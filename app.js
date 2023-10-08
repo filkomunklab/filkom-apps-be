@@ -3,7 +3,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
-const authRouter = require("./app/api/auth/router");
+const adminRoutes = require("./app/api/v1/admin/admin.routes");
 
 const URL = "/api/v1";
 
@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(`${URL}`, authRouter);
+app.use(`${URL}`, adminRoutes);
 
 app.use("/", (req, res) => {
   res.send({ message: "Welcome to API Filkom Apps" });
