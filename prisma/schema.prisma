@@ -23,9 +23,52 @@ model Admin {
   updatedAt DateTime?
 }
 
+model Employee {
+  id        String    @id @default(uuid())
+  nik       String    @unique
+  password  String
+  firstName String
+  lastName  String
+  createdBy String?
+  updatedBy String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+}
+
+model Student {
+  id        String    @id @default(uuid())
+  nim       String    @unique
+  password  String
+  firstName String
+  lastName  String
+  email     String?
+  phoneNo   String?
+  createdBy String?
+  updatedBy String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+}
+
+model UserRole {
+  id        String    @id @default(uuid())
+  userId    String
+  role      Role      @default(MAHASISWA)
+  createdBy String?
+  updatedBy String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+}
+
 enum Role {
   ADMIN
   SUPER_ADMIN
+  MAHASISWA
+  ADMIN_LPMI
+  OPERATOR_LPMI
+  ALUMNI
+  DEKAN
+  KAPRODI
+  DOSEN
 }
 
 //-------------------Klabat Bridge ----------------------
