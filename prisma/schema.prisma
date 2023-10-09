@@ -10,9 +10,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ------- global ------------------------
 model Admin {
   id        String    @id @default(uuid())
-  username  String
+  username  String    @unique
   email     String
   password  String
   role      Role      @default(ADMIN)
@@ -26,3 +27,9 @@ enum Role {
   ADMIN
   SUPER_ADMIN
 }
+
+//-------------------Klabat Bridge ----------------------
+
+//-------------------Skripsi App ------------------------
+
+//-------------------Bimbingan Akademik-------------------

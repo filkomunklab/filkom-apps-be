@@ -1,8 +1,6 @@
 //Layer untuk handle request dan response
 //Biasanya juga handle validasi body
 
-const express = require("express");
-const router = express.Router();
 const adminService = require("./admin.service");
 
 const getAllAdmins = async (req, res) => {
@@ -33,7 +31,7 @@ const deleteAdminById = async (req, res) => {
   try {
     const id = req.params.id;
     await adminService.deleteAdminById(id);
-    res.status(204).send({ status: "OK" });
+    res.status(200).send({ status: "OK" });
   } catch (error) {
     res
       .status(error?.status || 500)

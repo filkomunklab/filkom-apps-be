@@ -1,5 +1,5 @@
-//komunikasi dengan database
-const prisma = require("../../../db");
+//Layer untuk komunikasi dengan database
+const prisma = require("../../../database");
 
 const findAdmins = async () => {
   const admin = await prisma.admin.findMany();
