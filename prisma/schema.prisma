@@ -85,7 +85,7 @@ model Student {
   group_student       Group_Student[]       @relation("StudentMember")
   proposal_assessment Proposal_Assessment[] @relation("Student")
   skripsi_assessment  Skripsi_Assessment[]  @relation("Student")
-  FormSPT   FormSPT[]
+  FormSPT             FormSPT[]
 }
 
 model UserRole {
