@@ -17,6 +17,7 @@ model Admin {
   email     String
   password  String
   role      Role      @default(ADMIN)
+  token     String?   @unique
   createdBy String?
   updatedBy String?
   createdAt DateTime  @default(now())

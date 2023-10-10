@@ -1,15 +1,30 @@
 const jwt = require("jsonwebtoken");
 const { secretKey } = require("../config");
+const { getToken } = require("../utils");
+const adminRepository = require("../api/v1/admin/admin.repository");
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
   try {
-    const decoded = jwt.verify(req.headers.token, secretKey);
-    if (decoded) {
-      req.user = decoded.user;
-      next();
+    let token = getToken(req);
+
+    if (!token) {
+      return res
+        .status(401)
+        .send({ status: "FAILED", data: { error: "token not found" } });
     }
+
+    req.user = jwt.verify(token, secretKey);
+    let admin = await adminRepository.findAdminByToken(token);
+    if (!admin) {
+      return res
+        .status(401)
+        .send({ status: "FAILED", data: { error: "token expired" } });
+    }
+    next();
   } catch (error) {
-    res.status(401).send({ message: "Invalid Token" });
+    return res
+      .status(401)
+      .send({ status: "FAILED", data: { error: "invalid token" } });
   }
 };
 
