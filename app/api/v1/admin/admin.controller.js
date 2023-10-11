@@ -5,7 +5,7 @@ const adminService = require("./admin.service");
 
 const getAllAdmins = async (req, res) => {
   const admin = await adminService.getAllAdmins();
-  res.send({ status: "OK", data: admin });
+  res.status(200).send({ status: "OK", data: admin });
 };
 
 const getAdminById = async (req, res) => {
@@ -13,7 +13,7 @@ const getAdminById = async (req, res) => {
     const id = req.params.id;
     const admin = await adminService.getAdminById(id);
     //Todo: format data
-    res.send({ status: "OK", data: admin });
+    res.status(200).send({ status: "OK", data: admin });
   } catch (error) {
     res
       .status(error?.status || 500)

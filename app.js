@@ -3,13 +3,13 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
+const app = express();
+
+const authRoutes = require("./app/api/v1/auth/auth.routes");
 const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
-const authRoutes = require("./app/api/v1/auth/auth.routes");
 
 const URL = "/api/v1";
-
-const app = express();
 
 app.use(express.json());
 app.use(logger("dev"));

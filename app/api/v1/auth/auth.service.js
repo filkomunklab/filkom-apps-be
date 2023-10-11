@@ -38,6 +38,13 @@ const signInAdmin = async (username, password) => {
   }
 };
 
+const signOutAdmin = async (token) => {
+  const admin = await adminRepository.findAdminByToken(token);
+  admin.token = null;
+  await adminRepository.updateAdmin(admin.id, admin);
+};
+
 module.exports = {
   signInAdmin,
+  signOutAdmin,
 };
