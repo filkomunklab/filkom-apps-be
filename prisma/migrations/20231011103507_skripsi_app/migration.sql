@@ -102,14 +102,15 @@ CREATE TABLE "Classroom" (
 CREATE TABLE "Submission" (
     "id" TEXT NOT NULL,
     "file_name" TEXT NOT NULL,
-    "upload_date" TEXT NOT NULL,
     "file_size" TEXT NOT NULL,
     "is_consultation" BOOLEAN NOT NULL,
     "proposed_advisor" TEXT NOT NULL,
     "proposed_co_advisor1" TEXT,
     "proposed_co_advisor2" TEXT,
-    "is_approve" "Submission_Approve" NOT NULL,
+    "is_approve" "Submission_Approve" NOT NULL DEFAULT 'Waiting',
     "classroom_id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
 
     CONSTRAINT "Submission_pkey" PRIMARY KEY ("id")
 );

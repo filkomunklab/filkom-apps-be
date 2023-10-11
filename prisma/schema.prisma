@@ -139,16 +139,17 @@ model Classroom {
 model Submission {
   id                   String             @id @default(uuid())
   file_name            String
-  upload_date          String
   file_size            String
   is_consultation      Boolean
   // @relation
   proposed_advisor     String
   proposed_co_advisor1 String?
   proposed_co_advisor2 String?
-  is_approve           Submission_Approve
+  is_approve           Submission_Approve @default(Waiting)
   // @relation
   classroom_id         String
+  created_at          DateTime @default(now())
+  updated_at DateTime?
 }
 
 enum Submission_Approve {
