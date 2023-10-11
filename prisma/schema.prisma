@@ -17,6 +17,48 @@ model Admin {
   email     String
   password  String
   role      Role      @default(ADMIN)
+  token     String?   @unique
+  createdBy String?
+  updatedBy String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+}
+
+model Employee {
+  id        String    @id @default(uuid())
+  nik       String    @unique
+  password  String
+  firstName String
+  lastName  String
+  degree    String?
+  prodi     String?
+  createdBy String?
+  updatedBy String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+}
+
+model Student {
+  id        String    @id @default(uuid())
+  nim       String    @unique
+  password  String
+  firstName String
+  lastName  String?
+  faculty   String
+  major     String
+  address   String
+  email     String?
+  phoneNo   String?
+  createdBy String?
+  updatedBy String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+}
+
+model UserRole {
+  id        String    @id @default(uuid())
+  userId    String
+  role      Role      @default(MAHASISWA)
   createdBy String?
   updatedBy String?
   createdAt DateTime  @default(now())
@@ -26,360 +68,290 @@ model Admin {
 enum Role {
   ADMIN
   SUPER_ADMIN
-  Mahasiswa
+  MAHASISWA
   ADMIN_LPMI
   OPERATOR_LPMI
   ALUMNI
   DEKAN
   KAPRODI
   DOSEN
-}
-
-model employees {
-  id             String       @id @default(uuid())
-  nik            String       @unique
-  nidn           String       @unique
-  gelarS1        String
-  gelarS2        String
-  gelasS3        String
-  password       String
-  first_name     String       @unique
-  last_name      String
-  created_by     String?
-  updated_by     String?
-  created_at     DateTime     @default(now())
-  updated_at     DateTime?
-  advisor        TimAdvisor[] @relation("Advisor")
-  coAdvisor1     TimAdvisor[] @relation("CoAdvisor1")
-  coAdvisor2     TimAdvisor[] @relation("CoAdvisor2")
-  ketuaPanelis   TimPanelis[] @relation("KetuaPanelis")
-  anggotaPanelis TimPanelis[] @relation("AnggotaPanelis")
-  advisorPanelis TimPanelis[] @relation("AdvisorPanelis")
-}
-
-model UsersRoles {
-  id         String   @id @default(uuid())
-  user_id    String
-  role       Role
-  created_by String?
-  updated_by String?
-  created_at DateTime
-  updated_at DateTime
-}
-
-model students {
-  id         String    @id @default(uuid())
-  nim        String    @unique
-  password   String
-  first_name String
-  last_name  String
-  faculty    String
-  major      String
-  address    String
-  phone_no   String
-  email      String
-  created_by String?
-  updated_by String?
-  created_at DateTime  @default(now())
-  updated_at DateTime?
+  DOSEN_MK
+  OPERATOR_FAKULTAS
 }
 
 //-------------------Klabat Bridge ----------------------
 
 //-------------------Skripsi App ------------------------
-model Prodi {
-  id         String      @id @default(uuid())
-  prodi      String      @unique
-  mahasiswas Mahasiswa[]
+model Thesis_Student {
+  id       String @id @default(uuid())
+  fullname String @unique
 }
 
-model Mahasiswa {
-  nim             String             @id
-  namalengkap     String             @unique
-  kelasProposal   Kelas              @relation("MahasiswaKelasProposal", fields: [kelasProposalId], references: [id])
-  kelasProposalId String
-  kelasSkripsi    Kelas              @relation("MahasiswaKelasSkripsi", fields: [kelasSkripsiId], references: [id])
-  kelasSkripsiId  String
-  prodi           Prodi              @relation(fields: [prodiId], references: [id])
-  prodiId         String
-  mahasiswa1      KelompokMahasiswa? @relation("MahasiswaKelompok1")
-  mahasiswa2      KelompokMahasiswa? @relation("MahasiswaKelompok2")
-  mahasiswa3      KelompokMahasiswa? @relation("MahasiswaKelompok3")
-  mahasiswa4      KelompokMahasiswa? @relation("MahasiswaKelompok4")
+model Group_Student {
+  id         String @id @default(uuid())
+  // @relation
+  group_id   String
+  // @relation
+  student_id String
 }
 
-model Kelas {
-  id              String              @id @default(uuid())
-  tipe            TipeKelas
-  semester        SemesterKelas
-  thnajaran       String
-  kelasProposal   Mahasiswa[]         @relation("MahasiswaKelasProposal")
-  kelasSkripsi    Mahasiswa[]         @relation("MahasiswaKelasSkripsi")
-  kelasProposalKM KelompokMahasiswa[] @relation("KelompokMahasiswaKelasProposal")
-  kelasSkripsiKM  KelompokMahasiswa[] @relation("KelompokMahasiswaKelasSkripsi")
+model Group {
+  id            String   @id @default(uuid())
+  progress      Progress
+  title         String?
+  keywords      String?
+  abstrak       String?
+  reference     String?
+  // @relation
+  submission_id String?
+  // @relation
+  proposal_id   String?
+  // @relation
+  skripsi_id    String?
 }
 
-enum TipeKelas {
-  PROPOSAL
-  SKRIPSI
+enum Progress {
+  Sumission
+  Proposal
+  Skripsi
 }
 
-enum SemesterKelas {
-  GANJIL
-  GENAP
-  PADAT
+model Academic_Calendar {
+  id       String   @id @default(uuid())
+  semester Semester
+  year     String
 }
 
-model KelompokMahasiswa {
-  id                 String          @id @default(uuid())
-  judul              String          @unique
-  mahasiswa1         Mahasiswa?      @relation("MahasiswaKelompok1", fields: [mahasiswa1Nim], references: [nim])
-  mahasiswa1Nim      String?         @unique
-  mahasiswa2         Mahasiswa?      @relation("MahasiswaKelompok2", fields: [mahasiswa2Nim], references: [nim])
-  mahasiswa2Nim      String?         @unique
-  mahasiswa3         Mahasiswa?      @relation("MahasiswaKelompok3", fields: [mahasiswa3Nim], references: [nim])
-  mahasiswa3Nim      String?         @unique
-  mahasiswa4         Mahasiswa?      @relation("MahasiswaKelompok4", fields: [mahasiswa4Nim], references: [nim])
-  mahasiswa4Nim      String?         @unique
-  kelasProposalKM    Kelas           @relation("KelompokMahasiswaKelasProposal", fields: [kelasProposalKMId], references: [id])
-  kelasProposalKMId  String
-  kelasSkripsiKM     Kelas           @relation("KelompokMahasiswaKelasSkripsi", fields: [kelasSkripsiKMId], references: [id])
-  kelasSkripsiKMId   String
-  pengajuanJudul     PengajuanJudul? @relation(fields: [pengajuanJudulId], references: [id])
-  pengajuanJudulId   String          @unique
-  // @relasi pengajuanSkripsiId
-  pengajuanSkripsiId String
-  // @relasi jadwalSidangId
-  jadwalSidangId     String
-  // @relasi beritaAcaraId
-  beritaAcaraId      String
-  // @relasi revisiSkripsi
-  revisiSkripsi      String
-  // @relasi timAdvisor
-  timAdvisor         String
-  // @relasi timPanelis
-  timPanelis         String
-  konsultasi         Konsultasi[]
+enum Semester {
+  Ganjil
+  Genap
+  Padat
 }
 
-model PengajuanJudul {
-  id                String                 @id @default(uuid())
-  judul             String
-  latarBelakang     String
-  rumusanMasalah    String
-  tujuan            String
-  manfaat           String
-  cakupan           String
-  batasan           String
-  calonAdvisor      String
-  calonCoAdvisor1   String
-  calonCoAdvisor2   String
-  statusKonsultasi  Boolean
-  tglPengajuan      DateTime
-  tglPembaruan      DateTime
-  statusPersetujuan statusPersetujuanJudul
-  tglPersetujuan    DateTime
-  kelompokMahasiswa KelompokMahasiswa?
+model Classroom {
+  id          String @id @default(uuid())
+  // @relation
+  dosen_mk_id String
+  // @relation
+  academic_id String
 }
 
-enum statusPersetujuanJudul {
-  BELUM
-  MENUNGGU
-  DITERIMA
-  DITOLAK
+model Submission {
+  id                   String             @id @default(uuid())
+  file_name            String
+  upload_date          String
+  file_size            String
+  is_consultation      Boolean
+  // @relation
+  proposed_advisor     String
+  proposed_co_advisor1 String?
+  proposed_co_advisor2 String?
+  is_approve           Submission_Approve
+  // @relation
+  classroom_id         String
 }
 
-model pengajuanSkripsi {
-  id                                  String                   @id @default(uuid())
-  namaDokumenProposal                 String
-  namaPembayaranProposal              String
-  namaCekPlagiatProposal              String
-  ukuranDokumenProposal               String
-  ukuranPembayaranProposal            String
-  ukuranCekPlagiatProposal            String
-  lokasiDokumenProposal               String
-  lokasiPembayaranProposal            String
-  lokasiCekPlagiatProposal            String
-  tglUnggahDokumenProposal            String
-  tglUnggahPembayaranProposal         String
-  tglUnggahCekPlagiatProposal         String
-  statusPersetujuanProposalAdvisor    StatusPersetujuanSkripsi
-  statusPersetujuanProposalCoAdvisor1 StatusPersetujuanSkripsi
-  statusPersetujuanProposalCoAdvisor2 StatusPersetujuanSkripsi
-  tglPersetujuanProposalAdvisor       DateTime
-  tglPersetujuanProposalCoAdvisor1    DateTime
-  tglPersetujuanProposalCoAdvisor2    DateTime
-  namaDokumenSkripsi                  String
-  namaPembayaranSkripsi               String
-  namaCekPlagiatSkripsi               String
-  ukuranDokumenSkripsi                String
-  ukuranPembayaranSkripsi             String
-  ukuranCekPlagiatSkripsi             String
-  lokasiDokumenSkripsi                String
-  lokasiPembayaranSkripsi             String
-  lokasiCekPlagiatSkripsi             String
-  tglUnggahDokumenSkripsi             String
-  tglUnggahPembayaranSkripsi          String
-  tglUnggahCekPlagiatSkripsi          String
-  statusPersetujuanSkripsiAdvisor     StatusPersetujuanSkripsi
-  statusPersetujuanSkripsiCoAdvisor1  StatusPersetujuanSkripsi
-  statusPersetujuanSkripsiCoAdvisor2  StatusPersetujuanSkripsi
-  tglPersetujuanSkripsiAdvisor        DateTime
-  tglPersetujuanSkripsiCoAdvisor1     DateTime
-  tglPersetujuanSkripsiCoAdvisor2     DateTime
+enum Submission_Approve {
+  Waiting
+  Approve
+  Rejected
 }
 
-enum StatusPersetujuanSkripsi {
-  BELUM
-  MENUNGGU
-  DITOLAK
-  DISETUJUI
+model Proposal {
+  id                                       String            @id @default(uuid())
+  file_name_proposal                       String?
+  file_name_payment                        String?
+  file_name_plagiarismcheck                String?
+  upload_date_proposal                     DateTime?
+  upload_date_payment                      DateTime?
+  upload_date_plagiarismcheck              DateTime?
+  file_size_proposal                       String?
+  file_size_payment                        String?
+  file_size_plagiarismcheck                String?
+  // @relation
+  advisor                                  String
+  // @relation
+  co_advisor1                              String?
+  // @relation
+  co_advisor2                              String?
+  // @relation
+  classroom_id                             String
+  is_proposal_approve_by_advisor           Thesis_Approve?
+  is_proposal_approve_by_co_advisor1       Thesis_Approve?
+  is_proposal_approve_by_co_advisor2       Thesis_Approve?
+  advisor_proposal_approved_date           DateTime?
+  co_advisor1_proposal_approved_date       DateTime?
+  co_advisor2_proposal_approved_date       DateTime?
+  // @relation
+  panelist_chairman                        String?
+  // @relation
+  panelist_member                          String?
+  start_defence                            String?
+  end_defence                              String?
+  defence_room                             String?
+  defence_date                             String?
+  is_report_open                           Boolean?
+  student1_assessment_by_panelist_chairman String?
+  student2_assessment_by_panelist_chairman String?
+  student3_assessment_by_panelist_chairman String?
+  student4_assessment_by_panelist_chairman String?
+  student1_assessment_by_panelist_member   String?
+  student2_assessment_by_panelist_member   String?
+  student3_assessment_by_panelist_member   String?
+  student4_assessment_by_panelist_member   String?
+  student1_assessment_by_advisor           String?
+  student2_assessment_by_advisor           String?
+  student3_assessment_by_advisor           String?
+  student4_assessment_by_advisor           String?
+  changes_by_panelist_chairman             String?
+  changes_by_panelist_member               String?
+  changes_by_advisor                       String?
+  changes_by_co_advisor1                   String?
+  changes_by_co_advisor2                   String?
+  is_report_approve_by_dekan               Boolean?
+  is_report_approve_by_panelist_chairman   Boolean?
+  is_report_approve_by_panelist_member     Boolean?
+  is_report_approve_by_advisor             Boolean?
+  exam_conclution                          Exam_Conclution?
+  assessment_conclution                    String?
+  is_pass                                  Pass?
+  report_date                              DateTime?
+  file_name_revision                       String?
+  upload_date_revision                     DateTime
+  file_size_revision                       String?
+  is_revision_approve_by_panelist_chairman Revision_Approve?
+  is_revision_approve_by_panelist_member   Revision_Approve?
+  is_revision_approve_by_advisor           Revision_Approve?
+  panelist_chairman_revision_approve_date  DateTime?
+  panelist_member_revision_approve_date    DateTime?
+  advisor_revision_approve_date            DateTime?
 }
 
-model BeritaAcara {
-  id                                        String                            @id @default(uuid())
-  penilaianProposalKetuaPanelisMahasiswa1   String
-  penilaianProposalKetuaPanelisMahasiswa2   String
-  penilaianProposalKetuaPanelisMahasiswa3   String
-  penilaianProposalKetuaPanelisMahasiswa4   String
-  penilaianProposalAnggotaPanelisMahasiswa1 String
-  penilaianProposalAnggotaPanelisMahasiswa2 String
-  penilaianProposalAnggotaPanelisMahasiswa3 String
-  penilaianProposalAnggotaPanelisMahasiswa4 String
-  penilaianProposalAdvisorMahasiswa1        String
-  penilaianProposalAdvisorMahasiswa2        String
-  penilaianProposalAdvisorMahasiswa3        String
-  penilaianProposalAdvisorMahasiswa4        String
-  perubahanProposalKetuaPanelis             String
-  perubahanProposalAnggotaPanelis           String
-  perubahanProposalAdvisor                  String
-  perubahanProposalCoAdvisor1               String
-  perubahanProposalCoAdvisor2               String
-  statusBeritaAcaraProposalKetuaPanelis     String
-  statusBeritaAcaraProposalAnggotaPanelis   String
-  statusBeritaAcaraProposalAdvisor          String
-  statusBeritaAcaraProposalDekan            String
-  kesimpulanUjianProposal                   StatusKesimpulanUjianSkripsi
-  perubahanProposal                         StatusPerubahanSkripsi
-  nilaiKesimpulanUjianProposal              StatusNilaiKesimpulanUjianSkripsi
-  penilaianSkripsiKetuaPanelisMahasiswa1    String
-  penilaianSkripsiKetuaPanelisMahasiswa2    String
-  penilaianSkripsiKetuaPanelisMahasiswa3    String
-  penilaianSkripsiKetuaPanelisMahasiswa4    String
-  penilaianSkripsiAnggotaPanelisMahasiswa1  String
-  penilaianSkripsiAnggotaPanelisMahasiswa2  String
-  penilaianSkripsiAnggotaPanelisMahasiswa3  String
-  penilaianSkripsiAnggotaPanelisMahasiswa4  String
-  penilaianSkripsiAdvisorMahasiswa1         String
-  penilaianSkripsiAdvisorMahasiswa2         String
-  penilaianSkripsiAdvisorMahasiswa3         String
-  penilaianSkripsiAdvisorMahasiswa4         String
-  perubahanSkripsiKetuaPanelis              String
-  perubahanSkripsiAnggotaPanelis            String
-  perubahanSkripsiAdvisor                   String
-  perubahanSkripsiCoAdvisor1                String
-  perubahanSkripsiCoAdvisor2                String
-  statusBeritaAcaraSkripsiKetuaPanelis      String
-  statusBeritaAcaraSkripsiAnggotaPanelis    String
-  statusBeritaAcaraSkripsiAdvisor           String
-  statusBeritaAcaraSkripsiDekan             String
-  kesimpulanUjianSkripsi                    StatusKesimpulanUjianSkripsi
-  perubahanSkripsi                          StatusPerubahanSkripsi
-  nilaiKesimpulanUjianSkripsi               StatusNilaiKesimpulanUjianSkripsi
+model Skripsi {
+  id                                       String            @id @default(uuid())
+  file_name_skripsi                        String?
+  file_name_payment                        String?
+  file_name_plagiarismcheck                String?
+  upload_date_skripsi                      DateTime?
+  upload_date_payment                      DateTime?
+  upload_date_plagiarismcheck              DateTime?
+  file_size_skripsi                        String?
+  file_size_payment                        String?
+  file_size_plagiarismcheck                String?
+  // @relation
+  advisor                                  String
+  // @relation
+  co_advisor1                              String?
+  // @relation
+  co_advisor2                              String?
+  // @relation
+  classroom_id                             String
+  is_skripsi_approve_by_advisor            Thesis_Approve?
+  is_skripsi_approve_by_co_advisor1        Thesis_Approve?
+  is_skripsi_approve_by_co_advisor2        Thesis_Approve?
+  advisor_skripsi_approved_date            DateTime?
+  co_advisor1_skripsi_approved_date        DateTime?
+  co_advisor2_skripsi_approved_date        DateTime?
+  // @relation
+  panelist_chairman                        String?
+  // @relation
+  panelist_member                          String?
+  start_defence                            String?
+  end_defence                              String?
+  defence_room                             String?
+  defence_date                             String?
+  is_report_open                           Boolean?
+  student1_assessment_by_panelist_chairman String?
+  student2_assessment_by_panelist_chairman String?
+  student3_assessment_by_panelist_chairman String?
+  student4_assessment_by_panelist_chairman String?
+  student1_assessment_by_panelist_member   String?
+  student2_assessment_by_panelist_member   String?
+  student3_assessment_by_panelist_member   String?
+  student4_assessment_by_panelist_member   String?
+  student1_assessment_by_advisor           String?
+  student2_assessment_by_advisor           String?
+  student3_assessment_by_advisor           String?
+  student4_assessment_by_advisor           String?
+  changes_by_panelist_chairman             String?
+  changes_by_panelist_member               String?
+  changes_by_advisor                       String?
+  changes_by_co_advisor1                   String?
+  changes_by_co_advisor2                   String?
+  is_report_approve_by_dekan               Boolean?
+  is_report_approve_by_panelist_chairman   Boolean?
+  is_report_approve_by_panelist_member     Boolean?
+  is_report_approve_by_advisor             Boolean?
+  exam_conclution                          Exam_Conclution?
+  assessment_conclution                    String?
+  is_pass                                  Pass?
+  report_date                              DateTime?
+  file_name_revision                       String?
+  upload_date_revision                     DateTime
+  file_size_revision                       String?
+  is_revision_approve_by_panelist_chairman Revision_Approve?
+  is_revision_approve_by_panelist_member   Revision_Approve?
+  is_revision_approve_by_advisor           Revision_Approve?
+  panelist_chairman_revision_approve_date  DateTime?
+  panelist_member_revision_approve_date    DateTime?
+  advisor_revision_approve_date            DateTime?
+  file_name_hki                            String?
+  file_name_journal                        String?
+  file_name_sourcecode                     String?
+  file_name_poster                         String?
+  file_name_tutorial                       String?
+  upload_date_hki                          DateTime?
+  upload_date_journal                      DateTime?
+  upload_date_sourcecode                   DateTime?
+  upload_date_poster                       DateTime?
+  upload_date_tutorial                     DateTime?
+  file_size_hki                            String?
+  file_size_journal                        String?
+  file_size_sourcecode                     String?
+  link_soucecode                           String?
+  file_size_poster                         String?
+  file_size_tutorial                       String?
 }
 
-enum StatusKesimpulanUjianSkripsi {
-  DITERIMA
-  DITOLAK
+enum Thesis_Approve {
+  Waiting
+  Approve
+  Rejected
 }
 
-enum StatusPerubahanSkripsi {
-  MAJOR
-  MINOR
+enum Exam_Conclution {
+  Rejected
+  Approve
 }
 
-enum StatusNilaiKesimpulanUjianSkripsi {
-  LULUS
-  TIDAK_LULUS
-  MENGULANG
+enum Pass {
+  Pass
+  Fail
+  Repeat
 }
 
-model RevisiSkripsi {
-  id                                            String                         @id @default(uuid())
-  namaRevisiProposal                            String
-  ukuranRevisiProposal                          String
-  lokasiRevisiProposal                          String
-  tglUnggahRevisiProposal                       String
-  statusPersetujuanRevisiProposalKetuaPanelis   StatusPersetujuanRevisiSkripsi
-  statusPersetujuanRevisiProposalAnggotaPanelis StatusPersetujuanRevisiSkripsi
-  statusPersetujuanRevisiProposalAdvisor        StatusPersetujuanRevisiSkripsi
-  tglPersetujuanRevisiProposalKetuaPanelis      DateTime
-  tglPersetujuanRevisiProposalAnggotaPanelis    DateTime
-  tglPersetujuanRevisiProposalAdvisor           DateTime
-  namaRevisiSkripsi                             String
-  ukuranRevisiSkripsi                           String
-  lokasiRevisiSkripsi                           String
-  tglUnggahRevisiSkripsi                        String
-  statusPersetujuanRevisiSkripsiKetuaPanelis    StatusPersetujuanRevisiSkripsi
-  statusPersetujuanRevisiSkripsiAnggotaPanelis  StatusPersetujuanRevisiSkripsi
-  statusPersetujuanRevisiSkripsiAdvisor         StatusPersetujuanRevisiSkripsi
-  tglPersetujuanRevisiSkripsiKetuaPanelis       DateTime
-  tglPersetujuanRevisiSkripsiAnggotaPanelis     DateTime
-  tglPersetujuanRevisiSkripsiAdvisor            DateTime
+enum Revision_Approve {
+  Waiting
+  Approve
+  Rejected
 }
 
-enum StatusPersetujuanRevisiSkripsi {
-  BELUM
-  MENUNGGU
-  DITOLAK
-  DISETUJUI
+model Consultaion {
+  id          String   @id @default(uuid())
+  // @relation
+  group_id    String
+  description String
+  date        DateTime
+  // +dosen
 }
 
-model TimAdvisor {
-  id           String       @id @default(uuid())
-  advisor      employees    @relation("Advisor", fields: [advisorId], references: [id])
-  advisorId    String
-  coAdvisor1   employees    @relation("CoAdvisor1", fields: [coAdvisor1Id], references: [id])
-  coAdvisor1Id String
-  coAdvisor2   employees    @relation("CoAdvisor2", fields: [coAdvisor2Id], references: [id])
-  coAdvisor2Id String
-  konsultasi   Konsultasi[]
-}
-
-model Konsultasi {
-  id                  String            @id @default(uuid())
-  deskripsi           String
-  tanggal             String
-  tertanda            String
-  timAdvisor          TimAdvisor        @relation(fields: [timAdvisorId], references: [id])
-  timAdvisorId        String
-  kelompokMahasiswa   KelompokMahasiswa @relation(fields: [kelompokMahasiswaId], references: [id])
-  kelompokMahasiswaId String
-}
-
-model JadwalSidang {
-  id                    String     @id @default(uuid())
-  mulaiSidangProposal   String
-  selesaiSidangProposal String
-  ruanganSidangProposal String
-  tanggalSidangProposal String
-  mulaiSidangSkripsi    String
-  selesaiSidangSkripsi  String
-  ruanganSidangSkripsi  String
-  tanggalSidangSkripsi  String
-  timPanelis            TimPanelis @relation(fields: [timPanelisId], references: [id])
-  timPanelisId          String     @unique
-}
-
-model TimPanelis {
-  id               String        @id @default(uuid())
-  ketuaPanelis     employees     @relation("KetuaPanelis", fields: [ketuaPanelisId], references: [id])
-  ketuaPanelisId   String
-  anggotaPanelis   employees     @relation("AnggotaPanelis", fields: [anggotaPanelisId], references: [id])
-  anggotaPanelisId String
-  advisor          employees     @relation("AdvisorPanelis", fields: [advisorId], references: [id])
-  advisorId        String
-  jadwalSidang     JadwalSidang?
+model History {
+  id          String   @id @default(uuid())
+  user_id     String
+  description String
+  date        DateTime
+  // @relation
+  group_id    String
 }
 
 //-------------------Bimbingan Akademik-------------------

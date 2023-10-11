@@ -1,4 +1,5 @@
 const authRepository = require("./auth.repository");
+const adminRepository = require("../admin/admin.repository");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { secretKey } = require("../../../config");
@@ -20,17 +21,19 @@ const signInAdmin = async (username, password) => {
         },
         secretKey
       );
+      checkUsername.token = token;
+      await adminRepository.updateAdmin(checkUsername.id, checkUsername);
       return token;
     } else {
       throw {
         status: 403,
-        message: `Invalid Password`,
+        message: "email or password incorrect",
       };
     }
   } else {
     throw {
       status: 403,
-      message: `Invalid Username`,
+      message: "email or password incorrect",
     };
   }
 };

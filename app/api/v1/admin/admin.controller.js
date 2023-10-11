@@ -58,7 +58,9 @@ const updateAdminById = async (req, res) => {
     const payload = req.body;
 
     if (!(payload.username && payload.email && payload.password)) {
-      return res.status(400).send("some field is missing");
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
     }
     const admin = await adminService.updateOrPatchAdminById(id, payload);
     res.send({ status: "OK", data: admin });
