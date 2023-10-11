@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "format": "prisma format --schema=./prisma/schema.prisma"
   },
   "dependencies": {
     "@prisma/client": "^5.4.1",

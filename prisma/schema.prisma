@@ -26,10 +26,360 @@ model Admin {
 enum Role {
   ADMIN
   SUPER_ADMIN
+  Mahasiswa
+  ADMIN_LPMI
+  OPERATOR_LPMI
+  ALUMNI
+  DEKAN
+  KAPRODI
+  DOSEN
+}
+
+model employees {
+  id             String       @id @default(uuid())
+  nik            String       @unique
+  nidn           String       @unique
+  gelarS1        String
+  gelarS2        String
+  gelasS3        String
+  password       String
+  first_name     String       @unique
+  last_name      String
+  created_by     String?
+  updated_by     String?
+  created_at     DateTime     @default(now())
+  updated_at     DateTime?
+  advisor        TimAdvisor[] @relation("Advisor")
+  coAdvisor1     TimAdvisor[] @relation("CoAdvisor1")
+  coAdvisor2     TimAdvisor[] @relation("CoAdvisor2")
+  ketuaPanelis   TimPanelis[] @relation("KetuaPanelis")
+  anggotaPanelis TimPanelis[] @relation("AnggotaPanelis")
+  advisorPanelis TimPanelis[] @relation("AdvisorPanelis")
+}
+
+model UsersRoles {
+  id         String   @id @default(uuid())
+  user_id    String
+  role       Role
+  created_by String?
+  updated_by String?
+  created_at DateTime
+  updated_at DateTime
+}
+
+model students {
+  id         String    @id @default(uuid())
+  nim        String    @unique
+  password   String
+  first_name String
+  last_name  String
+  faculty    String
+  major      String
+  address    String
+  phone_no   String
+  email      String
+  created_by String?
+  updated_by String?
+  created_at DateTime  @default(now())
+  updated_at DateTime?
 }
 
 //-------------------Klabat Bridge ----------------------
 
 //-------------------Skripsi App ------------------------
+model Prodi {
+  id         String      @id @default(uuid())
+  prodi      String      @unique
+  mahasiswas Mahasiswa[]
+}
+
+model Mahasiswa {
+  nim             String             @id
+  namalengkap     String             @unique
+  kelasProposal   Kelas              @relation("MahasiswaKelasProposal", fields: [kelasProposalId], references: [id])
+  kelasProposalId String
+  kelasSkripsi    Kelas              @relation("MahasiswaKelasSkripsi", fields: [kelasSkripsiId], references: [id])
+  kelasSkripsiId  String
+  prodi           Prodi              @relation(fields: [prodiId], references: [id])
+  prodiId         String
+  mahasiswa1      KelompokMahasiswa? @relation("MahasiswaKelompok1")
+  mahasiswa2      KelompokMahasiswa? @relation("MahasiswaKelompok2")
+  mahasiswa3      KelompokMahasiswa? @relation("MahasiswaKelompok3")
+  mahasiswa4      KelompokMahasiswa? @relation("MahasiswaKelompok4")
+}
+
+model Kelas {
+  id              String              @id @default(uuid())
+  tipe            TipeKelas
+  semester        SemesterKelas
+  thnajaran       String
+  kelasProposal   Mahasiswa[]         @relation("MahasiswaKelasProposal")
+  kelasSkripsi    Mahasiswa[]         @relation("MahasiswaKelasSkripsi")
+  kelasProposalKM KelompokMahasiswa[] @relation("KelompokMahasiswaKelasProposal")
+  kelasSkripsiKM  KelompokMahasiswa[] @relation("KelompokMahasiswaKelasSkripsi")
+}
+
+enum TipeKelas {
+  PROPOSAL
+  SKRIPSI
+}
+
+enum SemesterKelas {
+  GANJIL
+  GENAP
+  PADAT
+}
+
+model KelompokMahasiswa {
+  id                 String          @id @default(uuid())
+  judul              String          @unique
+  mahasiswa1         Mahasiswa?      @relation("MahasiswaKelompok1", fields: [mahasiswa1Nim], references: [nim])
+  mahasiswa1Nim      String?         @unique
+  mahasiswa2         Mahasiswa?      @relation("MahasiswaKelompok2", fields: [mahasiswa2Nim], references: [nim])
+  mahasiswa2Nim      String?         @unique
+  mahasiswa3         Mahasiswa?      @relation("MahasiswaKelompok3", fields: [mahasiswa3Nim], references: [nim])
+  mahasiswa3Nim      String?         @unique
+  mahasiswa4         Mahasiswa?      @relation("MahasiswaKelompok4", fields: [mahasiswa4Nim], references: [nim])
+  mahasiswa4Nim      String?         @unique
+  kelasProposalKM    Kelas           @relation("KelompokMahasiswaKelasProposal", fields: [kelasProposalKMId], references: [id])
+  kelasProposalKMId  String
+  kelasSkripsiKM     Kelas           @relation("KelompokMahasiswaKelasSkripsi", fields: [kelasSkripsiKMId], references: [id])
+  kelasSkripsiKMId   String
+  pengajuanJudul     PengajuanJudul? @relation(fields: [pengajuanJudulId], references: [id])
+  pengajuanJudulId   String          @unique
+  // @relasi pengajuanSkripsiId
+  pengajuanSkripsiId String
+  // @relasi jadwalSidangId
+  jadwalSidangId     String
+  // @relasi beritaAcaraId
+  beritaAcaraId      String
+  // @relasi revisiSkripsi
+  revisiSkripsi      String
+  // @relasi timAdvisor
+  timAdvisor         String
+  // @relasi timPanelis
+  timPanelis         String
+  konsultasi         Konsultasi[]
+}
+
+model PengajuanJudul {
+  id                String                 @id @default(uuid())
+  judul             String
+  latarBelakang     String
+  rumusanMasalah    String
+  tujuan            String
+  manfaat           String
+  cakupan           String
+  batasan           String
+  calonAdvisor      String
+  calonCoAdvisor1   String
+  calonCoAdvisor2   String
+  statusKonsultasi  Boolean
+  tglPengajuan      DateTime
+  tglPembaruan      DateTime
+  statusPersetujuan statusPersetujuanJudul
+  tglPersetujuan    DateTime
+  kelompokMahasiswa KelompokMahasiswa?
+}
+
+enum statusPersetujuanJudul {
+  BELUM
+  MENUNGGU
+  DITERIMA
+  DITOLAK
+}
+
+model pengajuanSkripsi {
+  id                                  String                   @id @default(uuid())
+  namaDokumenProposal                 String
+  namaPembayaranProposal              String
+  namaCekPlagiatProposal              String
+  ukuranDokumenProposal               String
+  ukuranPembayaranProposal            String
+  ukuranCekPlagiatProposal            String
+  lokasiDokumenProposal               String
+  lokasiPembayaranProposal            String
+  lokasiCekPlagiatProposal            String
+  tglUnggahDokumenProposal            String
+  tglUnggahPembayaranProposal         String
+  tglUnggahCekPlagiatProposal         String
+  statusPersetujuanProposalAdvisor    StatusPersetujuanSkripsi
+  statusPersetujuanProposalCoAdvisor1 StatusPersetujuanSkripsi
+  statusPersetujuanProposalCoAdvisor2 StatusPersetujuanSkripsi
+  tglPersetujuanProposalAdvisor       DateTime
+  tglPersetujuanProposalCoAdvisor1    DateTime
+  tglPersetujuanProposalCoAdvisor2    DateTime
+  namaDokumenSkripsi                  String
+  namaPembayaranSkripsi               String
+  namaCekPlagiatSkripsi               String
+  ukuranDokumenSkripsi                String
+  ukuranPembayaranSkripsi             String
+  ukuranCekPlagiatSkripsi             String
+  lokasiDokumenSkripsi                String
+  lokasiPembayaranSkripsi             String
+  lokasiCekPlagiatSkripsi             String
+  tglUnggahDokumenSkripsi             String
+  tglUnggahPembayaranSkripsi          String
+  tglUnggahCekPlagiatSkripsi          String
+  statusPersetujuanSkripsiAdvisor     StatusPersetujuanSkripsi
+  statusPersetujuanSkripsiCoAdvisor1  StatusPersetujuanSkripsi
+  statusPersetujuanSkripsiCoAdvisor2  StatusPersetujuanSkripsi
+  tglPersetujuanSkripsiAdvisor        DateTime
+  tglPersetujuanSkripsiCoAdvisor1     DateTime
+  tglPersetujuanSkripsiCoAdvisor2     DateTime
+}
+
+enum StatusPersetujuanSkripsi {
+  BELUM
+  MENUNGGU
+  DITOLAK
+  DISETUJUI
+}
+
+model BeritaAcara {
+  id                                        String                            @id @default(uuid())
+  penilaianProposalKetuaPanelisMahasiswa1   String
+  penilaianProposalKetuaPanelisMahasiswa2   String
+  penilaianProposalKetuaPanelisMahasiswa3   String
+  penilaianProposalKetuaPanelisMahasiswa4   String
+  penilaianProposalAnggotaPanelisMahasiswa1 String
+  penilaianProposalAnggotaPanelisMahasiswa2 String
+  penilaianProposalAnggotaPanelisMahasiswa3 String
+  penilaianProposalAnggotaPanelisMahasiswa4 String
+  penilaianProposalAdvisorMahasiswa1        String
+  penilaianProposalAdvisorMahasiswa2        String
+  penilaianProposalAdvisorMahasiswa3        String
+  penilaianProposalAdvisorMahasiswa4        String
+  perubahanProposalKetuaPanelis             String
+  perubahanProposalAnggotaPanelis           String
+  perubahanProposalAdvisor                  String
+  perubahanProposalCoAdvisor1               String
+  perubahanProposalCoAdvisor2               String
+  statusBeritaAcaraProposalKetuaPanelis     String
+  statusBeritaAcaraProposalAnggotaPanelis   String
+  statusBeritaAcaraProposalAdvisor          String
+  statusBeritaAcaraProposalDekan            String
+  kesimpulanUjianProposal                   StatusKesimpulanUjianSkripsi
+  perubahanProposal                         StatusPerubahanSkripsi
+  nilaiKesimpulanUjianProposal              StatusNilaiKesimpulanUjianSkripsi
+  penilaianSkripsiKetuaPanelisMahasiswa1    String
+  penilaianSkripsiKetuaPanelisMahasiswa2    String
+  penilaianSkripsiKetuaPanelisMahasiswa3    String
+  penilaianSkripsiKetuaPanelisMahasiswa4    String
+  penilaianSkripsiAnggotaPanelisMahasiswa1  String
+  penilaianSkripsiAnggotaPanelisMahasiswa2  String
+  penilaianSkripsiAnggotaPanelisMahasiswa3  String
+  penilaianSkripsiAnggotaPanelisMahasiswa4  String
+  penilaianSkripsiAdvisorMahasiswa1         String
+  penilaianSkripsiAdvisorMahasiswa2         String
+  penilaianSkripsiAdvisorMahasiswa3         String
+  penilaianSkripsiAdvisorMahasiswa4         String
+  perubahanSkripsiKetuaPanelis              String
+  perubahanSkripsiAnggotaPanelis            String
+  perubahanSkripsiAdvisor                   String
+  perubahanSkripsiCoAdvisor1                String
+  perubahanSkripsiCoAdvisor2                String
+  statusBeritaAcaraSkripsiKetuaPanelis      String
+  statusBeritaAcaraSkripsiAnggotaPanelis    String
+  statusBeritaAcaraSkripsiAdvisor           String
+  statusBeritaAcaraSkripsiDekan             String
+  kesimpulanUjianSkripsi                    StatusKesimpulanUjianSkripsi
+  perubahanSkripsi                          StatusPerubahanSkripsi
+  nilaiKesimpulanUjianSkripsi               StatusNilaiKesimpulanUjianSkripsi
+}
+
+enum StatusKesimpulanUjianSkripsi {
+  DITERIMA
+  DITOLAK
+}
+
+enum StatusPerubahanSkripsi {
+  MAJOR
+  MINOR
+}
+
+enum StatusNilaiKesimpulanUjianSkripsi {
+  LULUS
+  TIDAK_LULUS
+  MENGULANG
+}
+
+model RevisiSkripsi {
+  id                                            String                         @id @default(uuid())
+  namaRevisiProposal                            String
+  ukuranRevisiProposal                          String
+  lokasiRevisiProposal                          String
+  tglUnggahRevisiProposal                       String
+  statusPersetujuanRevisiProposalKetuaPanelis   StatusPersetujuanRevisiSkripsi
+  statusPersetujuanRevisiProposalAnggotaPanelis StatusPersetujuanRevisiSkripsi
+  statusPersetujuanRevisiProposalAdvisor        StatusPersetujuanRevisiSkripsi
+  tglPersetujuanRevisiProposalKetuaPanelis      DateTime
+  tglPersetujuanRevisiProposalAnggotaPanelis    DateTime
+  tglPersetujuanRevisiProposalAdvisor           DateTime
+  namaRevisiSkripsi                             String
+  ukuranRevisiSkripsi                           String
+  lokasiRevisiSkripsi                           String
+  tglUnggahRevisiSkripsi                        String
+  statusPersetujuanRevisiSkripsiKetuaPanelis    StatusPersetujuanRevisiSkripsi
+  statusPersetujuanRevisiSkripsiAnggotaPanelis  StatusPersetujuanRevisiSkripsi
+  statusPersetujuanRevisiSkripsiAdvisor         StatusPersetujuanRevisiSkripsi
+  tglPersetujuanRevisiSkripsiKetuaPanelis       DateTime
+  tglPersetujuanRevisiSkripsiAnggotaPanelis     DateTime
+  tglPersetujuanRevisiSkripsiAdvisor            DateTime
+}
+
+enum StatusPersetujuanRevisiSkripsi {
+  BELUM
+  MENUNGGU
+  DITOLAK
+  DISETUJUI
+}
+
+model TimAdvisor {
+  id           String       @id @default(uuid())
+  advisor      employees    @relation("Advisor", fields: [advisorId], references: [id])
+  advisorId    String
+  coAdvisor1   employees    @relation("CoAdvisor1", fields: [coAdvisor1Id], references: [id])
+  coAdvisor1Id String
+  coAdvisor2   employees    @relation("CoAdvisor2", fields: [coAdvisor2Id], references: [id])
+  coAdvisor2Id String
+  konsultasi   Konsultasi[]
+}
+
+model Konsultasi {
+  id                  String            @id @default(uuid())
+  deskripsi           String
+  tanggal             String
+  tertanda            String
+  timAdvisor          TimAdvisor        @relation(fields: [timAdvisorId], references: [id])
+  timAdvisorId        String
+  kelompokMahasiswa   KelompokMahasiswa @relation(fields: [kelompokMahasiswaId], references: [id])
+  kelompokMahasiswaId String
+}
+
+model JadwalSidang {
+  id                    String     @id @default(uuid())
+  mulaiSidangProposal   String
+  selesaiSidangProposal String
+  ruanganSidangProposal String
+  tanggalSidangProposal String
+  mulaiSidangSkripsi    String
+  selesaiSidangSkripsi  String
+  ruanganSidangSkripsi  String
+  tanggalSidangSkripsi  String
+  timPanelis            TimPanelis @relation(fields: [timPanelisId], references: [id])
+  timPanelisId          String     @unique
+}
+
+model TimPanelis {
+  id               String        @id @default(uuid())
+  ketuaPanelis     employees     @relation("KetuaPanelis", fields: [ketuaPanelisId], references: [id])
+  ketuaPanelisId   String
+  anggotaPanelis   employees     @relation("AnggotaPanelis", fields: [anggotaPanelisId], references: [id])
+  anggotaPanelisId String
+  advisor          employees     @relation("AdvisorPanelis", fields: [advisorId], references: [id])
+  advisorId        String
+  jadwalSidang     JadwalSidang?
+}
 
 //-------------------Bimbingan Akademik-------------------
