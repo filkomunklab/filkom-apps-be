@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-
+const cors = require("cors");
 const app = express();
 
 const authRoutes = require("./app/api/v1/auth/auth.routes");
@@ -11,6 +11,11 @@ const employeeRoutes = require("./app/api/v1/employee/employee.routes");
 
 const URL = "/api/v1";
 
+const corsOptions = {
+  origin: "http://localhost:3000",
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(logger("dev"));
 app.use(express.json());
