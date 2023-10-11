@@ -23,7 +23,16 @@ const signInAdmin = async (username, password) => {
       );
       checkUsername.token = token;
       await adminRepository.updateAdmin(checkUsername.id, checkUsername);
-      return token;
+      const data = {
+        user: {
+          id: checkUsername.id,
+          name: checkUsername.username,
+          email: checkUsername.email,
+          role: checkUsername.role,
+        },
+        token: token,
+      };
+      return data;
     } else {
       throw {
         status: 403,

@@ -4,8 +4,8 @@ const { getToken } = require("../../../utils/index");
 const signInAdmin = async (req, res) => {
   try {
     const { username, password } = req.body;
-    const token = await authService.signInAdmin(username, password);
-    res.status(200).send({ status: "SUCCESS", data: { token: token } });
+    const admin = await authService.signInAdmin(username, password);
+    res.status(200).send({ status: "SUCCESS", data: admin });
   } catch (error) {
     res
       .status(error?.status || 500)
