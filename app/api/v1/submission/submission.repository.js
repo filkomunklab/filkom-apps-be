@@ -1,11 +1,13 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
+// get semua submission
 const findAllSubmission = async () => {
   const submission = await prisma.submission.findMany();
   return submission;
 };
 
+// hapus 1 submission
 const deleteSubmission = async (id) => {
   await prisma.submission.delete({
     where: {
@@ -14,15 +16,14 @@ const deleteSubmission = async (id) => {
   });
 };
 
+// hapus All submission
 const deleteAllSubmission = async () => {
   await prisma.submission.deleteMany({});
 };
 
-// ------
-
+// create submission
 const insertSubmission = async (payload) => {
   const {
-      // title - di model group
       file_name,
       file_size,
       is_consultation,
@@ -42,9 +43,50 @@ const insertSubmission = async (payload) => {
       classroom_id,
     },
   });
+
+  // Mengambil ID grup yang baru dibuat
+  const { id: submission_id } = submission;
+
+  await insertGroup(payload, submission_id);
+
   return submission;
 };
 
+// +++ create kelompok, input title
+const insertGroup = async (payload, submission_id) => {
+  const {
+    title,
+  } = payload;
+  const group = await prisma.group.create({
+    data: {
+      title,
+      progress: "Submission",
+      submission_id
+    },
+  });
+
+  // Mengambil ID grup yang baru dibuat
+  const { id: group_id } = group;
+
+  await insertGroupStudent({group_id});
+  return group;
+};
+
+// +++ create kelompok mahasiswa
+const insertGroupStudent = async (group) => {
+  const {
+    group_id
+  } = group;
+  const group_student = await prisma.group_Student.create({
+    data: {
+      group_id: group_id,
+      student_id: "27492-25375-09769" // masih manual
+    },
+  });
+  return group_student;
+};
+
+// get 1 submission
 const findSubmissionById = async (id) => {
   const submission = await prisma.submission.findUnique({
     where: {
@@ -54,9 +96,9 @@ const findSubmissionById = async (id) => {
   return submission;
 };
 
+// update submission
 const updateSubmission = async (id, payload) => {
   const {
-    // title - di model group
     file_name,
     file_size,
     is_consultation,
@@ -75,11 +117,30 @@ const updateSubmission = async (id, payload) => {
       proposed_advisor,
       proposed_co_advisor1,
       proposed_co_advisor2,
+      updated_at: new Date(),
     },
   });
+
+  await updateGroupTitle(id, payload);
   return submission;
 };
 
+// update title
+const updateGroupTitle = async (id, payload) => {
+  const { title } = payload;
+    const group = await prisma.group.update({
+        where: {
+          submission_id: id,
+        },
+        data: {
+            title,
+            updated_at: new Date(),
+        },
+    });
+    return group;
+}
+
+// update advisor
 const updateAdvisorAndOrCoAdvisor = async (id, payload) => {
   const {
     proposed_advisor,
@@ -99,6 +160,7 @@ const updateAdvisorAndOrCoAdvisor = async (id, payload) => {
   return submission;
 };
 
+// approve submission
 const approveSubmission = async (id) => {
   const submission = await prisma.submission.update({
     where: {
@@ -111,6 +173,7 @@ const approveSubmission = async (id) => {
   return submission;
 };
 
+// reject submission
 const rejectSubmission = async (id) => {
   const submission = await prisma.submission.update({
     where: {
@@ -127,11 +190,11 @@ module.exports = {
   findAllSubmission,
   deleteSubmission,
   deleteAllSubmission,
-
   insertSubmission,
   findSubmissionById,
   updateSubmission,
   updateAdvisorAndOrCoAdvisor,
   approveSubmission,
   rejectSubmission,
+  updateGroupTitle,
 }

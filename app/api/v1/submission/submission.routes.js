@@ -8,8 +8,6 @@ const { auth } = require("../../../middleware/auth");
 
 //-------------------Skripsi App ------------------------
 
-// !!!   mengubah judul -> di model group
-
 //       melihat semua pengajuan
 router.get("/submission", submissionController.getAllSubmission);
 //       menghapus pengajuan
@@ -17,9 +15,7 @@ router.delete("/submission/:id", submissionController.deleteSubmissionById);
 //       menghapus semua pengajuan
 router.delete("/submission", submissionController.deleteAllSubmission);
 
-//       beranda - status pengajuan judul
-// router.get("/submission/submission-status/:id", submissionController.getSubmissionStatusById);
-// //       mengajukan judul baru
+//       mengajukan judul baru
 router.post("/submission", submissionController.createSubmission);
 //       melihat pengajuan judul
 router.get("/submission/:id", submissionController.getSubmissionById);
@@ -31,5 +27,8 @@ router.put("/submission/advisor-and-co-advisor/:id", submissionController.update
 router.put("/submission/approve/:id", submissionController.approveSubmissionById);
 //       menolak pengajuan judul
 router.put("/submission/reject/:id", submissionController.rejectSubmissionById);
+//       memperbarui judul
+router.put("/submission/title/:id", submissionController.updateGroupTitleById);
+
 
 module.exports = router;

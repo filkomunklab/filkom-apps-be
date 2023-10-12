@@ -60,15 +60,22 @@ const rejectSubmissionById = async (id) => {
   return submission;
 };
 
+const updateGroupTitleById = async (id, payload) => {
+  await getSubmissionById(id);
+
+  const submission = await submissionRepository.updateGroupTitle(id, payload);
+  return submission;
+};
+
 module.exports = {
   getAllSubmission,
   deleteSubmissionById,
   deleteAllSubmission,
-  // getSubmissionStatusById,
   createSubmission,
   getSubmissionById,
   updateSubmissionById,
   updateAdvisorAndOrCoAdvisorById,
   approveSubmissionById,
   rejectSubmissionById,
+  updateGroupTitleById,
 }

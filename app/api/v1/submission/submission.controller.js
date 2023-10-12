@@ -31,11 +31,6 @@ const deleteAllSubmission = async (req, res) => {
     }
 };
 
-// const getSubmissionStatusById = async (req, res) => {
-//     const submission = await submissionService.getSubmissionStatusById();
-//     res.send({ status: "OK", data: submission });
-// };
-
 const createSubmission = async (req, res) => {
     const payload = req.body;
     const submission = await submissionService.createSubmission(payload);
@@ -141,15 +136,39 @@ const rejectSubmissionById = async (req, res) => {
     }
 };
 
+const updateGroupTitleById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const payload = req.body;
+
+        if (
+            !( payload.title )
+        ) {
+            return res
+            .status(400)
+            .send({ status: "FAILED", data: { error: "some field is missing" } });
+        }
+        const submission = await submissionService.updateGroupTitleById(
+            id,
+            payload
+        );
+        res.send({ status: "OK", data: submission });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
 module.exports = {
     getAllSubmission,
     deleteSubmissionById,
     deleteAllSubmission,
-    // getSubmissionStatusById,
     createSubmission,
     getSubmissionById,
     updateSubmissionById,
     updateAdvisorAndOrCoAdvisorById,
     approveSubmissionById,
     rejectSubmissionById,
+    updateGroupTitleById,
 };

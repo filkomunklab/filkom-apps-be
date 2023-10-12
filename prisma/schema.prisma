@@ -96,22 +96,24 @@ model Group_Student {
 }
 
 model Group {
-  id            String   @id @default(uuid())
-  progress      Progress
+  id            String    @id @default(uuid())
+  progress      Progress?
   title         String?
   keywords      String?
   abstrak       String?
   reference     String?
   // @relation
-  submission_id String?
+  submission_id String?   @unique
   // @relation
-  proposal_id   String?
+  proposal_id   String?   @unique
   // @relation
-  skripsi_id    String?
+  skripsi_id    String?   @unique
+  created_at    DateTime  @default(now())
+  updated_at    DateTime?
 }
 
 enum Progress {
-  Sumission
+  Submission
   Proposal
   Skripsi
 }
@@ -148,8 +150,8 @@ model Submission {
   is_approve           Submission_Approve @default(Waiting)
   // @relation
   classroom_id         String
-  created_at          DateTime @default(now())
-  updated_at DateTime?
+  created_at           DateTime           @default(now())
+  updated_at           DateTime?
 }
 
 enum Submission_Approve {

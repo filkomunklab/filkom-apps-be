@@ -7,7 +7,7 @@
 
 */
 -- CreateEnum
-CREATE TYPE "Progress" AS ENUM ('Sumission', 'Proposal', 'Skripsi');
+CREATE TYPE "Progress" AS ENUM ('Submission', 'Proposal', 'Skripsi');
 
 -- CreateEnum
 CREATE TYPE "Semester" AS ENUM ('Ganjil', 'Genap', 'Padat');
@@ -68,7 +68,7 @@ CREATE TABLE "Group_Student" (
 -- CreateTable
 CREATE TABLE "Group" (
     "id" TEXT NOT NULL,
-    "progress" "Progress" NOT NULL,
+    "progress" "Progress",
     "title" TEXT,
     "keywords" TEXT,
     "abstrak" TEXT,
@@ -76,6 +76,8 @@ CREATE TABLE "Group" (
     "submission_id" TEXT,
     "proposal_id" TEXT,
     "skripsi_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
 
     CONSTRAINT "Group_pkey" PRIMARY KEY ("id")
 );
@@ -288,3 +290,12 @@ CREATE TABLE "History" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Thesis_Student_fullname_key" ON "Thesis_Student"("fullname");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Group_submission_id_key" ON "Group"("submission_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Group_proposal_id_key" ON "Group"("proposal_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Group_skripsi_id_key" ON "Group"("skripsi_id");
