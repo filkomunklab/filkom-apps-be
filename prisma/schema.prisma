@@ -40,14 +40,15 @@ model Employee {
 
 model Student {
   id        String    @id @default(uuid())
+  reg_num   String?   @unique
   nim       String    @unique
   password  String
   firstName String
   lastName  String?
   faculty   String
   major     String
-  address   String
-  email     String?
+  address   String?
+  email     String?   @unique
   phoneNo   String?
   createdBy String?
   updatedBy String?

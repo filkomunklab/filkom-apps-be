@@ -8,7 +8,9 @@ const employeeRoutes = require("./app/api/v1/employee/employee.routes");
 const authRoutes = require("./app/api/v1/auth/auth.routes");
 
 //------------------Ruter Skripsi App---------------------------
+const studentRoutes = require("./app/api/v1/student/student.routes");
 const submissionRoutes = require("./app/api/v1/submission/submission.routes");
+const groupRoutes = require("./app/api/v1/group/group.routes");
 
 
 const URL = "/api/v1";
@@ -27,8 +29,9 @@ app.use(`${URL}`, adminRoutes);
 app.use(`${URL}`, employeeRoutes);
 
 //------------------Ruter Skripsi App---------------------------
+app.use(`${URL}`, studentRoutes);
 app.use(`${URL}`, submissionRoutes);
-
+app.use(`${URL}`, groupRoutes);
 
 app.use("/", (req, res) => {
   res.send({ message: "Welcome to API Filkom Apps" });

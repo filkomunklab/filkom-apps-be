@@ -1,7 +1,6 @@
 /*
   Warnings:
 
-  - Added the required column `address` to the `Student` table without a default value. This is not possible if the table is not empty.
   - Added the required column `faculty` to the `Student` table without a default value. This is not possible if the table is not empty.
   - Added the required column `major` to the `Student` table without a default value. This is not possible if the table is not empty.
 
@@ -43,9 +42,10 @@ ALTER TABLE "Employee" ADD COLUMN     "degree" TEXT,
 ADD COLUMN     "prodi" TEXT;
 
 -- AlterTable
-ALTER TABLE "Student" ADD COLUMN     "address" TEXT NOT NULL,
+ALTER TABLE "Student" ADD COLUMN     "address" TEXT,
 ADD COLUMN     "faculty" TEXT NOT NULL,
 ADD COLUMN     "major" TEXT NOT NULL,
+ADD COLUMN     "reg_num" TEXT,
 ALTER COLUMN "lastName" DROP NOT NULL;
 
 -- CreateTable
