@@ -30,5 +30,6 @@ router.put("/submission/reject/:id", submissionController.rejectSubmissionById);
 //       memperbarui judul
 router.put("/submission/title/:id", submissionController.updateGroupTitleById);
 
+/* Note: Saat pengajuan judul, belum menggunakan student_id*/
 
 module.exports = router;

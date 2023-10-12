@@ -56,6 +56,9 @@ const insertSubmission = async (payload) => {
 const insertGroup = async (payload, submission_id) => {
   const {
     title,
+    partner1,
+    partner2,
+    partner3,
   } = payload;
   const group = await prisma.group.create({
     data: {
@@ -65,22 +68,31 @@ const insertGroup = async (payload, submission_id) => {
     },
   });
 
+  // get id user yang login
+  // student_id = userId;
+  student_id = "ef483f6b-e79c-4975-9188-fcbdca3e9364";
+
   // Mengambil ID grup yang baru dibuat
   const { id: group_id } = group;
 
-  await insertGroupStudent({group_id});
+  // Memasukkan mahasiswa ke dalam kelompok
+  const groupStudents = await Promise.all([
+    insertGroupStudent({ group_id, student_id: student_id }),
+    insertGroupStudent({ group_id, student_id: partner1 }),
+    insertGroupStudent({ group_id, student_id: partner2 }),
+    insertGroupStudent({ group_id, student_id: partner3 }),
+  ]);
+
   return group;
 };
 
 // +++ create kelompok mahasiswa
-const insertGroupStudent = async (group) => {
-  const {
-    group_id
-  } = group;
+const insertGroupStudent = async (data) => {
+  const { group_id, student_id } = data;
   const group_student = await prisma.group_Student.create({
     data: {
-      group_id: group_id,
-      student_id: "27492-25375-09769" // masih manual
+      group_id,
+      student_id,
     },
   });
   return group_student;
