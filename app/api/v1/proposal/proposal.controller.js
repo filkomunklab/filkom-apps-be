@@ -177,6 +177,59 @@ const deleteProposalPlagiarismById = async (req, res) => {
     }
 };
 
+const getProposalSchedule = async (req, res) => {
+    try {
+        const proposal = await proposalService.getProposalSchedule();
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const updateProposalScheduleById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const payload = req.body;
+        if (
+            !(
+                payload.panelist_chairman  &&
+                payload.panelist_member &&
+                payload.start_defence &&
+                payload.end_defence &&
+                payload.defence_room &&
+                payload.defence_date
+            )
+        ) {
+            return res
+            .status(400)
+            .send({ status: "FAILED", data: { error: "some field is missing" } });
+        }
+        const proposal = await proposalService.updateProposalScheduleById(
+            id,
+            payload
+        );
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const getProposalScheduleById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.getProposalScheduleById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
 module.exports = {
     updateProposalDocumentById,
     getProposalDocumentById,
@@ -189,4 +242,8 @@ module.exports = {
     updateProposalPlagiarismById,
     getProposalPlagiarismById,
     deleteProposalPlagiarismById,
+
+    getProposalSchedule,
+    updateProposalScheduleById,
+    getProposalScheduleById,
 }

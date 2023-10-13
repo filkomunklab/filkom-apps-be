@@ -96,6 +96,35 @@ const deleteProposalPlagiarismById = async (id) => {
   await proposalRepository.deleteProposalPlagiarismById(id);
 };
 
+const getProposalSchedule = async () => {
+  const proposal = await proposalRepository.findProposalSchedule();
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return proposal;
+};
+
+const updateProposalScheduleById = async (id, payload) => {
+  await getProposalById(id);
+
+  const proposal = await proposalRepository.updateProposalScheduleById(id, payload);
+  return proposal;
+};
+
+const getProposalScheduleById = async (id) => {
+  const proposal = await proposalRepository.findProposalScheduleById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return proposal;
+};
+
 module.exports = {
   getProposalDocumentById,
   updateProposalDocumentById,
@@ -109,4 +138,7 @@ module.exports = {
   getProposalPlagiarismById,
   deleteProposalPlagiarismById,
 
+  getProposalSchedule,
+  updateProposalScheduleById,
+  getProposalScheduleById,
 }

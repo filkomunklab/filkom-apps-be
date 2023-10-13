@@ -61,7 +61,7 @@ const findProposalDocumentById = async (id) => {
     return proposal;
 };
 
-// hapus/update 1 submission
+// hapus/update 1 proposal
 const deleteProposalDocumentById = async (id) => {
     await prisma.proposal.update({
       where: {
@@ -170,7 +170,7 @@ const findProposalPaymentById = async (id) => {
     return proposal;
 };
 
-// hapus/update 1 submission
+// hapus/update 1 proposal
 const deleteProposalPaymentById = async (id) => {
   await prisma.proposal.update({
     where: {
@@ -231,7 +231,7 @@ const findProposalPlagiarismById = async (id) => {
     return proposal;
 };
 
-// hapus/update 1 submission
+// hapus/update 1 proposal
 const deleteProposalPlagiarismById = async (id) => {
   await prisma.proposal.update({
     where: {
@@ -251,6 +251,171 @@ const deleteProposalPlagiarismById = async (id) => {
   });
 };
 
+// get list schedule
+const findProposalSchedule = async () => {
+  // Mencari proposal yang tidak memiliki is_pass berisi "Pass" atau "Fail"
+  const proposals = await prisma.proposal.findMany({
+    where: {
+      OR: [
+        {
+          is_pass: null,
+        },
+        {
+          is_pass: "Repeat",
+        },
+      ],
+    },
+    select: {
+      id: true,
+      advisor: true,
+      panelist_chairman: true,
+      panelist_member: true,
+      start_defence: true,
+      end_defence: true,
+      defence_room: true,
+      defence_date: true,
+    },
+  });
+
+  // Mengambil daftar proposalIds
+  const proposalIds = proposals.map((proposal) => proposal.id);
+
+  // Mengambil data grup berdasarkan proposalIds
+  const groups = await findManyGroupsByProposalIds(proposalIds);
+
+  // Menggabungkan data proposal dengan data grup
+  const result = proposals.map((proposal) => {
+    const group = groups.find((group) => group.proposal_id === proposal.id);
+    if (group) {
+      return {
+        group_id: group.id,
+        proposal_id: proposal.id,
+        title: group.title,
+        advisor: proposal.advisor,
+        panelist_chairman: proposal.panelist_chairman,
+        panelist_member: proposal.panelist_member,
+        start_defence: proposal.start_defence,
+        end_defence: proposal.end_defence,
+        defence_room: proposal.defence_room,
+        defence_date: proposal.defence_date,
+      };
+    }
+    return null;
+  });
+
+  // Filter null values (jika ada proposal tanpa grup)
+  const filteredResult = result.filter((item) => item !== null);
+
+  return filteredResult;
+};
+
+// Mencari grup berdasarkan proposalIds
+const findManyGroupsByProposalIds = async (proposalIds) => {
+  const groups = await prisma.group.findMany({
+    where: {
+      proposal_id: {
+        in: proposalIds,
+      },
+    },
+    select: {
+      id: true,
+      proposal_id: true,
+      title: true,
+    },
+  });
+  return groups;
+};
+
+
+// create/update jadwal
+const updateProposalScheduleById = async (id, payload) => {
+  const {
+    panelist_chairman,
+    panelist_member,
+    start_defence,
+    end_defence,
+    defence_room,
+    defence_date
+  } = payload;
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      panelist_chairman,
+      panelist_member,
+      start_defence,
+      end_defence,
+      defence_room,
+      defence_date
+    },
+    select: {
+      id: true,
+      panelist_chairman: true,
+      panelist_member: true,
+      start_defence: true,
+      end_defence: true,
+      defence_room: true,
+      defence_date: true
+    }
+  });
+  return proposal;
+};
+
+// get 1 jadwal proposal
+const findProposalScheduleById = async (id) => {
+  const proposal = await prisma.proposal.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      panelist_chairman: true,
+      panelist_member: true,
+      advisor: true,
+      start_defence: true,
+      end_defence: true,
+      defence_room: true,
+      defence_date: true
+    }
+  });
+
+  const group = await findGroupById(id);
+  group_id = group.id;
+  const group_Student = await findGroupStudentById(group_id);
+  const scheduleData = {
+    id: proposal.id, 
+    title: group.title,
+    students: group_Student.map(student => student.student_id),
+    panelist_chairman: proposal.panelist_chairman,
+    panelist_member: proposal.panelist_member,
+    advisor: proposal.advisor,
+    start_defence: proposal.start_defence,
+    end_defence: proposal.end_defence,
+    defence_room: proposal.defence_room,
+    defence_date: proposal.defence_date,
+  };
+  return scheduleData;
+};
+
+const findGroupById =  async (proposal_id) => {
+  const group = await prisma.group.findUnique({
+    where: {
+      proposal_id,
+    },
+  });
+  return group;
+}
+
+const findGroupStudentById =  async (group_id) => {
+  const group_Student = await prisma.group_Student.findMany({
+    where: {
+      group_id,
+    },
+  });
+  return group_Student;
+}
+
 module.exports = {
   findProposalById,
   updateProposalDocumentById,
@@ -265,4 +430,7 @@ module.exports = {
   findProposalPlagiarismById,
   deleteProposalPlagiarismById,
 
+  findProposalSchedule,
+  updateProposalScheduleById,
+  findProposalScheduleById,
 }

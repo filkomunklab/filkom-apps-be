@@ -30,23 +30,15 @@ router.put("/proposal/proposal-plagiarism-check/:id", proposalController.updateP
 router.get("/proposal/proposal-plagiarism-check/:id", proposalController.getProposalPlagiarismById);
 //       hapus bukti hasil cek plagiat
 router.put("/proposal/proposal-plagiarism-check/delete/:id", proposalController.deleteProposalPlagiarismById);
-// //       menyetujui dokumen proposal
-// router.put("/proposal/proposal-document/approve/:id", proposalController.approveProposalDocumentById);
-// //       menolak dokumen proposal
-// router.put("/proposal/proposal-document/reject/:id", proposalController.rejectProposalDocumentById);
-// //       upload/update bukti pembayaran
-// router.put("/proposal/payment/:id", proposalController.updatePaymentById);
-// //       melihat bukti pembayaran
-// router.get("/proposal/payment/:id", proposalController.getPaymentById);
-// //       upload/update hasil cek plagiat
-// router.put("/proposal/plagiarism-check/:id", proposalController.updatePlagiarismCheckById);
-// //       melihat hasil cek plagiat
-// router.get("/proposal/plagiarism-check/:id", proposalController.getPlagiarismCheckById);
 
-// //       membuat/memperbarui jadwal
-// router.put("/proposal/schedule/:id", proposalController.updateScheduleById);
-// //       melihat jadwal
-// router.get("/proposal/schedule/:id", proposalController.getScheduleById);
+
+//       melihat daftar sidang
+router.get("/proposal/schedule", proposalController.getProposalSchedule);
+//       membuat/memperbarui jadwal
+router.put("/proposal/schedule/:id", proposalController.updateProposalScheduleById);
+//       melihat jadwal
+router.get("/proposal/schedule/:id", proposalController.getProposalScheduleById);
+
 
 // //       membuka akses berita acara
 // router.put("/proposal/proposal-report/open-access/:id", proposalController.openAccessProposalReportById);
