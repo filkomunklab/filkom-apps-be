@@ -70,7 +70,7 @@ const insertGroup = async (payload, submission_id) => {
 
   // get id user yang login
   // student_id = userId;
-  student_id = "ef483f6b-e79c-4975-9188-fcbdca3e9364";
+  student_id = "f3fa4d77-0c7b-49a0-b84d-7a9be9b3faf0";
 
   // Mengambil ID grup yang baru dibuat
   const { id: group_id } = group;
@@ -78,9 +78,9 @@ const insertGroup = async (payload, submission_id) => {
   // Memasukkan mahasiswa ke dalam kelompok
   const groupStudents = await Promise.all([
     insertGroupStudent({ group_id, student_id: student_id }),
-    insertGroupStudent({ group_id, student_id: partner1 }),
-    insertGroupStudent({ group_id, student_id: partner2 }),
-    insertGroupStudent({ group_id, student_id: partner3 }),
+    partner1 && insertGroupStudent({ group_id, student_id: partner1 }),
+    partner2 && insertGroupStudent({ group_id, student_id: partner2 }),
+    partner3 &&insertGroupStudent({ group_id, student_id: partner3 }),
   ]);
 
   return group;
@@ -182,8 +182,84 @@ const approveSubmission = async (id) => {
       is_approve: "Approve"
     },
   });
+
+  await insertProposal(id, submission);
+  await insertSkripsi(id, submission);
+
   return submission;
 };
+
+// +++ create proposal
+const insertProposal = async (submission_id, submission) => {
+  const {
+    proposed_advisor,
+    proposed_co_advisor1,
+    proposed_co_advisor2,
+    classroom_id,
+  } = submission;
+  const proposal = await prisma.proposal.create({
+    data: {
+      advisor: proposed_advisor,
+      co_advisor1: proposed_co_advisor1,
+      co_advisor2: proposed_co_advisor2,
+      classroom_id,
+    },
+  });
+
+  const { id: proposal_id } = proposal;
+  
+  await updateGroupProposalIdById(submission_id, proposal_id);
+
+  return proposal;
+}
+
+const updateGroupProposalIdById = async (submission_id, proposal_id) => {
+  const group = await prisma.group.update({
+    where: {
+      submission_id,
+    },
+    data: {
+      proposal_id,
+    },
+  });
+
+  return group;
+}
+
+// +++ create skripsi
+const insertSkripsi = async (submission_id, submission) => {
+  const {
+    proposed_advisor,
+    proposed_co_advisor1,
+    proposed_co_advisor2,
+  } = submission;
+  const skripsi = await prisma.skripsi.create({
+    data: {
+      advisor: proposed_advisor,
+      co_advisor1: proposed_co_advisor1,
+      co_advisor2: proposed_co_advisor2,
+    },
+  });
+
+  const { id: skripsi_id } = skripsi;
+  
+  await updateGroupSkripsiIdById(submission_id, skripsi_id);
+
+  return skripsi;
+}
+
+const updateGroupSkripsiIdById = async (submission_id, skripsi_id) => {
+  const group = await prisma.group.update({
+    where: {
+      submission_id,
+    },
+    data: {
+      skripsi_id,
+    },
+  });
+
+  return group;
+}
 
 // reject submission
 const rejectSubmission = async (id) => {

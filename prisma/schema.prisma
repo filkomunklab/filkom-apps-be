@@ -27,6 +27,7 @@ model Admin {
 model Employee {
   id        String    @id @default(uuid())
   nik       String    @unique
+  nidn      String?    @unique
   password  String
   firstName String
   lastName  String
@@ -221,7 +222,7 @@ model Proposal {
   is_pass                                  Pass?
   report_date                              DateTime?
   file_name_revision                       String?
-  upload_date_revision                     DateTime
+  upload_date_revision                     DateTime?
   file_size_revision                       String?
   is_revision_approve_by_panelist_chairman Revision_Approve?
   is_revision_approve_by_panelist_member   Revision_Approve?
@@ -249,7 +250,7 @@ model Skripsi {
   // @relation
   co_advisor2                              String?
   // @relation
-  classroom_id                             String
+  classroom_id                             String?
   is_skripsi_approve_by_advisor            Thesis_Approve?
   is_skripsi_approve_by_co_advisor1        Thesis_Approve?
   is_skripsi_approve_by_co_advisor2        Thesis_Approve?
@@ -291,7 +292,7 @@ model Skripsi {
   is_pass                                  Pass?
   report_date                              DateTime?
   file_name_revision                       String?
-  upload_date_revision                     DateTime
+  upload_date_revision                     DateTime?
   file_size_revision                       String?
   is_revision_approve_by_panelist_chairman Revision_Approve?
   is_revision_approve_by_panelist_member   Revision_Approve?

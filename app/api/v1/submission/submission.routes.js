@@ -31,5 +31,6 @@ router.put("/submission/reject/:id", submissionController.rejectSubmissionById);
 router.put("/submission/title/:id", submissionController.updateGroupTitleById);
 
 /* Note: Saat pengajuan judul, belum menggunakan student_id*/
+/* Classroom belum pasti*/
 
 module.exports = router;
