@@ -55,11 +55,9 @@ const signOutAdmin = async (token) => {
 
 const signInEmployee = async (username, password) => {
   const checkUsername = await authRepository.findEmployeeByNik(username);
-  const employeeRole = await authRepository.findEmployeeRoleByNik(
-    checkUsername.nik
-  );
 
   if (checkUsername) {
+    const role = await authRepository.findRoleById(checkUsername.nik);
     const checkPassword = bcrypt.compareSync(password, checkUsername.password);
     if (checkPassword) {
       const token = jwt.sign(
@@ -67,7 +65,7 @@ const signInEmployee = async (username, password) => {
           user: {
             nik: checkUsername.nik,
             name: `${checkUsername.firstName} ${checkUsername.lastName}`,
-            role: employeeRole,
+            role: role,
           },
         },
         secretKey
@@ -76,7 +74,47 @@ const signInEmployee = async (username, password) => {
         user: {
           nik: checkUsername.nik,
           name: `${checkUsername.firstName} ${checkUsername.lastName}`,
-          role: employeeRole,
+          role: role,
+        },
+        token: token,
+      };
+      return data;
+    } else {
+      throw {
+        status: 403,
+        message: "email or password incorrect",
+      };
+    }
+  } else {
+    throw {
+      status: 403,
+      message: "email or password incorrect",
+    };
+  }
+};
+
+const signInStudent = async (username, password) => {
+  const checkUsername = await authRepository.findStudentByNim(username);
+
+  if (checkUsername) {
+    const role = await authRepository.findRoleById(checkUsername.nim);
+    const checkPassword = bcrypt.compareSync(password, checkUsername.password);
+    if (checkPassword) {
+      const token = jwt.sign(
+        {
+          user: {
+            nim: checkUsername.nim,
+            name: `${checkUsername.firstName} ${checkUsername.lastName}`,
+            role,
+          },
+        },
+        secretKey
+      );
+      const data = {
+        user: {
+          nim: checkUsername.nim,
+          name: `${checkUsername.firstName} ${checkUsername.lastName}`,
+          role,
         },
         token: token,
       };
@@ -99,4 +137,5 @@ module.exports = {
   signInAdmin,
   signOutAdmin,
   signInEmployee,
+  signInStudent,
 };
