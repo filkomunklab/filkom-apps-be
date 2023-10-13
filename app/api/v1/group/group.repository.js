@@ -13,7 +13,6 @@ const findSubmissionListById = async (student_id) => {
     // Untuk setiap entri dalam group_students, Anda dapat mengambil ID grupnya
     const groupIds = group_students.map((groupStudent) => groupStudent.group_id);
 
-    // await findGroup(groupIds);
     const groups = await findGroup(groupIds);
 
     return groups;
@@ -69,7 +68,43 @@ const findSubmissionById = async (submissionId) => {
 }
 
 // Main - get submission details - beranda
-// const findSubmissionDetailsById = async
+const findSubmissionDetailsById = async (id) => {
+    const students = await prisma.group_Student.findMany({
+        where: {
+            group_id: id,
+        },
+        select: {
+            student_id: true,
+        },
+    });
+
+    // const studentIds = students.map((groupStudent) => groupStudent.student_id);
+    const group = await findTitleById(id);
+    submission_id = group.submission_id;
+    const submission = await findSubmissionById(submission_id);
+    const groupData = {
+        group_id: group.id, 
+        title: group.title,
+        students: students.map(student => student.student_id),
+        is_approve: submission.is_approve,
+    };
+
+    return groupData;
+}
+
+const findTitleById =  async (id) => {
+    const group = await prisma.group.findUnique({
+        where: {
+            id,
+        },
+    });
+
+    // const { id: submission_id } = group;
+
+    // const submission = await findSubmissionById(submission_id);
+
+    return group;
+}
 
 // // get kelompok mahasiswa
 // const findGroupStudentById = async (id) => {
@@ -113,6 +148,7 @@ const findSubmissionById = async (submissionId) => {
 
 module.exports = {
     findSubmissionListById,
+    findSubmissionDetailsById,
     // findGroupStudentById,
     // updateMetadata,
     // findMetadataById,

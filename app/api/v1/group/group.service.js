@@ -13,6 +13,17 @@ const getSubmissionListById = async (student_id) => {
     return student_group;
 };
 
+const getSubmissionDetailsById = async (id) => {
+    const student_group = await groupRepository.findSubmissionDetailsById(id);
+    if (!student_group) {
+      throw {
+        status: 400,
+        message: `Not found`,
+      };
+    }
+    return student_group;
+};
+
 // const getGroupStudentById = async (id) => {
 //     const student_group = await groupRepository.findGroupStudentById(id);
 //     if (!student_group) {
@@ -44,6 +55,7 @@ const getSubmissionListById = async (student_id) => {
 
 module.exports = {
     getSubmissionListById,
+    getSubmissionDetailsById,
     // getGroupStudentById,
     // updateMetadataById,
     // getMetadataById,

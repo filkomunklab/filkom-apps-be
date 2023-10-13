@@ -17,6 +17,18 @@ const getSubmissionListById = async (req, res) => {
     }
 };
 
+const getSubmissionDetailsById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const group_student = await groupService.getSubmissionDetailsById(id);
+        res.send({ status: "OK", data: group_student });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
 // const getGroupStudentById = async (req, res) => {
 //     try {
 //         const id = req.params.id;
@@ -71,6 +83,7 @@ const getSubmissionListById = async (req, res) => {
 
 module.exports = {
     getSubmissionListById,
+    getSubmissionDetailsById
     // getGroupStudentById,
     // updateMetadataById,
     // getMetadataById,

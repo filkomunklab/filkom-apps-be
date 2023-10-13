@@ -12,6 +12,8 @@ const { auth } = require("../../../middleware/auth");
 
 //       melihat daftar submission
 router.get("/group_student/submission_list", groupController.getSubmissionListById);
+//       melihat detail submission
+router.get("/group_student/submission_details/:id", groupController.getSubmissionDetailsById);
 
 // //       melihat kelompok mahasiswa
 // router.get("/group_student/:id", groupController.getGroupStudentById);
