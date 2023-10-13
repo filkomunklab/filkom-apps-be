@@ -39,7 +39,7 @@ async function main() {
         firstName: "John",
         lastName: "Doe",
         email: "student@mail.com",
-        nim: "1234567890",
+        nim: "student",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },

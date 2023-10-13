@@ -19,10 +19,20 @@ const findEmployeeByNik = async (nik) => {
   return employee;
 };
 
-const findEmployeeRoleByNik = async (nik) => {
+const findStudentByNim = async (nim) => {
+  const student = await prisma.student.findUnique({
+    where: {
+      nim,
+    },
+  });
+
+  return student;
+};
+
+const findRoleById = async (id) => {
   const { role } = await prisma.userRole.findUnique({
     where: {
-      userId: nik,
+      userId: id,
     },
     select: {
       role: true,
@@ -35,5 +45,6 @@ const findEmployeeRoleByNik = async (nik) => {
 module.exports = {
   findAdminByUsername,
   findEmployeeByNik,
-  findEmployeeRoleByNik,
+  findStudentByNim,
+  findRoleById,
 };
