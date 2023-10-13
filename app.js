@@ -11,6 +11,7 @@ const authRoutes = require("./app/api/v1/auth/auth.routes");
 const studentRoutes = require("./app/api/v1/student/student.routes");
 const submissionRoutes = require("./app/api/v1/submission/submission.routes");
 const groupRoutes = require("./app/api/v1/group/group.routes");
+const proposalRoutes = require("./app/api/v1/proposal/proposal.routes");
 
 
 const URL = "/api/v1";
@@ -32,6 +33,7 @@ app.use(`${URL}`, employeeRoutes);
 app.use(`${URL}`, studentRoutes);
 app.use(`${URL}`, submissionRoutes);
 app.use(`${URL}`, groupRoutes);
+app.use(`${URL}`, proposalRoutes);
 
 app.use("/", (req, res) => {
   res.send({ message: "Welcome to API Filkom Apps" });

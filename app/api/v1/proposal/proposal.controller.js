@@ -1,0 +1,192 @@
+//Layer untuk handle request dan response
+//Biasanya juga handle validasi body
+
+const proposalService = require("./proposal.service");
+
+const updateProposalDocumentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const payload = req.body;
+        if (
+            !(
+                payload.file_name_proposal  &&
+                payload.file_size_proposal
+            )
+        ) {
+            return res
+            .status(400)
+            .send({ status: "FAILED", data: { error: "some field is missing" } });
+        }
+        const proposal = await proposalService.updateProposalDocumentById(
+            id,
+            payload
+        );
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const getProposalDocumentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.getProposalDocumentById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const deleteProposalDocumentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        await proposalService.deleteProposalDocumentById(id);
+        res.status(200).send({ status: "OK" });
+    } catch (error) {
+        res
+        .status(error?.status || 500)
+        .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const approveProposalDocumentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.approveProposalDocumentById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const rejectProposalDocumentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.rejectProposalDocumentById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const updateProposalPaymentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const payload = req.body;
+        if (
+            !(
+                payload.file_name_payment  &&
+                payload.file_size_payment
+            )
+        ) {
+            return res
+            .status(400)
+            .send({ status: "FAILED", data: { error: "some field is missing" } });
+        }
+        const proposal = await proposalService.updateProposalPaymentById(
+            id,
+            payload
+        );
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const getProposalPaymentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.getProposalPaymentById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const deleteProposalPaymentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        await proposalService.deleteProposalPaymentById(id);
+        res.status(200).send({ status: "OK" });
+    } catch (error) {
+        res
+        .status(error?.status || 500)
+        .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const updateProposalPlagiarismById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const payload = req.body;
+        if (
+            !(
+                payload.file_name_plagiarismcheck  &&
+                payload.file_size_plagiarismcheck
+            )
+        ) {
+            return res
+            .status(400)
+            .send({ status: "FAILED", data: { error: "some field is missing" } });
+        }
+        const proposal = await proposalService.updateProposalPlagiarismById(
+            id,
+            payload
+        );
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const getProposalPlagiarismById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.getProposalPlagiarismById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const deleteProposalPlagiarismById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        await proposalService.deleteProposalPlagiarismById(id);
+        res.status(200).send({ status: "OK" });
+    } catch (error) {
+        res
+        .status(error?.status || 500)
+        .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+module.exports = {
+    updateProposalDocumentById,
+    getProposalDocumentById,
+    deleteProposalDocumentById,
+    approveProposalDocumentById,
+    rejectProposalDocumentById,
+    updateProposalPaymentById,
+    getProposalPaymentById,
+    deleteProposalPaymentById,
+    updateProposalPlagiarismById,
+    getProposalPlagiarismById,
+    deleteProposalPlagiarismById,
+}
