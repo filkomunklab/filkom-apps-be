@@ -53,7 +53,50 @@ const signOutAdmin = async (token) => {
   await adminRepository.updateAdmin(admin.id, admin);
 };
 
+const signInEmployee = async (username, password) => {
+  const checkUsername = await authRepository.findEmployeeByNik(username);
+  const employeeRole = await authRepository.findEmployeeRoleByNik(
+    checkUsername.nik
+  );
+
+  if (checkUsername) {
+    const checkPassword = bcrypt.compareSync(password, checkUsername.password);
+    if (checkPassword) {
+      const token = jwt.sign(
+        {
+          user: {
+            nik: checkUsername.nik,
+            name: `${checkUsername.firstName} ${checkUsername.lastName}`,
+            role: employeeRole,
+          },
+        },
+        secretKey
+      );
+      const data = {
+        user: {
+          nik: checkUsername.nik,
+          name: `${checkUsername.firstName} ${checkUsername.lastName}`,
+          role: employeeRole,
+        },
+        token: token,
+      };
+      return data;
+    } else {
+      throw {
+        status: 403,
+        message: "email or password incorrect",
+      };
+    }
+  } else {
+    throw {
+      status: 403,
+      message: "email or password incorrect",
+    };
+  }
+};
+
 module.exports = {
   signInAdmin,
   signOutAdmin,
+  signInEmployee,
 };

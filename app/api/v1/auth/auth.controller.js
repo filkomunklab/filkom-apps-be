@@ -38,8 +38,21 @@ const signOutAdmin = async (req, res) => {
   }
 };
 
+const signInEmployee = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const employee = await authService.signInEmployee(username, password);
+    res.status(200).send({ status: "SUCCESS", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   signInAdmin,
   signOutAdmin,
+  signInEmployee,
   me,
 };
