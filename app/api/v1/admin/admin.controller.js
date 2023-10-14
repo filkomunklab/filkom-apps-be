@@ -2,18 +2,35 @@
 //Biasanya juga handle validasi body
 
 const adminService = require("./admin.service");
+const { policyFor } = require("../policy");
 
 const getAllAdmins = async (req, res) => {
-  const admin = await adminService.getAllAdmins();
-  res.send({ status: "OK", data: admin });
+  const policy = policyFor(req.user);
+  if (policy.can("read", "Admin")) {
+    const admin = await adminService.getAllAdmins();
+    res.status(200).send({ status: "OK", data: admin });
+  } else {
+    res.status(500).send({
+      status: "FAILED",
+      data: { message: "You dont have permission to get all admins" },
+    });
+  }
 };
 
 const getAdminById = async (req, res) => {
   try {
-    const id = req.params.id;
-    const admin = await adminService.getAdminById(id);
-    //Todo: format data
-    res.send({ status: "OK", data: admin });
+    const policy = policyFor(req.user);
+    if (policy.can("read", "Admin")) {
+      const id = req.params.id;
+      const admin = await adminService.getAdminById(id);
+      //Todo: format data
+      res.status(200).send({ status: "OK", data: admin });
+    } else {
+      res.status(500).send({
+        status: "FAILED",
+        data: { message: "You dont have permission to get all admins" },
+      });
+    }
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -22,16 +39,32 @@ const getAdminById = async (req, res) => {
 };
 
 const createAdmin = async (req, res) => {
-  const payload = req.body;
-  const admin = await adminService.createAdmin(payload);
-  res.status(201).send({ status: "OK", data: admin });
+  const policy = policyFor(req.user);
+  if (policy.can("create", "Admin")) {
+    const payload = req.body;
+    const admin = await adminService.createAdmin(payload);
+    res.status(201).send({ status: "OK", data: admin });
+  } else {
+    res.status(500).send({
+      status: "FAILED",
+      data: { message: "You dont have permission to create new admin" },
+    });
+  }
 };
 
 const deleteAdminById = async (req, res) => {
   try {
-    const id = req.params.id;
-    await adminService.deleteAdminById(id);
-    res.status(200).send({ status: "OK" });
+    const policy = policyFor(req.user);
+    if (policy.can("delete", "Admin")) {
+      const id = req.params.id;
+      await adminService.deleteAdminById(id);
+      res.status(200).send({ status: "OK" });
+    } else {
+      res.status(500).send({
+        status: "FAILED",
+        data: { message: "You dont have permission to delete admin" },
+      });
+    }
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -41,10 +74,18 @@ const deleteAdminById = async (req, res) => {
 
 const patchAdminById = async (req, res) => {
   try {
-    const id = req.params.id;
-    const payload = req.body;
-    const admin = await adminService.updateOrPatchAdminById(id, payload);
-    res.send({ status: "OK", data: admin });
+    const policy = policyFor(req.user);
+    if (policy.can("update", "Admin")) {
+      const id = req.params.id;
+      const payload = req.body;
+      const admin = await adminService.updateOrPatchAdminById(id, payload);
+      res.send({ status: "OK", data: admin });
+    } else {
+      res.status(500).send({
+        status: "FAILED",
+        data: { message: "You dont have permission to delete admin" },
+      });
+    }
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -54,16 +95,23 @@ const patchAdminById = async (req, res) => {
 
 const updateAdminById = async (req, res) => {
   try {
-    const id = req.params.id;
-    const payload = req.body;
-
-    if (!(payload.username && payload.email && payload.password)) {
-      return res
-        .status(400)
-        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    const policy = policyFor(req.user);
+    if (policy.can("update", "Admin")) {
+      const id = req.params.id;
+      const payload = req.body;
+      if (!(payload.username && payload.email && payload.password)) {
+        return res
+          .status(400)
+          .send({ status: "FAILED", data: { error: "some field is missing" } });
+      }
+      const admin = await adminService.updateOrPatchAdminById(id, payload);
+      res.send({ status: "OK", data: admin });
+    } else {
+      res.status(500).send({
+        status: "FAILED",
+        data: { message: "You dont have permission to delete admin" },
+      });
     }
-    const admin = await adminService.updateOrPatchAdminById(id, payload);
-    res.send({ status: "OK", data: admin });
   } catch (error) {
     res
       .status(error?.status || 500)

@@ -59,7 +59,7 @@ model Student {
 
 model UserRole {
   id        String    @id @default(uuid())
-  userId    String
+  userId    String    @unique
   role      Role      @default(MAHASISWA)
   createdBy String?
   updatedBy String?

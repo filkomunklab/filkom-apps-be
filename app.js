@@ -2,10 +2,12 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cors = require("cors");
+const app = express();
 
+const authRoutes = require("./app/api/v1/auth/auth.routes");
 const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
-const authRoutes = require("./app/api/v1/auth/auth.routes");
 
 //------------------Ruter Skripsi App---------------------------
 const studentRoutes = require("./app/api/v1/student/student.routes");
@@ -16,8 +18,11 @@ const proposalRoutes = require("./app/api/v1/proposal/proposal.routes");
 
 const URL = "/api/v1";
 
-const app = express();
+const corsOptions = {
+  origin: "http://localhost:3000",
+};
 
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(logger("dev"));
 app.use(express.json());
