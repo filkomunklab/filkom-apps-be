@@ -306,6 +306,80 @@ const getProposalConclusionById = async (req, res) => {
     }
 };
 
+const updateProposalRevisionDocumentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const payload = req.body;
+        if (
+            !(
+                payload.file_name_revision  &&
+                payload.file_size_revision
+            )
+        ) {
+            return res
+            .status(400)
+            .send({ status: "FAILED", data: { error: "some field is missing" } });
+        }
+        const proposal = await proposalService.updateProposalRevisionDocumentById(
+            id,
+            payload
+        );
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const getProposalRevisionDocumentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.getProposalRevisionDocumentById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const deleteProposalRevisionDocumentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        await proposalService.deleteProposalRevisionDocumentById(id);
+        res.status(200).send({ status: "OK" });
+    } catch (error) {
+        res
+        .status(error?.status || 500)
+        .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const approveProposalRevisionDocumentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.approveProposalRevisionDocumentById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const rejectProposalRevisionDocumentById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.rejectProposalRevisionDocumentById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
 module.exports = {
     updateProposalDocumentById,
     getProposalDocumentById,
@@ -329,5 +403,9 @@ module.exports = {
     updateProposalConclusionById,
     getProposalConclusionById,
 
-
+    updateProposalRevisionDocumentById,
+    getProposalRevisionDocumentById,
+    deleteProposalRevisionDocumentById,
+    approveProposalRevisionDocumentById,
+    rejectProposalRevisionDocumentById,
 }

@@ -168,6 +168,43 @@ const getProposalConclusionById = async (id) => {
   return proposal;
 };
 
+const updateProposalRevisionDocumentById = async (id, payload) => {
+  await getProposalById(id);
+
+  const proposal = await proposalRepository.updateProposalRevisionDocumentById(id, payload);
+  return proposal;
+};
+
+const getProposalRevisionDocumentById = async (id) => {
+  const proposal = await proposalRepository.findProposalRevisionDocumentById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return proposal;
+};
+
+const deleteProposalRevisionDocumentById = async (id) => {
+  await getProposalById(id);
+  await proposalRepository.deleteProposalRevisionDocumentById(id);
+};
+
+const approveProposalRevisionDocumentById = async (id) => {
+  await getProposalById(id);
+
+  const proposal = await proposalRepository.approveProposalRevisionDocumentById(id);
+  return proposal;
+};
+
+const rejectProposalRevisionDocumentById = async (id) => {
+  await getProposalById(id);
+
+  const proposal = await proposalRepository.rejectProposalRevisionDocumentById(id);
+  return proposal;
+};
+
 module.exports = {
   getProposalDocumentById,
   updateProposalDocumentById,
@@ -190,5 +227,11 @@ module.exports = {
   signProposalReportById,
   updateProposalConclusionById,
   getProposalConclusionById,
+  
+  updateProposalRevisionDocumentById,
+  getProposalRevisionDocumentById,
+  deleteProposalRevisionDocumentById,
+  approveProposalRevisionDocumentById,
+  rejectProposalRevisionDocumentById,
   
 }

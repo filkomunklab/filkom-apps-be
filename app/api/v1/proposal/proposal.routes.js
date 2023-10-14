@@ -50,13 +50,15 @@ router.put("/proposal/proposal-report/conclusion/:id", proposalController.update
 router.get("/proposal/proposal-report/conclusion/:id", proposalController.getProposalConclusionById);
 
 
-// //       upload/update dokumen revisi proposal
-// router.put("/proposal/proposal-revision-document/:id", proposalController.updateProposalRevisionDocumentById);
-// //       melihat dokumen revisi proposal
-// router.get("/proposal/proposal-revision-document/:id", proposalController.getProposalRevisionDocumentById);
-// //       menyetujui dokumen revisi proposal
-// router.put("/proposal/proposal-revision-document/approve/:id", proposalController.ApproveProposalRevisionDocumentById);
-// //       menolak dokumen revisi proposal
-// router.put("/proposal/proposal-revision-document/reject/:id", proposalController.RejectProposalRevisionDocumentById);
+//       upload/update dokumen revisi proposal
+router.put("/proposal/proposal-revision-document/:id", proposalController.updateProposalRevisionDocumentById);
+//       melihat dokumen revisi proposal
+router.get("/proposal/proposal-revision-document/:id", proposalController.getProposalRevisionDocumentById);
+//       delete dokumen revisi proposal
+router.delete("/proposal/proposal-revision-document/:id", proposalController.deleteProposalRevisionDocumentById);
+//       menyetujui dokumen revisi proposal
+router.put("/proposal/proposal-revision-document/approve/:id", proposalController.approveProposalRevisionDocumentById);
+//       menolak dokumen revisi proposal
+router.put("/proposal/proposal-revision-document/reject/:id", proposalController.rejectProposalRevisionDocumentById);
 
 module.exports = router;

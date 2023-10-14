@@ -521,6 +521,151 @@ const findProposalConclusionById =  async (id) => {
   return proposal;
 }
 
+// upload/update dokumen revisi
+const updateProposalRevisionDocumentById = async (id, payload) => {
+  const {
+    file_name_revision,
+    file_size_revision,
+  } = payload;
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_revision,
+      upload_date_revision: new Date(),
+      file_size_revision,
+      is_revision_approve_by_panelist_chairman: "Waiting",
+      is_revision_approve_by_panelist_member: "Waiting",
+      is_revision_approve_by_advisor: "Waiting",
+    },
+    select: {
+      id: true,
+      file_name_revision: true,
+      upload_date_revision: true,
+      file_size_revision: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+    }
+  });
+  return proposal;
+};
+
+// get dokumen revisi
+const findProposalRevisionDocumentById =  async (id) => {
+  const proposal = await prisma.proposal.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      file_name_revision: true,
+      upload_date_revision: true,
+      file_size_revision: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+    }
+  });
+  return proposal;
+}
+
+// hapus/update 1 revisi
+const deleteProposalRevisionDocumentById = async (id) => {
+  await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_revision: null,
+      upload_date_revision: null,
+      file_size_revision: null,
+      is_revision_approve_by_panelist_chairman: null,
+      is_revision_approve_by_panelist_member: null,
+      is_revision_approve_by_advisor: null,
+    },
+    select: {
+      id: true,
+      file_name_revision: true,
+      upload_date_revision: true,
+      file_size_revision: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+    }
+  });
+};
+
+// approve dokumen revisi
+const approveProposalRevisionDocumentById = async (id) => {
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_panelist_chairman: "Approve",
+      is_revision_approve_by_panelist_member: "Approve",
+      is_revision_approve_by_advisor: "Approve",
+    },
+    select: {
+      id: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+    }
+  });
+
+  if (
+    proposal.is_revision_approve_by_panelist_chairman === "Approve" &&
+    proposal.is_revision_approve_by_panelist_member === "Approve" &&
+    proposal.is_revision_approve_by_advisor === "Approve"
+  ) {
+    await updateProgressById(id);
+  }
+
+  return proposal;
+};
+
+// ++ update progress
+const updateProgressById = async (proposal_id) => {
+  const proposal = await prisma.group.update({
+    where: {
+      proposal_id,
+    },
+    data: {
+      progress: "Skripsi"
+    },
+    select: {
+      id: true,
+      progress: true
+    }
+  });
+
+  return proposal;
+}
+
+// approve dokumen revisi
+const rejectProposalRevisionDocumentById = async (id) => {
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_panelist_chairman: "Rejected",
+      is_revision_approve_by_panelist_member: "Rejected",
+      is_revision_approve_by_advisor: "Rejected",
+    },
+    select: {
+      id: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+    }
+  });
+  return proposal;
+};
+
 module.exports = {
   findProposalById,
   updateProposalDocumentById,
@@ -544,5 +689,11 @@ module.exports = {
   signProposalReportById,
   updateProposalConclusionById,
   findProposalConclusionById,
+
+  updateProposalRevisionDocumentById,
+  findProposalRevisionDocumentById,
+  deleteProposalRevisionDocumentById,
+  approveProposalRevisionDocumentById,
+  rejectProposalRevisionDocumentById,
 
 }
