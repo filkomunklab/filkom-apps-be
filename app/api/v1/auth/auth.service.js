@@ -1,5 +1,7 @@
 const authRepository = require("./auth.repository");
 const adminRepository = require("../admin/admin.repository");
+const employeeRepository = require("../employee/employee.repository");
+const studentRepository = require("../student/student.repository");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { secretKey } = require("../../../config");
@@ -70,6 +72,8 @@ const signInEmployee = async (username, password) => {
         },
         secretKey
       );
+      checkUsername.token = token;
+      await employeeRepository.updateEmployee(checkUsername.id, checkUsername);
       const data = {
         user: {
           nik: checkUsername.nik,
@@ -93,6 +97,12 @@ const signInEmployee = async (username, password) => {
   }
 };
 
+const signOutEmployee = async (token) => {
+  const employee = await employeeRepository.findEmployeeByToken(token);
+  employee.token = null;
+  await employeeRepository.updateEmployee(employee.id, employee);
+};
+
 const signInStudent = async (username, password) => {
   const checkUsername = await authRepository.findStudentByNim(username);
 
@@ -110,6 +120,8 @@ const signInStudent = async (username, password) => {
         },
         secretKey
       );
+      checkUsername.token = token;
+      await studentRepository.updateStudent(checkUsername.id, checkUsername);
       const data = {
         user: {
           nim: checkUsername.nim,
@@ -133,9 +145,17 @@ const signInStudent = async (username, password) => {
   }
 };
 
+const signOutStudent = async (token) => {
+  const student = await studentRepository.findStudentByToken(token);
+  student.token = null;
+  await studentRepository.updateStudent(student.id, student);
+};
+
 module.exports = {
   signInAdmin,
   signOutAdmin,
   signInEmployee,
+  signOutEmployee,
   signInStudent,
+  signOutStudent,
 };
