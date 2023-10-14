@@ -346,7 +346,8 @@ const updateProposalScheduleById = async (id, payload) => {
       start_defence,
       end_defence,
       defence_room,
-      defence_date
+      defence_date,
+      report_date: defence_date,
     },
     select: {
       id: true,

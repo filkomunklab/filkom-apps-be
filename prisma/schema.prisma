@@ -204,7 +204,7 @@ model Proposal {
   changes_conclusion                       Changes_Conclusion?
   assessment_conclution                    String?
   is_pass                                  Pass?
-  report_date                              DateTime?
+  report_date                              String?
   file_name_revision                       String?
   upload_date_revision                     DateTime?
   file_size_revision                       String?
@@ -258,7 +258,7 @@ model Skripsi {
   changes_conclusion                       Changes_Conclusion?
   assessment_conclution                    String?
   is_pass                                  Pass?
-  report_date                              DateTime?
+  report_date                              String?
   file_name_revision                       String?
   upload_date_revision                     DateTime?
   file_size_revision                       String?

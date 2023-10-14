@@ -62,7 +62,8 @@ DROP COLUMN "student4_assessment_by_panelist_chairman",
 DROP COLUMN "student4_assessment_by_panelist_member",
 ADD COLUMN     "changes_conclusion" "Changes_Conclusion",
 ALTER COLUMN "is_report_open" SET NOT NULL,
-ALTER COLUMN "is_report_open" SET DEFAULT false;
+ALTER COLUMN "is_report_open" SET DEFAULT false,
+ALTER COLUMN "report_date" SET DATA TYPE TEXT;
 
 -- AlterTable
 ALTER TABLE "Skripsi" DROP COLUMN "changes_by_advisor",
@@ -84,7 +85,8 @@ DROP COLUMN "student4_assessment_by_panelist_chairman",
 DROP COLUMN "student4_assessment_by_panelist_member",
 ADD COLUMN     "changes_conclusion" "Changes_Conclusion",
 ALTER COLUMN "is_report_open" SET NOT NULL,
-ALTER COLUMN "is_report_open" SET DEFAULT false;
+ALTER COLUMN "is_report_open" SET DEFAULT false,
+ALTER COLUMN "report_date" SET DATA TYPE TEXT;
 
 -- CreateTable
 CREATE TABLE "proposal_assessment" (
