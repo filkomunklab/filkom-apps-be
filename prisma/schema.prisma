@@ -27,7 +27,7 @@ model Admin {
 model Employee {
   id        String    @id @default(uuid())
   nik       String    @unique
-  nidn      String?    @unique
+  nidn      String?   @unique
   password  String
   firstName String
   lastName  String
@@ -163,7 +163,7 @@ enum Submission_Approve {
 }
 
 model Proposal {
-  id                                       String            @id @default(uuid())
+  id                                       String              @id @default(uuid())
   file_name_proposal                       String?
   file_name_payment                        String?
   file_name_plagiarismcheck                String?
@@ -195,29 +195,13 @@ model Proposal {
   end_defence                              String?
   defence_room                             String?
   defence_date                             String?
-  is_report_open                           Boolean?
-  student1_assessment_by_panelist_chairman String?
-  student2_assessment_by_panelist_chairman String?
-  student3_assessment_by_panelist_chairman String?
-  student4_assessment_by_panelist_chairman String?
-  student1_assessment_by_panelist_member   String?
-  student2_assessment_by_panelist_member   String?
-  student3_assessment_by_panelist_member   String?
-  student4_assessment_by_panelist_member   String?
-  student1_assessment_by_advisor           String?
-  student2_assessment_by_advisor           String?
-  student3_assessment_by_advisor           String?
-  student4_assessment_by_advisor           String?
-  changes_by_panelist_chairman             String?
-  changes_by_panelist_member               String?
-  changes_by_advisor                       String?
-  changes_by_co_advisor1                   String?
-  changes_by_co_advisor2                   String?
+  is_report_open                           Boolean             @default(false)
   is_report_approve_by_dekan               Boolean?
   is_report_approve_by_panelist_chairman   Boolean?
   is_report_approve_by_panelist_member     Boolean?
   is_report_approve_by_advisor             Boolean?
   exam_conclution                          Exam_Conclution?
+  changes_conclusion                       Changes_Conclusion?
   assessment_conclution                    String?
   is_pass                                  Pass?
   report_date                              DateTime?
@@ -233,7 +217,7 @@ model Proposal {
 }
 
 model Skripsi {
-  id                                       String            @id @default(uuid())
+  id                                       String              @id @default(uuid())
   file_name_skripsi                        String?
   file_name_payment                        String?
   file_name_plagiarismcheck                String?
@@ -265,29 +249,13 @@ model Skripsi {
   end_defence                              String?
   defence_room                             String?
   defence_date                             String?
-  is_report_open                           Boolean?
-  student1_assessment_by_panelist_chairman String?
-  student2_assessment_by_panelist_chairman String?
-  student3_assessment_by_panelist_chairman String?
-  student4_assessment_by_panelist_chairman String?
-  student1_assessment_by_panelist_member   String?
-  student2_assessment_by_panelist_member   String?
-  student3_assessment_by_panelist_member   String?
-  student4_assessment_by_panelist_member   String?
-  student1_assessment_by_advisor           String?
-  student2_assessment_by_advisor           String?
-  student3_assessment_by_advisor           String?
-  student4_assessment_by_advisor           String?
-  changes_by_panelist_chairman             String?
-  changes_by_panelist_member               String?
-  changes_by_advisor                       String?
-  changes_by_co_advisor1                   String?
-  changes_by_co_advisor2                   String?
+  is_report_open                           Boolean             @default(false)
   is_report_approve_by_dekan               Boolean?
   is_report_approve_by_panelist_chairman   Boolean?
   is_report_approve_by_panelist_member     Boolean?
   is_report_approve_by_advisor             Boolean?
   exam_conclution                          Exam_Conclution?
+  changes_conclusion                       Changes_Conclusion?
   assessment_conclution                    String?
   is_pass                                  Pass?
   report_date                              DateTime?
@@ -329,6 +297,11 @@ enum Exam_Conclution {
   Approve
 }
 
+enum Changes_Conclusion {
+  Major
+  Minor
+}
+
 enum Pass {
   Pass
   Fail
@@ -339,6 +312,46 @@ enum Revision_Approve {
   Waiting
   Approve
   Rejected
+}
+
+model proposal_assessment {
+  id         String @id @default(uuid())
+  // @relation
+  group_id   String
+  // @relation
+  student_id String
+  // @relation
+  dosen_id   String
+  value      String
+}
+
+model skripsi_assessment {
+  id         String @id @default(uuid())
+  // @relation
+  group_id   String
+  // @relation
+  student_id String
+  // @relation
+  dosen_id   String
+  value      String
+}
+
+model proposal_changes {
+  id       String @id @default(uuid())
+  // @relation
+  group_id String
+  // @relation
+  dosen_id String
+  changes  String
+}
+
+model skripsi_changes {
+  id       String @id @default(uuid())
+  // @relation
+  group_id String
+  // @relation
+  dosen_id String
+  changes  String
 }
 
 model Consultaion {

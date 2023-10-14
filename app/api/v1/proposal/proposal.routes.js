@@ -31,7 +31,6 @@ router.get("/proposal/proposal-plagiarism-check/:id", proposalController.getProp
 //       hapus bukti hasil cek plagiat
 router.put("/proposal/proposal-plagiarism-check/delete/:id", proposalController.deleteProposalPlagiarismById);
 
-
 //       melihat daftar sidang
 router.get("/proposal/schedule", proposalController.getProposalSchedule);
 //       membuat/memperbarui jadwal
@@ -39,25 +38,17 @@ router.put("/proposal/schedule/:id", proposalController.updateProposalScheduleBy
 //       melihat jadwal
 router.get("/proposal/schedule/:id", proposalController.getProposalScheduleById);
 
+//       membuka akses berita acara
+router.put("/proposal/proposal-report/open-access/:id", proposalController.openAccessProposalReportById);
+//       melihat berita acara
+router.get("/proposal/proposal-report/:id", proposalController.getProposalReportById);
+//       mengisi berita acara
+router.put("/proposal/proposal-report/:id", proposalController.signProposalReportById);
+//       mengisi kesimpulan sidang
+router.put("/proposal/proposal-report/conclusion/:id", proposalController.updateProposalConclusionById);
+//       melihat kesimpulan sidang
+router.get("/proposal/proposal-report/conclusion/:id", proposalController.getProposalConclusionById);
 
-// //       membuka akses berita acara
-// router.put("/proposal/proposal-report/open-access/:id", proposalController.openAccessProposalReportById);
-// //       melihat penilaian
-// router.get("/proposal/proposal-report/assessment/:id", proposalController.getProposalAssessmentById);
-// //       mengisi penilaian
-// router.put("/proposal/proposal-report/assessment/:id", proposalController.updateProposalAssessmentById);
-// //       melihat perubahan
-// router.get("/proposal/proposal-report/changes/:id", proposalController.getProposalChangesById);
-// //       mengisi perubahan
-// router.put("/proposal/proposal-report/changes/:id", proposalController.updateProposalChangesById);
-// //       melihat kesimpulan sidang proposal
-// router.get("/proposal/proposal-report/conclusion/:id", proposalController.getProposalConclusionById);
-// //       mengisi kesimpulan sidang proposal
-// router.put("/proposal/proposal-report/conclusion/:id", proposalController.updateProposalConclusionById);
-// //       melihat berita acara
-// router.get("/proposal/proposal-report/get/:id", proposalController.getProposalReportById);
-// //       mengisi berita acara
-// router.put("/proposal/proposal-report/sign/:id", proposalController.signProposalReportById);
 
 // //       upload/update dokumen revisi proposal
 // router.put("/proposal/proposal-revision-document/:id", proposalController.updateProposalRevisionDocumentById);

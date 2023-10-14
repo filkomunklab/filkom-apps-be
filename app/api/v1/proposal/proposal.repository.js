@@ -326,7 +326,6 @@ const findManyGroupsByProposalIds = async (proposalIds) => {
   return groups;
 };
 
-
 // create/update jadwal
 const updateProposalScheduleById = async (id, payload) => {
   const {
@@ -416,6 +415,111 @@ const findGroupStudentById =  async (group_id) => {
   return group_Student;
 }
 
+// create/update jadwal
+const openAccessProposalReportById = async (id) => {
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      is_report_open: true,
+    },
+    select: {
+      id: true,
+      is_report_open: true,
+    }
+  });
+  return proposal;
+};
+
+// get siapa saja yang sudah mengisi berita acara
+const findProposalReportById =  async (id) => {
+  const proposal = await prisma.proposal.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      is_report_approve_by_dekan: true,
+      is_report_approve_by_panelist_chairman: true,
+      is_report_approve_by_panelist_member: true,
+      is_report_approve_by_advisor: true
+    }
+  });
+  return proposal;
+}
+
+// create/update report
+const signProposalReportById = async (id) => {
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      is_report_approve_by_dekan: true,
+      is_report_approve_by_panelist_chairman: true,
+      is_report_approve_by_panelist_member: true,
+      is_report_approve_by_advisor: true
+    },
+    select: {
+      id: true,
+      is_report_approve_by_dekan: true,
+      is_report_approve_by_panelist_chairman: true,
+      is_report_approve_by_panelist_member: true,
+      is_report_approve_by_advisor: true
+    }
+  });
+  return proposal;
+};
+
+// create/update kesimpulan report
+const updateProposalConclusionById = async (id, payload) => {
+  const {
+    exam_conclution,
+    changes_conclusion,
+    assessment_conclution,
+    is_pass,
+  } = payload;
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      exam_conclution,
+      changes_conclusion,
+      assessment_conclution,
+      is_pass,
+    },
+    select: {
+      id: true,
+      exam_conclution: true,
+      changes_conclusion: true,
+      assessment_conclution: true,
+      is_pass: true,
+      report_date: true
+    }
+  });
+  return proposal;
+};
+
+// get kesimpulan report
+const findProposalConclusionById =  async (id) => {
+  const proposal = await prisma.proposal.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      exam_conclution,
+      changes_conclusion,
+      assessment_conclution,
+      is_pass,
+      report_date
+    }
+  });
+  return proposal;
+}
+
 module.exports = {
   findProposalById,
   updateProposalDocumentById,
@@ -433,4 +537,11 @@ module.exports = {
   findProposalSchedule,
   updateProposalScheduleById,
   findProposalScheduleById,
+
+  openAccessProposalReportById,
+  findProposalReportById,
+  signProposalReportById,
+  updateProposalConclusionById,
+  findProposalConclusionById,
+
 }

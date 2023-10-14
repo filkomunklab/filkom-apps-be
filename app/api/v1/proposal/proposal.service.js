@@ -125,6 +125,49 @@ const getProposalScheduleById = async (id) => {
   return proposal;
 };
 
+const openAccessProposalReportById = async (id) => {
+  await getProposalById(id);
+
+  const proposal = await proposalRepository.openAccessProposalReportById(id);
+  return proposal;
+};
+
+const getProposalReportById = async (id) => {
+  const proposal = await proposalRepository.findProposalReportById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return proposal;
+};
+
+const signProposalReportById = async (id) => {
+  await getProposalById(id);
+
+  const proposal = await proposalRepository.signProposalReportById(id);
+  return proposal;
+};
+
+const updateProposalConclusionById = async (id, payload) => {
+  await getProposalById(id);
+
+  const proposal = await proposalRepository.updateProposalConclusionById(id, payload);
+  return proposal;
+};
+
+const getProposalConclusionById = async (id) => {
+  const proposal = await proposalRepository.findProposalConclusionById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return proposal;
+};
+
 module.exports = {
   getProposalDocumentById,
   updateProposalDocumentById,
@@ -141,4 +184,11 @@ module.exports = {
   getProposalSchedule,
   updateProposalScheduleById,
   getProposalScheduleById,
+
+  openAccessProposalReportById,
+  getProposalReportById,
+  signProposalReportById,
+  updateProposalConclusionById,
+  getProposalConclusionById,
+  
 }

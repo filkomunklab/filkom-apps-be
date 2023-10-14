@@ -230,6 +230,82 @@ const getProposalScheduleById = async (req, res) => {
     }
 };
 
+const openAccessProposalReportById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.openAccessProposalReportById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const getProposalReportById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.getProposalReportById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const signProposalReportById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.signProposalReportById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const updateProposalConclusionById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const payload = req.body;
+        if (
+            !(
+                payload.exam_conclution  &&
+                payload.changes_conclusion  &&
+                payload.assessment_conclution &&
+                payload.is_pass 
+            )
+        ) {
+            return res
+            .status(400)
+            .send({ status: "FAILED", data: { error: "some field is missing" } });
+        }
+        const proposal = await proposalService.updateProposalConclusionById(
+            id,
+            payload
+        );
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const getProposalConclusionById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const proposal = await proposalService.getProposalConclusionById(id);
+        res.send({ status: "OK", data: proposal });
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
 module.exports = {
     updateProposalDocumentById,
     getProposalDocumentById,
@@ -246,4 +322,12 @@ module.exports = {
     getProposalSchedule,
     updateProposalScheduleById,
     getProposalScheduleById,
+
+    openAccessProposalReportById,
+    getProposalReportById,
+    signProposalReportById,
+    updateProposalConclusionById,
+    getProposalConclusionById,
+
+
 }
