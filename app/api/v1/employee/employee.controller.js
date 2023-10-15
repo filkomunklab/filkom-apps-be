@@ -2,13 +2,29 @@
 //Biasanya juga handle validasi body
 
 const employeeService = require("./employee.service");
+const { policyFor } = require("../policy");
+const { subject } = require("@casl/ability");
 
 const getAllEmployees = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "Employee")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   const employee = await employeeService.getAllEmployees();
   res.send({ status: "OK", data: employee });
 };
 
 const getEmployeeById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "Employee")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const id = req.params.id;
     const employee = await employeeService.getEmployeeById(id);
@@ -22,12 +38,27 @@ const getEmployeeById = async (req, res) => {
 };
 
 const createEmployee = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("create", "Employee")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const payload = req.body;
   const employee = await employeeService.createEmployee(payload);
   res.status(201).send({ status: "OK", data: employee });
 };
 
 const deleteEmployeeById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("delete", "Employee")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const id = req.params.id;
     await employeeService.deleteEmployeeById(id);
@@ -40,6 +71,14 @@ const deleteEmployeeById = async (req, res) => {
 };
 
 const patchEmployeeById = async (req, res) => {
+  const policy = policyFor(req.user);
+  const Employee = { id: req.params.id };
+  if (!policy.can("update", subject("Employee", Employee))) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const id = req.params.id;
     const payload = req.body;
@@ -56,10 +95,17 @@ const patchEmployeeById = async (req, res) => {
 };
 
 const updateEmployeeById = async (req, res) => {
+  const policy = policyFor(req.user);
+  const Employee = { id: req.params.id };
+  if (!policy.can("update", subject("Employee", Employee))) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const id = req.params.id;
     const payload = req.body;
-
     if (
       !(
         payload.nik &&
