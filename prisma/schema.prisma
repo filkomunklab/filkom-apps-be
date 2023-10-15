@@ -33,6 +33,7 @@ model Employee {
   lastName  String
   degree    String?
   major     String?
+  token     String?   @unique
   createdBy String?
   updatedBy String?
   createdAt DateTime  @default(now())
@@ -51,6 +52,7 @@ model Student {
   address   String?
   email     String?   @unique
   phoneNo   String?
+  token     String?   @unique
   createdBy String?
   updatedBy String?
   createdAt DateTime  @default(now())

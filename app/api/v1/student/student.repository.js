@@ -23,7 +23,40 @@ const insertStudent = async (payload) => {
     return student;
 };
 
-module.exports = {
-    insertStudent,
+const updateStudent = async (id, payload) => {
+  const { 
+    nim, 
+    password, 
+    firstName, 
+    lastName, 
+    token } 
+  = payload;
+  const employee = await prisma.student.update({
+    where: {
+      id,
+    },
+    data: {
+      nim,
+      password,
+      firstName,
+      lastName,
+      token,
+    },
+  });
+  return employee;
+};
 
+const findStudentByToken = async (token) => {
+  const student = await prisma.student.findUnique({
+    where: {
+      token,
+    },
+  });
+  return student;
+};
+
+module.exports = {
+  insertStudent,
+  updateStudent,
+  findStudentByToken,
 }

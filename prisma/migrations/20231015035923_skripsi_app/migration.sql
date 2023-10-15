@@ -2,8 +2,10 @@
   Warnings:
 
   - A unique constraint covering the columns `[nidn]` on the table `Employee` will be added. If there are existing duplicate values, this will fail.
+  - A unique constraint covering the columns `[token]` on the table `Employee` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[reg_num]` on the table `Student` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[email]` on the table `Student` will be added. If there are existing duplicate values, this will fail.
+  - A unique constraint covering the columns `[token]` on the table `Student` will be added. If there are existing duplicate values, this will fail.
 
 */
 -- CreateEnum
@@ -44,13 +46,15 @@ ALTER TYPE "Role" ADD VALUE 'OPERATOR_FAKULTAS';
 -- AlterTable
 ALTER TABLE "Employee" ADD COLUMN     "degree" TEXT,
 ADD COLUMN     "major" TEXT,
-ADD COLUMN     "nidn" TEXT;
+ADD COLUMN     "nidn" TEXT,
+ADD COLUMN     "token" TEXT;
 
 -- AlterTable
 ALTER TABLE "Student" ADD COLUMN     "address" TEXT,
 ADD COLUMN     "faculty" TEXT,
 ADD COLUMN     "major" TEXT,
 ADD COLUMN     "reg_num" TEXT,
+ADD COLUMN     "token" TEXT,
 ALTER COLUMN "lastName" DROP NOT NULL;
 
 -- CreateTable
@@ -321,7 +325,13 @@ CREATE UNIQUE INDEX "Group_skripsi_id_key" ON "Group"("skripsi_id");
 CREATE UNIQUE INDEX "Employee_nidn_key" ON "Employee"("nidn");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Employee_token_key" ON "Employee"("token");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Student_reg_num_key" ON "Student"("reg_num");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Student_email_key" ON "Student"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Student_token_key" ON "Student"("token");

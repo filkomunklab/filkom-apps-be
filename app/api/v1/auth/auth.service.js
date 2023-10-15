@@ -1,5 +1,7 @@
 const authRepository = require("./auth.repository");
 const adminRepository = require("../admin/admin.repository");
+const employeeRepository = require("../employee/employee.repository");
+const studentRepository = require("../student/student.repository");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { secretKey } = require("../../../config");
@@ -53,27 +55,29 @@ const signOutAdmin = async (token) => {
   await adminRepository.updateAdmin(admin.id, admin);
 };
 
-const signInEmployee = async (username, password) => {
-  const checkUsername = await authRepository.findEmployeeByNik(username);
+const signInEmployee = async (nik, password) => {
+  const checkNIK = await authRepository.findEmployeeByNik(nik);
 
-  if (checkUsername) {
-    const role = await authRepository.findRolesByUserId(checkUsername.nik);
-    const checkPassword = bcrypt.compareSync(password, checkUsername.password);
+  if (checkNIK) {
+    const role = await authRepository.findRolesByUserId(checkNIK.nik);
+    const checkPassword = bcrypt.compareSync(password, checkNIK.password);
     if (checkPassword) {
       const token = jwt.sign(
         {
           user: {
-            nik: checkUsername.nik,
-            name: `${checkUsername.firstName} ${checkUsername.lastName}`,
+            nik: checkNIK.nik,
+            name: `${checkNIK.firstName} ${checkNIK.lastName}`,
             role: role,
           },
         },
         secretKey
       );
+      checkNIK.token = token;
+      await employeeRepository.updateEmployee(checkNIK.id, checkNIK);
       const data = {
         user: {
-          nik: checkUsername.nik,
-          name: `${checkUsername.firstName} ${checkUsername.lastName}`,
+          nik: checkNIK.nik,
+          name: `${checkNIK.firstName} ${checkNIK.lastName}`,
           role: role,
         },
         token: token,
@@ -110,6 +114,8 @@ const signInStudent = async (nim, password) => {
         },
         secretKey
       );
+      checkNIM.token = token;
+      await studentRepository.updateStudent(checkNIM.id, checkNIM);
       const data = {
         user: {
           nim: checkNIM.nim,
