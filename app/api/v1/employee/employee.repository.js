@@ -15,6 +15,15 @@ const findEmployeeById = async (id) => {
   return employee;
 };
 
+const findEmployeeByToken = async (token) => {
+  const employee = await prisma.employee.findUnique({
+    where: {
+      token,
+    },
+  });
+  return employee;
+};
+
 const insertEmployee = async (payload) => {
   const { nik, password, firstName, lastName } = payload;
   const employee = await prisma.employee.create({
@@ -37,7 +46,7 @@ const deleteEmployee = async (id) => {
 };
 
 const updateEmployee = async (id, payload) => {
-  const { nik, password, firstName, lastName } = payload;
+  const { nik, password, firstName, lastName, token } = payload;
   const employee = await prisma.employee.update({
     where: {
       id,
@@ -47,6 +56,7 @@ const updateEmployee = async (id, payload) => {
       password,
       firstName,
       lastName,
+      token,
     },
   });
   return employee;
@@ -55,6 +65,7 @@ const updateEmployee = async (id, payload) => {
 module.exports = {
   findEmployees,
   findEmployeeById,
+  findEmployeeByToken,
   insertEmployee,
   deleteEmployee,
   updateEmployee,

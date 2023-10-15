@@ -30,6 +30,7 @@ model Employee {
   password  String
   firstName String
   lastName  String
+  token     String?   @unique
   createdBy String?
   updatedBy String?
   createdAt DateTime  @default(now())
@@ -44,6 +45,7 @@ model Student {
   lastName  String
   email     String?
   phoneNo   String?
+  token     String?   @unique
   createdBy String?
   updatedBy String?
   createdAt DateTime  @default(now())
