@@ -57,7 +57,7 @@ const signInEmployee = async (username, password) => {
   const checkUsername = await authRepository.findEmployeeByNik(username);
 
   if (checkUsername) {
-    const role = await authRepository.findRoleById(checkUsername.nik);
+    const role = await authRepository.findRolesByUserId(checkUsername.nik);
     const checkPassword = bcrypt.compareSync(password, checkUsername.password);
     if (checkPassword) {
       const token = jwt.sign(
@@ -93,28 +93,28 @@ const signInEmployee = async (username, password) => {
   }
 };
 
-const signInStudent = async (username, password) => {
-  const checkUsername = await authRepository.findStudentByNim(username);
+const signInStudent = async (nim, password) => {
+  const checkNIM = await authRepository.findStudentByNim(nim);
 
-  if (checkUsername) {
-    const role = await authRepository.findRoleById(checkUsername.nim);
-    const checkPassword = bcrypt.compareSync(password, checkUsername.password);
+  if (checkNIM) {
+    const role = await authRepository.findRolesByUserId(checkNIM.nim);
+    const checkPassword = bcrypt.compareSync(password, checkNIM.password);
     if (checkPassword) {
       const token = jwt.sign(
         {
           user: {
-            nim: checkUsername.nim,
-            name: `${checkUsername.firstName} ${checkUsername.lastName}`,
-            role,
+            nim: checkNIM.nim,
+            name: `${checkNIM.firstName} ${checkNIM.lastName}`,
+            role: role,
           },
         },
         secretKey
       );
       const data = {
         user: {
-          nim: checkUsername.nim,
-          name: `${checkUsername.firstName} ${checkUsername.lastName}`,
-          role,
+          nim: checkNIM.nim,
+          name: `${checkNIM.firstName} ${checkNIM.lastName}`,
+          role: role,
         },
         token: token,
       };
