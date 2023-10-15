@@ -4,7 +4,7 @@ const policyFor = (user) => {
   const { can, build } = new AbilityBuilder(createMongoAbility);
 
   if (user.user.role === "ADMIN") {
-    can("manage", "all"); // read-write access to everything
+    can("manage", "Admin"); // read-write access to everything
   } else {
     can("read", "all");
   }

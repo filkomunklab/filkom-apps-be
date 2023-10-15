@@ -12,7 +12,7 @@ const getAllAdmins = async (req, res) => {
   } else {
     res.status(500).send({
       status: "FAILED",
-      data: { message: "You dont have permission to get all admins" },
+      data: { error: "You don't have permission to get all admins" },
     });
   }
 };
@@ -28,11 +28,13 @@ const getAdminById = async (req, res) => {
     } else {
       res.status(500).send({
         status: "FAILED",
-        data: { message: "You dont have permission to get all admins" },
+        data: { error: "You don't have permission to get all admins" },
       });
     }
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -45,7 +47,7 @@ const createAdmin = async (req, res) => {
   } else {
     res.status(500).send({
       status: "FAILED",
-      data: { message: "You dont have permission to create new admin" },
+      data: { error: "You don't have permission to create new admin" },
     });
   }
 };
@@ -60,11 +62,13 @@ const deleteAdminById = async (req, res) => {
     } else {
       res.status(500).send({
         status: "FAILED",
-        data: { message: "You dont have permission to delete admin" },
+        data: { error: "You don't have permission to delete admin" },
       });
     }
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -79,11 +83,13 @@ const patchAdminById = async (req, res) => {
     } else {
       res.status(500).send({
         status: "FAILED",
-        data: { message: "You dont have permission to delete admin" },
+        data: { error: "You don't have permission to delete admin" },
       });
     }
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -94,18 +100,22 @@ const updateAdminById = async (req, res) => {
       const id = req.params.id;
       const payload = req.body;
       if (!(payload.username && payload.email && payload.password)) {
-        return res.status(400).send({ status: "FAILED", data: { error: "some field is missing" } });
+        return res
+          .status(400)
+          .send({ status: "FAILED", data: { error: "some field is missing" } });
       }
       const admin = await adminService.updateOrPatchAdminById(id, payload);
       res.send({ status: "OK", data: admin });
     } else {
       res.status(500).send({
         status: "FAILED",
-        data: { message: "You dont have permission to delete admin" },
+        data: { error: "You don't have permission to delete admin" },
       });
     }
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
