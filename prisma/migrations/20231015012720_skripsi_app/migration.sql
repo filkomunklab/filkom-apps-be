@@ -1,8 +1,9 @@
 /*
   Warnings:
 
-  - Added the required column `faculty` to the `Student` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `major` to the `Student` table without a default value. This is not possible if the table is not empty.
+  - A unique constraint covering the columns `[nidn]` on the table `Employee` will be added. If there are existing duplicate values, this will fail.
+  - A unique constraint covering the columns `[reg_num]` on the table `Student` will be added. If there are existing duplicate values, this will fail.
+  - A unique constraint covering the columns `[email]` on the table `Student` will be added. If there are existing duplicate values, this will fail.
 
 */
 -- CreateEnum
@@ -19,6 +20,9 @@ CREATE TYPE "Thesis_Approve" AS ENUM ('Waiting', 'Approve', 'Rejected');
 
 -- CreateEnum
 CREATE TYPE "Exam_Conclution" AS ENUM ('Rejected', 'Approve');
+
+-- CreateEnum
+CREATE TYPE "Changes_Conclusion" AS ENUM ('Major', 'Minor');
 
 -- CreateEnum
 CREATE TYPE "Pass" AS ENUM ('Pass', 'Fail', 'Repeat');
@@ -39,19 +43,22 @@ ALTER TYPE "Role" ADD VALUE 'OPERATOR_FAKULTAS';
 
 -- AlterTable
 ALTER TABLE "Employee" ADD COLUMN     "degree" TEXT,
-ADD COLUMN     "prodi" TEXT;
+ADD COLUMN     "major" TEXT,
+ADD COLUMN     "nidn" TEXT;
 
 -- AlterTable
 ALTER TABLE "Student" ADD COLUMN     "address" TEXT,
-ADD COLUMN     "faculty" TEXT NOT NULL,
-ADD COLUMN     "major" TEXT NOT NULL,
+ADD COLUMN     "faculty" TEXT,
+ADD COLUMN     "major" TEXT,
 ADD COLUMN     "reg_num" TEXT,
 ALTER COLUMN "lastName" DROP NOT NULL;
 
 -- CreateTable
 CREATE TABLE "Thesis_Student" (
     "id" TEXT NOT NULL,
-    "fullname" TEXT NOT NULL,
+    "student_id" TEXT NOT NULL,
+    "proposal_class_id" TEXT NOT NULL,
+    "skripsi_class_id" TEXT NOT NULL,
 
     CONSTRAINT "Thesis_Student_pkey" PRIMARY KEY ("id")
 );
@@ -145,34 +152,18 @@ CREATE TABLE "Proposal" (
     "end_defence" TEXT,
     "defence_room" TEXT,
     "defence_date" TEXT,
-    "is_report_open" BOOLEAN,
-    "student1_assessment_by_panelist_chairman" TEXT,
-    "student2_assessment_by_panelist_chairman" TEXT,
-    "student3_assessment_by_panelist_chairman" TEXT,
-    "student4_assessment_by_panelist_chairman" TEXT,
-    "student1_assessment_by_panelist_member" TEXT,
-    "student2_assessment_by_panelist_member" TEXT,
-    "student3_assessment_by_panelist_member" TEXT,
-    "student4_assessment_by_panelist_member" TEXT,
-    "student1_assessment_by_advisor" TEXT,
-    "student2_assessment_by_advisor" TEXT,
-    "student3_assessment_by_advisor" TEXT,
-    "student4_assessment_by_advisor" TEXT,
-    "changes_by_panelist_chairman" TEXT,
-    "changes_by_panelist_member" TEXT,
-    "changes_by_advisor" TEXT,
-    "changes_by_co_advisor1" TEXT,
-    "changes_by_co_advisor2" TEXT,
+    "is_report_open" BOOLEAN NOT NULL DEFAULT false,
     "is_report_approve_by_dekan" BOOLEAN,
     "is_report_approve_by_panelist_chairman" BOOLEAN,
     "is_report_approve_by_panelist_member" BOOLEAN,
     "is_report_approve_by_advisor" BOOLEAN,
     "exam_conclution" "Exam_Conclution",
+    "changes_conclusion" "Changes_Conclusion",
     "assessment_conclution" TEXT,
     "is_pass" "Pass",
-    "report_date" TIMESTAMP(3),
+    "report_date" TEXT,
     "file_name_revision" TEXT,
-    "upload_date_revision" TIMESTAMP(3) NOT NULL,
+    "upload_date_revision" TIMESTAMP(3),
     "file_size_revision" TEXT,
     "is_revision_approve_by_panelist_chairman" "Revision_Approve",
     "is_revision_approve_by_panelist_member" "Revision_Approve",
@@ -199,7 +190,7 @@ CREATE TABLE "Skripsi" (
     "advisor" TEXT NOT NULL,
     "co_advisor1" TEXT,
     "co_advisor2" TEXT,
-    "classroom_id" TEXT NOT NULL,
+    "classroom_id" TEXT,
     "is_skripsi_approve_by_advisor" "Thesis_Approve",
     "is_skripsi_approve_by_co_advisor1" "Thesis_Approve",
     "is_skripsi_approve_by_co_advisor2" "Thesis_Approve",
@@ -212,34 +203,18 @@ CREATE TABLE "Skripsi" (
     "end_defence" TEXT,
     "defence_room" TEXT,
     "defence_date" TEXT,
-    "is_report_open" BOOLEAN,
-    "student1_assessment_by_panelist_chairman" TEXT,
-    "student2_assessment_by_panelist_chairman" TEXT,
-    "student3_assessment_by_panelist_chairman" TEXT,
-    "student4_assessment_by_panelist_chairman" TEXT,
-    "student1_assessment_by_panelist_member" TEXT,
-    "student2_assessment_by_panelist_member" TEXT,
-    "student3_assessment_by_panelist_member" TEXT,
-    "student4_assessment_by_panelist_member" TEXT,
-    "student1_assessment_by_advisor" TEXT,
-    "student2_assessment_by_advisor" TEXT,
-    "student3_assessment_by_advisor" TEXT,
-    "student4_assessment_by_advisor" TEXT,
-    "changes_by_panelist_chairman" TEXT,
-    "changes_by_panelist_member" TEXT,
-    "changes_by_advisor" TEXT,
-    "changes_by_co_advisor1" TEXT,
-    "changes_by_co_advisor2" TEXT,
+    "is_report_open" BOOLEAN NOT NULL DEFAULT false,
     "is_report_approve_by_dekan" BOOLEAN,
     "is_report_approve_by_panelist_chairman" BOOLEAN,
     "is_report_approve_by_panelist_member" BOOLEAN,
     "is_report_approve_by_advisor" BOOLEAN,
     "exam_conclution" "Exam_Conclution",
+    "changes_conclusion" "Changes_Conclusion",
     "assessment_conclution" TEXT,
     "is_pass" "Pass",
-    "report_date" TIMESTAMP(3),
+    "report_date" TEXT,
     "file_name_revision" TEXT,
-    "upload_date_revision" TIMESTAMP(3) NOT NULL,
+    "upload_date_revision" TIMESTAMP(3),
     "file_size_revision" TEXT,
     "is_revision_approve_by_panelist_chairman" "Revision_Approve",
     "is_revision_approve_by_panelist_member" "Revision_Approve",
@@ -268,6 +243,48 @@ CREATE TABLE "Skripsi" (
 );
 
 -- CreateTable
+CREATE TABLE "proposal_assessment" (
+    "id" TEXT NOT NULL,
+    "group_id" TEXT NOT NULL,
+    "student_id" TEXT NOT NULL,
+    "dosen_id" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
+
+    CONSTRAINT "proposal_assessment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "skripsi_assessment" (
+    "id" TEXT NOT NULL,
+    "group_id" TEXT NOT NULL,
+    "student_id" TEXT NOT NULL,
+    "dosen_id" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
+
+    CONSTRAINT "skripsi_assessment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "proposal_changes" (
+    "id" TEXT NOT NULL,
+    "group_id" TEXT NOT NULL,
+    "dosen_id" TEXT NOT NULL,
+    "changes" TEXT NOT NULL,
+
+    CONSTRAINT "proposal_changes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "skripsi_changes" (
+    "id" TEXT NOT NULL,
+    "group_id" TEXT NOT NULL,
+    "dosen_id" TEXT NOT NULL,
+    "changes" TEXT NOT NULL,
+
+    CONSTRAINT "skripsi_changes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Consultaion" (
     "id" TEXT NOT NULL,
     "group_id" TEXT NOT NULL,
@@ -289,7 +306,7 @@ CREATE TABLE "History" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Thesis_Student_fullname_key" ON "Thesis_Student"("fullname");
+CREATE UNIQUE INDEX "Thesis_Student_student_id_key" ON "Thesis_Student"("student_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Group_submission_id_key" ON "Group"("submission_id");
@@ -299,3 +316,12 @@ CREATE UNIQUE INDEX "Group_proposal_id_key" ON "Group"("proposal_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Group_skripsi_id_key" ON "Group"("skripsi_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Employee_nidn_key" ON "Employee"("nidn");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Student_reg_num_key" ON "Student"("reg_num");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Student_email_key" ON "Student"("email");

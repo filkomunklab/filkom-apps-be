@@ -32,7 +32,7 @@ model Employee {
   firstName String
   lastName  String
   degree    String?
-  prodi     String?
+  major     String?
   createdBy String?
   updatedBy String?
   createdAt DateTime  @default(now())
@@ -46,8 +46,8 @@ model Student {
   password  String
   firstName String
   lastName  String?
-  faculty   String
-  major     String
+  faculty   String?
+  major     String?
   address   String?
   email     String?   @unique
   phoneNo   String?
@@ -59,7 +59,7 @@ model Student {
 
 model UserRole {
   id        String    @id @default(uuid())
-  userId    String    @unique
+  userId    String
   role      Role      @default(MAHASISWA)
   createdBy String?
   updatedBy String?
@@ -86,7 +86,12 @@ enum Role {
 //-------------------Skripsi App ------------------------
 model Thesis_Student {
   id       String @id @default(uuid())
-  fullname String @unique
+  // @relation
+  student_id String @unique
+  // @relation
+  proposal_class_id String
+  // @relation
+  skripsi_class_id String
 }
 
 model Group_Student {
