@@ -9,6 +9,13 @@ const policyFor = (user) => {
     can("read", "all");
   }
 
+  if (user.user.role.includes("DOSEN_MK")) {
+  can("manage", "Academic_Calendar");
+} else {
+  can("read", "Academic_Calendar");
+}
+
+
   return build();
 };
 

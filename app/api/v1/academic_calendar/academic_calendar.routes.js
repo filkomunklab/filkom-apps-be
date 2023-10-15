@@ -7,13 +7,15 @@ const academicController = require("./academic_calendar.controller");
 const { auth } = require("../../../middleware/auth");
 
 //-------------------Skripsi App ------------------------
-//       membuat tahun ajaran baru
-router.post("/academic-calendar", academicController.createAcademic);
-//       melihat tahun ajaran
-router.get("/academic-calendar", academicController.getAcademic);
-//       mengubah tahun ajaran
-router.put("/academic-calendar", academicController.updateAcademic);
-//       hapus tahun ajaran
-router.delete("/academic-calendar", academicController.deleteAcademic);
+//       create tahun ajaran baru
+router.post("/academic-calendar", auth, academicController.createAcademic);
+//       view tahun ajaran
+router.get("/academic-calendar/:id", auth, academicController.getAcademicById);
+//       view all tahun ajaran
+router.get("/academic-calendar", auth, academicController.getAllAcademic);
+// //       mengubah tahun ajaran
+// router.put("/academic-calendar/:id", auth, academicController.updateAcademicById);
+// //       hapus tahun ajaran
+// router.delete("/academic-calendar/:id", auth, academicController.deleteAcademicById);
 
 module.exports = router;

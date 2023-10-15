@@ -9,7 +9,7 @@
 
 */
 -- CreateEnum
-CREATE TYPE "Progress" AS ENUM ('Submission', 'Proposal', 'Skripsi');
+CREATE TYPE "Progress" AS ENUM ('Submission', 'Proposal', 'Skripsi', 'Finished');
 
 -- CreateEnum
 CREATE TYPE "Semester" AS ENUM ('Ganjil', 'Genap', 'Padat');
