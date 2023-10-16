@@ -45,18 +45,25 @@ const findByNim = async (nim) => {
     return student;
 }
 
+// get all academic
+const findListClassroom = async (dosen_mk_id) => {
+    const classroom = await prisma.classroom.findMany({
+        where:{
+            dosen_mk_id
+        }
+    });
+    return classroom;
+};
+
 // Mendapatkan nama classroom berdasarkan classroom_id
-const findClassroomNameById = async (id) => {
+const findClassroomById = async (id) => {
     const classroom = await prisma.classroom.findUnique({
         where: {
             id,
-        },
-        select: {
-            name: true,
-        },
+        }
     });
     console.log("classroom name: ", classroom.name);
-    return classroom.name;
+    return classroom;
 }
 
 // Fungsi untuk mencari data student yang sudah ada di thesis_student
@@ -106,7 +113,6 @@ const insertSkripsiStudent = async (student_id, classroom_id) => {
     return skripsiStudent;
 }
 
-
 // mencari classroom dari dosenMK
 const findClassroomsByDosenMk = async (dosen_mk_id) => {
     const classrooms = await prisma.classroom.findMany({
@@ -117,11 +123,11 @@ const findClassroomsByDosenMk = async (dosen_mk_id) => {
     return classrooms;
 };
 
-// mencari student berdasarkan classroom
-const findStudentsByClassroomId = async (classroomId) => {
+// mencari proposal student berdasarkan classroom
+const findProposalStudentsByClassroomId = async (classroomId) => {
     const students = await prisma.thesis_Student.findMany({
       where: {
-        proposal_class_id: classroomId, // Ubah sesuai kelas yang Anda cari (Proposal/Skripsi)
+        proposal_class_id: classroomId,
       },
       include: {
         student: true,
@@ -129,17 +135,73 @@ const findStudentsByClassroomId = async (classroomId) => {
     });
     return students;
 };
-  
+
+// mencari skripsi student berdasarkan classroom
+const findSkripsiStudentsByClassroomId = async (classroomId) => {
+    const students = await prisma.thesis_Student.findMany({
+      where: {
+        skripsi_class_id: classroomId,
+      },
+      include: {
+        student: true,
+      },
+    });
+    return students;
+};
+
+const findExistStudentInProposalClassroom = async (proposal_class_id) => {
+    const students = await prisma.thesis_Student.findFirst({
+        where: {
+          proposal_class_id,
+        },
+    });
+    return students;
+}
+
+const findExistStudentInSkripsiClassroom = async (skripsi_class_id) => {
+    const students = await prisma.thesis_Student.findFirst({
+        where: {
+          skripsi_class_id,
+        },
+    });
+    return students;
+}
+
+// hapus 1 classroom
+const deleteClassroomById = async (id) => {
+    await prisma.classroom.delete({
+        where: {
+            id,
+        },
+    });
+};
+
+// hapus 1 thesis_student
+const deleteStudentById = async (student_id) => {
+    await prisma.thesis_Student.delete({
+        where: {
+            student_id,
+        },
+    });
+};
 
 module.exports = {
     findExistingClassroom,
     insertClassroom,
+    findListClassroom,
+    findClassroomById,
     findClassroomsByDosenMk,
-    findStudentsByClassroomId,
+    findProposalStudentsByClassroomId,
+    findSkripsiStudentsByClassroomId,
     findByNim,
-    findClassroomNameById,
+    findClassroomById,
     findExistStudent,
     findExistSkripsiStudent,
     insertProposalStudent,
     insertSkripsiStudent,
+    deleteClassroomById,
+    findExistStudentInProposalClassroom,
+    findExistStudentInSkripsiClassroom,
+    deleteStudentById,
+
 }

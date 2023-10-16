@@ -25,7 +25,7 @@ const createClassroom = async (req, res) => {
         } else {
             res.status(403).send({
                 status: "FAILED",
-                data: { message: "You don't have permission to create new classroom" },
+                data: { message: "You don't have permission to perform this action" },
             });
         }
     } catch (error) {
@@ -34,6 +34,66 @@ const createClassroom = async (req, res) => {
             .send({ status: "FAILED", data: { error: error?.message || error } });
     }
     
+};
+
+const getListClassroom = async (req, res) => {
+    try {
+        const policy = policyFor(req.user);
+        if (policy.can("read", "Classroom")) {
+            const userId = req.user.user.id;
+            const classroom = await classroomService.getListClassroom(userId);
+            res.status(200).send({ status: "OK", data: classroom });
+        } else {
+            res.status(403).send({
+                status: "FAILED",
+                data: { message: "You don't have permission to perform this action" },
+            });
+        }
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const getClassroomById = async (req, res) => {
+    try {
+        const policy = policyFor(req.user);
+        if (policy.can("read", "Classroom")) {
+            const id = req.params.id;
+            const classroom = await classroomService.getClassroomById(id);
+            res.status(200).send({ status: "OK", data: classroom });
+        } else {
+            res.status(403).send({
+                status: "FAILED",
+                data: { message: "You don't have permission to perform this action" },
+            });
+        }
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const getAllClassroom = async (req, res) => {
+    try {
+        const policy = policyFor(req.user);
+        if (policy.can("read", "Classroom")) {
+            const userId = req.user.user.id;
+            const classroom = await classroomService.getAllClassroom(userId);
+            res.status(200).send({ status: "OK", data: classroom });
+        } else {
+            res.status(403).send({
+                status: "FAILED",
+                data: { message: "You don't have permission to perform this action" },
+            });
+        }
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
 };
 
 const inputStudent = async (req, res) => {
@@ -56,7 +116,7 @@ const inputStudent = async (req, res) => {
         } else {
             res.status(403).send({
                 status: "FAILED",
-                data: { message: "You don't have permission to input student into classroom" },
+                data: { message: "You don't have permission to perform this action" },
             });
         }
     } catch (error) {
@@ -66,30 +126,54 @@ const inputStudent = async (req, res) => {
     }
 };
 
-const getAllClassroom = async (req, res) => {
+const deleteClassroomById = async (req, res) => {
     try {
         const policy = policyFor(req.user);
-        if (policy.can("read", "Classroom")) {
-            const userId = req.user.user.id;
-            const classroom = await classroomService.getAllClassroom(userId);
-            res.status(200).send({ status: "OK", data: classroom });
+        if (policy.can("delete", "Classroom")) {
+            const id = req.params.id;
+            await classroomService.deleteClassroomById(id);
+            res.status(200).send({ status: "OK" });
         } else {
             res.status(403).send({
                 status: "FAILED",
-                data: { message: "You don't have permission to get all classroom" },
+                data: { message: "You don't have permission to perform this action" },
             });
         }
     } catch (error) {
         res
-            .status(error?.status || 500)
-            .send({ status: "FAILED", data: { error: error?.message || error } });
+        .status(error?.status || 500)
+        .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
+
+const deleteStudentById = async (req, res) => {
+    try {
+        const policy = policyFor(req.user);
+        if (policy.can("delete", "Thesis_Student")) {
+            const id = req.params.id;
+            await classroomService.deleteStudentById(id);
+            res.status(200).send({ status: "OK" });
+        } else {
+            res.status(403).send({
+                status: "FAILED",
+                data: { message: "You don't have permission to perform this action" },
+            });
+        }
+    } catch (error) {
+        res
+        .status(error?.status || 500)
+        .send({ status: "FAILED", data: { error: error?.message || error } });
     }
 };
 
 module.exports = {
     createClassroom,
-    inputStudent,
+    getListClassroom,
+    getClassroomById,
     getAllClassroom,
+    inputStudent,
+    deleteClassroomById,
+    deleteStudentById,
 
 }
 

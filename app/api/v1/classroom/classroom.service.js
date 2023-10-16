@@ -19,16 +19,27 @@ const createClassroom = async (userId, payload) => {
     return classroom;
 };
 
-// const getClassroomById = async (id) => {
-//   const classroom = await classroomRepository.findClassroomById(id);
-//   if (!classroom) {
-//     throw {
-//       status: 400,
-//       message: `Not found`,
-//     };
-//   }
-//   return classroom;
-// };
+const getListClassroom = async (userId) => {
+  const classroom = await classroomRepository.findListClassroom(userId);
+  if (!classroom) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return classroom;
+};
+
+const getClassroomById = async (id) => {
+  const classroom = await classroomRepository.findClassroomById(id);
+  if (!classroom) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return classroom;
+};
 
 const getExistStudent = async (student_id) => {
   const thesis_student = await classroomRepository.findExistStudent(student_id);
@@ -76,12 +87,13 @@ const inputStudents = async (payload) => {
     const studentRecord = await classroomRepository.findByNim(nim);
 
     if (studentRecord) {
-      const classroomName = await classroomRepository.findClassroomNameById(classroom_id);
+      const classroom = await classroomRepository.findClassroomById(classroom_id);
+      const classroomName = classroom.name;
 
       if (classroomName === 'Proposal') {
         const existStudent = await getExistStudent(studentRecord.id);
 
-        if (existStudent) {
+        if (!existStudent) {
           const proposalStudent = await classroomRepository.insertProposalStudent(studentRecord.id, classroom_id);
           insertedStudents.push({ id: proposalStudent.id });
         }
@@ -99,7 +111,6 @@ const inputStudents = async (payload) => {
   return insertedStudents;
 };
 
-
 const getAllClassroom = async (userId) => {
   const classrooms = await classroomRepository.findClassroomsByDosenMk(userId);
 
@@ -108,20 +119,28 @@ const getAllClassroom = async (userId) => {
   const skripsiClassrooms = classrooms.filter((classroom) => classroom.name === 'Skripsi');
 
   // Dapatkan mahasiswa untuk setiap kelas
-  const proposalClassroomsWithStudents = await getClassroomsWithStudents(proposalClassrooms);
-  const skripsiClassroomsWithStudents = await getClassroomsWithStudents(skripsiClassrooms);
+  const proposalClassroomsWithStudents = await getClassroomsWithStudents(proposalClassrooms, 'Proposal');
+  const skripsiClassroomsWithStudents = await getClassroomsWithStudents(skripsiClassrooms, 'Skripsi');
 
   // Gabungkan kelas Proposal dan Skripsi
   const allClassrooms = [...proposalClassroomsWithStudents, ...skripsiClassroomsWithStudents];
 
-  return allClassrooms;
+  return {
+    status: "OK",
+    data: allClassrooms,
+  };
 };
 
-const getClassroomsWithStudents = async (classrooms) => {
+const getClassroomsWithStudents = async (classrooms, classroomName) => {
   const classroomsWithStudents = await Promise.all(
     classrooms.map(async (classroom) => {
       // Dapatkan mahasiswa di kelas ini
-      const students = await classroomRepository.findStudentsByClassroomId(classroom.id);
+      let students;
+      if (classroomName === 'Proposal') {
+        students = await classroomRepository.findProposalStudentsByClassroomId(classroom.id);
+      } else if (classroomName === 'Skripsi') {
+        students = await classroomRepository.findSkripsiStudentsByClassroomId(classroom.id);
+      }
 
       const studentData = students.map((student) => ({
         student_id: student.student.id,
@@ -151,9 +170,53 @@ const getClassroomsWithStudents = async (classrooms) => {
   return sortedClassrooms;
 };
 
+
+const getExistStudentInProposalClassroom = async (skripsi_class_id) => {
+  const classroom = await classroomRepository.findExistStudentInProposalClassroom(skripsi_class_id);
+  if (classroom) {
+    throw {
+      status: 400,
+      message: `There are still students in the class`,
+    };
+  }
+  return classroom;
+};
+
+const getExistStudentInSkripsiClassroom = async (skripsi_class_id) => {
+  const classroom = await classroomRepository.findExistStudentInSkripsiClassroom(skripsi_class_id);
+  if (classroom) {
+    throw {
+      status: 400,
+      message: `There are still students in the class`,
+    };
+  }
+  return classroom;
+};
+
+const deleteClassroomById = async (id) => {
+  const classroom = await getClassroomById(id);
+  const classroomName = classroom.name;
+  if (classroomName === 'Proposal') {
+    await getExistStudentInProposalClassroom(id);
+    await classroomRepository.deleteClassroomById(id);
+  } else if (classroomName === 'Skripsi') {
+    await getExistStudentInSkripsiClassroom(id);
+    await classroomRepository.deleteClassroomById(id);
+  }
+};
+
+const deleteStudentById = async (id) => {
+  // await getClassroomById(id);
+  await classroomRepository.deleteStudentById(id);
+};
+
 module.exports = {
   createClassroom,
+  getListClassroom,
+  getClassroomById,
   getAllClassroom,
   inputStudents,
+  deleteClassroomById,
+  deleteStudentById,
 
 }
