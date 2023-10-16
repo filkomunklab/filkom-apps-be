@@ -2,10 +2,8 @@
   Warnings:
 
   - A unique constraint covering the columns `[nidn]` on the table `Employee` will be added. If there are existing duplicate values, this will fail.
-  - A unique constraint covering the columns `[token]` on the table `Employee` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[reg_num]` on the table `Student` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[email]` on the table `Student` will be added. If there are existing duplicate values, this will fail.
-  - A unique constraint covering the columns `[token]` on the table `Student` will be added. If there are existing duplicate values, this will fail.
 
 */
 -- CreateEnum
@@ -46,18 +44,19 @@ CREATE TYPE "Revision_Approve" AS ENUM ('Waiting', 'Approve', 'Rejected');
 ALTER TYPE "Role" ADD VALUE 'DOSEN_MK';
 ALTER TYPE "Role" ADD VALUE 'OPERATOR_FAKULTAS';
 
+-- DropIndex
+DROP INDEX "UserRole_userId_key";
+
 -- AlterTable
 ALTER TABLE "Employee" ADD COLUMN     "degree" TEXT,
 ADD COLUMN     "major" TEXT,
-ADD COLUMN     "nidn" TEXT,
-ADD COLUMN     "token" TEXT;
+ADD COLUMN     "nidn" TEXT;
 
 -- AlterTable
 ALTER TABLE "Student" ADD COLUMN     "address" TEXT,
 ADD COLUMN     "faculty" TEXT,
 ADD COLUMN     "major" TEXT,
 ADD COLUMN     "reg_num" TEXT,
-ADD COLUMN     "token" TEXT,
 ALTER COLUMN "lastName" DROP NOT NULL;
 
 -- CreateTable
@@ -87,7 +86,7 @@ CREATE TABLE "Group" (
     "keywords" TEXT,
     "abstrak" TEXT,
     "reference" TEXT,
-    "submission_id" TEXT,
+    "submission_id" TEXT NOT NULL,
     "proposal_id" TEXT,
     "skripsi_id" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -119,6 +118,7 @@ CREATE TABLE "Classroom" (
 CREATE TABLE "Submission" (
     "id" TEXT NOT NULL,
     "file_name" TEXT NOT NULL,
+    "upload_date" TIMESTAMP(3) NOT NULL,
     "file_size" TEXT NOT NULL,
     "is_consultation" BOOLEAN NOT NULL,
     "proposed_advisor" TEXT NOT NULL,
@@ -251,45 +251,45 @@ CREATE TABLE "Skripsi" (
 );
 
 -- CreateTable
-CREATE TABLE "proposal_assessment" (
+CREATE TABLE "Proposal_Assessment" (
     "id" TEXT NOT NULL,
-    "group_id" TEXT NOT NULL,
+    "proposal_id" TEXT NOT NULL,
     "student_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
     "value" TEXT NOT NULL,
 
-    CONSTRAINT "proposal_assessment_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Proposal_Assessment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "skripsi_assessment" (
+CREATE TABLE "Skripsi_Assessment" (
     "id" TEXT NOT NULL,
-    "group_id" TEXT NOT NULL,
+    "skripsi_id" TEXT NOT NULL,
     "student_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
     "value" TEXT NOT NULL,
 
-    CONSTRAINT "skripsi_assessment_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Skripsi_Assessment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "proposal_changes" (
+CREATE TABLE "Proposal_Changes" (
     "id" TEXT NOT NULL,
-    "group_id" TEXT NOT NULL,
+    "proposal_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
     "changes" TEXT NOT NULL,
 
-    CONSTRAINT "proposal_changes_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Proposal_Changes_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "skripsi_changes" (
+CREATE TABLE "Skripsi_Changes" (
     "id" TEXT NOT NULL,
-    "group_id" TEXT NOT NULL,
+    "skripsi_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
     "changes" TEXT NOT NULL,
 
-    CONSTRAINT "skripsi_changes_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Skripsi_Changes_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -298,6 +298,7 @@ CREATE TABLE "Consultaion" (
     "group_id" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
+    "dosen_id" TEXT NOT NULL,
 
     CONSTRAINT "Consultaion_pkey" PRIMARY KEY ("id")
 );
@@ -329,16 +330,10 @@ CREATE UNIQUE INDEX "Group_skripsi_id_key" ON "Group"("skripsi_id");
 CREATE UNIQUE INDEX "Employee_nidn_key" ON "Employee"("nidn");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Employee_token_key" ON "Employee"("token");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Student_reg_num_key" ON "Student"("reg_num");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Student_email_key" ON "Student"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Student_token_key" ON "Student"("token");
 
 -- AddForeignKey
 ALTER TABLE "Thesis_Student" ADD CONSTRAINT "Thesis_Student_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -348,6 +343,21 @@ ALTER TABLE "Thesis_Student" ADD CONSTRAINT "Thesis_Student_proposal_class_id_fk
 
 -- AddForeignKey
 ALTER TABLE "Thesis_Student" ADD CONSTRAINT "Thesis_Student_skripsi_class_id_fkey" FOREIGN KEY ("skripsi_class_id") REFERENCES "Classroom"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Group_Student" ADD CONSTRAINT "Group_Student_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Group_Student" ADD CONSTRAINT "Group_Student_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Group" ADD CONSTRAINT "Group_submission_id_fkey" FOREIGN KEY ("submission_id") REFERENCES "Submission"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Group" ADD CONSTRAINT "Group_proposal_id_fkey" FOREIGN KEY ("proposal_id") REFERENCES "Proposal"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Group" ADD CONSTRAINT "Group_skripsi_id_fkey" FOREIGN KEY ("skripsi_id") REFERENCES "Skripsi"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Classroom" ADD CONSTRAINT "Classroom_dosen_mk_id_fkey" FOREIGN KEY ("dosen_mk_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -363,3 +373,24 @@ ALTER TABLE "Proposal" ADD CONSTRAINT "Proposal_classroom_id_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "Skripsi" ADD CONSTRAINT "Skripsi_classroom_id_fkey" FOREIGN KEY ("classroom_id") REFERENCES "Classroom"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Proposal_Assessment" ADD CONSTRAINT "Proposal_Assessment_proposal_id_fkey" FOREIGN KEY ("proposal_id") REFERENCES "Proposal"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi_Assessment" ADD CONSTRAINT "Skripsi_Assessment_skripsi_id_fkey" FOREIGN KEY ("skripsi_id") REFERENCES "Skripsi"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Proposal_Changes" ADD CONSTRAINT "Proposal_Changes_proposal_id_fkey" FOREIGN KEY ("proposal_id") REFERENCES "Proposal"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi_Changes" ADD CONSTRAINT "Skripsi_Changes_skripsi_id_fkey" FOREIGN KEY ("skripsi_id") REFERENCES "Skripsi"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Consultaion" ADD CONSTRAINT "Consultaion_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Consultaion" ADD CONSTRAINT "Consultaion_dosen_id_fkey" FOREIGN KEY ("dosen_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "History" ADD CONSTRAINT "History_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
