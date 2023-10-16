@@ -59,6 +59,27 @@ const findClassroomNameById = async (id) => {
     return classroom.name;
 }
 
+// Fungsi untuk mencari data student yang sudah ada di thesis_student
+const findExistStudent = async (student_id) => {
+    const thesis_student = await prisma.thesis_Student.findUnique({
+        where: {
+            student_id
+        },
+    });
+    return thesis_student;
+}
+
+// Fungsi untuk mencari data student yang sudah ada di thesis_student
+const findExistSkripsiStudent = async (student_id, classroom_id) => {
+    const thesis_student = await prisma.thesis_Student.findUnique({
+        where: {
+            student_id,
+            skripsi_class_id: classroom_id,
+        },
+    });
+    return thesis_student;
+}
+
 // Menyisipkan data student ke dalam proposal_student
 const insertProposalStudent = async (student_id, classroom_id) => {
     const proposalStudent = await prisma.thesis_Student.create({
@@ -73,9 +94,11 @@ const insertProposalStudent = async (student_id, classroom_id) => {
 
 // Menyisipkan data student ke dalam skripsi_student
 const insertSkripsiStudent = async (student_id, classroom_id) => {
-    const skripsiStudent = await prisma.thesis_Student.create({
+    const skripsiStudent = await prisma.thesis_Student.update({
+        where: {
+            student_id
+        },
         data: {
-            student_id,
             skripsi_class_id: classroom_id,
         },
     });
@@ -115,6 +138,8 @@ module.exports = {
     findStudentsByClassroomId,
     findByNim,
     findClassroomNameById,
+    findExistStudent,
+    findExistSkripsiStudent,
     insertProposalStudent,
     insertSkripsiStudent,
 }

@@ -30,6 +30,39 @@ const createClassroom = async (userId, payload) => {
 //   return classroom;
 // };
 
+const getExistStudent = async (student_id) => {
+  const thesis_student = await classroomRepository.findExistStudent(student_id);
+  if (thesis_student) {
+    throw {
+      status: 400,
+      message: `Some data already exists`,
+    };
+  }
+  return thesis_student;
+};
+
+const getExistProposalStudent = async (student_id) => {
+  const thesis_student = await classroomRepository.findExistStudent(student_id);
+  if (!thesis_student) {
+    throw {
+      status: 400,
+      message: `Some data were not found`,
+    };
+  }
+  return thesis_student;
+};
+
+const getExistSkripsiStudent = async (student_id, classroom_id) => {
+  const thesis_student = await classroomRepository.findExistSkripsiStudent(student_id, classroom_id);
+  if (thesis_student) {
+    throw {
+      status: 400,
+      message: `Some data already exists`,
+    };
+  }
+  return thesis_student;
+};
+
 const inputStudents = async (payload) => {
   const {
     classroom_id,
@@ -46,11 +79,20 @@ const inputStudents = async (payload) => {
       const classroomName = await classroomRepository.findClassroomNameById(classroom_id);
 
       if (classroomName === 'Proposal') {
-        const proposalStudent = await classroomRepository.insertProposalStudent(studentRecord.id, classroom_id);
-        insertedStudents.push({ id: proposalStudent.id });
+        const existStudent = await getExistStudent(studentRecord.id);
+
+        if (existStudent) {
+          const proposalStudent = await classroomRepository.insertProposalStudent(studentRecord.id, classroom_id);
+          insertedStudents.push({ id: proposalStudent.id });
+        }
       } else if (classroomName === 'Skripsi') {
-        const skripsiStudent = await classroomRepository.insertSkripsiStudent(studentRecord.id, classroom_id);
-        insertedStudents.push({ id: skripsiStudent.id });
+        const existProposalStudent = await getExistProposalStudent(studentRecord.id);
+        await getExistSkripsiStudent(studentRecord.id, classroom_id);
+        
+        if (existProposalStudent) {
+          const skripsiStudent = await classroomRepository.insertSkripsiStudent(studentRecord.id, classroom_id);
+          insertedStudents.push({ id: skripsiStudent.id });
+        }
       }
     }
   }
@@ -81,9 +123,19 @@ const getClassroomsWithStudents = async (classrooms) => {
       // Dapatkan mahasiswa di kelas ini
       const students = await classroomRepository.findStudentsByClassroomId(classroom.id);
 
+      const studentData = students.map((student) => ({
+        student_id: student.student.id,
+        fullname: `${student.student.firstName} ${student.student.lastName || ''}`,
+        nim: student.student.nim,
+        major: student.student.major,
+      }));
+
       return {
-        ...classroom,
-        Students: students,
+        id: classroom.id,
+        dosen_mk_id: classroom.dosen_mk_id,
+        academic_id: classroom.academic_id,
+        name: classroom.name,
+        Students: studentData,
       };
     })
   );
