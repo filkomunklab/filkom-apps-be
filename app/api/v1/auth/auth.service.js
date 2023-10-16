@@ -99,8 +99,14 @@ const signInEmployee = async (nik, password) => {
   }
 };
 
-const signInStudent = async (nim, password) => {
-  const checkNIM = await authRepository.findStudentByNim(nim);
+const signOutEmployee = async (token) => {
+  const employee = await employeeRepository.findEmployeeByToken(token);
+  employee.token = null;
+  await employeeRepository.updateEmployee(employee.id, employee);
+};
+
+const signInStudent = async (username, password) => {
+  const checkUsername = await authRepository.findStudentByNim(username);
 
   if (checkNIM) {
     const role = await authRepository.findRolesByUserId(checkNIM.nim);
@@ -143,9 +149,17 @@ const signInStudent = async (nim, password) => {
   }
 };
 
+const signOutStudent = async (token) => {
+  const student = await studentRepository.findStudentByToken(token);
+  student.token = null;
+  await studentRepository.updateStudent(student.id, student);
+};
+
 module.exports = {
   signInAdmin,
   signOutAdmin,
   signInEmployee,
+  signOutEmployee,
   signInStudent,
+  signOutStudent,
 };

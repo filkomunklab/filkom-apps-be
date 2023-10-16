@@ -17,7 +17,7 @@ const me = (req, res) => {
   if (!req.user) {
     return res.status(500).send({
       status: "FAILED",
-      data: { error: "Your're not login or token expiredd" },
+      data: { error: "You're not login or token expired" },
     });
   }
 
@@ -50,6 +50,20 @@ const signInEmployee = async (req, res) => {
   }
 };
 
+const signOutEmployee = async (req, res) => {
+  try {
+    const token = getToken(req);
+    await authService.signOutEmployee(token);
+    res
+      .status(200)
+      .send({ status: "OK", data: { message: "sign out success" } });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 const signInStudent = async (req, res) => {
   try {
     const { nim, password } = req.body;
@@ -62,10 +76,26 @@ const signInStudent = async (req, res) => {
   }
 };
 
+const signOutStudent = async (req, res) => {
+  try {
+    const token = getToken(req);
+    await authService.signOutStudent(token);
+    res
+      .status(200)
+      .send({ status: "OK", data: { message: "sign out success" } });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   signInAdmin,
   signOutAdmin,
   signInEmployee,
+  signOutEmployee,
   signInStudent,
+  signOutStudent,
   me,
 };
