@@ -16,24 +16,81 @@ const submissionRepository = require("./submission.repository");
 //   await submissionRepository.deleteAllSubmission();
 // };
 
+const getStudentById = async (student_id) => {
+  const thesis_student = await submissionRepository.findStudentById(student_id);
+  if (!thesis_student) {
+    throw {
+      status: 400,
+      message: `Student Not found`,
+    };
+  }
+  return thesis_student;
+};
+
+const getDosenById = async (id) => {
+  const dosen = await submissionRepository.findDosenById(id);
+  if (!dosen) {
+    throw {
+      status: 400,
+      message: `Dosen Not found`,
+    };
+  }
+  return dosen;
+};
+
 const createSubmission = async (userId, payload) => {
-  const proposalClassroom = await submissionRepository.findProposalClassroomByUserId(userId);
+  const { partner1, partner2, partner3,
+          proposed_advisor, proposed_co_advisor1, proposed_co_advisor2 } = payload;
+  // mengecek student
+  if (partner1) {
+    await getStudentById(partner1);
+  }
+  if (partner2) {
+    await getStudentById(partner2);
+  }
+  if (partner3) {
+    await getStudentById(partner3);
+  }
+
+  // mengecek dosen
+  if (proposed_advisor) {
+    await getDosenById(proposed_advisor);
+  }
+  if (proposed_co_advisor1) {
+    await getDosenById(proposed_co_advisor1);
+  }
+  if (proposed_co_advisor2) {
+    await getDosenById(proposed_co_advisor2);
+  }
+
+  // mengambil proposal_classroom dari user
+  const proposalClassroom = await submissionRepository.findStudentById(userId);
   const { proposal_class_id: classroom_id } = proposalClassroom;
+
+  // create submission
   const submission = await submissionRepository.insertSubmission(classroom_id, payload);
   const { id: submission_id } = submission;
 
+  // create group
   const group = await submissionRepository.insertGroup(payload, submission_id);
   const { id: group_id } = group;
-  const { partner1, partner2, partner3 } = payload;
 
-  // Memasukkan mahasiswa ke dalam kelompok
+  // Memeriksa apakah partner1, partner2, dan partner3 adalah sama satu sama lain (tidak bole null)
+  if ((partner1 && partner1 === partner2) || (partner2 && partner2 === partner3) || (partner1 && partner1 === partner3)) {
+    throw {
+      status: 400,
+      message: `Terdapat partner yang sama`,
+    };
+  }
+
+  // mengelompokkan mahasiswa
   await Promise.all([
                 submissionRepository.insertGroupStudent({ group_id, student_id: userId }),
     partner1 && submissionRepository.insertGroupStudent({ group_id, student_id: partner1 }),
     partner2 && submissionRepository.insertGroupStudent({ group_id, student_id: partner2 }),
     partner3 && submissionRepository.insertGroupStudent({ group_id, student_id: partner3 }),
   ]);
-  
+
   const groupData = {
     id: group.submission_id,
     title: group.title,

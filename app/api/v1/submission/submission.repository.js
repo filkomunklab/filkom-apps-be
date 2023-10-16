@@ -21,14 +21,24 @@ const prisma = require("../../../database");
 //   await prisma.submission.deleteMany({});
 // };
 
-// get proposal_classroom_id by user_id yg akses
-const findProposalClassroomByUserId = async (userId) => {
+// find student
+const findStudentById = async (student_id) => {
   const thesis_student = await prisma.thesis_Student.findUnique({
     where: {
-      student_id: userId,
+      student_id,
     },
   });
   return thesis_student;
+};
+
+// find dosen
+const findDosenById = async (id) => {
+  const dosen = await prisma.employee.findUnique({
+    where: {
+      id,
+    },
+  });
+  return dosen;
 };
 
 // create submission
@@ -265,7 +275,8 @@ module.exports = {
   // findAllSubmission,
   // deleteSubmission,
   // deleteAllSubmission,
-  findProposalClassroomByUserId,
+  findStudentById,
+  findDosenById,
   insertSubmission,
   insertGroup,
   insertGroupStudent,
