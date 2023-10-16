@@ -15,6 +15,9 @@ CREATE TYPE "Progress" AS ENUM ('Submission', 'Proposal', 'Skripsi', 'Finished')
 CREATE TYPE "Semester" AS ENUM ('Ganjil', 'Genap', 'Padat');
 
 -- CreateEnum
+CREATE TYPE "Classroom_Name" AS ENUM ('Proposal', 'Skripsi');
+
+-- CreateEnum
 CREATE TYPE "Submission_Approve" AS ENUM ('Waiting', 'Approve', 'Rejected');
 
 -- CreateEnum
@@ -62,7 +65,7 @@ CREATE TABLE "Thesis_Student" (
     "id" TEXT NOT NULL,
     "student_id" TEXT NOT NULL,
     "proposal_class_id" TEXT NOT NULL,
-    "skripsi_class_id" TEXT NOT NULL,
+    "skripsi_class_id" TEXT,
 
     CONSTRAINT "Thesis_Student_pkey" PRIMARY KEY ("id")
 );
@@ -107,6 +110,7 @@ CREATE TABLE "Classroom" (
     "id" TEXT NOT NULL,
     "dosen_mk_id" TEXT NOT NULL,
     "academic_id" TEXT NOT NULL,
+    "name" "Classroom_Name" NOT NULL,
 
     CONSTRAINT "Classroom_pkey" PRIMARY KEY ("id")
 );
@@ -335,3 +339,27 @@ CREATE UNIQUE INDEX "Student_email_key" ON "Student"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Student_token_key" ON "Student"("token");
+
+-- AddForeignKey
+ALTER TABLE "Thesis_Student" ADD CONSTRAINT "Thesis_Student_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Thesis_Student" ADD CONSTRAINT "Thesis_Student_proposal_class_id_fkey" FOREIGN KEY ("proposal_class_id") REFERENCES "Classroom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Thesis_Student" ADD CONSTRAINT "Thesis_Student_skripsi_class_id_fkey" FOREIGN KEY ("skripsi_class_id") REFERENCES "Classroom"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Classroom" ADD CONSTRAINT "Classroom_dosen_mk_id_fkey" FOREIGN KEY ("dosen_mk_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Classroom" ADD CONSTRAINT "Classroom_academic_id_fkey" FOREIGN KEY ("academic_id") REFERENCES "Academic_Calendar"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Submission" ADD CONSTRAINT "Submission_classroom_id_fkey" FOREIGN KEY ("classroom_id") REFERENCES "Classroom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Proposal" ADD CONSTRAINT "Proposal_classroom_id_fkey" FOREIGN KEY ("classroom_id") REFERENCES "Classroom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi" ADD CONSTRAINT "Skripsi_classroom_id_fkey" FOREIGN KEY ("classroom_id") REFERENCES "Classroom"("id") ON DELETE SET NULL ON UPDATE CASCADE;

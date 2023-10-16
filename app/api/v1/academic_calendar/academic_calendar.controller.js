@@ -9,6 +9,16 @@ const createAcademic = async (req, res) => {
         const policy = policyFor(req.user);
         if (policy.can("create", "Academic_Calendar")) {
             const payload = req.body;
+            if (
+                !(
+                    payload.semester  &&
+                    payload.year
+                )
+            ) {
+                return res
+                .status(400)
+                .send({ status: "FAILED", data: { error: "Some field is missing" } });
+            }
             const academic = await academicService.createAcademic(payload);
             res.status(201).send({ status: "OK", data: academic });
         } else {
@@ -54,7 +64,7 @@ const getAllAcademic = async (req, res) => {
         } else {
             res.status(403).send({
                 status: "FAILED",
-                data: { message: "You don't have permission to get academic calendar" },
+                data: { message: "You don't have permission to get all academic calendar" },
             });
         }
     } catch (error) {

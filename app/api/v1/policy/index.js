@@ -5,16 +5,12 @@ const policyFor = (user) => {
 
   if (user.user.role === "ADMIN") {
     can("manage", "all"); // read-write access to everything
-  } else {
     can("read", "all");
+  } else if (user.user.role.includes("DOSEN_MK")){
+    can("manage", "Academic_Calendar");
+    can("manage", "Classroom");
+    can("manage", "Thesis_Student");
   }
-
-  if (user.user.role.includes("DOSEN_MK")) {
-  can("manage", "Academic_Calendar");
-} else {
-  can("read", "Academic_Calendar");
-}
-
 
   return build();
 };

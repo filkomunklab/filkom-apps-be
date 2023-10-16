@@ -65,6 +65,7 @@ const signInEmployee = async (nik, password) => {
       const token = jwt.sign(
         {
           user: {
+            id: checkNIK.id,
             nik: checkNIK.nik,
             name: `${checkNIK.firstName} ${checkNIK.lastName}`,
             role: role,
@@ -76,6 +77,7 @@ const signInEmployee = async (nik, password) => {
       await employeeRepository.updateEmployee(checkNIK.id, checkNIK);
       const data = {
         user: {
+          id: checkNIK.id,
           nik: checkNIK.nik,
           name: `${checkNIK.firstName} ${checkNIK.lastName}`,
           role: role,
@@ -107,6 +109,7 @@ const signInStudent = async (nim, password) => {
       const token = jwt.sign(
         {
           user: {
+            id: checkNIM.id,
             nim: checkNIM.nim,
             name: `${checkNIM.firstName} ${checkNIM.lastName}`,
             role: role,
@@ -118,6 +121,7 @@ const signInStudent = async (nim, password) => {
       await studentRepository.updateStudent(checkNIM.id, checkNIM);
       const data = {
         user: {
+          id: checkNIM.id,
           nim: checkNIM.nim,
           name: `${checkNIM.firstName} ${checkNIM.lastName}`,
           role: role,

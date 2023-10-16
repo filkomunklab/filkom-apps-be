@@ -38,6 +38,7 @@ model Employee {
   updatedBy String?
   createdAt DateTime  @default(now())
   updatedAt DateTime?
+  classroom Classroom[] @relation("DosenMK")
 }
 
 model Student {
@@ -57,6 +58,7 @@ model Student {
   updatedBy String?
   createdAt DateTime  @default(now())
   updatedAt DateTime?
+  thesis_student Thesis_Student? @relation("ThesisStudent")
 }
 
 model UserRole {
@@ -88,12 +90,12 @@ enum Role {
 //-------------------Skripsi App ------------------------
 model Thesis_Student {
   id       String @id @default(uuid())
-  // @relation
+  student    Student @relation("ThesisStudent", fields: [student_id], references: [id])
   student_id String @unique
-  // @relation
+  proposal_class    Classroom @relation("ProposalClassroom", fields: [proposal_class_id], references: [id])
   proposal_class_id String
-  // @relation
-  skripsi_class_id String
+  skripsi_class    Classroom? @relation("SkripsiClassroom", fields: [skripsi_class_id], references: [id])
+  skripsi_class_id String?
 }
 
 model Group_Student {
@@ -132,6 +134,7 @@ model Academic_Calendar {
   id       String   @id @default(uuid())
   semester Semester
   year     String
+  classroom Classroom[] @relation("Academic")
 }
 
 enum Semester {
@@ -142,10 +145,22 @@ enum Semester {
 
 model Classroom {
   id          String @id @default(uuid())
-  // @relation
+  dosen_mk    Employee @relation("DosenMK", fields: [dosen_mk_id], references: [id])
   dosen_mk_id String
-  // @relation
+  academic    Academic_Calendar @relation("Academic", fields: [academic_id], references: [id])
   academic_id String
+  name        Classroom_Name
+  proposal_student Thesis_Student[] @relation("ProposalClassroom")
+  skripsi_student Thesis_Student[] @relation("SkripsiClassroom")
+  submission Submission[] @relation("SubmissionClassroom")
+  proposal Proposal[] @relation("ProposalClassroom")
+  skripsi Skripsi[] @relation("SkripsiClassroom")
+
+}
+
+enum Classroom_Name {
+  Proposal
+  Skripsi
 }
 
 model Submission {
@@ -158,10 +173,11 @@ model Submission {
   proposed_co_advisor1 String?
   proposed_co_advisor2 String?
   is_approve           Submission_Approve @default(Waiting)
-  // @relation
+  classroom    Classroom @relation("SubmissionClassroom", fields: [classroom_id], references: [id])
   classroom_id         String
   created_at           DateTime           @default(now())
   updated_at           DateTime?
+  
 }
 
 enum Submission_Approve {
@@ -187,7 +203,7 @@ model Proposal {
   co_advisor1                              String?
   // @relation
   co_advisor2                              String?
-  // @relation
+  classroom    Classroom @relation("ProposalClassroom", fields: [classroom_id], references: [id])
   classroom_id                             String
   is_proposal_approve_by_advisor           Thesis_Approve?
   is_proposal_approve_by_co_advisor1       Thesis_Approve?
@@ -241,7 +257,7 @@ model Skripsi {
   co_advisor1                              String?
   // @relation
   co_advisor2                              String?
-  // @relation
+  classroom    Classroom? @relation("SkripsiClassroom", fields: [classroom_id], references: [id])
   classroom_id                             String?
   is_skripsi_approve_by_advisor            Thesis_Approve?
   is_skripsi_approve_by_co_advisor1        Thesis_Approve?

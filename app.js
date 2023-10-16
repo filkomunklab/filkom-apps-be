@@ -10,8 +10,9 @@ const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
 
 //------------------Ruter Skripsi App---------------------------
-const academicRoutes = require("./app/api/v1/academic_calendar/academic_calendar.routes");
 const studentRoutes = require("./app/api/v1/student/student.routes");
+const academicRoutes = require("./app/api/v1/academic_calendar/academic_calendar.routes");
+const classroomRoutes = require("./app/api/v1/classroom/classroom.routes");
 const submissionRoutes = require("./app/api/v1/submission/submission.routes");
 const groupRoutes = require("./app/api/v1/group/group.routes");
 const proposalRoutes = require("./app/api/v1/proposal/proposal.routes");
@@ -36,8 +37,9 @@ app.use(`${URL}`, adminRoutes);
 app.use(`${URL}`, employeeRoutes);
 
 //------------------Ruter Skripsi App---------------------------
-app.use(`${URL}`, academicRoutes);
 app.use(`${URL}`, studentRoutes);
+app.use(`${URL}`, academicRoutes);
+app.use(`${URL}`, classroomRoutes);
 app.use(`${URL}`, submissionRoutes);
 app.use(`${URL}`, groupRoutes);
 app.use(`${URL}`, proposalRoutes);
