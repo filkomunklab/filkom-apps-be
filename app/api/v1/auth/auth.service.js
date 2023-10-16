@@ -106,7 +106,7 @@ const signOutEmployee = async (token) => {
 };
 
 const signInStudent = async (username, password) => {
-  const checkUsername = await authRepository.findStudentByNim(username);
+  const checkNIM = await authRepository.findStudentByNim(username);
 
   if (checkNIM) {
     const role = await authRepository.findRolesByUserId(checkNIM.nim);

@@ -12,7 +12,8 @@ const policyFor = ({ user }) => {
   } else if (user.role === "OPERATOR_LPMI") {
   } else if (user.role === "KAPRODI") {
   } else if (user.role === "DOSEN") {
-  } else if (user.role === "MAHASISWA") {
+  } else if (user.role.includes("MAHASISWA")) {
+    can("create", "Submission");
   } else if (user.role === "ALUMNI") {
   } else if (user.role.includes("DOSEN_MK")){
     can("manage", "Academic_Calendar");

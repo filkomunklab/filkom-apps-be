@@ -1,28 +1,38 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
-// get semua submission
-const findAllSubmission = async () => {
-  const submission = await prisma.submission.findMany();
-  return submission;
-};
+// // get semua submission
+// const findAllSubmission = async () => {
+//   const submission = await prisma.submission.findMany();
+//   return submission;
+// };
 
-// hapus 1 submission
-const deleteSubmission = async (id) => {
-  await prisma.submission.delete({
+// // hapus 1 submission
+// const deleteSubmission = async (id) => {
+//   await prisma.submission.delete({
+//     where: {
+//       id,
+//     },
+//   });
+// };
+
+// // hapus All submission
+// const deleteAllSubmission = async () => {
+//   await prisma.submission.deleteMany({});
+// };
+
+// get proposal_classroom_id by user_id yg akses
+const findProposalClassroomByUserId = async (userId) => {
+  const thesis_student = await prisma.thesis_Student.findUnique({
     where: {
-      id,
+      student_id: userId,
     },
   });
-};
-
-// hapus All submission
-const deleteAllSubmission = async () => {
-  await prisma.submission.deleteMany({});
+  return thesis_student;
 };
 
 // create submission
-const insertSubmission = async (payload) => {
+const insertSubmission = async (classroom_id, payload) => {
   const {
       file_name,
       file_size,
@@ -30,24 +40,19 @@ const insertSubmission = async (payload) => {
       proposed_advisor,
       proposed_co_advisor1,
       proposed_co_advisor2,
-      classroom_id,
   } = payload;
   const submission = await prisma.submission.create({
     data: {
       file_name,
+      upload_date: new Date(),
       file_size,
       is_consultation,
       proposed_advisor,
-      proposed_co_advisor1,
-      proposed_co_advisor2,
+      proposed_co_advisor1: proposed_co_advisor1 || null,
+      proposed_co_advisor2: proposed_co_advisor2 || null,
       classroom_id,
     },
   });
-
-  // Mengambil ID grup yang baru dibuat
-  const { id: submission_id } = submission;
-
-  await insertGroup(payload, submission_id);
 
   return submission;
 };
@@ -55,10 +60,7 @@ const insertSubmission = async (payload) => {
 // +++ create kelompok, input title
 const insertGroup = async (payload, submission_id) => {
   const {
-    title,
-    partner1,
-    partner2,
-    partner3,
+    title
   } = payload;
   const group = await prisma.group.create({
     data: {
@@ -67,21 +69,6 @@ const insertGroup = async (payload, submission_id) => {
       submission_id
     },
   });
-
-  // get id user yang login
-  // student_id = userId;
-  student_id = "f3fa4d77-0c7b-49a0-b84d-7a9be9b3faf0";
-
-  // Mengambil ID grup yang baru dibuat
-  const { id: group_id } = group;
-
-  // Memasukkan mahasiswa ke dalam kelompok
-  const groupStudents = await Promise.all([
-    insertGroupStudent({ group_id, student_id: student_id }),
-    partner1 && insertGroupStudent({ group_id, student_id: partner1 }),
-    partner2 && insertGroupStudent({ group_id, student_id: partner2 }),
-    partner3 &&insertGroupStudent({ group_id, student_id: partner3 }),
-  ]);
 
   return group;
 };
@@ -98,191 +85,194 @@ const insertGroupStudent = async (data) => {
   return group_student;
 };
 
-// get 1 submission
-const findSubmissionById = async (id) => {
-  const submission = await prisma.submission.findUnique({
-    where: {
-      id,
-    },
-  });
-  return submission;
-};
+// // get 1 submission
+// const findSubmissionById = async (id) => {
+//   const submission = await prisma.submission.findUnique({
+//     where: {
+//       id,
+//     },
+//   });
+//   return submission;
+// };
 
-// update submission
-const updateSubmission = async (id, payload) => {
-  const {
-    file_name,
-    file_size,
-    is_consultation,
-    proposed_advisor,
-    proposed_co_advisor1,
-    proposed_co_advisor2,
-  } = payload;
-  const submission = await prisma.submission.update({
-    where: {
-      id,
-    },
-    data: {
-      file_name,
-      file_size,
-      is_consultation,
-      proposed_advisor,
-      proposed_co_advisor1,
-      proposed_co_advisor2,
-      updated_at: new Date(),
-    },
-  });
+// // update submission
+// const updateSubmission = async (id, payload) => {
+//   const {
+//     file_name,
+//     file_size,
+//     is_consultation,
+//     proposed_advisor,
+//     proposed_co_advisor1,
+//     proposed_co_advisor2,
+//   } = payload;
+//   const submission = await prisma.submission.update({
+//     where: {
+//       id,
+//     },
+//     data: {
+//       file_name,
+//       file_size,
+//       is_consultation,
+//       proposed_advisor,
+//       proposed_co_advisor1,
+//       proposed_co_advisor2,
+//       updated_at: new Date(),
+//     },
+//   });
 
-  await updateGroupTitle(id, payload);
-  return submission;
-};
+//   await updateGroupTitle(id, payload);
+//   return submission;
+// };
 
-// update title
-const updateGroupTitle = async (id, payload) => {
-  const { title } = payload;
-    const group = await prisma.group.update({
-        where: {
-          submission_id: id,
-        },
-        data: {
-            title,
-            updated_at: new Date(),
-        },
-    });
-    return group;
-}
+// // update title
+// const updateGroupTitle = async (id, payload) => {
+//   const { title } = payload;
+//     const group = await prisma.group.update({
+//         where: {
+//           submission_id: id,
+//         },
+//         data: {
+//             title,
+//             updated_at: new Date(),
+//         },
+//     });
+//     return group;
+// }
 
-// update advisor
-const updateAdvisorAndOrCoAdvisor = async (id, payload) => {
-  const {
-    proposed_advisor,
-    proposed_co_advisor1,
-    proposed_co_advisor2,
-  } = payload;
-  const submission = await prisma.submission.update({
-    where: {
-      id,
-    },
-    data: {
-      proposed_advisor,
-      proposed_co_advisor1,
-      proposed_co_advisor2,
-    },
-  });
-  return submission;
-};
+// // update advisor
+// const updateAdvisorAndOrCoAdvisor = async (id, payload) => {
+//   const {
+//     proposed_advisor,
+//     proposed_co_advisor1,
+//     proposed_co_advisor2,
+//   } = payload;
+//   const submission = await prisma.submission.update({
+//     where: {
+//       id,
+//     },
+//     data: {
+//       proposed_advisor,
+//       proposed_co_advisor1,
+//       proposed_co_advisor2,
+//     },
+//   });
+//   return submission;
+// };
 
-// approve submission
-const approveSubmission = async (id) => {
-  const submission = await prisma.submission.update({
-    where: {
-      id,
-    },
-    data: {
-      is_approve: "Approve"
-    },
-  });
+// // approve submission
+// const approveSubmission = async (id) => {
+//   const submission = await prisma.submission.update({
+//     where: {
+//       id,
+//     },
+//     data: {
+//       is_approve: "Approve"
+//     },
+//   });
 
-  await insertProposal(id, submission);
-  await insertSkripsi(id, submission);
+//   await insertProposal(id, submission);
+//   await insertSkripsi(id, submission);
 
-  return submission;
-};
+//   return submission;
+// };
 
-// +++ create proposal
-const insertProposal = async (submission_id, submission) => {
-  const {
-    proposed_advisor,
-    proposed_co_advisor1,
-    proposed_co_advisor2,
-    classroom_id,
-  } = submission;
-  const proposal = await prisma.proposal.create({
-    data: {
-      advisor: proposed_advisor,
-      co_advisor1: proposed_co_advisor1,
-      co_advisor2: proposed_co_advisor2,
-      classroom_id,
-    },
-  });
+// // +++ create proposal
+// const insertProposal = async (submission_id, submission) => {
+//   const {
+//     proposed_advisor,
+//     proposed_co_advisor1,
+//     proposed_co_advisor2,
+//     classroom_id,
+//   } = submission;
+//   const proposal = await prisma.proposal.create({
+//     data: {
+//       advisor: proposed_advisor,
+//       co_advisor1: proposed_co_advisor1,
+//       co_advisor2: proposed_co_advisor2,
+//       classroom_id,
+//     },
+//   });
 
-  const { id: proposal_id } = proposal;
+//   const { id: proposal_id } = proposal;
   
-  await updateGroupProposalIdById(submission_id, proposal_id);
+//   await updateGroupProposalIdById(submission_id, proposal_id);
 
-  return proposal;
-}
+//   return proposal;
+// }
 
-const updateGroupProposalIdById = async (submission_id, proposal_id) => {
-  const group = await prisma.group.update({
-    where: {
-      submission_id,
-    },
-    data: {
-      proposal_id,
-    },
-  });
+// const updateGroupProposalIdById = async (submission_id, proposal_id) => {
+//   const group = await prisma.group.update({
+//     where: {
+//       submission_id,
+//     },
+//     data: {
+//       proposal_id,
+//     },
+//   });
 
-  return group;
-}
+//   return group;
+// }
 
-// +++ create skripsi
-const insertSkripsi = async (submission_id, submission) => {
-  const {
-    proposed_advisor,
-    proposed_co_advisor1,
-    proposed_co_advisor2,
-  } = submission;
-  const skripsi = await prisma.skripsi.create({
-    data: {
-      advisor: proposed_advisor,
-      co_advisor1: proposed_co_advisor1,
-      co_advisor2: proposed_co_advisor2,
-    },
-  });
+// // +++ create skripsi
+// const insertSkripsi = async (submission_id, submission) => {
+//   const {
+//     proposed_advisor,
+//     proposed_co_advisor1,
+//     proposed_co_advisor2,
+//   } = submission;
+//   const skripsi = await prisma.skripsi.create({
+//     data: {
+//       advisor: proposed_advisor,
+//       co_advisor1: proposed_co_advisor1,
+//       co_advisor2: proposed_co_advisor2,
+//     },
+//   });
 
-  const { id: skripsi_id } = skripsi;
+//   const { id: skripsi_id } = skripsi;
   
-  await updateGroupSkripsiIdById(submission_id, skripsi_id);
+//   await updateGroupSkripsiIdById(submission_id, skripsi_id);
 
-  return skripsi;
-}
+//   return skripsi;
+// }
 
-const updateGroupSkripsiIdById = async (submission_id, skripsi_id) => {
-  const group = await prisma.group.update({
-    where: {
-      submission_id,
-    },
-    data: {
-      skripsi_id,
-    },
-  });
+// const updateGroupSkripsiIdById = async (submission_id, skripsi_id) => {
+//   const group = await prisma.group.update({
+//     where: {
+//       submission_id,
+//     },
+//     data: {
+//       skripsi_id,
+//     },
+//   });
 
-  return group;
-}
+//   return group;
+// }
 
-// reject submission
-const rejectSubmission = async (id) => {
-  const submission = await prisma.submission.update({
-    where: {
-      id,
-    },
-    data: {
-      is_approve: "Rejected"
-    },
-  });
-  return submission;
-};
+// // reject submission
+// const rejectSubmission = async (id) => {
+//   const submission = await prisma.submission.update({
+//     where: {
+//       id,
+//     },
+//     data: {
+//       is_approve: "Rejected"
+//     },
+//   });
+//   return submission;
+// };
 
 module.exports = {
-  findAllSubmission,
-  deleteSubmission,
-  deleteAllSubmission,
+  // findAllSubmission,
+  // deleteSubmission,
+  // deleteAllSubmission,
+  findProposalClassroomByUserId,
   insertSubmission,
-  findSubmissionById,
-  updateSubmission,
-  updateAdvisorAndOrCoAdvisor,
-  approveSubmission,
-  rejectSubmission,
-  updateGroupTitle,
+  insertGroup,
+  insertGroupStudent,
+  // findSubmissionById,
+  // updateSubmission,
+  // updateAdvisorAndOrCoAdvisor,
+  // approveSubmission,
+  // rejectSubmission,
+  // updateGroupTitle,
 }
