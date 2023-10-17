@@ -7,6 +7,9 @@
 
 */
 -- CreateEnum
+CREATE TYPE "Major" AS ENUM ('SI', 'IF');
+
+-- CreateEnum
 CREATE TYPE "Progress" AS ENUM ('Submission', 'Proposal', 'Skripsi', 'Finished');
 
 -- CreateEnum
@@ -49,13 +52,13 @@ DROP INDEX "UserRole_userId_key";
 
 -- AlterTable
 ALTER TABLE "Employee" ADD COLUMN     "degree" TEXT,
-ADD COLUMN     "major" TEXT,
+ADD COLUMN     "major" "Major",
 ADD COLUMN     "nidn" TEXT;
 
 -- AlterTable
 ALTER TABLE "Student" ADD COLUMN     "address" TEXT,
 ADD COLUMN     "faculty" TEXT,
-ADD COLUMN     "major" TEXT,
+ADD COLUMN     "major" "Major",
 ADD COLUMN     "reg_num" TEXT,
 ALTER COLUMN "lastName" DROP NOT NULL;
 

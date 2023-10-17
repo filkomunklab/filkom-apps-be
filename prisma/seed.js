@@ -41,7 +41,7 @@ async function main() {
         email: "student@mail.com",
         nim: "student",
         faculty: "Fakultas Ilmu Komputer",
-        major: "Informatika",
+        major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -165,7 +165,7 @@ async function main() {
         email: "frances@mail.com",
         nim: "frances",
         faculty: "Fakultas Ilmu Komputer",
-        major: "Informatika",
+        major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -187,7 +187,7 @@ async function main() {
         email: "geovalga@mail.com",
         nim: "geovalga",
         faculty: "Fakultas Ilmu Komputer",
-        major: "Informatika",
+        major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -208,7 +208,7 @@ async function main() {
         firstName: "Lecturer1",
         lastName: "Dosen1",
         nik: "dosen1",
-        major: "Informatika",
+        major: "IF",
         password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       }
     })
@@ -234,7 +234,7 @@ async function main() {
         firstName: "Lecturer2",
         lastName: "Dosen2",
         nik: "dosen2",
-        major: "Sistem Informasi",
+        major: "SI",
         password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       }
     })
