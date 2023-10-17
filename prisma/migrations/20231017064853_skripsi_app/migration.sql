@@ -124,9 +124,9 @@ CREATE TABLE "Submission" (
     "upload_date" TIMESTAMP(3) NOT NULL,
     "file_size" TEXT NOT NULL,
     "is_consultation" BOOLEAN NOT NULL,
-    "proposed_advisor" TEXT NOT NULL,
-    "proposed_co_advisor1" TEXT,
-    "proposed_co_advisor2" TEXT,
+    "proposed_advisor_id" TEXT NOT NULL,
+    "proposed_co_advisor1_id" TEXT,
+    "proposed_co_advisor2_id" TEXT,
     "is_approve" "Submission_Approve" NOT NULL DEFAULT 'Waiting',
     "classroom_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -147,9 +147,9 @@ CREATE TABLE "Proposal" (
     "file_size_proposal" TEXT,
     "file_size_payment" TEXT,
     "file_size_plagiarismcheck" TEXT,
-    "advisor" TEXT NOT NULL,
-    "co_advisor1" TEXT,
-    "co_advisor2" TEXT,
+    "advisor_id" TEXT NOT NULL,
+    "co_advisor1_id" TEXT,
+    "co_advisor2_id" TEXT,
     "classroom_id" TEXT NOT NULL,
     "is_proposal_approve_by_advisor" "Thesis_Approve",
     "is_proposal_approve_by_co_advisor1" "Thesis_Approve",
@@ -157,8 +157,8 @@ CREATE TABLE "Proposal" (
     "advisor_proposal_approved_date" TIMESTAMP(3),
     "co_advisor1_proposal_approved_date" TIMESTAMP(3),
     "co_advisor2_proposal_approved_date" TIMESTAMP(3),
-    "panelist_chairman" TEXT,
-    "panelist_member" TEXT,
+    "panelist_chairman_id" TEXT,
+    "panelist_member_id" TEXT,
     "start_defence" TEXT,
     "end_defence" TEXT,
     "defence_room" TEXT,
@@ -198,9 +198,9 @@ CREATE TABLE "Skripsi" (
     "file_size_skripsi" TEXT,
     "file_size_payment" TEXT,
     "file_size_plagiarismcheck" TEXT,
-    "advisor" TEXT NOT NULL,
-    "co_advisor1" TEXT,
-    "co_advisor2" TEXT,
+    "advisor_id" TEXT NOT NULL,
+    "co_advisor1_id" TEXT,
+    "co_advisor2_id" TEXT,
     "classroom_id" TEXT,
     "is_skripsi_approve_by_advisor" "Thesis_Approve",
     "is_skripsi_approve_by_co_advisor1" "Thesis_Approve",
@@ -208,8 +208,8 @@ CREATE TABLE "Skripsi" (
     "advisor_skripsi_approved_date" TIMESTAMP(3),
     "co_advisor1_skripsi_approved_date" TIMESTAMP(3),
     "co_advisor2_skripsi_approved_date" TIMESTAMP(3),
-    "panelist_chairman" TEXT,
-    "panelist_member" TEXT,
+    "panelist_chairman_id" TEXT,
+    "panelist_member_id" TEXT,
     "start_defence" TEXT,
     "end_defence" TEXT,
     "defence_room" TEXT,
@@ -369,25 +369,82 @@ ALTER TABLE "Classroom" ADD CONSTRAINT "Classroom_dosen_mk_id_fkey" FOREIGN KEY 
 ALTER TABLE "Classroom" ADD CONSTRAINT "Classroom_academic_id_fkey" FOREIGN KEY ("academic_id") REFERENCES "Academic_Calendar"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Submission" ADD CONSTRAINT "Submission_proposed_advisor_id_fkey" FOREIGN KEY ("proposed_advisor_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Submission" ADD CONSTRAINT "Submission_proposed_co_advisor1_id_fkey" FOREIGN KEY ("proposed_co_advisor1_id") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Submission" ADD CONSTRAINT "Submission_proposed_co_advisor2_id_fkey" FOREIGN KEY ("proposed_co_advisor2_id") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Submission" ADD CONSTRAINT "Submission_classroom_id_fkey" FOREIGN KEY ("classroom_id") REFERENCES "Classroom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Proposal" ADD CONSTRAINT "Proposal_advisor_id_fkey" FOREIGN KEY ("advisor_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Proposal" ADD CONSTRAINT "Proposal_co_advisor1_id_fkey" FOREIGN KEY ("co_advisor1_id") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Proposal" ADD CONSTRAINT "Proposal_co_advisor2_id_fkey" FOREIGN KEY ("co_advisor2_id") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Proposal" ADD CONSTRAINT "Proposal_classroom_id_fkey" FOREIGN KEY ("classroom_id") REFERENCES "Classroom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Proposal" ADD CONSTRAINT "Proposal_panelist_chairman_id_fkey" FOREIGN KEY ("panelist_chairman_id") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Proposal" ADD CONSTRAINT "Proposal_panelist_member_id_fkey" FOREIGN KEY ("panelist_member_id") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi" ADD CONSTRAINT "Skripsi_advisor_id_fkey" FOREIGN KEY ("advisor_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi" ADD CONSTRAINT "Skripsi_co_advisor1_id_fkey" FOREIGN KEY ("co_advisor1_id") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi" ADD CONSTRAINT "Skripsi_co_advisor2_id_fkey" FOREIGN KEY ("co_advisor2_id") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Skripsi" ADD CONSTRAINT "Skripsi_classroom_id_fkey" FOREIGN KEY ("classroom_id") REFERENCES "Classroom"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi" ADD CONSTRAINT "Skripsi_panelist_chairman_id_fkey" FOREIGN KEY ("panelist_chairman_id") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi" ADD CONSTRAINT "Skripsi_panelist_member_id_fkey" FOREIGN KEY ("panelist_member_id") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Proposal_Assessment" ADD CONSTRAINT "Proposal_Assessment_proposal_id_fkey" FOREIGN KEY ("proposal_id") REFERENCES "Proposal"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Proposal_Assessment" ADD CONSTRAINT "Proposal_Assessment_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Proposal_Assessment" ADD CONSTRAINT "Proposal_Assessment_dosen_id_fkey" FOREIGN KEY ("dosen_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Skripsi_Assessment" ADD CONSTRAINT "Skripsi_Assessment_skripsi_id_fkey" FOREIGN KEY ("skripsi_id") REFERENCES "Skripsi"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi_Assessment" ADD CONSTRAINT "Skripsi_Assessment_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi_Assessment" ADD CONSTRAINT "Skripsi_Assessment_dosen_id_fkey" FOREIGN KEY ("dosen_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Proposal_Changes" ADD CONSTRAINT "Proposal_Changes_proposal_id_fkey" FOREIGN KEY ("proposal_id") REFERENCES "Proposal"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Proposal_Changes" ADD CONSTRAINT "Proposal_Changes_dosen_id_fkey" FOREIGN KEY ("dosen_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Skripsi_Changes" ADD CONSTRAINT "Skripsi_Changes_skripsi_id_fkey" FOREIGN KEY ("skripsi_id") REFERENCES "Skripsi"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi_Changes" ADD CONSTRAINT "Skripsi_Changes_dosen_id_fkey" FOREIGN KEY ("dosen_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Consultaion" ADD CONSTRAINT "Consultaion_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -40,6 +40,23 @@ model Employee {
   updatedAt    DateTime?
   classroom    Classroom[]   @relation("DosenMK")
   consultation Consultaion[] @relation("Consultation")
+  proposed_advisor Submission[] @relation("ProposedAdvisor")
+  proposed_co_advisor1 Submission[] @relation("ProposedCoAdvisor1")
+  proposed_co_advisor2 Submission[] @relation("ProposedCoAdvisor2")
+  proposal_advisor Proposal[] @relation("ProposalAdvisor")
+  proposal_co_advisor1 Proposal[] @relation("ProposalCoAdvisor1")
+  proposal_co_advisor2 Proposal[] @relation("ProposalCoAdvisor2")
+  proposal_panelis_chairman Proposal[] @relation("ProposalPanelistChairman")
+  proposal_panelis_member Proposal[] @relation("ProposalPanelistMember")
+  skripsi_advisor Skripsi[] @relation("SkripsiAdvisor")
+  skripsi_co_advisor1 Skripsi[] @relation("SkripsiCoAdvisor1")
+  skripsi_co_advisor2 Skripsi[] @relation("SkripsiCoAdvisor2")
+  skripsi_panelis_chairman Skripsi[] @relation("SkripsiPanelistChairman")
+  skripsi_panelis_member Skripsi[] @relation("SkripsiPanelistMember")
+  proposal_assessment Proposal_Assessment[] @relation("Dosen")
+  skripsi_assessment Skripsi_Assessment[] @relation("Dosen")
+  proposal_changes Proposal_Changes[] @relation("Dosen")
+  skripsi_changes Skripsi_Changes[] @relation("Dosen")
 }
 
 enum Major {
@@ -66,6 +83,8 @@ model Student {
   updatedAt      DateTime?
   thesis_student Thesis_Student? @relation("ThesisStudent")
   group_student  Group_Student[] @relation("StudentMember")
+  proposal_assessment Proposal_Assessment[] @relation("Student")
+  skripsi_assessment Skripsi_Assessment[] @relation("Student")
 }
 
 model UserRole {
@@ -178,10 +197,12 @@ model Submission {
   upload_date          DateTime
   file_size            String
   is_consultation      Boolean
-  // @relation
-  proposed_advisor     String
-  proposed_co_advisor1 String?
-  proposed_co_advisor2 String?
+  proposed_advisor            Employee          @relation("ProposedAdvisor", fields: [proposed_advisor_id], references: [id])
+  proposed_advisor_id     String
+  proposed_co_advisor1            Employee?          @relation("ProposedCoAdvisor1", fields: [proposed_co_advisor1_id], references: [id])
+  proposed_co_advisor1_id String?
+  proposed_co_advisor2            Employee?          @relation("ProposedCoAdvisor2", fields: [proposed_co_advisor2_id], references: [id])
+  proposed_co_advisor2_id String?
   is_approve           Submission_Approve @default(Waiting)
   classroom            Classroom          @relation("SubmissionClassroom", fields: [classroom_id], references: [id])
   classroom_id         String
@@ -207,12 +228,12 @@ model Proposal {
   file_size_proposal                       String?
   file_size_payment                        String?
   file_size_plagiarismcheck                String?
-  // @relation
-  advisor                                  String
-  // @relation
-  co_advisor1                              String?
-  // @relation
-  co_advisor2                              String?
+  advisor            Employee          @relation("ProposalAdvisor", fields: [advisor_id], references: [id])
+  advisor_id                                  String
+  co_advisor1            Employee?          @relation("ProposalCoAdvisor1", fields: [co_advisor1_id], references: [id])
+  co_advisor1_id                              String?
+  co_advisor2            Employee?          @relation("ProposalCoAdvisor2", fields: [co_advisor2_id], references: [id])
+  co_advisor2_id                              String?
   classroom                                Classroom             @relation("ProposalClassroom", fields: [classroom_id], references: [id])
   classroom_id                             String
   is_proposal_approve_by_advisor           Thesis_Approve?
@@ -221,10 +242,10 @@ model Proposal {
   advisor_proposal_approved_date           DateTime?
   co_advisor1_proposal_approved_date       DateTime?
   co_advisor2_proposal_approved_date       DateTime?
-  // @relation
-  panelist_chairman                        String?
-  // @relation
-  panelist_member                          String?
+  panelist_chairman            Employee?          @relation("ProposalPanelistChairman", fields: [panelist_chairman_id], references: [id])
+  panelist_chairman_id                        String?
+  panelist_member            Employee?          @relation("ProposalPanelistMember", fields: [panelist_member_id], references: [id])
+  panelist_member_id                          String?
   start_defence                            String?
   end_defence                              String?
   defence_room                             String?
@@ -264,12 +285,12 @@ model Skripsi {
   file_size_skripsi                        String?
   file_size_payment                        String?
   file_size_plagiarismcheck                String?
-  // @relation
-  advisor                                  String
-  // @relation
-  co_advisor1                              String?
-  // @relation
-  co_advisor2                              String?
+  advisor            Employee          @relation("SkripsiAdvisor", fields: [advisor_id], references: [id])
+  advisor_id                                  String
+  co_advisor1            Employee?          @relation("SkripsiCoAdvisor1", fields: [co_advisor1_id], references: [id])
+  co_advisor1_id                              String?
+  co_advisor2            Employee?          @relation("SkripsiCoAdvisor2", fields: [co_advisor2_id], references: [id])
+  co_advisor2_id                              String?
   classroom                                Classroom?           @relation("SkripsiClassroom", fields: [classroom_id], references: [id])
   classroom_id                             String?
   is_skripsi_approve_by_advisor            Thesis_Approve?
@@ -278,10 +299,10 @@ model Skripsi {
   advisor_skripsi_approved_date            DateTime?
   co_advisor1_skripsi_approved_date        DateTime?
   co_advisor2_skripsi_approved_date        DateTime?
-  // @relation
-  panelist_chairman                        String?
-  // @relation
-  panelist_member                          String?
+  panelist_chairman            Employee?          @relation("SkripsiPanelistChairman", fields: [panelist_chairman_id], references: [id])
+  panelist_chairman_id                        String?
+  panelist_member            Employee?          @relation("SkripsiPanelistMember", fields: [panelist_member_id], references: [id])
+  panelist_member_id                          String?
   start_defence                            String?
   end_defence                              String?
   defence_room                             String?
@@ -358,9 +379,9 @@ model Proposal_Assessment {
   id          String   @id @default(uuid())
   proposal    Proposal @relation("Assessment", fields: [proposal_id], references: [id])
   proposal_id String
-  // @relation
+  student    Student @relation("Student", fields: [student_id], references: [id])
   student_id  String
-  // @relation
+  dosen    Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id    String
   value       String
 }
@@ -369,9 +390,9 @@ model Skripsi_Assessment {
   id         String  @id @default(uuid())
   skripsi    Skripsi @relation("Assessment", fields: [skripsi_id], references: [id])
   skripsi_id String
-  // @relation
+  student    Student @relation("Student", fields: [student_id], references: [id])
   student_id String
-  // @relation
+  dosen    Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id   String
   value      String
 }
@@ -380,7 +401,7 @@ model Proposal_Changes {
   id          String   @id @default(uuid())
   proposal    Proposal @relation("Changes", fields: [proposal_id], references: [id])
   proposal_id String
-  // @relation
+  dosen    Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id    String
   changes     String
 }
@@ -389,7 +410,7 @@ model Skripsi_Changes {
   id         String  @id @default(uuid())
   skripsi    Skripsi @relation("Changes", fields: [skripsi_id], references: [id])
   skripsi_id String
-  // @relation
+  dosen    Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id   String
   changes    String
 }
