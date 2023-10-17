@@ -27,6 +27,45 @@ const insertGroup = async (payload, submission_id) => {
     return group;
 };
 
+// update title
+const updateGroupTitle = async (id, payload) => {
+    const { title } = payload;
+        const group = await prisma.group.update({
+            where: {
+            submission_id: id,
+            },
+            data: {
+                title,
+                updated_at: new Date(),
+            },
+    });
+    return group;
+}
+
+const updateGroupProposalIdById = async (submission_id, proposal_id) => {
+    const group = await prisma.group.update({
+        where: {
+            submission_id,
+        },
+        data: {
+            proposal_id,
+        },
+    });
+    return group;
+}
+
+const updateGroupSkripsiIdById = async (submission_id, skripsi_id) => {
+    const group = await prisma.group.update({
+        where: {
+            submission_id,
+        },
+        data: {
+            skripsi_id,
+        },
+    });
+
+    return group;
+}
 
 
 
@@ -178,7 +217,10 @@ const findTitleById =  async (id) => {
 module.exports = {
     findGroupById,
     insertGroup,
-
+    updateGroupTitle,
+    updateGroupProposalIdById,
+    updateGroupSkripsiIdById,
+    
     findSubmissionListById,
     findSubmissionDetailsById,
     // findGroupStudentById,

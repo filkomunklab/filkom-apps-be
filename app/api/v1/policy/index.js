@@ -14,15 +14,18 @@ const policyFor = ({ user }) => {
   } else if (user.role === "KAPRODI") {
     can("read", "Submission");
   } else if (user.role === "DOSEN") {
+    can("read", "Submission");
   } else if (user.role.includes("MAHASISWA")) {
     can("create", "Submission");
     can("read", "Submission");
+    can("update", "Submission");
   } else if (user.role === "ALUMNI") {
   } else if (user.role.includes("DOSEN_MK")){
     can("manage", "Academic_Calendar");
     can("manage", "Classroom");
     can("manage", "Thesis_Student");
     can("read", "Submission");
+    can("update", "Submission");
   } else {
     can("read", "all");
   }

@@ -1,6 +1,26 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
+// create proposal
+const insertProposal = async (submission) => {
+  const {
+    proposed_advisor_id,
+    proposed_co_advisor1_id,
+    proposed_co_advisor2_id,
+    classroom_id,
+  } = submission;
+  const proposal = await prisma.proposal.create({
+    data: {
+      advisor_id: proposed_advisor_id,
+      co_advisor1_id: proposed_co_advisor1_id,
+      co_advisor2_id: proposed_co_advisor2_id,
+      classroom_id,
+    },
+  });
+  return proposal;
+}
+
+
 // get 1 Proposal
 const findProposalById = async (id) => {
     const proposal = await prisma.proposal.findUnique({
@@ -667,6 +687,8 @@ const rejectProposalRevisionDocumentById = async (id) => {
 };
 
 module.exports = {
+  insertProposal,
+
   findProposalById,
   updateProposalDocumentById,
   deleteProposalDocumentById,

@@ -6,6 +6,8 @@ const groupStudentRepository = require("../group_student/group_student.repositor
 const studentRepository = require("../student/student.repository");
 const thesisStudentRepository = require("../thesis_student/thesis_student.repository");
 const employeeRepository = require("../employee/employee.repository");
+const proposalRepository = require("../proposal/proposal.repository");
+const skripsiRepository = require("../skripsi/skripsi.repository");
 
 // const getAllSubmission = async () => {
 //   const submission = await submissionRepository.findAllSubmission();
@@ -20,6 +22,17 @@ const employeeRepository = require("../employee/employee.repository");
 // const deleteAllSubmission = async () => {
 //   await submissionRepository.deleteAllSubmission();
 // };
+
+const GetUserProposalClassroomByStudentId = async (student_id) => {
+  const thesis_student = await thesisStudentRepository.findThesisStudentByStudentId(student_id);
+  if (!thesis_student) {
+    throw {
+      status: 400,
+      message: `You are not registered in the proposal class`,
+    };
+  }
+  return thesis_student;
+};
 
 const getThesisStudentById = async (student_id) => {
   const thesis_student = await thesisStudentRepository.findThesisStudentByStudentId(student_id);
@@ -43,9 +56,13 @@ const getDosenById = async (id) => {
   return dosen;
 };
 
+//===================================================================
+// @description     Mengajukan judul
+// @route           POST /submission
+// @access          MAHASISWA
 const createSubmission = async (userId, payload) => {
   const { partner1, partner2, partner3,
-          proposed_advisor, proposed_co_advisor1, proposed_co_advisor2 } = payload;
+          proposed_advisor_id, proposed_co_advisor1_id, proposed_co_advisor2_id } = payload;
   // mengecek student
   if (partner1) {
     await getThesisStudentById(partner1);
@@ -58,18 +75,18 @@ const createSubmission = async (userId, payload) => {
   }
 
   // mengecek dosen
-  if (proposed_advisor) {
-    await getDosenById(proposed_advisor);
+  if (proposed_advisor_id) {
+    await getDosenById(proposed_advisor_id);
   }
-  if (proposed_co_advisor1) {
-    await getDosenById(proposed_co_advisor1);
+  if (proposed_co_advisor1_id) {
+    await getDosenById(proposed_co_advisor1_id);
   }
-  if (proposed_co_advisor2) {
-    await getDosenById(proposed_co_advisor2);
+  if (proposed_co_advisor2_id) {
+    await getDosenById(proposed_co_advisor2_id);
   }
 
   // mengambil proposal_classroom dari user
-  const proposalClassroom = await thesisStudentRepository.findThesisStudentByStudentId(userId);
+  const proposalClassroom = await GetUserProposalClassroomByStudentId(userId);
   const { proposal_class_id: classroom_id } = proposalClassroom;
 
   // create submission
@@ -84,7 +101,7 @@ const createSubmission = async (userId, payload) => {
   if ((partner1 && partner1 === partner2) || (partner2 && partner2 === partner3) || (partner1 && partner1 === partner3)) {
     throw {
       status: 400,
-      message: `Terdapat partner yang sama`,
+      message: `There are the same partners`,
     };
   }
 
@@ -103,9 +120,9 @@ const createSubmission = async (userId, payload) => {
     upload_date: submission.upload_date,
     file_size: submission.file_size,
     is_consultation: submission.is_consultation,
-    proposed_advisor: submission.proposed_advisor,
-    proposed_co_advisor1: submission.proposed_co_advisor1,
-    proposed_co_advisor2: submission.proposed_co_advisor2,
+    proposed_advisor_id: submission.proposed_advisor_id,
+    proposed_co_advisor1_id: submission.proposed_co_advisor1_id,
+    proposed_co_advisor2_id: submission.proposed_co_advisor2_id,
     classroom_id: submission.classroom_id,
   }
   return groupData;
@@ -144,6 +161,10 @@ const getGroupById = async (submission_id) => {
   return group;
 };
 
+//===================================================================
+// @description     Melihat pengajuan judul
+// @route           GET /submission/:id
+// @access          MAHASISWA
 const getSubmissionById = async (id) => {
   const submission = await submissionRepository.findSubmissionById(id);
   if (!submission) {
@@ -191,26 +212,117 @@ const getSubmissionById = async (id) => {
   return groupData;
 };
 
-// const updateSubmissionById = async (id, payload) => {
-//   await getSubmissionById(id);
+const checkSubmissionById = async (id) => {
+  const submission = await submissionRepository.findSubmissionById(id);
+  if (!submission) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return submission;
+};
 
-//   const submission = await submissionRepository.updateSubmission(id, payload);
-//   return submission;
-// };
+//===================================================================
+// @description     Memperbarui pengajuan judul
+// @route           PUT /submission/:id
+// @access          MAHASISWA
+const updateSubmissionById = async (id, payload) => {
+  // mengecek submission
+  await checkSubmissionById(id);
 
-// const updateAdvisorAndOrCoAdvisorById = async (id, payload) => {
-//   await getSubmissionById(id);
+  const { proposed_advisor_id, proposed_co_advisor1_id, proposed_co_advisor2_id } = payload;
+  // mengecek dosen
+  if (proposed_advisor_id) {
+    await getDosenById(proposed_advisor_id);
+  }
+  if (proposed_co_advisor1_id) {
+    await getDosenById(proposed_co_advisor1_id);
+  }
+  if (proposed_co_advisor2_id) {
+    await getDosenById(proposed_co_advisor2_id);
+  }
 
-//   const submission = await submissionRepository.updateAdvisorAndOrCoAdvisor(id, payload);
-//   return submission;
-// };
+  // update submission
+  const submission = await submissionRepository.updateSubmission(id, payload);
+  // update submission title in group
+  const group = await groupRepository.updateGroupTitle(id, payload);
+  
+  const groupData = {
+    id: group.submission_id,
+    title: group.title,
+    file_name: submission.file_name,
+    upload_date: submission.upload_date,
+    file_size: submission.file_size,
+    is_consultation: submission.is_consultation,
+    proposed_advisor_id: submission.proposed_advisor_id,
+    proposed_co_advisor1_id: submission.proposed_co_advisor1_id,
+    proposed_co_advisor2_id: submission.proposed_co_advisor2_id,
+  }
+  return groupData;
+};
 
-// const approveSubmissionById = async (id) => {
-//   await getSubmissionById(id);
+//===================================================================
+// @description     Mengganti advisor, co-advisor
+// @route           PUT /submission/advisor-and-co-advisor/:id
+// @access          DOSEN_MK
+const updateAdvisorAndCoAdvisorById = async (id, payload) => {
+  // mengecek submission
+  await checkSubmissionById(id);
 
-//   const submission = await submissionRepository.approveSubmission(id);
-//   return submission;
-// };
+  const { proposed_advisor_id, proposed_co_advisor1_id, proposed_co_advisor2_id } = payload;
+  // mengecek dosen
+  if (proposed_advisor_id) {
+    await getDosenById(proposed_advisor_id);
+  }
+  if (proposed_co_advisor1_id) {
+    await getDosenById(proposed_co_advisor1_id);
+  }
+  if (proposed_co_advisor2_id) {
+    await getDosenById(proposed_co_advisor2_id);
+  }
+
+  const submission = await submissionRepository.updateAdvisorAndCoAdvisor(id, payload);
+  return submission;
+};
+
+//===================================================================
+// @description     Approve pengajuan judul
+// @route           PUT /submission/approve/:id
+// @access          DOSEN_MK
+const approveSubmissionById = async (id) => {
+  // mengecek submission
+  const checkSubmission = await checkSubmissionById(id);
+  if (checkSubmission.is_approve === "Approve" || checkSubmission.is_approve === "Rejected"){
+    throw {
+      status: 400,
+      message: `Can't perform this action`,
+    };
+  }
+
+  // approve submission
+  const submission = await submissionRepository.approveSubmissionById(id);
+  
+  // create empty proposal
+  const proposal = await proposalRepository.insertProposal(submission);
+  const proposal_id = proposal.id;
+  
+  // update proposal_id in group
+  await groupRepository.updateGroupProposalIdById(id, proposal_id);
+  
+  // create empty skripsi
+  const skripsi = await skripsiRepository.insertSkripsi(submission);
+  const skripsi_id = skripsi.id;
+  
+  // update skripsi_id in group
+  await groupRepository.updateGroupSkripsiIdById(id, skripsi_id);
+  
+  const groupData = {
+    id: submission.id,
+    is_approve: submission.is_approve
+  }
+  return groupData;
+};
 
 // const rejectSubmissionById = async (id) => {
 //   await getSubmissionById(id);
@@ -232,9 +344,9 @@ module.exports = {
   // deleteAllSubmission,
   createSubmission,
   getSubmissionById,
-  // updateSubmissionById,
-  // updateAdvisorAndOrCoAdvisorById,
-  // approveSubmissionById,
+  updateSubmissionById,
+  updateAdvisorAndCoAdvisorById,
+  approveSubmissionById,
   // rejectSubmissionById,
   // updateGroupTitleById,
 }

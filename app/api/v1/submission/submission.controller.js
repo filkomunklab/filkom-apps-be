@@ -32,6 +32,10 @@ const { policyFor } = require("../policy");
 //     }
 // };
 
+//===================================================================
+// @description     Mengajukan judul
+// @route           POST /submission
+// @access          MAHASISWA
 const createSubmission = async (req, res) => {
     try {
         const policy = policyFor(req.user);
@@ -44,7 +48,7 @@ const createSubmission = async (req, res) => {
                     payload.file_name  &&
                     payload.file_size &&
                     payload.is_consultation &&
-                    payload.proposed_advisor
+                    payload.proposed_advisor_id
                 )
             ) {
                 return res
@@ -66,6 +70,10 @@ const createSubmission = async (req, res) => {
     }
 };
 
+//===================================================================
+// @description     Melihat pengajuan judul
+// @route           GET /submission/:id
+// @access          MAHASISWA
 const getSubmissionById = async (req, res) => {
     try {
         const policy = policyFor(req.user);
@@ -86,78 +94,107 @@ const getSubmissionById = async (req, res) => {
     }
 };
 
-// const updateSubmissionById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const payload = req.body;
+//===================================================================
+// @description     Memperbarui pengajuan judul
+// @route           PUT /submission/:id
+// @access          MAHASISWA
+const updateSubmissionById = async (req, res) => {
+    try {
+        const policy = policyFor(req.user);
+        if (policy.can("update", "Submission")) {
+            const id = req.params.id;
+            const payload = req.body;
+            if (
+                !(
+                    payload.title &&
+                    payload.file_name  &&
+                    payload.file_size  &&
+                    payload.is_consultation  &&
+                    payload.proposed_advisor_id
+                )
+            ) {
+                return res
+                .status(400)
+                .send({ status: "FAILED", data: { error: "some field is missing" } });
+            }
+            const submission = await submissionService.updateSubmissionById(
+                id,
+                payload
+            );
+            res.send({ status: "OK", data: submission });
+        } else {
+            res.status(403).send({
+                status: "FAILED",
+                data: { message: "You don't have permission to perform this action" },
+            });
+        }
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
 
-//         if (
-//             !(
-//                 payload.file_name  &&
-//                 payload.file_size  &&
-//                 payload.is_consultation  &&
-//                 payload.proposed_advisor  &&
-//                 payload.proposed_co_advisor1  &&
-//                 payload.proposed_co_advisor2
-//             )
-//         ) {
-//             return res
-//             .status(400)
-//             .send({ status: "FAILED", data: { error: "some field is missing" } });
-//         }
-//         const submission = await submissionService.updateSubmissionById(
-//             id,
-//             payload
-//         );
-//         res.send({ status: "OK", data: submission });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+//===================================================================
+// @description     Mengganti advisor, co-advisor
+// @route           PUT /submission/advisor-and-co-advisor/:id
+// @access          DOSEN_MK
+const updateAdvisorAndCoAdvisorById = async (req, res) => {
+    try {
+        const policy = policyFor(req.user);
+        if (policy.can("update", "Submission")) {
+            const id = req.params.id;
+            const payload = req.body;
+            if (
+                !(
+                    payload.proposed_advisor_id
+                )
+            ) {
+                return res
+                .status(400)
+                .send({ status: "FAILED", data: { error: "some field is missing" } });
+            }
+            const submission = await submissionService.updateAdvisorAndCoAdvisorById(
+                id,
+                payload
+            );
+            res.send({ status: "OK", data: submission });
+        } else {
+            res.status(403).send({
+                status: "FAILED",
+                data: { message: "You don't have permission to perform this action" },
+            });
+        }
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
 
-// const updateAdvisorAndOrCoAdvisorById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const payload = req.body;
-
-//         if (
-//             !(
-//                 payload.proposed_advisor  &&
-//                 payload.proposed_co_advisor1  &&
-//                 payload.proposed_co_advisor2
-//             )
-//         ) {
-//             return res
-//             .status(400)
-//             .send({ status: "FAILED", data: { error: "some field is missing" } });
-//         }
-//         const submission = await submissionService.updateAdvisorAndOrCoAdvisorById(
-//             id,
-//             payload
-//         );
-//         res.send({ status: "OK", data: submission });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
-
-// const approveSubmissionById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const submission = await submissionService.approveSubmissionById(
-//             id
-//         );
-//         res.send({ status: "OK", data: submission });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+//===================================================================
+// @description     Approve pengajuan judul
+// @route           PUT /submission/approve/:id
+// @access          DOSEN_MK
+const approveSubmissionById = async (req, res) => {
+    try {
+        const policy = policyFor(req.user);
+        if (policy.can("update", "Submission")) {
+            const id = req.params.id;
+            const submission = await submissionService.approveSubmissionById(id);
+            res.send({ status: "OK", data: submission });
+        } else {
+            res.status(403).send({
+                status: "FAILED",
+                data: { message: "You don't have permission to perform this action" },
+            });
+        }
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
 
 // const rejectSubmissionById = async (req, res) => {
 //     try {
@@ -203,9 +240,9 @@ module.exports = {
     // deleteAllSubmission,
     createSubmission,
     getSubmissionById,
-    // updateSubmissionById,
-    // updateAdvisorAndOrCoAdvisorById,
-    // approveSubmissionById,
+    updateSubmissionById,
+    updateAdvisorAndCoAdvisorById,
+    approveSubmissionById,
     // rejectSubmissionById,
     // updateGroupTitleById,
 };
