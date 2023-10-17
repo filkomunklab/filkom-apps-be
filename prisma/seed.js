@@ -297,6 +297,20 @@ async function main() {
         },
       });
     });
+    //--------------------------------------Klabat Bridge--------------------------------------------
+    // CREATE SPT
+    await prisma.formSPT.create({
+      data: {
+        birth_mother: 'Ariana',
+        date_of_birth: '27/06/1998',
+        gender: 'LAKILAKI',
+        graduate_plan: 'Semester 8',
+        nik: '12343567',
+        remaining_classes: "[{subject: 'IGD', sks: '3'}, {subject: 'Entre', sks: '3'}, {subject: 'Web Design', sks: '3'}, {subject: 'Math', sks: '3'}, {subject: 'Family Living', sks: '3'}]",
+        remaining_credits: '3',
+        studentId: 'student'
+      }
+    })
 }
 
 main()
