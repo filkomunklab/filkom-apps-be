@@ -21,26 +21,6 @@ const prisma = require("../../../database");
 //   await prisma.submission.deleteMany({});
 // };
 
-// find student
-const findStudentById = async (student_id) => {
-  const thesis_student = await prisma.thesis_Student.findUnique({
-    where: {
-      student_id,
-    },
-  });
-  return thesis_student;
-};
-
-// find dosen
-const findDosenById = async (id) => {
-  const dosen = await prisma.employee.findUnique({
-    where: {
-      id,
-    },
-  });
-  return dosen;
-};
-
 // create submission
 const insertSubmission = async (classroom_id, payload) => {
   const {
@@ -67,43 +47,15 @@ const insertSubmission = async (classroom_id, payload) => {
   return submission;
 };
 
-// +++ create kelompok, input title
-const insertGroup = async (payload, submission_id) => {
-  const {
-    title
-  } = payload;
-  const group = await prisma.group.create({
-    data: {
-      title,
-      progress: "Submission",
-      submission_id
+// get 1 submission
+const findSubmissionById = async (id) => {
+  const submission = await prisma.submission.findUnique({
+    where: {
+      id,
     },
   });
-
-  return group;
+  return submission;
 };
-
-// +++ create kelompok mahasiswa
-const insertGroupStudent = async (data) => {
-  const { group_id, student_id } = data;
-  const group_student = await prisma.group_Student.create({
-    data: {
-      group_id,
-      student_id,
-    },
-  });
-  return group_student;
-};
-
-// // get 1 submission
-// const findSubmissionById = async (id) => {
-//   const submission = await prisma.submission.findUnique({
-//     where: {
-//       id,
-//     },
-//   });
-//   return submission;
-// };
 
 // // update submission
 // const updateSubmission = async (id, payload) => {
@@ -275,12 +227,8 @@ module.exports = {
   // findAllSubmission,
   // deleteSubmission,
   // deleteAllSubmission,
-  findStudentById,
-  findDosenById,
   insertSubmission,
-  insertGroup,
-  insertGroupStudent,
-  // findSubmissionById,
+  findSubmissionById,
   // updateSubmission,
   // updateAdvisorAndOrCoAdvisor,
   // approveSubmission,

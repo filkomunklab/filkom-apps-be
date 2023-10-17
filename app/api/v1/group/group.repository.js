@@ -1,6 +1,35 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
+// get 1 submission
+const findGroupById = async (submission_id) => {
+    const group = await prisma.group.findUnique({
+      where: {
+        submission_id,
+      },
+    });
+    return group;
+};
+
+// +++ create kelompok, input title
+const insertGroup = async (payload, submission_id) => {
+    const {
+      title
+    } = payload;
+    const group = await prisma.group.create({
+      data: {
+        title,
+        progress: "Submission",
+        submission_id
+      },
+    });
+  
+    return group;
+};
+
+
+
+
 // Main - get kelompok mahasiswa
 const findSubmissionListById = async (student_id) => {
     // Mengambil semua entri dalam tabel Group_Student yang memiliki student_id yang sesuai
@@ -147,6 +176,9 @@ const findTitleById =  async (id) => {
 // };
 
 module.exports = {
+    findGroupById,
+    insertGroup,
+
     findSubmissionListById,
     findSubmissionDetailsById,
     // findGroupStudentById,

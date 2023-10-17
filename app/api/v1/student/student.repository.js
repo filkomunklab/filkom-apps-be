@@ -1,6 +1,27 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
+// get student in group
+const findStudentById = async (id) => {
+  const student = await prisma.student.findUnique({
+    where: {
+      id,
+    },
+  });
+  return student;
+};
+
+// Menemukan student berdasarkan NIM
+const findStudentByNim = async (nim) => {
+  const student = await prisma.student.findUnique({
+      where: {
+          nim,
+      },
+  });
+  console.log("student: ", student.id);
+  return student;
+}
+
 // create submission
 const insertStudent = async (payload) => {
     const {
@@ -56,6 +77,9 @@ const findStudentByToken = async (token) => {
 };
 
 module.exports = {
+  findStudentById,
+  findStudentByNim,
+  
   insertStudent,
   updateStudent,
   findStudentByToken,

@@ -17,8 +17,8 @@ const { auth } = require("../../../middleware/auth");
 
 //       mengajukan judul baru
 router.post("/submission", auth, submissionController.createSubmission);
-// //       melihat pengajuan judul
-// router.get("/submission/:id", submissionController.getSubmissionById);
+//       melihat pengajuan judul
+router.get("/submission/:id", auth, submissionController.getSubmissionById);
 // //       mengubah pengajuan judul
 // router.put("/submission/:id", submissionController.updateSubmissionById);
 // //       mengganti advisor, co-advisor

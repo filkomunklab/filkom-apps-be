@@ -1,6 +1,8 @@
 //Layer untuk handle business logic
 
 const classroomRepository = require("./classroom.repository")
+const studentRepository = require("../student/student.repository")
+const thesisStudentRepository = require("../thesis_student/thesis_student.repository")
 
 const getExistingClassroom = async (userId, payload) => {
     const classroom = await classroomRepository.findExistingClassroom(userId, payload);
@@ -42,7 +44,7 @@ const getClassroomById = async (id) => {
 };
 
 const getExistStudent = async (student_id) => {
-  const thesis_student = await classroomRepository.findExistStudent(student_id);
+  const thesis_student = await thesisStudentRepository.findThesisStudentByStudentId(student_id);
   if (thesis_student) {
     throw {
       status: 400,
@@ -53,7 +55,7 @@ const getExistStudent = async (student_id) => {
 };
 
 const getExistProposalStudent = async (student_id) => {
-  const thesis_student = await classroomRepository.findExistStudent(student_id);
+  const thesis_student = await thesisStudentRepository.findThesisStudentByStudentId(student_id);
   if (!thesis_student) {
     throw {
       status: 400,
@@ -64,7 +66,7 @@ const getExistProposalStudent = async (student_id) => {
 };
 
 const getExistSkripsiStudent = async (student_id, classroom_id) => {
-  const thesis_student = await classroomRepository.findExistSkripsiStudent(student_id, classroom_id);
+  const thesis_student = await thesisStudentRepository.findExistSkripsiStudent(student_id, classroom_id);
   if (thesis_student) {
     throw {
       status: 400,
@@ -84,7 +86,7 @@ const inputStudents = async (payload) => {
 
   for (const student of students) {
     const nim = student.nim;
-    const studentRecord = await classroomRepository.findByNim(nim);
+    const studentRecord = await studentRepository.findStudentByNim(nim);
 
     if (studentRecord) {
       const classroom = await classroomRepository.findClassroomById(classroom_id);
@@ -94,7 +96,7 @@ const inputStudents = async (payload) => {
         const existStudent = await getExistStudent(studentRecord.id);
 
         if (!existStudent) {
-          const proposalStudent = await classroomRepository.insertProposalStudent(studentRecord.id, classroom_id);
+          const proposalStudent = await thesisStudentRepository.insertProposalStudent(studentRecord.id, classroom_id);
           insertedStudents.push({ id: proposalStudent.id });
         }
       } else if (classroomName === 'Skripsi') {
@@ -102,7 +104,7 @@ const inputStudents = async (payload) => {
         await getExistSkripsiStudent(studentRecord.id, classroom_id);
         
         if (existProposalStudent) {
-          const skripsiStudent = await classroomRepository.insertSkripsiStudent(studentRecord.id, classroom_id);
+          const skripsiStudent = await thesisStudentRepository.insertSkripsiStudent(studentRecord.id, classroom_id);
           insertedStudents.push({ id: skripsiStudent.id });
         }
       }
@@ -137,9 +139,9 @@ const getClassroomsWithStudents = async (classrooms, classroomName) => {
       // Dapatkan mahasiswa di kelas ini
       let students;
       if (classroomName === 'Proposal') {
-        students = await classroomRepository.findProposalStudentsByClassroomId(classroom.id);
+        students = await thesisStudentRepository.findProposalStudentsByClassroomId(classroom.id);
       } else if (classroomName === 'Skripsi') {
-        students = await classroomRepository.findSkripsiStudentsByClassroomId(classroom.id);
+        students = await thesisStudentRepository.findSkripsiStudentsByClassroomId(classroom.id);
       }
 
       const studentData = students.map((student) => ({
@@ -172,7 +174,7 @@ const getClassroomsWithStudents = async (classrooms, classroomName) => {
 
 
 const getExistStudentInProposalClassroom = async (skripsi_class_id) => {
-  const classroom = await classroomRepository.findExistStudentInProposalClassroom(skripsi_class_id);
+  const classroom = await thesisStudentRepository.findExistStudentInProposalClassroomByClassroomId(skripsi_class_id);
   if (classroom) {
     throw {
       status: 400,
@@ -183,7 +185,7 @@ const getExistStudentInProposalClassroom = async (skripsi_class_id) => {
 };
 
 const getExistStudentInSkripsiClassroom = async (skripsi_class_id) => {
-  const classroom = await classroomRepository.findExistStudentInSkripsiClassroom(skripsi_class_id);
+  const classroom = await thesisStudentRepository.findExistStudentInSkripsiClassroomByClassroomId(skripsi_class_id);
   if (classroom) {
     throw {
       status: 400,
@@ -207,7 +209,7 @@ const deleteClassroomById = async (id) => {
 
 const deleteStudentById = async (id) => {
   // await getClassroomById(id);
-  await classroomRepository.deleteStudentById(id);
+  await thesisStudentRepository.deleteStudentById(id);
 };
 
 module.exports = {

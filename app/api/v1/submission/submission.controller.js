@@ -66,17 +66,25 @@ const createSubmission = async (req, res) => {
     }
 };
 
-// const getSubmissionById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const submission = await submissionService.getSubmissionById(id);
-//         res.send({ status: "OK", data: submission });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+const getSubmissionById = async (req, res) => {
+    try {
+        const policy = policyFor(req.user);
+        if (policy.can("read", "Submission")) {
+            const id = req.params.id;
+            const submission = await submissionService.getSubmissionById(id);
+            res.send({ status: "OK", data: submission });
+        } else {
+            res.status(403).send({
+                status: "FAILED",
+                data: { message: "You don't have permission to perform this action" },
+            });
+        }
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
 
 // const updateSubmissionById = async (req, res) => {
 //     try {
@@ -194,7 +202,7 @@ module.exports = {
     // deleteSubmissionById,
     // deleteAllSubmission,
     createSubmission,
-    // getSubmissionById,
+    getSubmissionById,
     // updateSubmissionById,
     // updateAdvisorAndOrCoAdvisorById,
     // approveSubmissionById,
