@@ -9,88 +9,134 @@ const { policyFor } = require("../policy");
 // @route           PUT /proposal/proposal-document/:id
 // @access          MAHASISWA
 const updateProposalDocumentById = async (req, res) => {
-    try {
-        const policy = policyFor(req.user);
-        if (policy.can("update", "Proposal")) {
-            const userId = req.user.user.id;
-            const id = req.params.id;
-            const payload = req.body;
-            if (
-                !(
-                    payload.file_name_proposal  &&
-                    payload.file_size_proposal
-                )
-            ) {
-                return res
-                .status(400)
-                .send({ status: "FAILED", data: { error: "some field is missing" } });
-            }
-            const proposal = await proposalService.updateProposalDocumentById(
-                userId,
-                id,
-                payload
-            );
-            res.send({ status: "OK", data: proposal });
-        } else {
-            res.status(403).send({
-                status: "FAILED",
-                data: { message: "You don't have permission to perform this action" },
-            });
-        }
-    } catch (error) {
-        res
-            .status(error?.status || 500)
-            .send({ status: "FAILED", data: { error: error?.message || error } });
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "document_proposal")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const id = req.params.id;
+    const payload = req.body;
+    if (!(payload.file_name_proposal && payload.file_size_proposal)) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
     }
+    const proposal = await proposalService.updateProposalDocumentById(
+      userId,
+      id,
+      payload
+    );
+    res.send({ status: "OK", data: proposal });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
 };
 
-// const getProposalDocumentById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const proposal = await proposalService.getProposalDocumentById(id);
-//         res.send({ status: "OK", data: proposal });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+//===================================================================
+// @description     Get dokumen proposal
+// @route           GET /proposal/proposal-document/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN
+const getProposalDocumentById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "document_proposal")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const proposal = await proposalService.getProposalDocumentById(id);
+    res.send({ status: "OK", data: proposal });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
 
-// const deleteProposalDocumentById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         await proposalService.deleteProposalDocumentById(id);
-//         res.status(200).send({ status: "OK" });
-//     } catch (error) {
-//         res
-//         .status(error?.status || 500)
-//         .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+//===================================================================
+// @description     Delete/Update dokumen proposal
+// @route           PUT /proposal/proposal-document/delete/:id
+// @access          MAHASISWA
+const deleteProposalDocumentById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "document_proposal")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const id = req.params.id;
+    await proposalService.deleteProposalDocumentById(userId, id);
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
 
-// const approveProposalDocumentById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const proposal = await proposalService.approveProposalDocumentById(id);
-//         res.send({ status: "OK", data: proposal });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+//===================================================================
+// @description     Approve dokumen proposal
+// @route           PUT /proposal/proposal-document/approve/:id
+// @access          DOSEN
+const approveProposalDocumentById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "is_proposal_approve")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const id = req.params.id;
+    const proposal = await proposalService.approveProposalDocumentById(
+      userId,
+      id
+    );
+    res.send({ status: "OK", data: proposal });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
 
-// const rejectProposalDocumentById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const proposal = await proposalService.rejectProposalDocumentById(id);
-//         res.send({ status: "OK", data: proposal });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+//===================================================================
+// @description     Reject dokumen proposal
+// @route           PUT /proposal/proposal-document/reject/:id
+// @access          DOSEN
+const rejectProposalDocumentById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "is_proposal_approve")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const id = req.params.id;
+    const proposal = await proposalService.rejectProposalDocumentById(
+      userId,
+      id
+    );
+    res.send({ status: "OK", data: proposal });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
 
 // const updateProposalPaymentById = async (req, res) => {
 //     try {
@@ -290,7 +336,7 @@ const updateProposalDocumentById = async (req, res) => {
 //                 payload.exam_conclution  &&
 //                 payload.changes_conclusion  &&
 //                 payload.assessment_conclution &&
-//                 payload.is_pass 
+//                 payload.is_pass
 //             )
 //         ) {
 //             return res
@@ -396,31 +442,31 @@ const updateProposalDocumentById = async (req, res) => {
 // };
 
 module.exports = {
-    updateProposalDocumentById,
-    // getProposalDocumentById,
-    // deleteProposalDocumentById,
-    // approveProposalDocumentById,
-    // rejectProposalDocumentById,
-    // updateProposalPaymentById,
-    // getProposalPaymentById,
-    // deleteProposalPaymentById,
-    // updateProposalPlagiarismById,
-    // getProposalPlagiarismById,
-    // deleteProposalPlagiarismById,
+  updateProposalDocumentById,
+  getProposalDocumentById,
+  deleteProposalDocumentById,
+  approveProposalDocumentById,
+  rejectProposalDocumentById,
+  // updateProposalPaymentById,
+  // getProposalPaymentById,
+  // deleteProposalPaymentById,
+  // updateProposalPlagiarismById,
+  // getProposalPlagiarismById,
+  // deleteProposalPlagiarismById,
 
-    // getProposalSchedule,
-    // updateProposalScheduleById,
-    // getProposalScheduleById,
+  // getProposalSchedule,
+  // updateProposalScheduleById,
+  // getProposalScheduleById,
 
-    // openAccessProposalReportById,
-    // getProposalReportById,
-    // signProposalReportById,
-    // updateProposalConclusionById,
-    // getProposalConclusionById,
+  // openAccessProposalReportById,
+  // getProposalReportById,
+  // signProposalReportById,
+  // updateProposalConclusionById,
+  // getProposalConclusionById,
 
-    // updateProposalRevisionDocumentById,
-    // getProposalRevisionDocumentById,
-    // deleteProposalRevisionDocumentById,
-    // approveProposalRevisionDocumentById,
-    // rejectProposalRevisionDocumentById,
-}
+  // updateProposalRevisionDocumentById,
+  // getProposalRevisionDocumentById,
+  // deleteProposalRevisionDocumentById,
+  // approveProposalRevisionDocumentById,
+  // rejectProposalRevisionDocumentById,
+};

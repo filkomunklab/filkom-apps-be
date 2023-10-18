@@ -11,15 +11,47 @@ const { auth } = require("../../../middleware/auth");
 //===================================================================
 // @description     Upload dokumen proposal
 // @access          MAHASISWA
-router.put("/proposal/proposal-document/:id", auth, proposalController.updateProposalDocumentById);
-// //       melihat dokumen proposal
-// router.get("/proposal/proposal-document/:id", auth, proposalController.getProposalDocumentById);
-// //       hapus dokumen proposal
-// router.put("/proposal/proposal-document/delete/:id", auth, proposalController.deleteProposalDocumentById);
-// //       approve dokumen proposal
-// router.put("/proposal/proposal-document/approve/:id", auth, proposalController.approveProposalDocumentById);
-// //       reject dokumen proposal
-// router.put("/proposal/proposal-document/reject/:id", auth, proposalController.rejectProposalDocumentById);
+router.put(
+  "/proposal/proposal-document/:id",
+  auth,
+  proposalController.updateProposalDocumentById
+);
+
+//===================================================================
+// @description     Get dokumen proposal
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN
+router.get(
+  "/proposal/proposal-document/:id",
+  auth,
+  proposalController.getProposalDocumentById
+);
+
+//===================================================================
+// @description     Delete/Update dokumen proposal
+// @access          MAHASISWA
+router.put(
+  "/proposal/proposal-document/delete/:id",
+  auth,
+  proposalController.deleteProposalDocumentById
+);
+
+//===================================================================
+// @description     Approve dokumen proposal
+// @access          DOSEN
+router.put(
+  "/proposal/proposal-document/approve/:id",
+  auth,
+  proposalController.approveProposalDocumentById
+);
+
+//===================================================================
+// @description     Reject dokumen proposal
+// @access          DOSEN
+router.put(
+  "/proposal/proposal-document/reject/:id",
+  auth,
+  proposalController.rejectProposalDocumentById
+);
 // //       upload/update bukti pembayaran
 // router.put("/proposal/proposal-payment/:id", auth, proposalController.updateProposalPaymentById);
 // //       melihat bukti pembayaran
@@ -50,7 +82,6 @@ router.put("/proposal/proposal-document/:id", auth, proposalController.updatePro
 // router.put("/proposal/proposal-report/conclusion/:id", auth, proposalController.updateProposalConclusionById);
 // //       melihat kesimpulan sidang
 // router.get("/proposal/proposal-report/conclusion/:id", auth, proposalController.getProposalConclusionById);
-
 
 // //       upload/update dokumen revisi proposal
 // router.put("/proposal/proposal-revision-document/:id", proposalController.updateProposalRevisionDocumentById);

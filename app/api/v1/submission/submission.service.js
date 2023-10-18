@@ -24,7 +24,8 @@ const skripsiRepository = require("../skripsi/skripsi.repository");
 // };
 
 const GetUserProposalClassroomByStudentId = async (student_id) => {
-  const thesis_student = await thesisStudentRepository.findThesisStudentByStudentId(student_id);
+  const thesis_student =
+    await thesisStudentRepository.findThesisStudentByStudentId(student_id);
   if (!thesis_student) {
     throw {
       status: 400,
@@ -35,7 +36,8 @@ const GetUserProposalClassroomByStudentId = async (student_id) => {
 };
 
 const getThesisStudentById = async (student_id) => {
-  const thesis_student = await thesisStudentRepository.findThesisStudentByStudentId(student_id);
+  const thesis_student =
+    await thesisStudentRepository.findThesisStudentByStudentId(student_id);
   if (!thesis_student) {
     throw {
       status: 400,
@@ -61,8 +63,14 @@ const getDosenById = async (id) => {
 // @route           POST /submission
 // @access          MAHASISWA
 const createSubmission = async (userId, payload) => {
-  const { partner1, partner2, partner3,
-          proposed_advisor_id, proposed_co_advisor1_id, proposed_co_advisor2_id } = payload;
+  const {
+    partner1,
+    partner2,
+    partner3,
+    proposed_advisor_id,
+    proposed_co_advisor1_id,
+    proposed_co_advisor2_id,
+  } = payload;
   // mengecek student
   if (partner1) {
     await getThesisStudentById(partner1);
@@ -90,7 +98,10 @@ const createSubmission = async (userId, payload) => {
   const { proposal_class_id: classroom_id } = proposalClassroom;
 
   // create submission
-  const submission = await submissionRepository.insertSubmission(classroom_id, payload);
+  const submission = await submissionRepository.insertSubmission(
+    classroom_id,
+    payload
+  );
   const { id: submission_id } = submission;
 
   // create group
@@ -98,7 +109,11 @@ const createSubmission = async (userId, payload) => {
   const { id: group_id } = group;
 
   // Memeriksa apakah partner1, partner2, dan partner3 adalah sama satu sama lain (tidak bole null)
-  if ((partner1 && partner1 === partner2) || (partner2 && partner2 === partner3) || (partner1 && partner1 === partner3)) {
+  if (
+    (partner1 && partner1 === partner2) ||
+    (partner2 && partner2 === partner3) ||
+    (partner1 && partner1 === partner3)
+  ) {
     throw {
       status: 400,
       message: `There are the same partners`,
@@ -107,10 +122,22 @@ const createSubmission = async (userId, payload) => {
 
   // mengelompokkan mahasiswa
   await Promise.all([
-                groupStudentRepository.insertGroupStudent({ group_id, student_id: userId }),
-    partner1 && groupStudentRepository.insertGroupStudent({ group_id, student_id: partner1 }),
-    partner2 && groupStudentRepository.insertGroupStudent({ group_id, student_id: partner2 }),
-    partner3 && groupStudentRepository.insertGroupStudent({ group_id, student_id: partner3 }),
+    groupStudentRepository.insertGroupStudent({ group_id, student_id: userId }),
+    partner1 &&
+      groupStudentRepository.insertGroupStudent({
+        group_id,
+        student_id: partner1,
+      }),
+    partner2 &&
+      groupStudentRepository.insertGroupStudent({
+        group_id,
+        student_id: partner2,
+      }),
+    partner3 &&
+      groupStudentRepository.insertGroupStudent({
+        group_id,
+        student_id: partner3,
+      }),
   ]);
 
   const Data = {
@@ -124,12 +151,14 @@ const createSubmission = async (userId, payload) => {
     proposed_co_advisor1_id: submission.proposed_co_advisor1_id,
     proposed_co_advisor2_id: submission.proposed_co_advisor2_id,
     classroom_id: submission.classroom_id,
-  }
+  };
   return Data;
 };
 
 const getGroupStudentByGroupId = async (group_id) => {
-  const groupStudent = await groupStudentRepository.findGroupStudentByGroupId(group_id);
+  const groupStudent = await groupStudentRepository.findGroupStudentByGroupId(
+    group_id
+  );
   if (!groupStudent) {
     throw {
       status: 400,
@@ -173,10 +202,10 @@ const getSubmissionById = async (id) => {
       message: `Not found`,
     };
   }
-  const { id: submission_id} = submission;
+  const { id: submission_id } = submission;
   // cari group dari submission
   const group = await getGroupBySubmissionId(submission_id);
-  const { id: group_id} = group;
+  const { id: group_id } = group;
   // cari group student dari group
   const groupStudent = await getGroupStudentByGroupId(group_id);
   const students = await Promise.all(
@@ -185,8 +214,10 @@ const getSubmissionById = async (id) => {
       const student = await getStudentById(student_id);
       if (student) {
         // Menggabungkan firstName dan lastName menjadi fullName
-        const fullName = `${student.firstName} ${student.lastName || ''}`;
-        console.log(`Student ID: ${student_id}, FullName: ${fullName}, Nim: ${student.nim}, Major: ${student.major}`);
+        const fullName = `${student.firstName} ${student.lastName || ""}`;
+        console.log(
+          `Student ID: ${student_id}, FullName: ${fullName}, Nim: ${student.nim}, Major: ${student.major}`
+        );
         return {
           fullName: fullName,
           nim: student.nim,
@@ -208,7 +239,7 @@ const getSubmissionById = async (id) => {
     proposed_co_advisor2: submission.proposed_co_advisor2,
     is_approve: submission.is_approve,
     classroom_id: submission.classroom_id,
-  }
+  };
   return Data;
 };
 
@@ -231,7 +262,11 @@ const updateSubmissionById = async (id, payload) => {
   // mengecek submission
   await checkSubmissionById(id);
 
-  const { proposed_advisor_id, proposed_co_advisor1_id, proposed_co_advisor2_id } = payload;
+  const {
+    proposed_advisor_id,
+    proposed_co_advisor1_id,
+    proposed_co_advisor2_id,
+  } = payload;
   // mengecek dosen
   if (proposed_advisor_id) {
     await getDosenById(proposed_advisor_id);
@@ -246,8 +281,11 @@ const updateSubmissionById = async (id, payload) => {
   // update submission
   const submission = await submissionRepository.updateSubmission(id, payload);
   // update submission title in group
-  const group = await groupRepository.updateGroupTitleBySubmissionId(id, payload);
-  
+  const group = await groupRepository.updateGroupTitleBySubmissionId(
+    id,
+    payload
+  );
+
   const Data = {
     id: group.submission_id,
     title: group.title,
@@ -258,7 +296,7 @@ const updateSubmissionById = async (id, payload) => {
     proposed_advisor_id: submission.proposed_advisor_id,
     proposed_co_advisor1_id: submission.proposed_co_advisor1_id,
     proposed_co_advisor2_id: submission.proposed_co_advisor2_id,
-  }
+  };
   return Data;
 };
 
@@ -270,7 +308,11 @@ const updateAdvisorAndCoAdvisorById = async (id, payload) => {
   // mengecek submission
   await checkSubmissionById(id);
 
-  const { proposed_advisor_id, proposed_co_advisor1_id, proposed_co_advisor2_id } = payload;
+  const {
+    proposed_advisor_id,
+    proposed_co_advisor1_id,
+    proposed_co_advisor2_id,
+  } = payload;
   // mengecek dosen
   if (proposed_advisor_id) {
     await getDosenById(proposed_advisor_id);
@@ -282,13 +324,16 @@ const updateAdvisorAndCoAdvisorById = async (id, payload) => {
     await getDosenById(proposed_co_advisor2_id);
   }
 
-  const submission = await submissionRepository.updateAdvisorAndCoAdvisor(id, payload);
+  const submission = await submissionRepository.updateAdvisorAndCoAdvisor(
+    id,
+    payload
+  );
   const Data = {
     id: submission.id,
     proposed_advisor_id: submission.proposed_advisor_id,
     proposed_co_advisor1_id: submission.proposed_co_advisor1_id,
     proposed_co_advisor2_id: submission.proposed_co_advisor2_id,
-  }
+  };
   return Data;
 };
 
@@ -299,7 +344,10 @@ const updateAdvisorAndCoAdvisorById = async (id, payload) => {
 const approveSubmissionById = async (id) => {
   // mengecek submission
   const checkSubmission = await checkSubmissionById(id);
-  if (checkSubmission.is_approve === "Approve" || checkSubmission.is_approve === "Rejected"){
+  if (
+    checkSubmission.is_approve === "Approve" ||
+    checkSubmission.is_approve === "Rejected"
+  ) {
     throw {
       status: 400,
       message: `Can't perform this action`,
@@ -308,25 +356,25 @@ const approveSubmissionById = async (id) => {
 
   // approve submission
   const submission = await submissionRepository.approveSubmissionById(id);
-  
+
   // create empty proposal
   const proposal = await proposalRepository.insertProposal(submission);
   const proposal_id = proposal.id;
-  
+
   // update proposal_id in group
   await groupRepository.updateGroupProposalIdBySubmissionId(id, proposal_id);
-  
+
   // create empty skripsi
   const skripsi = await skripsiRepository.insertSkripsi(submission);
   const skripsi_id = skripsi.id;
-  
+
   // update skripsi_id in group
   await groupRepository.updateGroupSkripsiIdBySubmissionId(id, skripsi_id);
-  
+
   const Data = {
     id: submission.id,
-    is_approve: submission.is_approve
-  }
+    is_approve: submission.is_approve,
+  };
   return Data;
 };
 
@@ -337,7 +385,10 @@ const approveSubmissionById = async (id) => {
 const rejectSubmissionById = async (id) => {
   // mengecek submission
   const checkSubmission = await checkSubmissionById(id);
-  if (checkSubmission.is_approve === "Approve" || checkSubmission.is_approve === "Rejected"){
+  if (
+    checkSubmission.is_approve === "Approve" ||
+    checkSubmission.is_approve === "Rejected"
+  ) {
     throw {
       status: 400,
       message: `Can't perform this action`,
@@ -348,8 +399,8 @@ const rejectSubmissionById = async (id) => {
   const submission = await submissionRepository.rejectSubmission(id);
   const Data = {
     id: submission.id,
-    is_approve: submission.is_approve
-  }
+    is_approve: submission.is_approve,
+  };
   return Data;
 };
 
@@ -361,11 +412,14 @@ const updateSubmissionTitleById = async (id, payload) => {
   // mengecek submission
   await checkSubmissionById(id);
 
-  const submission = await groupRepository.updateGroupTitleBySubmissionId(id, payload);
+  const submission = await groupRepository.updateGroupTitleBySubmissionId(
+    id,
+    payload
+  );
   const Data = {
     id: submission.id,
-    title: submission.title
-  }
+    title: submission.title,
+  };
   return Data;
 };
 
@@ -380,4 +434,4 @@ module.exports = {
   approveSubmissionById,
   rejectSubmissionById,
   updateSubmissionTitleById,
-}
+};
