@@ -12,6 +12,17 @@ const findGroupBySubmissionId = async (submission_id) => {
     return group;
 };
 
+// @description     Get group by proposal_id
+// @used            Proposal
+const findGroupByProposalId = async (proposal_id) => {
+    const group = await prisma.group.findUnique({
+      where: {
+        proposal_id
+      },
+    });
+    return group;
+};
+
 // @description     Create group from submission by title & submission_id
 // @used            Submission
 const insertGroup = async (payload, submission_id) => {
@@ -223,6 +234,7 @@ const findTitleById =  async (id) => {
 
 module.exports = {
     findGroupBySubmissionId,
+    findGroupByProposalId,
     insertGroup,
     updateGroupTitleBySubmissionId,
     updateGroupProposalIdBySubmissionId,

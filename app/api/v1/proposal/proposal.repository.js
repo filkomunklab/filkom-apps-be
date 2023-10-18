@@ -22,7 +22,9 @@ const insertProposal = async (submission) => {
 }
 
 
-// get 1 Proposal
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get proposal by id
+// @used            getProposalById
 const findProposalById = async (id) => {
     const proposal = await prisma.proposal.findUnique({
       where: {
@@ -32,7 +34,10 @@ const findProposalById = async (id) => {
     return proposal;
 };
 
-// upload/update dokumen proposal
+//===================================================================
+// @description     Upload dokumen proposal
+// @route           PUT /proposal/proposal-document/:id
+// @access          MAHASISWA
 const updateProposalDocumentById = async (id, payload) => {
     const {
       file_name_proposal,

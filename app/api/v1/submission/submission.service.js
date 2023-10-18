@@ -113,7 +113,7 @@ const createSubmission = async (userId, payload) => {
     partner3 && groupStudentRepository.insertGroupStudent({ group_id, student_id: partner3 }),
   ]);
 
-  const groupData = {
+  const Data = {
     id: group.submission_id,
     title: group.title,
     file_name: submission.file_name,
@@ -125,7 +125,7 @@ const createSubmission = async (userId, payload) => {
     proposed_co_advisor2_id: submission.proposed_co_advisor2_id,
     classroom_id: submission.classroom_id,
   }
-  return groupData;
+  return Data;
 };
 
 const getGroupStudentByGroupId = async (group_id) => {
@@ -195,7 +195,7 @@ const getSubmissionById = async (id) => {
       }
     })
   );
-  const groupData = {
+  const Data = {
     id: group.submission_id,
     title: group.title,
     students,
@@ -209,7 +209,7 @@ const getSubmissionById = async (id) => {
     is_approve: submission.is_approve,
     classroom_id: submission.classroom_id,
   }
-  return groupData;
+  return Data;
 };
 
 const checkSubmissionById = async (id) => {
@@ -248,7 +248,7 @@ const updateSubmissionById = async (id, payload) => {
   // update submission title in group
   const group = await groupRepository.updateGroupTitleBySubmissionId(id, payload);
   
-  const groupData = {
+  const Data = {
     id: group.submission_id,
     title: group.title,
     file_name: submission.file_name,
@@ -259,7 +259,7 @@ const updateSubmissionById = async (id, payload) => {
     proposed_co_advisor1_id: submission.proposed_co_advisor1_id,
     proposed_co_advisor2_id: submission.proposed_co_advisor2_id,
   }
-  return groupData;
+  return Data;
 };
 
 //===================================================================
@@ -283,7 +283,13 @@ const updateAdvisorAndCoAdvisorById = async (id, payload) => {
   }
 
   const submission = await submissionRepository.updateAdvisorAndCoAdvisor(id, payload);
-  return submission;
+  const Data = {
+    id: submission.id,
+    proposed_advisor_id: submission.proposed_advisor_id,
+    proposed_co_advisor1_id: submission.proposed_co_advisor1_id,
+    proposed_co_advisor2_id: submission.proposed_co_advisor2_id,
+  }
+  return Data;
 };
 
 //===================================================================
@@ -317,11 +323,11 @@ const approveSubmissionById = async (id) => {
   // update skripsi_id in group
   await groupRepository.updateGroupSkripsiIdBySubmissionId(id, skripsi_id);
   
-  const groupData = {
+  const Data = {
     id: submission.id,
     is_approve: submission.is_approve
   }
-  return groupData;
+  return Data;
 };
 
 //===================================================================
@@ -340,11 +346,11 @@ const rejectSubmissionById = async (id) => {
 
   // reject submission
   const submission = await submissionRepository.rejectSubmission(id);
-  const groupData = {
+  const Data = {
     id: submission.id,
     is_approve: submission.is_approve
   }
-  return groupData;
+  return Data;
 };
 
 //===================================================================
@@ -356,11 +362,11 @@ const updateSubmissionTitleById = async (id, payload) => {
   await checkSubmissionById(id);
 
   const submission = await groupRepository.updateGroupTitleBySubmissionId(id, payload);
-  const groupData = {
+  const Data = {
     id: submission.id,
     title: submission.title
   }
-  return groupData;
+  return Data;
 };
 
 module.exports = {

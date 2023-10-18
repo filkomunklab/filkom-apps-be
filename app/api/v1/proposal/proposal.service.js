@@ -1,7 +1,12 @@
 //Layer untuk handle business logic
 
 const proposalRepository = require("./proposal.repository");
+const groupRepository = require("../group/group.repository");
+const groupStudentRepository = require("../group_student/group_student.repository");
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get proposal by id
+// @used            updateProposalDocumentById
 const getProposalById = async (id) => {
     const proposal = await proposalRepository.findProposalById(id);
     if (!proposal) {
@@ -11,25 +16,58 @@ const getProposalById = async (id) => {
       };
     }
     return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get group_student by student_id & group_id (check student in group_student)
+// @used            updateProposalDocumentById
+const getGroupStudentByStudentIdAndGroupId = async (student_id, group_id) => {
+  const group_student = await groupStudentRepository.findGroupStudentByStudentIdAndGroupId(student_id, group_id);
+  if (!group_student) {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+  return group_student;
 }; 
 
-const updateProposalDocumentById = async (id, payload) => {
-    await getProposalById(id);
+//===================================================================
+// @description     Upload dokumen proposal
+// @route           PUT /proposal/proposal-document/:id
+// @access          MAHASISWA
+const updateProposalDocumentById = async (userId, id, payload) => {
+  // check proposal
+  const proposal = await getProposalById(id);
+  // get group by proposal_id
+  const group = await groupRepository.findGroupByProposalId(proposal.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
 
-    const proposal = await proposalRepository.updateProposalDocumentById(id, payload);
-    return proposal;
+  // update document
+  const UpdatedProposal = await proposalRepository.updateProposalDocumentById(id, payload);
+  const Data = {
+    id: UpdatedProposal.id,
+    file_name_proposal: UpdatedProposal.file_name_proposal,
+    upload_date_proposal: UpdatedProposal.upload_date_proposal,
+    file_size_proposal: UpdatedProposal.file_size_proposal,
+    is_proposal_approve_by_advisor: UpdatedProposal.is_proposal_approve_by_advisor,
+    is_proposal_approve_by_co_advisor1: UpdatedProposal.is_proposal_approve_by_co_advisor1,
+    is_proposal_approve_by_co_advisor2: UpdatedProposal.is_proposal_approve_by_co_advisor2
+  }
+  return Data;
 };
 
-const getProposalDocumentById = async (id) => {
-    const proposal = await proposalRepository.findProposalDocumentById(id);
-    if (!proposal) {
-      throw {
-        status: 400,
-        message: `Not found`,
-      };
-    }
-    return proposal;
-};
+// const getProposalDocumentById = async (id) => {
+//     const proposal = await proposalRepository.findProposalDocumentById(id);
+//     if (!proposal) {
+//       throw {
+//         status: 400,
+//         message: `Not found`,
+//       };
+//     }
+//     return proposal;
+// };
 
 const deleteProposalDocumentById = async (id) => {
     await getProposalById(id);
@@ -206,32 +244,32 @@ const rejectProposalRevisionDocumentById = async (id) => {
 };
 
 module.exports = {
-  getProposalDocumentById,
   updateProposalDocumentById,
-  deleteProposalDocumentById,
-  approveProposalDocumentById,
-  rejectProposalDocumentById,
-  updateProposalPaymentById,
-  getProposalPaymentById,
-  deleteProposalPaymentById,
-  updateProposalPlagiarismById,
-  getProposalPlagiarismById,
-  deleteProposalPlagiarismById,
+  // getProposalDocumentById,
+  // deleteProposalDocumentById,
+  // approveProposalDocumentById,
+  // rejectProposalDocumentById,
+  // updateProposalPaymentById,
+  // getProposalPaymentById,
+  // deleteProposalPaymentById,
+  // updateProposalPlagiarismById,
+  // getProposalPlagiarismById,
+  // deleteProposalPlagiarismById,
 
-  getProposalSchedule,
-  updateProposalScheduleById,
-  getProposalScheduleById,
+  // getProposalSchedule,
+  // updateProposalScheduleById,
+  // getProposalScheduleById,
 
-  openAccessProposalReportById,
-  getProposalReportById,
-  signProposalReportById,
-  updateProposalConclusionById,
-  getProposalConclusionById,
+  // openAccessProposalReportById,
+  // getProposalReportById,
+  // signProposalReportById,
+  // updateProposalConclusionById,
+  // getProposalConclusionById,
   
-  updateProposalRevisionDocumentById,
-  getProposalRevisionDocumentById,
-  deleteProposalRevisionDocumentById,
-  approveProposalRevisionDocumentById,
-  rejectProposalRevisionDocumentById,
+  // updateProposalRevisionDocumentById,
+  // getProposalRevisionDocumentById,
+  // deleteProposalRevisionDocumentById,
+  // approveProposalRevisionDocumentById,
+  // rejectProposalRevisionDocumentById,
   
 }

@@ -19,6 +19,7 @@ const policyFor = ({ user }) => {
     can("create", "Submission");
     can("read", "Submission");
     can("update", "Submission");
+    can("update", "Proposal");
   } else if (user.role === "ALUMNI") {
   } else if (user.role.includes("DOSEN_MK")){
     can("manage", "Academic_Calendar");

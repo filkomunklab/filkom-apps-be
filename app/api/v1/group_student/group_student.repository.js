@@ -14,6 +14,18 @@ const findGroupStudentByGroupId = async (group_id) => {
     return studentIds;
 };
 
+// @description     Get group_student by student_id & group_id
+// @used            Proposal
+const findGroupStudentByStudentIdAndGroupId = async (student_id, group_id) => {
+  const groupStudent = await prisma.group_Student.findFirst({
+    where: {
+      student_id,
+      group_id,
+    },
+  });
+  return groupStudent;
+};
+
 // @description     Create group_student (mengelompokkan student)
 // @used            Submission
 const insertGroupStudent = async (data) => {
@@ -29,5 +41,6 @@ const insertGroupStudent = async (data) => {
 
 module.exports = {
     findGroupStudentByGroupId,
+    findGroupStudentByStudentIdAndGroupId,
     insertGroupStudent
 }
