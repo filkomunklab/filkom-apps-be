@@ -135,18 +135,18 @@ const approveSubmissionById = async (id) => {
   return submission;
 };
 
-// // reject submission
-// const rejectSubmission = async (id) => {
-//   const submission = await prisma.submission.update({
-//     where: {
-//       id,
-//     },
-//     data: {
-//       is_approve: "Rejected"
-//     },
-//   });
-//   return submission;
-// };
+// reject submission
+const rejectSubmission = async (id) => {
+  const submission = await prisma.submission.update({
+    where: {
+      id,
+    },
+    data: {
+      is_approve: "Rejected"
+    },
+  });
+  return submission;
+};
 
 module.exports = {
   // findAllSubmission,
@@ -157,6 +157,6 @@ module.exports = {
   updateSubmission,
   updateAdvisorAndCoAdvisor,
   approveSubmissionById,
-  // rejectSubmission,
+  rejectSubmission,
   // updateGroupTitle,
 }

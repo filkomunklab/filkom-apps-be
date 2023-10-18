@@ -1,8 +1,9 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
-// get 1 submission
-const findGroupById = async (submission_id) => {
+// @description     Get group by submission_id
+// @used            Submission
+const findGroupBySubmissionId = async (submission_id) => {
     const group = await prisma.group.findUnique({
       where: {
         submission_id,
@@ -11,7 +12,8 @@ const findGroupById = async (submission_id) => {
     return group;
 };
 
-// +++ create kelompok, input title
+// @description     Create group from submission by title & submission_id
+// @used            Submission
 const insertGroup = async (payload, submission_id) => {
     const {
       title
@@ -27,8 +29,9 @@ const insertGroup = async (payload, submission_id) => {
     return group;
 };
 
-// update title
-const updateGroupTitle = async (id, payload) => {
+// @description     Update group title by submission_id
+// @used            Submission
+const updateGroupTitleBySubmissionId = async (id, payload) => {
     const { title } = payload;
         const group = await prisma.group.update({
             where: {
@@ -42,7 +45,9 @@ const updateGroupTitle = async (id, payload) => {
     return group;
 }
 
-const updateGroupProposalIdById = async (submission_id, proposal_id) => {
+// @description     Update proposal_id by submission_id
+// @used            Submission
+const updateGroupProposalIdBySubmissionId = async (submission_id, proposal_id) => {
     const group = await prisma.group.update({
         where: {
             submission_id,
@@ -54,7 +59,9 @@ const updateGroupProposalIdById = async (submission_id, proposal_id) => {
     return group;
 }
 
-const updateGroupSkripsiIdById = async (submission_id, skripsi_id) => {
+// @description     Update proposal_id by submission_id
+// @used            Submission
+const updateGroupSkripsiIdBySubmissionId = async (submission_id, skripsi_id) => {
     const group = await prisma.group.update({
         where: {
             submission_id,
@@ -215,11 +222,11 @@ const findTitleById =  async (id) => {
 // };
 
 module.exports = {
-    findGroupById,
+    findGroupBySubmissionId,
     insertGroup,
-    updateGroupTitle,
-    updateGroupProposalIdById,
-    updateGroupSkripsiIdById,
+    updateGroupTitleBySubmissionId,
+    updateGroupProposalIdBySubmissionId,
+    updateGroupSkripsiIdBySubmissionId,
     
     findSubmissionListById,
     findSubmissionDetailsById,

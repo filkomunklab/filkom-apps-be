@@ -1,7 +1,8 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
-// get student in group
+// @description     Get group_student by group_id
+// @used            Submission
 const findGroupStudentByGroupId = async (group_id) => {
     const groupStudent = await prisma.group_Student.findMany({
       where: {
@@ -13,7 +14,8 @@ const findGroupStudentByGroupId = async (group_id) => {
     return studentIds;
 };
 
-// +++ create kelompok mahasiswa
+// @description     Create group_student (mengelompokkan student)
+// @used            Submission
 const insertGroupStudent = async (data) => {
   const { group_id, student_id } = data;
   const group_student = await prisma.group_Student.create({

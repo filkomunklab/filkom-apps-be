@@ -40,12 +40,14 @@ router.put("/submission/advisor-and-co-advisor/:id", auth, submissionController.
 // @access          DOSEN_MK
 router.put("/submission/approve/:id", auth, submissionController.approveSubmissionById);
 
-// //       menolak pengajuan judul
-// router.put("/submission/reject/:id", auth, submissionController.rejectSubmissionById);
-// //       memperbarui judul
-// router.put("/submission/title/:id", auth, submissionController.updateGroupTitleById);
+//===================================================================
+// @description     Reject pengajuan judul
+// @access          DOSEN_MK
+router.put("/submission/reject/:id", auth, submissionController.rejectSubmissionById);
 
-/* Note: Saat pengajuan judul, belum menggunakan student_id*/
-/* Classroom belum pasti*/
+//===================================================================
+// @description     Mengganti judul setelah approve
+// @access          MAHASISWA
+router.put("/submission/title/:id", auth, submissionController.updateSubmissionTitleById);
 
 module.exports = router;

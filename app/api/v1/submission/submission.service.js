@@ -150,8 +150,8 @@ const getStudentById = async (student_id) => {
   return student;
 };
 
-const getGroupById = async (submission_id) => {
-  const group = await groupRepository.findGroupById(submission_id);
+const getGroupBySubmissionId = async (submission_id) => {
+  const group = await groupRepository.findGroupBySubmissionId(submission_id);
   if (!group) {
     throw {
       status: 400,
@@ -175,7 +175,7 @@ const getSubmissionById = async (id) => {
   }
   const { id: submission_id} = submission;
   // cari group dari submission
-  const group = await getGroupById(submission_id);
+  const group = await getGroupBySubmissionId(submission_id);
   const { id: group_id} = group;
   // cari group student dari group
   const groupStudent = await getGroupStudentByGroupId(group_id);
@@ -246,7 +246,7 @@ const updateSubmissionById = async (id, payload) => {
   // update submission
   const submission = await submissionRepository.updateSubmission(id, payload);
   // update submission title in group
-  const group = await groupRepository.updateGroupTitle(id, payload);
+  const group = await groupRepository.updateGroupTitleBySubmissionId(id, payload);
   
   const groupData = {
     id: group.submission_id,
@@ -308,14 +308,14 @@ const approveSubmissionById = async (id) => {
   const proposal_id = proposal.id;
   
   // update proposal_id in group
-  await groupRepository.updateGroupProposalIdById(id, proposal_id);
+  await groupRepository.updateGroupProposalIdBySubmissionId(id, proposal_id);
   
   // create empty skripsi
   const skripsi = await skripsiRepository.insertSkripsi(submission);
   const skripsi_id = skripsi.id;
   
   // update skripsi_id in group
-  await groupRepository.updateGroupSkripsiIdById(id, skripsi_id);
+  await groupRepository.updateGroupSkripsiIdBySubmissionId(id, skripsi_id);
   
   const groupData = {
     id: submission.id,
@@ -324,19 +324,44 @@ const approveSubmissionById = async (id) => {
   return groupData;
 };
 
-// const rejectSubmissionById = async (id) => {
-//   await getSubmissionById(id);
+//===================================================================
+// @description     Reject pengajuan judul
+// @route           PUT /submission/reject/:id
+// @access          DOSEN_MK
+const rejectSubmissionById = async (id) => {
+  // mengecek submission
+  const checkSubmission = await checkSubmissionById(id);
+  if (checkSubmission.is_approve === "Approve" || checkSubmission.is_approve === "Rejected"){
+    throw {
+      status: 400,
+      message: `Can't perform this action`,
+    };
+  }
 
-//   const submission = await submissionRepository.rejectSubmission(id);
-//   return submission;
-// };
+  // reject submission
+  const submission = await submissionRepository.rejectSubmission(id);
+  const groupData = {
+    id: submission.id,
+    is_approve: submission.is_approve
+  }
+  return groupData;
+};
 
-// const updateGroupTitleById = async (id, payload) => {
-//   await getSubmissionById(id);
+//===================================================================
+// @description     Mengganti judul setelah approve
+// @route           PUT /submission/title/:id
+// @access          MAHASISWA
+const updateSubmissionTitleById = async (id, payload) => {
+  // mengecek submission
+  await checkSubmissionById(id);
 
-//   const submission = await submissionRepository.updateGroupTitle(id, payload);
-//   return submission;
-// };
+  const submission = await groupRepository.updateGroupTitleBySubmissionId(id, payload);
+  const groupData = {
+    id: submission.id,
+    title: submission.title
+  }
+  return groupData;
+};
 
 module.exports = {
   // getAllSubmission,
@@ -347,6 +372,6 @@ module.exports = {
   updateSubmissionById,
   updateAdvisorAndCoAdvisorById,
   approveSubmissionById,
-  // rejectSubmissionById,
-  // updateGroupTitleById,
+  rejectSubmissionById,
+  updateSubmissionTitleById,
 }

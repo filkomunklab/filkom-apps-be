@@ -196,43 +196,65 @@ const approveSubmissionById = async (req, res) => {
     }
 };
 
-// const rejectSubmissionById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const submission = await submissionService.rejectSubmissionById(
-//             id
-//         );
-//         res.send({ status: "OK", data: submission });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+//===================================================================
+// @description     Reject pengajuan judul
+// @route           PUT /submission/reject/:id
+// @access          DOSEN_MK
+const rejectSubmissionById = async (req, res) => {
+    try {
+        const policy = policyFor(req.user);
+        if (policy.can("update", "Submission")) {
+            const id = req.params.id;
+            const submission = await submissionService.rejectSubmissionById(
+                id
+            );
+            res.send({ status: "OK", data: submission });
+        } else {
+            res.status(403).send({
+                status: "FAILED",
+                data: { message: "You don't have permission to perform this action" },
+            });
+        }
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
 
-// const updateGroupTitleById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const payload = req.body;
+//===================================================================
+// @description     Mengganti judul setelah approve
+// @route           PUT /submission/title/:id
+// @access          MAHASISWA
+const updateSubmissionTitleById = async (req, res) => {
+    try {
+        const policy = policyFor(req.user);
+        if (policy.can("update", "Submission")) {
+            const id = req.params.id;
+            const payload = req.body;
 
-//         if (
-//             !( payload.title )
-//         ) {
-//             return res
-//             .status(400)
-//             .send({ status: "FAILED", data: { error: "some field is missing" } });
-//         }
-//         const submission = await submissionService.updateGroupTitleById(
-//             id,
-//             payload
-//         );
-//         res.send({ status: "OK", data: submission });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+            if ( !( payload.title ) ) {
+                return res
+                .status(400)
+                .send({ status: "FAILED", data: { error: "title field is missing" } });
+            }
+            const submission = await submissionService.updateSubmissionTitleById(
+                id,
+                payload
+            );
+            res.send({ status: "OK", data: submission });
+        } else {
+            res.status(403).send({
+                status: "FAILED",
+                data: { message: "You don't have permission to perform this action" },
+            });
+        }
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+};
 
 module.exports = {
     // getAllSubmission,
@@ -243,6 +265,6 @@ module.exports = {
     updateSubmissionById,
     updateAdvisorAndCoAdvisorById,
     approveSubmissionById,
-    // rejectSubmissionById,
-    // updateGroupTitleById,
+    rejectSubmissionById,
+    updateSubmissionTitleById,
 };

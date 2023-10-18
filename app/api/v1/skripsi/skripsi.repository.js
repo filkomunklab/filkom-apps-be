@@ -1,7 +1,8 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
-// reate skripsi
+// @description     Create empty skripsi
+// @used            Submission
 const insertSkripsi = async (submission) => {
     const {
       proposed_advisor_id,
