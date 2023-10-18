@@ -55,31 +55,31 @@ const signOutAdmin = async (token) => {
   await adminRepository.updateAdmin(admin.id, admin);
 };
 
-const signInEmployee = async (username, password) => {
-  const checkUsername = await authRepository.findEmployeeByNik(username);
+const signInEmployee = async (nik, password) => {
+  const checkNIK = await authRepository.findEmployeeByNik(nik);
 
-  if (checkUsername) {
-    const role = await authRepository.findRoleById(checkUsername.nik);
-    const checkPassword = bcrypt.compareSync(password, checkUsername.password);
+  if (checkNIK) {
+    const role = await authRepository.findRolesByUserId(checkNIK.nik);
+    const checkPassword = bcrypt.compareSync(password, checkNIK.password);
     if (checkPassword) {
       const token = jwt.sign(
         {
           user: {
-            id: checkUsername.id,
-            nik: checkUsername.nik,
-            name: `${checkUsername.firstName} ${checkUsername.lastName}`,
+            id: checkNIK.id,
+            nik: checkNIK.nik,
+            name: `${checkNIK.firstName} ${checkNIK.lastName}`,
             role: role,
           },
         },
         secretKey
       );
-      checkUsername.token = token;
-      await employeeRepository.updateEmployee(checkUsername.id, checkUsername);
+      checkNIK.token = token;
+      await employeeRepository.updateEmployee(checkNIK.id, checkNIK);
       const data = {
         user: {
-          id: checkUsername.id,
-          nik: checkUsername.nik,
-          name: `${checkUsername.firstName} ${checkUsername.lastName}`,
+          id: checkNIK.id,
+          nik: checkNIK.nik,
+          name: `${checkNIK.firstName} ${checkNIK.lastName}`,
           role: role,
         },
         token: token,
@@ -106,31 +106,31 @@ const signOutEmployee = async (token) => {
 };
 
 const signInStudent = async (username, password) => {
-  const checkUsername = await authRepository.findStudentByNim(username);
+  const checkNIM = await authRepository.findStudentByNim(username);
 
-  if (checkUsername) {
-    const role = await authRepository.findRoleById(checkUsername.nim);
-    const checkPassword = bcrypt.compareSync(password, checkUsername.password);
+  if (checkNIM) {
+    const role = await authRepository.findRolesByUserId(checkNIM.nim);
+    const checkPassword = bcrypt.compareSync(password, checkNIM.password);
     if (checkPassword) {
       const token = jwt.sign(
         {
           user: {
-            id: checkUsername.id,
-            nim: checkUsername.nim,
-            name: `${checkUsername.firstName} ${checkUsername.lastName}`,
-            role,
+            id: checkNIM.id,
+            nim: checkNIM.nim,
+            name: `${checkNIM.firstName} ${checkNIM.lastName}`,
+            role: role,
           },
         },
         secretKey
       );
-      checkUsername.token = token;
-      await studentRepository.updateStudent(checkUsername.id, checkUsername);
+      checkNIM.token = token;
+      await studentRepository.updateStudent(checkNIM.id, checkNIM);
       const data = {
         user: {
-          id: checkUsername.id,
-          nim: checkUsername.nim,
-          name: `${checkUsername.firstName} ${checkUsername.lastName}`,
-          role,
+          id: checkNIM.id,
+          nim: checkNIM.nim,
+          name: `${checkNIM.firstName} ${checkNIM.lastName}`,
+          role: role,
         },
         token: token,
       };

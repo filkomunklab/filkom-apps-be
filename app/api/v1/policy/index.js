@@ -9,11 +9,23 @@ const policyFor = ({ user }) => {
   } else if (user.role === "DEKAN") {
     can("read", "Employee");
     can("update", "Employee", { id: user.id });
+    can("read", "Submission");
   } else if (user.role === "OPERATOR_LPMI") {
   } else if (user.role === "KAPRODI") {
+    can("read", "Submission");
   } else if (user.role === "DOSEN") {
-  } else if (user.role === "MAHASISWA") {
+    can("read", "Submission");
+  } else if (user.role.includes("MAHASISWA")) {
+    can("create", "Submission");
+    can("read", "Submission");
+    can("update", "Submission");
   } else if (user.role === "ALUMNI") {
+  } else if (user.role.includes("DOSEN_MK")){
+    can("manage", "Academic_Calendar");
+    can("manage", "Classroom");
+    can("manage", "Thesis_Student");
+    can("read", "Submission");
+    can("update", "Submission");
   } else {
     can("read", "all");
   }
