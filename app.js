@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const app = express();
+const moment = require("moment");
 
 const authRoutes = require("./app/api/v1/auth/auth.routes");
 const adminRoutes = require("./app/api/v1/admin/admin.routes");
@@ -23,7 +24,7 @@ const URL = "/api/v1";
 const corsOptions = {
   origin: [
     "http://localhost:3000",
-    "https://development-filkom-apps-be.vercel.app/",
+    "https://filkom-apps-fe-development.vercel.app",
   ],
 };
 
