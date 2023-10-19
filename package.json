@@ -6,6 +6,7 @@
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
     "format": "prisma format --schema=./prisma/schema.prisma",
+    "postinstall": "prisma generate",
     "migrate:skripsi": "npx prisma migrate dev --name skripsi_app",
     "db:migrate": "npx prisma migrate dev --name toLocal-darell",
     "db:seed": "npx prisma db seed",
