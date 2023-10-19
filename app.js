@@ -8,7 +8,9 @@ const app = express();
 const authRoutes = require("./app/api/v1/auth/auth.routes");
 const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
-const sptRoutes = require("./app/api/v1/spt/spt.routes")
+const sptRoutes = require("./app/api/v1/spt/spt.routes");
+
+// this line added just to trigger deployment
 
 //------------------Ruter Skripsi App---------------------------
 const studentRoutes = require("./app/api/v1/student/student.routes");
@@ -17,7 +19,6 @@ const classroomRoutes = require("./app/api/v1/classroom/classroom.routes");
 const submissionRoutes = require("./app/api/v1/submission/submission.routes");
 const groupRoutes = require("./app/api/v1/group/group.routes");
 const proposalRoutes = require("./app/api/v1/proposal/proposal.routes");
-
 
 const URL = "/api/v1";
 
