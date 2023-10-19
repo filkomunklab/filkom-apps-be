@@ -63,13 +63,21 @@ ADD COLUMN     "reg_num" TEXT,
 ALTER COLUMN "lastName" DROP NOT NULL;
 
 -- CreateTable
-CREATE TABLE "Thesis_Student" (
+CREATE TABLE "Proposal_Student" (
     "id" TEXT NOT NULL,
     "student_id" TEXT NOT NULL,
-    "proposal_class_id" TEXT NOT NULL,
-    "skripsi_class_id" TEXT,
+    "classroom_id" TEXT NOT NULL,
 
-    CONSTRAINT "Thesis_Student_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Proposal_Student_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Skripsi_Student" (
+    "id" TEXT NOT NULL,
+    "student_id" TEXT NOT NULL,
+    "classroom_id" TEXT,
+
+    CONSTRAINT "Skripsi_Student_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -318,9 +326,6 @@ CREATE TABLE "History" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Thesis_Student_student_id_key" ON "Thesis_Student"("student_id");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Group_submission_id_key" ON "Group"("submission_id");
 
 -- CreateIndex
@@ -339,13 +344,16 @@ CREATE UNIQUE INDEX "Student_reg_num_key" ON "Student"("reg_num");
 CREATE UNIQUE INDEX "Student_email_key" ON "Student"("email");
 
 -- AddForeignKey
-ALTER TABLE "Thesis_Student" ADD CONSTRAINT "Thesis_Student_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Proposal_Student" ADD CONSTRAINT "Proposal_Student_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Thesis_Student" ADD CONSTRAINT "Thesis_Student_proposal_class_id_fkey" FOREIGN KEY ("proposal_class_id") REFERENCES "Classroom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Proposal_Student" ADD CONSTRAINT "Proposal_Student_classroom_id_fkey" FOREIGN KEY ("classroom_id") REFERENCES "Classroom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Thesis_Student" ADD CONSTRAINT "Thesis_Student_skripsi_class_id_fkey" FOREIGN KEY ("skripsi_class_id") REFERENCES "Classroom"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Skripsi_Student" ADD CONSTRAINT "Skripsi_Student_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi_Student" ADD CONSTRAINT "Skripsi_Student_classroom_id_fkey" FOREIGN KEY ("classroom_id") REFERENCES "Classroom"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Group_Student" ADD CONSTRAINT "Group_Student_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

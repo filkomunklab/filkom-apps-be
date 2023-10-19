@@ -1,57 +1,61 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
-// Fungsi untuk mencari data akademik yang sudah ada
-const findExistingAcademic = async (payload) => {
-    const {
-        semester,
-        year,
-    } = payload;
-    const academic = await prisma.academic_Calendar.findFirst({
-        where: {
-            semester,
-            year,
-        },
-    });
-    return academic;
-}
-
-// create academic
-const insertAcademic = async (payload) => {
-    const {
-        semester,
-        year,
-    } = payload;
-    const academic = await prisma.academic_Calendar.create({
-      data: {
-        semester,
-        year,
-      },
-    });
-  
-    return academic;
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Find exist academic calendar
+// @used            getExistingAcademicCalendar
+const findExistingAcademicCalendar = async (payload) => {
+  const { semester, year } = payload;
+  const academic = await prisma.academic_Calendar.findFirst({
+    where: {
+      semester,
+      year,
+    },
+  });
+  return academic;
 };
 
-// get 1 academic
-const findAcademicById = async (id) => {
-    const academic = await prisma.academic_Calendar.findUnique({
-        where: {
-            id,
-        },
-    });
-    return academic;
+//===================================================================
+// @description     Create academic calendar
+// @route           POST /academic-calendar
+// @access          DOSEN_MK
+const insertAcademicCalendar = async (payload) => {
+  const { semester, year } = payload;
+  const academic = await prisma.academic_Calendar.create({
+    data: {
+      semester,
+      year,
+    },
+  });
+
+  return academic;
 };
 
-// get all academic
-const findAllAcademic = async () => {
-    const academic = await prisma.academic_Calendar.findMany();
-    return academic;
+//===================================================================
+// @description     Get academic calendar
+// @route           GET /academic-calendar/:id
+// @access          DOSEN_MK
+const findAcademicCalendarById = async (id) => {
+  const academic = await prisma.academic_Calendar.findUnique({
+    where: {
+      id,
+    },
+  });
+  return academic;
+};
+
+//===================================================================
+// @description     Get all academic calendar
+// @route           GET /academic-calendar
+// @access          DOSEN_MK
+const findAllAcademicCalendar = async () => {
+  const academic = await prisma.academic_Calendar.findMany();
+  return academic;
 };
 
 module.exports = {
-    findExistingAcademic,
-    insertAcademic,
-    findAcademicById,
-    findAllAcademic,
-
-}
+  findExistingAcademicCalendar,
+  insertAcademicCalendar,
+  findAcademicCalendarById,
+  findAllAcademicCalendar,
+};

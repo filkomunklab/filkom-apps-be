@@ -154,12 +154,13 @@ async function main() {
         },
       });
     });
-  
+
   //--------------------------------------Skripsi App--------------------------------------------
   // CREATE STUDENT
   await prisma.student
     .create({
       data: {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c83",
         firstName: "Frances",
         lastName: "Yong",
         email: "frances@mail.com",
@@ -178,10 +179,11 @@ async function main() {
         },
       });
     });
-  
+
   await prisma.student
     .create({
       data: {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9eb8",
         firstName: "Geovalga",
         lastName: "Lim",
         email: "geovalga@mail.com",
@@ -205,17 +207,19 @@ async function main() {
   await prisma.employee
     .create({
       data: {
+        id: "2eb35687-c414-4634-b010-1b64caa1bf27",
         firstName: "Lecturer1",
         lastName: "Dosen1",
         nik: "dosen1",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      }
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
     })
     .then(async (employee) => {
       // Daftar peran yang akan Anda tambahkan pada dosen
       const rolesToAdd = ["DOSEN", "DOSEN_MK", "KAPRODI"];
-  
+
       // Membuat entri UserRole untuk setiap peran
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
@@ -231,17 +235,19 @@ async function main() {
   await prisma.employee
     .create({
       data: {
+        id: "cebd73c8-9ad9-4136-a65a-50ad7b4d5896",
         firstName: "Lecturer2",
         lastName: "Dosen2",
         nik: "dosen2",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      }
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
     })
     .then(async (employee) => {
       // Daftar peran yang akan Anda tambahkan pada dosen
       const rolesToAdd = ["DOSEN", "DOSEN_MK", "KAPRODI"];
-  
+
       // Membuat entri UserRole untuk setiap peran
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
@@ -257,16 +263,18 @@ async function main() {
   await prisma.employee
     .create({
       data: {
+        id: "9ddc8258-3fa2-40ea-8477-1a651c9039be",
         firstName: "Lecturer3",
         lastName: "Dosen3",
         nik: "dosen3",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      }
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
     })
     .then(async (employee) => {
       // Daftar peran yang akan Anda tambahkan pada dosen
       const rolesToAdd = ["DOSEN", "DOSEN_MK", "DEKAN"];
-  
+
       // Membuat entri UserRole untuk setiap peran
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
@@ -277,11 +285,12 @@ async function main() {
         });
       }
     });
-  
+
   // CREATE SEKRETARIS
   await prisma.employee
     .create({
       data: {
+        id: "f6b7d2b0-b7f8-4393-9027-e4374e1eea52",
         firstName: "Sekretaris",
         lastName: "FILKOM",
         nik: "sekretarisfilkom",
