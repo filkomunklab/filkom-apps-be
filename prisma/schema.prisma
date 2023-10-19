@@ -77,7 +77,7 @@ enum Role {
 
 //-------------------Klabat Bridge ----------------------//
 
-enum statusSPT {
+enum status {
   WAITING
   APPROVED
   REJECTED
@@ -88,6 +88,15 @@ enum gender {
   PEREMPUAN
 }
 
+enum minor {
+  GD2A //Game Development and Graphic Design Animation 
+  CIA // Competitive Intelligence Analysis (CIA)
+  WMD //Web / Mobile Developer (WMD)
+  ITPM //IT PROJECT MANAGER
+  DMM //DIGITAL MARKETING MANAGER
+  TECHNOPRENEUR
+}
+
 model FormSPT {
   id                String    @id @default(uuid())
   nik               String
@@ -95,9 +104,11 @@ model FormSPT {
   gender            gender //male and female
   birth_mother      String
   graduate_plan     String //semester berapa?
+  minor             minor
   remaining_credits String // perhatikan kembali untuk sisa jumlah sks
   remaining_classes String
-  status            statusSPT @default(WAITING) // approved dan reject, default waiting
+  approvalFak       status    @default(WAITING) // approved dan reject, default waiting
+  approvalReg       status    @default(WAITING)
   created_at        DateTime  @default(now())
   updated_at        DateTime?
   student           Student   @relation(fields: [studentId], references: [nim])
