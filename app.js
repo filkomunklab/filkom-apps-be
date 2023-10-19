@@ -10,8 +10,6 @@ const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
 const sptRoutes = require("./app/api/v1/spt/spt.routes");
 
-// this line added just to trigger deployment
-
 //------------------Ruter Skripsi App---------------------------
 const studentRoutes = require("./app/api/v1/student/student.routes");
 const academicRoutes = require("./app/api/v1/academic_calendar/academic_calendar.routes");
@@ -23,7 +21,10 @@ const proposalRoutes = require("./app/api/v1/proposal/proposal.routes");
 const URL = "/api/v1";
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: [
+    "http://localhost:3000",
+    "https://development-filkom-apps-be.vercel.app/",
+  ],
 };
 
 app.use(cors(corsOptions));
