@@ -40,6 +40,8 @@ async function main() {
         lastName: "Doe",
         email: "student@mail.com",
         nim: "student",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -152,7 +154,150 @@ async function main() {
         },
       });
     });
+  
+  //--------------------------------------Skripsi App--------------------------------------------
+  // CREATE STUDENT
+  await prisma.student
+    .create({
+      data: {
+        firstName: "Frances",
+        lastName: "Yong",
+        email: "frances@mail.com",
+        nim: "frances",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (student) => {
+      await prisma.userRole.create({
+        data: {
+          userId: student.nim,
+          role: "MAHASISWA",
+        },
+      });
+    });
+  
+  await prisma.student
+    .create({
+      data: {
+        firstName: "Geovalga",
+        lastName: "Lim",
+        email: "geovalga@mail.com",
+        nim: "geovalga",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (student) => {
+      await prisma.userRole.create({
+        data: {
+          userId: student.nim,
+          role: "MAHASISWA",
+        },
+      });
+    });
 
+  // CREATE DOSEN SKRIPSI, KAPRODI IF
+  await prisma.employee
+    .create({
+      data: {
+        firstName: "Lecturer1",
+        lastName: "Dosen1",
+        nik: "dosen1",
+        major: "IF",
+        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      }
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK", "KAPRODI"];
+  
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN SKRIPSI, KAPRODI SI
+  await prisma.employee
+    .create({
+      data: {
+        firstName: "Lecturer2",
+        lastName: "Dosen2",
+        nik: "dosen2",
+        major: "SI",
+        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      }
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK", "KAPRODI"];
+  
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DEKAN
+  await prisma.employee
+    .create({
+      data: {
+        firstName: "Lecturer3",
+        lastName: "Dosen3",
+        nik: "dosen3",
+        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      }
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK", "DEKAN"];
+  
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+  
+  // CREATE SEKRETARIS
+  await prisma.employee
+    .create({
+      data: {
+        firstName: "Sekretaris",
+        lastName: "FILKOM",
+        nik: "sekretarisfilkom",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      await prisma.userRole.create({
+        data: {
+          userId: employee.nik,
+          role: "OPERATOR_FAKULTAS",
+        },
+      });
+    });
+    //--------------------------------------Klabat Bridge--------------------------------------------
     // CREATE SPT
     await prisma.formSPT.create({
       data: {

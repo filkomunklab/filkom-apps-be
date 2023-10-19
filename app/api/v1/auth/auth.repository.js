@@ -30,7 +30,7 @@ const findStudentByNim = async (nim) => {
 };
 
 const findRoleById = async (id) => {
-  const { role } = await prisma.userRole.findUnique({
+  const { role } = await prisma.userRole.findMany({
     where: {
       userId: id,
     },
@@ -42,9 +42,24 @@ const findRoleById = async (id) => {
   return role;
 };
 
+const findRolesByUserId = async (id) => {
+  const userRoles = await prisma.userRole.findMany({
+    where: {
+      userId: id,
+    },
+    select: {
+      role: true,
+    },
+  });
+
+  return userRoles.map((userRole) => userRole.role);
+};
+
+
 module.exports = {
   findAdminByUsername,
   findEmployeeByNik,
   findStudentByNim,
   findRoleById,
+  findRolesByUserId,
 };

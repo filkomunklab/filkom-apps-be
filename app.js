@@ -11,10 +11,21 @@ const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
 const sptRoutes = require("./app/api/v1/spt/spt.routes");
 
+//------------------Ruter Skripsi App---------------------------
+const studentRoutes = require("./app/api/v1/student/student.routes");
+const academicRoutes = require("./app/api/v1/academic_calendar/academic_calendar.routes");
+const classroomRoutes = require("./app/api/v1/classroom/classroom.routes");
+const submissionRoutes = require("./app/api/v1/submission/submission.routes");
+const groupRoutes = require("./app/api/v1/group/group.routes");
+const proposalRoutes = require("./app/api/v1/proposal/proposal.routes");
+
 const URL = "/api/v1";
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: [
+    "http://localhost:3000",
+    "https://development-filkom-apps-be.vercel.app/",
+  ],
 };
 
 app.use(cors(corsOptions));
@@ -29,6 +40,14 @@ app.use(`${URL}`, authRoutes);
 app.use(`${URL}`, adminRoutes);
 app.use(`${URL}`, employeeRoutes);
 app.use(`${URL}`, sptRoutes);
+
+//------------------Ruter Skripsi App---------------------------
+app.use(`${URL}`, studentRoutes);
+app.use(`${URL}`, academicRoutes);
+app.use(`${URL}`, classroomRoutes);
+app.use(`${URL}`, submissionRoutes);
+app.use(`${URL}`, groupRoutes);
+app.use(`${URL}`, proposalRoutes);
 
 app.use("/", (req, res) => {
   res.send({ message: "Welcome to API Filkom Apps" });
