@@ -165,8 +165,8 @@ enum status {
 }
 
 enum gender {
-  LAKILAKI
-  PEREMPUAN
+  Lakilaki
+  Perempuan
 }
 
 enum minor {

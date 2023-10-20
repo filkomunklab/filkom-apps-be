@@ -9,6 +9,8 @@ const moment = require("moment");
 const authRoutes = require("./app/api/v1/auth/auth.routes");
 const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
+
+//--------------------KlabatBridge------------------------------
 const sptRoutes = require("./app/api/v1/spt/spt.routes");
 
 //------------------Ruter Skripsi App---------------------------
@@ -39,6 +41,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(`${URL}`, authRoutes);
 app.use(`${URL}`, adminRoutes);
 app.use(`${URL}`, employeeRoutes);
+
+//---------------Router KlabatBridge---------------------------
 app.use(`${URL}`, sptRoutes);
 
 //------------------Ruter Skripsi App---------------------------
