@@ -1,3 +1,4 @@
+const { query } = require("express");
 const sptRepository = require("./spt.repository");
 
 const getListSPT = async () => {
@@ -27,10 +28,28 @@ const sptApprovedbyFak= async () => {
   return sptRepository.listApprovalSPTbyFak();
   };
 
+const approvalByReg = async (id, status) => {
+  return sptRepository.patchapprovalByReg(id, status);
+};
+
+const sptApprovedbyReg= async () => {
+  return sptRepository.listApprovalSPTbyReg();
+  };
+
+const sortSPT = async (filter) => {
+  return await sptRepository.sortSPT(filter);
+};
+
+
+
+
 module.exports = {
     createSPT,
     getListSPT,
     getSPTById,
     approvalByFak,
-    sptApprovedbyFak
+    sptApprovedbyFak,
+    approvalByReg,
+    sptApprovedbyReg,
+    sortSPT,
 }

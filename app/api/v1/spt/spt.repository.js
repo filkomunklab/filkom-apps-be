@@ -6,7 +6,7 @@ const moment = require('moment');
 const listSPT = async () => {
     return await prisma.formSPT.findMany({
       orderBy: {
-          created_at: 'desc' // 'asc' untuk urutan menaik, 'desc' untuk urutan menurun
+          graduate_plan: 'desc' // 'asc' untuk urutan menaik, 'desc' untuk urutan menurun
       },
       include: {
         student: true,
@@ -65,6 +65,9 @@ const patchapprovalByFak = async (id, status) => {
         data: {
             approvalFak: status,
         },
+        include: {
+            student: true,
+          },
         });
     } catch (error) {
         throw error;
@@ -75,9 +78,61 @@ const listApprovalSPTbyFak = async () => {
 return await prisma.formSPT.findMany({
     where: {
         approvalFak: 'APPROVED',
-    }
+    },
+    include: {
+        student: true,
+      },
 });
 };
+
+const patchapprovalByReg = async (id, status) => {
+    try {
+        return await prisma.formSPT.update({
+        where: { id },
+        data: {
+            approvalReg: status,
+        },
+        include: {
+            student: true,
+          },
+        });
+    } catch (error) {
+        throw error;
+    }
+};
+
+const listApprovalSPTbyReg = async () => {
+    return await prisma.formSPT.findMany({
+        where: {
+            approvalReg: 'APPROVED',
+        },
+        include: {
+            student: true,
+          },
+    });
+};
+
+//menampilkan data berdasarkan
+const sortSPT = async (filter) => {
+    const where = {};
+    if (filter.graduate_plan){
+        where.graduate_plan = filter.graduate_plan;
+    }
+    if (filter.approvalFak){
+        where.approvalFak = filter.approvalFak;
+    }
+    if (filter.approvalReg){
+        where.approvalReg = filter.approvalReg;
+    }
+
+    return await prisma.formSPT.findMany({
+        where,
+        include: {
+            student: true,
+        }
+    })
+}
+
 
 module.exports = {
     insertSPT,
@@ -85,4 +140,7 @@ module.exports = {
     findSPTById,
     patchapprovalByFak,
     listApprovalSPTbyFak,
+    patchapprovalByReg,
+    listApprovalSPTbyReg,
+    sortSPT,
 }
