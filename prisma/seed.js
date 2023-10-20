@@ -154,7 +154,7 @@ async function main() {
         },
       });
     });
-  
+
   //--------------------------------------Skripsi App--------------------------------------------
   // CREATE STUDENT
   await prisma.student
@@ -178,7 +178,7 @@ async function main() {
         },
       });
     });
-  
+
   await prisma.student
     .create({
       data: {
@@ -209,13 +209,14 @@ async function main() {
         lastName: "Dosen1",
         nik: "dosen1",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      }
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
     })
     .then(async (employee) => {
       // Daftar peran yang akan Anda tambahkan pada dosen
       const rolesToAdd = ["DOSEN", "DOSEN_MK", "KAPRODI"];
-  
+
       // Membuat entri UserRole untuk setiap peran
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
@@ -235,13 +236,14 @@ async function main() {
         lastName: "Dosen2",
         nik: "dosen2",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      }
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
     })
     .then(async (employee) => {
       // Daftar peran yang akan Anda tambahkan pada dosen
       const rolesToAdd = ["DOSEN", "DOSEN_MK", "KAPRODI"];
-  
+
       // Membuat entri UserRole untuk setiap peran
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
@@ -260,13 +262,14 @@ async function main() {
         firstName: "Lecturer3",
         lastName: "Dosen3",
         nik: "dosen3",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      }
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
     })
     .then(async (employee) => {
       // Daftar peran yang akan Anda tambahkan pada dosen
       const rolesToAdd = ["DOSEN", "DOSEN_MK", "DEKAN"];
-  
+
       // Membuat entri UserRole untuk setiap peran
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
@@ -277,7 +280,7 @@ async function main() {
         });
       }
     });
-  
+
   // CREATE SEKRETARIS
   await prisma.employee
     .create({
@@ -297,21 +300,22 @@ async function main() {
         },
       });
     });
-    //--------------------------------------Klabat Bridge--------------------------------------------
-    // CREATE SPT
-    await prisma.formSPT.create({
-      data: {
-        birth_mother: 'Ariana',
-        date_of_birth: '27/06/1998',
-        gender: 'LAKILAKI',
-        graduate_plan: 'Semester 8',
-        minor: 'CIA',
-        nik: '12343567',
-        remaining_classes: "[{subject: 'IGD', sks: '3'}, {subject: 'Entre', sks: '3'}, {subject: 'Web Design', sks: '3'}, {subject: 'Math', sks: '3'}, {subject: 'Family Living', sks: '3'}]",
-        remaining_credits: '3',
-        studentId: 'student'
-      }
-    })
+  //--------------------------------------Klabat Bridge--------------------------------------------
+  // CREATE SPT
+  await prisma.formSPT.create({
+    data: {
+      birth_mother: "Ariana",
+      date_of_birth: "27/06/1998",
+      gender: "LAKILAKI",
+      graduate_plan: "Semester 8",
+      minor: "CIA",
+      nik: "12343567",
+      remaining_classes:
+        "[{subject: 'IGD', sks: '3'}, {subject: 'Entre', sks: '3'}, {subject: 'Web Design', sks: '3'}, {subject: 'Math', sks: '3'}, {subject: 'Family Living', sks: '3'}]",
+      remaining_credits: "3",
+      studentId: "student",
+    },
+  });
 }
 
 main()
