@@ -90,6 +90,18 @@ const deleteClassroomById = async (id) => {
     },
   });
 };
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get classroom by id & dosen_mk_id
+// @used            Submission
+const findClassroomByIdAndDosenMK = async (id, dosen_mk_id) => {
+  const classroom = await prisma.classroom.findFirst({
+    where: {
+      id,
+      dosen_mk_id,
+    },
+  });
+  return classroom;
+};
 
 module.exports = {
   findExistingClassroom,
@@ -99,4 +111,5 @@ module.exports = {
   findClassroomsByDosenMk,
   findClassroomById,
   deleteClassroomById,
+  findClassroomByIdAndDosenMK,
 };

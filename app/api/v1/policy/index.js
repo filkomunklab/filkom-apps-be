@@ -6,33 +6,73 @@ const policyFor = ({ user }) => {
   if (user.role === "ADMIN") {
     can("manage", "all"); // read-write access to everything
   } else if (user.role === "ADMIN_LPMI") {
-  } else if (user.role === "DEKAN") {
+  } else if (user.role.includes("DEKAN")) {
     can("read", "Employee");
     can("update", "Employee", { id: user.id });
+    // Dekan view submission
     can("read", "Submission");
-    can("read", "document_proposal");
+    // Dekan view proposal document
+    can("read", "proposal_document");
+    // Dekan view proposal payment
+    can("read", "proposal_payment");
   } else if (user.role === "OPERATOR_LPMI") {
-  } else if (user.role === "KAPRODI") {
+  } else if (user.role.includes("OPERATOR_FAKULTAS")) {
+    // Sekertaris view proposal document
+    can("read", "proposal_document");
+    // Sekertaris view proposal payment
+    can("read", "proposal_payment");
+  } else if (user.role.includes("DOSEN_MK")) {
+    // Dosen MK manage academic_calendar
+    can("manage", "Academic_Calendar");
+    // Dosen MK manage classroom
+    can("manage", "Classroom");
+    // Dosen MK manage proposal_student & skripsi_student
+    can("manage", "thesis_student");
+    // Dosen MK view submission
     can("read", "Submission");
-    can("read", "document_proposal");
+    // Dosen MK update advisor & co-advisor in submission
+    can("update", "proposed_advisor_and_co_advisor");
+    // Dosen MK update is_approve in submission
+    can("update", "approve_submission");
+    // Dosen MK update title in group
+    can("update", "title");
+    // Dosen MK view proposal document
+    can("read", "proposal_document");
+    // Dosen MK view proposal payment
+    can("read", "proposal_payment");
+  } else if (user.role.includes("KAPRODI")) {
+    // Kaprodi view submission
+    can("read", "Submission");
+    // Kaprodi view proposal document
+    can("read", "proposal_document");
+    // Kaprodi view proposal payment
+    can("read", "proposal_payment");
   } else if (user.role.includes("DOSEN")) {
+    // Dosen view submission
     can("read", "Submission");
-    can("read", "document_proposal");
+    // Dosen view proposal document
+    can("read", "proposal_document");
+    // Advisor, Co-advisor approve document proposal
     can("update", "is_proposal_approve");
+    // Dosen view proposal pyment
+    can("read", "proposal_payment");
   } else if (user.role.includes("MAHASISWA")) {
     can("create", "Submission");
+    // Mahasiswa view submission
     can("read", "Submission");
+    // Mahasiswa update submission/title
     can("update", "Submission");
-    can("update", "document_proposal");
-    can("read", "document_proposal");
+    // Mahasiswa upload/update proposal document
+    can("update", "proposal_document");
+    // Mahasiswa view proposal document
+    can("read", "proposal_document");
+    // Mahasiswa view proposal payment
+    can("read", "proposal_payment");
+    // Mahasiswa upload/update proposal payment
+    can("update", "proposal_payment");
   } else if (user.role === "ALUMNI") {
   } else if (user.role.includes("DOSEN_MK")) {
-    can("manage", "Academic_Calendar");
-    can("manage", "Classroom");
-    can("manage", "Thesis_Student");
-    can("read", "Submission");
-    can("update", "Submission");
-    can("read", "document_proposal");
+    // can("manage", "Thesis_Student");
   } else {
     can("read", "all");
   }

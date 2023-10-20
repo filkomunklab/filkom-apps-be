@@ -52,24 +52,24 @@ const insertSkripsiStudentByStudentIdAndClassroomId = async (
 // @description     Get skripsi_student by classroom_id
 // @used            Classroom,
 const findSkripsiStudentByProposalId = async (classroom_id) => {
-  const Skripsi_student = await prisma.skripsi_Student.findFirst({
+  const skripsi_student = await prisma.skripsi_Student.findFirst({
     where: {
       classroom_id,
     },
   });
-  return Skripsi_student;
+  return skripsi_student;
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get skripsi_student by id
 // @used            Classroom,
 const findSkripsiStudentById = async (id) => {
-  const Skripsi_student = await prisma.skripsi_Student.findFirst({
+  const skripsi_student = await prisma.skripsi_Student.findFirst({
     where: {
       id,
     },
   });
-  return Skripsi_student;
+  return skripsi_student;
 };
 
 //===================================================================
@@ -85,6 +85,22 @@ const deleteSkripsiStudentById = async (id) => {
   });
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get skripsi_student by student_id & classroom_id
+// @used            Submission,
+const findStudentSkripsiByStudentIdAndClassroomId = async (
+  student_id,
+  classroom_id
+) => {
+  const skripsi_student = await prisma.skripsi_Student.findFirst({
+    where: {
+      student_id,
+      classroom_id,
+    },
+  });
+  return skripsi_student;
+};
+
 module.exports = {
   findSkripsiStudentByClassroomId,
   findSkripsiStudentByStudentId,
@@ -92,4 +108,5 @@ module.exports = {
   insertSkripsiStudentByStudentIdAndClassroomId,
   findSkripsiStudentById,
   deleteSkripsiStudentById,
+  findStudentSkripsiByStudentIdAndClassroomId,
 };

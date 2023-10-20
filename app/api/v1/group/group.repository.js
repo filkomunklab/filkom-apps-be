@@ -104,6 +104,22 @@ const updateGroupProgressByProposalId = async (proposal_id) => {
   return group;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update group progress by submission_id
+// @used            Submission
+const updateGroupProgressBySubmissionId = async (submission_id) => {
+  const group = await prisma.group.update({
+    where: {
+      submission_id,
+    },
+    data: {
+      progress: "Proposal",
+    },
+  });
+
+  return group;
+};
+
 // Main - get kelompok mahasiswa
 const findSubmissionListById = async (student_id) => {
   // Mengambil semua entri dalam tabel Group_Student yang memiliki student_id yang sesuai
@@ -257,6 +273,7 @@ module.exports = {
   updateGroupProposalIdBySubmissionId,
   updateGroupSkripsiIdBySubmissionId,
   updateGroupProgressByProposalId,
+  updateGroupProgressBySubmissionId,
 
   findSubmissionListById,
   findSubmissionDetailsById,

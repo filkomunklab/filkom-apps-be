@@ -1,17 +1,17 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
-// @description     Get group_student by group_id
+// @description     Get all group_student by group_id
 // @used            Submission
 const findGroupStudentByGroupId = async (group_id) => {
-    const groupStudent = await prisma.group_Student.findMany({
-      where: {
-        group_id,
-      },
-    });
+  const groupStudent = await prisma.group_Student.findMany({
+    where: {
+      group_id,
+    },
+  });
   // Mengambil daftar student_id dari groupStudent
-    const studentIds = groupStudent.map(student => student.student_id);
-    return studentIds;
+  const studentIds = groupStudent.map((student) => student.student_id);
+  return studentIds;
 };
 
 // @description     Get group_student by student_id & group_id
@@ -40,7 +40,7 @@ const insertGroupStudent = async (data) => {
 };
 
 module.exports = {
-    findGroupStudentByGroupId,
-    findGroupStudentByStudentIdAndGroupId,
-    insertGroupStudent
-}
+  findGroupStudentByGroupId,
+  findGroupStudentByStudentIdAndGroupId,
+  insertGroupStudent,
+};

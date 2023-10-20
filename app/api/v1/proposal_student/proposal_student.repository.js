@@ -85,6 +85,22 @@ const deleteProposalStudentById = async (id) => {
   });
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get proposal_student by student_id & classroom_id
+// @used            Submission,
+const findStudentProposalByStudentIdAndClassroomId = async (
+  student_id,
+  classroom_id
+) => {
+  const proposal_student = await prisma.proposal_Student.findFirst({
+    where: {
+      student_id,
+      classroom_id,
+    },
+  });
+  return proposal_student;
+};
+
 module.exports = {
   findProposalStudentByClassroomId,
   findProposalStudentByStudentId,
@@ -92,4 +108,5 @@ module.exports = {
   insertProposalStudentByStudentIdAndClassroomId,
   findProposalStudentById,
   deleteProposalStudentById,
+  findStudentProposalByStudentIdAndClassroomId,
 };
