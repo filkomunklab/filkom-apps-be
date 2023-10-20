@@ -24,7 +24,7 @@ const URL = "/api/v1";
 const corsOptions = {
   origin: [
     "http://localhost:3000",
-    "https://filkom-apps-fe-development.vercel.app",
+    "https://development-filkom-apps-fe.vercel.app",
   ],
 };
 
