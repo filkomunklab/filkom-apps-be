@@ -10,17 +10,20 @@
   - Added the required column `Address` to the `Employee` table without a default value. This is not possible if the table is not empty.
   - Added the required column `email` to the `Employee` table without a default value. This is not possible if the table is not empty.
   - Added the required column `phoneNum` to the `Employee` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `status` to the `Student` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `gender` to the `Student` table without a default value. This is not possible if the table is not empty.
 
 */
 -- CreateEnum
-CREATE TYPE "StudentStatus" AS ENUM ('graduate', 'active', 'inActive');
+CREATE TYPE "StudentStatus" AS ENUM ('GRADUATE', 'ACTIVE', 'INACTIVE');
+
+-- CreateEnum
+CREATE TYPE "gender" AS ENUM ('MALE', 'FEMALE');
+
+-- CreateEnum
+CREATE TYPE "status" AS ENUM ('WAITING', 'APPROVED', 'REJECTED');
 
 -- AlterEnum
 ALTER TYPE "Role" ADD VALUE 'SEKRETARIS';
-
--- DropIndex
-DROP INDEX "FormSPT_nik_key";
 
 -- AlterTable
 ALTER TABLE "Employee" ADD COLUMN     "Address" TEXT NOT NULL,
@@ -33,14 +36,32 @@ ADD COLUMN     "currentAdresss" TEXT,
 ADD COLUMN     "curriculum" TEXT,
 ADD COLUMN     "dateOfBirth" TIMESTAMP(3),
 ADD COLUMN     "employeeId" TEXT,
-ADD COLUMN     "gender" TEXT,
+ADD COLUMN     "gender" "gender" NOT NULL,
 ADD COLUMN     "highSchoolGrad" TEXT,
 ADD COLUMN     "marriageStatus" TEXT,
 ADD COLUMN     "personalEmail" TEXT,
 ADD COLUMN     "religion" TEXT,
-ADD COLUMN     "status" "StudentStatus" NOT NULL,
+ADD COLUMN     "status" "StudentStatus" NOT NULL DEFAULT 'ACTIVE',
 ADD COLUMN     "studentEmail" TEXT,
 ADD COLUMN     "studentGuardianId" TEXT;
+
+-- CreateTable
+CREATE TABLE "FormSPT" (
+    "id" TEXT NOT NULL,
+    "nik" TEXT NOT NULL,
+    "birth_mother" TEXT NOT NULL,
+    "graduate_plan" TEXT NOT NULL,
+    "minor" TEXT,
+    "remaining_credits" TEXT NOT NULL,
+    "remaining_classes" TEXT NOT NULL,
+    "approvalFak" "status" NOT NULL DEFAULT 'WAITING',
+    "approvalReg" "status" NOT NULL DEFAULT 'WAITING',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
+    "studentId" TEXT NOT NULL,
+
+    CONSTRAINT "FormSPT_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "StudentGuardian" (
@@ -155,6 +176,9 @@ CREATE TABLE "HistoryAcademic" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "FormSPT_nik_key" ON "FormSPT"("nik");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Employee_email_key" ON "Employee"("email");
 
 -- CreateIndex
@@ -183,6 +207,9 @@ ALTER TABLE "Student" ADD CONSTRAINT "Student_employeeId_fkey" FOREIGN KEY ("emp
 
 -- AddForeignKey
 ALTER TABLE "Student" ADD CONSTRAINT "Student_studentGuardianId_fkey" FOREIGN KEY ("studentGuardianId") REFERENCES "StudentGuardian"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "FormSPT" ADD CONSTRAINT "FormSPT_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("nim") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "PreRegistration" ADD CONSTRAINT "PreRegistration_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("id") ON DELETE SET NULL ON UPDATE CASCADE;

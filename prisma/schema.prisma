@@ -78,9 +78,14 @@ enum Major {
 }
 
 enum StudentStatus {
-  graduate
-  active
-  inActive
+  GRADUATE
+  ACTIVE
+  INACTIVE
+}
+
+enum gender {
+  MALE
+  FEMALE
 }
 
 model Student {
@@ -91,7 +96,7 @@ model Student {
   firstName      String
   lastName       String?
   dateOfBirth    DateTime?
-  gender         String?
+  gender         gender
   religion       String?
   bloodType      String?
   marriageStatus String?
@@ -100,7 +105,7 @@ model Student {
   highSchoolGrad String?
 
   currentAdresss      String?
-  status              StudentStatus
+  status              StudentStatus         @default(ACTIVE)
   personalEmail       String?               @unique
   faculty             String?
   major               Major?
@@ -164,28 +169,12 @@ enum status {
   REJECTED
 }
 
-enum gender {
-  Lakilaki
-  Perempuan
-}
-
-enum minor {
-  GD2A //Game Development and Graphic Design Animation 
-  CIA // Competitive Intelligence Analysis (CIA)
-  WMD //Web / Mobile Developer (WMD)
-  ITPM //IT PROJECT MANAGER
-  DMM //DIGITAL MARKETING MANAGER
-  TECHNOPRENEUR
-}
-
 model FormSPT {
   id                String    @id @default(uuid())
-  nik               String
-  date_of_birth     String // Mengubah ke tipe data String
-  gender            gender //male and female
+  nik               String    @unique
   birth_mother      String
   graduate_plan     String //semester berapa?
-  minor             minor
+  minor             String?
   remaining_credits String // perhatikan kembali untuk sisa jumlah sks
   remaining_classes String
   approvalFak       status    @default(WAITING) // approved dan reject, default waiting
