@@ -2,7 +2,7 @@
 const prisma = require("../../../database");
 
 // @description     Get student by id
-// @used            Submission
+// @used            Submission, Proposal
 const findStudentById = async (id) => {
   const student = await prisma.student.findUnique({
     where: {
@@ -16,43 +16,31 @@ const findStudentById = async (id) => {
 // @used            Classroom
 const findStudentByNim = async (nim) => {
   const student = await prisma.student.findUnique({
-      where: {
-          nim,
-      },
+    where: {
+      nim,
+    },
   });
   return student;
-}
+};
 
 // create submission
 const insertStudent = async (payload) => {
-    const {
-        nim,
-        password,
-        firstName,
-        faculty,
-        major,
-    } = payload;
-    const student = await prisma.student.create({
-      data: {
-        nim,
-        password,
-        firstName,
-        faculty,
-        major,
-      },
-    });
-  
-    return student;
+  const { nim, password, firstName, faculty, major } = payload;
+  const student = await prisma.student.create({
+    data: {
+      nim,
+      password,
+      firstName,
+      faculty,
+      major,
+    },
+  });
+
+  return student;
 };
 
 const updateStudent = async (id, payload) => {
-  const { 
-    nim, 
-    password, 
-    firstName, 
-    lastName, 
-    token } 
-  = payload;
+  const { nim, password, firstName, lastName, token } = payload;
   const employee = await prisma.student.update({
     where: {
       id,
@@ -80,8 +68,8 @@ const findStudentByToken = async (token) => {
 module.exports = {
   findStudentById,
   findStudentByNim,
-  
+
   insertStudent,
   updateStudent,
   findStudentByToken,
-}
+};

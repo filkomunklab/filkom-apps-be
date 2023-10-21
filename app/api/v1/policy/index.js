@@ -15,12 +15,20 @@ const policyFor = ({ user }) => {
     can("read", "proposal_document");
     // Dekan view proposal payment
     can("read", "proposal_payment");
+    // Dekan view proposal plagiarism
+    can("read", "proposal_plagiarism");
   } else if (user.role === "OPERATOR_LPMI") {
   } else if (user.role.includes("OPERATOR_FAKULTAS")) {
     // Sekertaris view proposal document
     can("read", "proposal_document");
     // Sekertaris view proposal payment
     can("read", "proposal_payment");
+    // Sekertaris view proposal plagiarism
+    can("read", "proposal_plagiarism");
+    // Sekertaris view proposal_schedule
+    can("read", "proposal_schedule");
+    // Sekertaris update proposal_schedule
+    can("update", "proposal_schedule");
   } else if (user.role.includes("DOSEN_MK")) {
     // Dosen MK manage academic_calendar
     can("manage", "Academic_Calendar");
@@ -40,6 +48,8 @@ const policyFor = ({ user }) => {
     can("read", "proposal_document");
     // Dosen MK view proposal payment
     can("read", "proposal_payment");
+    // Dosen MK view proposal plagiarism
+    can("read", "proposal_plagiarism");
   } else if (user.role.includes("KAPRODI")) {
     // Kaprodi view submission
     can("read", "Submission");
@@ -47,6 +57,8 @@ const policyFor = ({ user }) => {
     can("read", "proposal_document");
     // Kaprodi view proposal payment
     can("read", "proposal_payment");
+    // Kaprodi view proposal plagiarism
+    can("read", "proposal_plagiarism");
   } else if (user.role.includes("DOSEN")) {
     // Dosen view submission
     can("read", "Submission");
@@ -56,6 +68,8 @@ const policyFor = ({ user }) => {
     can("update", "is_proposal_approve");
     // Dosen view proposal pyment
     can("read", "proposal_payment");
+    // Dosen view proposal plagiarism
+    can("read", "proposal_plagiarism");
   } else if (user.role.includes("MAHASISWA")) {
     can("create", "Submission");
     // Mahasiswa view submission
@@ -70,6 +84,10 @@ const policyFor = ({ user }) => {
     can("read", "proposal_payment");
     // Mahasiswa upload/update proposal payment
     can("update", "proposal_payment");
+    // Mahasiswa view proposal plagiarism
+    can("read", "proposal_plagiarism");
+    // Mahasiswa upload/update proposal plagiarism
+    can("update", "proposal_plagiarism");
   } else if (user.role === "ALUMNI") {
   } else if (user.role.includes("DOSEN_MK")) {
     // can("manage", "Thesis_Student");

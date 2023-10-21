@@ -2,7 +2,7 @@
 const prisma = require("../../../database");
 
 // @description     Get all group_student by group_id
-// @used            Submission
+// @used            Submission, Proposal
 const findGroupStudentByGroupId = async (group_id) => {
   const groupStudent = await prisma.group_Student.findMany({
     where: {

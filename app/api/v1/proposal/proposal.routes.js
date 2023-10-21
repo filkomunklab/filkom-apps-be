@@ -19,7 +19,7 @@ router.put(
 
 //===================================================================
 // @description     Get dokumen proposal
-// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
 router.get(
   "/proposal/proposal-document/:id",
   auth,
@@ -52,25 +52,87 @@ router.put(
   auth,
   proposalController.rejectProposalDocumentById
 );
-// //       upload/update bukti pembayaran
-// router.put("/proposal/proposal-payment/:id", auth, proposalController.updateProposalPaymentById);
-// //       melihat bukti pembayaran
-// router.get("/proposal/proposal-payment/:id", auth, proposalController.getProposalPaymentById);
-// //       hapus bukti pembayaran
-// router.put("/proposal/proposal-payment/delete/:id" auth,, proposalController.deleteProposalPaymentById);
-// //       upload/update hasil cek plagiat
-// router.put("/proposal/proposal-plagiarism-check/:id", auth, proposalController.updateProposalPlagiarismById);
-// //       melihat bukti hasil cek plagiat
-// router.get("/proposal/proposal-plagiarism-check/:id", auth, proposalController.getProposalPlagiarismById);
-// //       hapus bukti hasil cek plagiat
-// router.put("/proposal/proposal-plagiarism-check/delete/:id", auth, proposalController.deleteProposalPlagiarismById);
 
-// //       melihat daftar sidang
-// router.get("/proposal/schedule", auth, proposalController.getProposalSchedule);
-// //       membuat/memperbarui jadwal
-// router.put("/proposal/schedule/:id", auth, proposalController.updateProposalScheduleById);
-// //       melihat jadwal
-// router.get("/proposal/schedule/:id", auth, proposalController.getProposalScheduleById);
+//===================================================================
+// @description     Upload/Update bukti pembayaran
+// @access          MAHASISWA
+router.put(
+  "/proposal/proposal-payment/:id",
+  auth,
+  proposalController.updateProposalPaymentById
+);
+
+//===================================================================
+// @description     Get bukti pembayaran
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/proposal/proposal-payment/:id",
+  auth,
+  proposalController.getProposalPaymentById
+);
+
+//===================================================================
+// @description     Delete/Update bukti pembayaran
+// @access          MAHASISWA
+router.put(
+  "/proposal/proposal-payment/delete/:id",
+  auth,
+  proposalController.deleteProposalPaymentById
+);
+
+//===================================================================
+// @description     Upload/Update bukti hasil cek plagiat
+// @access          MAHASISWA
+router.put(
+  "/proposal/proposal-plagiarism-check/:id",
+  auth,
+  proposalController.updateProposalPlagiarismById
+);
+
+//===================================================================
+// @description     Get bukti hasil cek plagiat
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/proposal/proposal-plagiarism-check/:id",
+  auth,
+  proposalController.getProposalPlagiarismById
+);
+
+//===================================================================
+// @description     Delete/Update bukti hasil cek plagiat
+// @access          MAHASISWA
+router.put(
+  "/proposal/proposal-plagiarism-check/delete/:id",
+  auth,
+  proposalController.deleteProposalPlagiarismById
+);
+
+//===================================================================
+// @description     Get all proposal schedule
+// @access          OPERATOR_FAKULTAS
+router.get(
+  "/proposal/schedule",
+  auth,
+  proposalController.getAllProposalSchedule
+);
+
+//===================================================================
+// @description     Create/Update proposal schedule
+// @access          OPERATOR_FAKULTAS
+router.put(
+  "/proposal/schedule/:id",
+  auth,
+  proposalController.updateProposalScheduleById
+);
+
+//===================================================================
+// @description     Get proposal schedule
+// @access          OPERATOR_FAKULTAS
+router.get(
+  "/proposal/schedule/:id",
+  auth,
+  proposalController.getProposalScheduleById
+);
 
 // //       membuka akses berita acara
 // router.put("/proposal/proposal-report/open-access/:id", auth, proposalController.openAccessProposalReportById);

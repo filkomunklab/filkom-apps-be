@@ -289,274 +289,243 @@ const rejectProposalDocumentByCoAdvisor2ById = async (id) => {
   return proposal;
 };
 
-// // upload/update pembayaran proposal
-// const updateProposalPaymentById = async (id, payload) => {
-//     const {
-//         file_name_payment,
-//         file_size_payment,
-//     } = payload;
-//     const proposal = await prisma.proposal.update({
-//       where: {
-//         id,
-//       },
-//       data: {
-//         file_name_payment,
-//         upload_date_payment: new Date(),
-//         file_size_payment
-//       },
-//       select: {
-//         id: true,
-//         file_name_payment: true,
-//         upload_date_payment: true,
-//         file_size_payment: true
-//       }
-//     });
-//     return proposal;
-// };
+//===================================================================
+// @description     Upload/Update bukti pembayaran
+// @route           PUT /proposal/proposal-payment/:id
+// @access          MAHASISWA
+const updateProposalPaymentById = async (id, payload) => {
+  const { file_name_payment, file_size_payment } = payload;
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_payment,
+      upload_date_payment: new Date(),
+      file_size_payment,
+    },
+    select: {
+      id: true,
+      file_name_payment: true,
+      upload_date_payment: true,
+      file_size_payment: true,
+    },
+  });
+  return proposal;
+};
 
-// // get 1 pembayaran proposal
-// const findProposalPaymentById = async (id) => {
-//     const proposal = await prisma.proposal.findUnique({
-//       where: {
-//         id,
-//       },
-//       select: {
-//         id: true,
-//         file_name_payment: true,
-//         upload_date_payment: true,
-//         file_size_payment: true
-//       }
-//     });
-//     return proposal;
-// };
+//===================================================================
+// @description     Get bukti pembayaran
+// @route           GET /proposal/proposal-payment/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const findProposalPaymentById = async (id) => {
+  const proposal = await prisma.proposal.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      file_name_payment: true,
+      upload_date_payment: true,
+      file_size_payment: true,
+    },
+  });
+  return proposal;
+};
 
-// // hapus/update 1 proposal
-// const deleteProposalPaymentById = async (id) => {
-//   await prisma.proposal.update({
-//     where: {
-//       id,
-//     },
-//     data: {
-//       file_name_payment: null,
-//       upload_date_payment: null,
-//       file_size_payment: null
-//     },
-//     select: {
-//       id: true,
-//       file_name_payment: true,
-//       upload_date_payment: true,
-//       file_size_payment: true
-//     }
-//   });
-// };
+//===================================================================
+// @description     Delete/Update bukti pembayaran
+// @route           DELETE /proposal/proposal-payment/delete/:id
+// @access          MAHASISWA
+const deleteProposalPaymentById = async (id) => {
+  await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_payment: null,
+      upload_date_payment: null,
+      file_size_payment: null,
+    },
+  });
+};
 
-// // upload/update pembayaran proposal
-// const updateProposalPlagiarismById = async (id, payload) => {
-//     const {
-//         file_name_plagiarismcheck,
-//         file_size_plagiarismcheck,
-//     } = payload;
-//     const proposal = await prisma.proposal.update({
-//       where: {
-//         id,
-//       },
-//       data: {
-//         file_name_plagiarismcheck,
-//         upload_date_plagiarismcheck: new Date(),
-//         file_size_plagiarismcheck
-//       },
-//       select: {
-//         id: true,
-//         file_name_plagiarismcheck: true,
-//         upload_date_plagiarismcheck: true,
-//         file_size_plagiarismcheck: true
-//       }
-//     });
-//     return proposal;
-// };
+//===================================================================
+// @description     Upload/Update bukti hasil cek plagiat
+// @route           PUT /proposal/proposal-plagiarism-check/:id
+// @access          MAHASISWA
+const updateProposalPlagiarismById = async (id, payload) => {
+  const { file_name_plagiarismcheck, file_size_plagiarismcheck } = payload;
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_plagiarismcheck,
+      upload_date_plagiarismcheck: new Date(),
+      file_size_plagiarismcheck,
+    },
+    select: {
+      id: true,
+      file_name_plagiarismcheck: true,
+      upload_date_plagiarismcheck: true,
+      file_size_plagiarismcheck: true,
+    },
+  });
+  return proposal;
+};
 
-// // get 1 pembayaran proposal
-// const findProposalPlagiarismById = async (id) => {
-//     const proposal = await prisma.proposal.findUnique({
-//       where: {
-//         id,
-//       },
-//       select: {
-//         id: true,
-//         file_name_plagiarismcheck: true,
-//         upload_date_plagiarismcheck: true,
-//         file_size_plagiarismcheck: true
-//       }
-//     });
-//     return proposal;
-// };
+//===================================================================
+// @description     Get bukti hasil cek plagiat
+// @route           PUT /proposal/proposal-plagiarism-check/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const findProposalPlagiarismById = async (id) => {
+  const proposal = await prisma.proposal.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      file_name_plagiarismcheck: true,
+      upload_date_plagiarismcheck: true,
+      file_size_plagiarismcheck: true,
+    },
+  });
+  return proposal;
+};
 
-// // hapus/update 1 proposal
-// const deleteProposalPlagiarismById = async (id) => {
-//   await prisma.proposal.update({
-//     where: {
-//       id,
-//     },
-//     data: {
-//       file_name_plagiarismcheck: null,
-//       upload_date_plagiarismcheck: null,
-//       file_size_plagiarismcheck: null
-//     },
-//     select: {
-//       id: true,
-//       file_name_plagiarismcheck: true,
-//       upload_date_plagiarismcheck: true,
-//       file_size_plagiarismcheck: true
-//     }
-//   });
-// };
+//===================================================================
+// @description     Delete/Update bukti hasil cek plagiat
+// @route           PUT /proposal/proposal-plagiarism-check/delete/:id
+// @access          MAHASISWA
+const deleteProposalPlagiarismById = async (id) => {
+  await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_plagiarismcheck: null,
+      upload_date_plagiarismcheck: null,
+      file_size_plagiarismcheck: null,
+    },
+  });
+};
 
-// // get list schedule
-// const findProposalSchedule = async () => {
-//   // Mencari proposal yang tidak memiliki is_pass berisi "Pass" atau "Fail"
-//   const proposals = await prisma.proposal.findMany({
-//     where: {
-//       OR: [
-//         {
-//           is_pass: null,
-//         },
-//         {
-//           is_pass: "Repeat",
-//         },
-//       ],
-//     },
-//     select: {
-//       id: true,
-//       advisor: true,
-//       panelist_chairman: true,
-//       panelist_member: true,
-//       start_defence: true,
-//       end_defence: true,
-//       defence_room: true,
-//       defence_date: true,
-//     },
-//   });
+//===================================================================
+// @description     Get all proposal schedule
+// @route           GET /proposal/schedule
+// @access          OPERATOR_FAKULTAS
+// @used            checkTimeConflict
+const findAllProposalSchedule = async () => {
+  // Mencari proposal yang tidak memiliki is_pass berisi "Pass" atau "Fail"
+  const proposals = await prisma.proposal.findMany({
+    where: {
+      OR: [
+        {
+          is_pass: null,
+        },
+        {
+          is_pass: "Repeat",
+        },
+      ],
+    },
+    select: {
+      id: true,
+      advisor: true,
+      panelist_chairman: true,
+      panelist_member: true,
+      start_defence: true,
+      end_defence: true,
+      defence_room: true,
+      defence_date: true,
+    },
+  });
 
-//   // Mengambil daftar proposalIds
-//   const proposalIds = proposals.map((proposal) => proposal.id);
+  return proposals;
+};
 
-//   // Mengambil data grup berdasarkan proposalIds
-//   const groups = await findManyGroupsByProposalIds(proposalIds);
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Check conflict between schedule
+// @used            checkScheduleConflict
+const findAllConflictingProposalSchedule = async (
+  id,
+  defence_date,
+  defence_room
+) => {
+  const conflictingSchedules = await prisma.Proposal.findMany({
+    where: {
+      defence_date,
+      defence_room,
+      NOT: {
+        id,
+      },
+    },
+  });
 
-//   // Menggabungkan data proposal dengan data grup
-//   const result = proposals.map((proposal) => {
-//     const group = groups.find((group) => group.proposal_id === proposal.id);
-//     if (group) {
-//       return {
-//         group_id: group.id,
-//         proposal_id: proposal.id,
-//         title: group.title,
-//         advisor: proposal.advisor,
-//         panelist_chairman: proposal.panelist_chairman,
-//         panelist_member: proposal.panelist_member,
-//         start_defence: proposal.start_defence,
-//         end_defence: proposal.end_defence,
-//         defence_room: proposal.defence_room,
-//         defence_date: proposal.defence_date,
-//       };
-//     }
-//     return null;
-//   });
+  return conflictingSchedules;
+};
 
-//   // Filter null values (jika ada proposal tanpa grup)
-//   const filteredResult = result.filter((item) => item !== null);
+//===================================================================
+// @description     Create/Update proposal schedule
+// @route           POST /proposal/schedule/:id
+// @access          OPERATOR_FAKULTAS
+const updateProposalScheduleById = async (id, payload) => {
+  const {
+    panelist_chairman_id,
+    panelist_member_id,
+    start_defence,
+    end_defence,
+    defence_room,
+    defence_date,
+  } = payload;
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      panelist_chairman_id,
+      panelist_member_id,
+      start_defence,
+      end_defence,
+      defence_room,
+      defence_date,
+      report_date: defence_date,
+    },
+    select: {
+      id: true,
+      panelist_chairman_id: true,
+      panelist_member_id: true,
+      start_defence: true,
+      end_defence: true,
+      defence_room: true,
+      defence_date: true,
+    },
+  });
+  return proposal;
+};
 
-//   return filteredResult;
-// };
-
-// // Mencari grup berdasarkan proposalIds
-// const findManyGroupsByProposalIds = async (proposalIds) => {
-//   const groups = await prisma.group.findMany({
-//     where: {
-//       proposal_id: {
-//         in: proposalIds,
-//       },
-//     },
-//     select: {
-//       id: true,
-//       proposal_id: true,
-//       title: true,
-//     },
-//   });
-//   return groups;
-// };
-
-// // create/update jadwal
-// const updateProposalScheduleById = async (id, payload) => {
-//   const {
-//     panelist_chairman,
-//     panelist_member,
-//     start_defence,
-//     end_defence,
-//     defence_room,
-//     defence_date
-//   } = payload;
-//   const proposal = await prisma.proposal.update({
-//     where: {
-//       id,
-//     },
-//     data: {
-//       panelist_chairman,
-//       panelist_member,
-//       start_defence,
-//       end_defence,
-//       defence_room,
-//       defence_date,
-//       report_date: defence_date,
-//     },
-//     select: {
-//       id: true,
-//       panelist_chairman: true,
-//       panelist_member: true,
-//       start_defence: true,
-//       end_defence: true,
-//       defence_room: true,
-//       defence_date: true
-//     }
-//   });
-//   return proposal;
-// };
-
-// // get 1 jadwal proposal
-// const findProposalScheduleById = async (id) => {
-//   const proposal = await prisma.proposal.findUnique({
-//     where: {
-//       id,
-//     },
-//     select: {
-//       id: true,
-//       panelist_chairman: true,
-//       panelist_member: true,
-//       advisor: true,
-//       start_defence: true,
-//       end_defence: true,
-//       defence_room: true,
-//       defence_date: true
-//     }
-//   });
-
-//   const group = await findGroupById(id);
-//   group_id = group.id;
-//   const group_Student = await findGroupStudentById(group_id);
-//   const scheduleData = {
-//     id: proposal.id,
-//     title: group.title,
-//     students: group_Student.map(student => student.student_id),
-//     panelist_chairman: proposal.panelist_chairman,
-//     panelist_member: proposal.panelist_member,
-//     advisor: proposal.advisor,
-//     start_defence: proposal.start_defence,
-//     end_defence: proposal.end_defence,
-//     defence_room: proposal.defence_room,
-//     defence_date: proposal.defence_date,
-//   };
-//   return scheduleData;
-// };
+//===================================================================
+// @description     Get proposal schedule
+// @route           GET /proposal/schedule/:id
+// @access          OPERATOR_FAKULTAS
+const findProposalScheduleById = async (id) => {
+  const proposal = await prisma.proposal.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      panelist_chairman: true,
+      panelist_member: true,
+      advisor: true,
+      start_defence: true,
+      end_defence: true,
+      defence_room: true,
+      defence_date: true,
+    },
+  });
+  return proposal;
+};
 
 // const findGroupById =  async (proposal_id) => {
 //   const group = await prisma.group.findUnique({
@@ -841,19 +810,17 @@ module.exports = {
   rejectProposalDocumentByAdvisorById,
   rejectProposalDocumentByCoAdvisor1ById,
   rejectProposalDocumentByCoAdvisor2ById,
+  updateProposalPaymentById,
+  findProposalPaymentById,
+  deleteProposalPaymentById,
+  updateProposalPlagiarismById,
+  findProposalPlagiarismById,
+  deleteProposalPlagiarismById,
 
-  // approveProposalDocumentById,
-  // rejectProposalDocumentById,
-  // updateProposalPaymentById,
-  // findProposalPaymentById,
-  // deleteProposalPaymentById,
-  // updateProposalPlagiarismById,
-  // findProposalPlagiarismById,
-  // deleteProposalPlagiarismById,
-
-  // findProposalSchedule,
-  // updateProposalScheduleById,
-  // findProposalScheduleById,
+  findAllProposalSchedule,
+  findAllConflictingProposalSchedule,
+  updateProposalScheduleById,
+  findProposalScheduleById,
 
   // openAccessProposalReportById,
   // findProposalReportById,

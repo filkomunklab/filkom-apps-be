@@ -3,16 +3,23 @@
 const proposalRepository = require("./proposal.repository");
 const groupRepository = require("../group/group.repository");
 const groupStudentRepository = require("../group_student/group_student.repository");
+const employeeRepository = require("../employee/employee.repository");
+const studentRepository = require("../student/student.repository");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get proposal by id
-// @used            updateProposalDocumentById
+// @used            updateProposalDocumentById, deleteProposalDocumentById,
+//                  approveProposalDocumentById, rejectProposalDocumentById,
+//                  updateProposalPaymentById, deleteProposalPaymentById,
+//                  updateProposalPaymentById, getProposalPaymentById,
+//                  updateProposalPlagiarismById, deleteProposalPlagiarismById,
+//                  updateProposalScheduleById,
 const getProposalById = async (id) => {
   const proposal = await proposalRepository.findProposalById(id);
   if (!proposal) {
     throw {
       status: 400,
-      message: `Not found`,
+      message: `Proposal not found`,
     };
   }
   return proposal;
@@ -20,7 +27,9 @@ const getProposalById = async (id) => {
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get group_student by student_id & group_id (check student in group_student)
-// @used            updateProposalDocumentById
+// @used            updateProposalDocumentById, deleteProposalDocumentById,
+//                  updateProposalPaymentById, deleteProposalPaymentById,
+//                  updateProposalPlagiarismById,
 const getGroupStudentByStudentIdAndGroupId = async (student_id, group_id) => {
   const group_student =
     await groupStudentRepository.findGroupStudentByStudentIdAndGroupId(
@@ -353,80 +362,317 @@ const rejectProposalDocumentById = async (userId, id) => {
   }
 };
 
-// const updateProposalPaymentById = async (id, payload) => {
-//     await getProposalById(id);
+//===================================================================
+// @description     Upload/Update bukti pembayaran
+// @route           PUT /proposal/proposal-payment/:id
+// @access          MAHASISWA
+const updateProposalPaymentById = async (id, userId, payload) => {
+  // check proposal
+  const proposal = await getProposalById(id);
+  // get group by proposal_id
+  const group = await groupRepository.findGroupByProposalId(proposal.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
 
-//     const proposal = await proposalRepository.updateProposalPaymentById(id, payload);
-//     return proposal;
-// };
+  // update proposal document
+  const UpdatedProposal = await proposalRepository.updateProposalPaymentById(
+    id,
+    payload
+  );
+  return UpdatedProposal;
+};
 
-// const getProposalPaymentById = async (id) => {
-//     const proposal = await proposalRepository.findProposalPaymentById(id);
-//     if (!proposal) {
-//       throw {
-//         status: 400,
-//         message: `Not found`,
-//       };
-//     }
-//     return proposal;
-// };
+//===================================================================
+// @description     Get bukti pembayaran
+// @route           GET /proposal/proposal-payment/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getProposalPaymentById = async (id) => {
+  const proposal = await proposalRepository.findProposalPaymentById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return proposal;
+};
 
-// const deleteProposalPaymentById = async (id) => {
-//   await getProposalById(id);
-//   await proposalRepository.deleteProposalPaymentById(id);
-// };
+//===================================================================
+// @description     Delete/Update bukti pembayaran
+// @route           DELETE /proposal/proposal-payment/delete/:id
+// @access          MAHASISWA
+const deleteProposalPaymentById = async (id, userId) => {
+  // check proposal
+  const proposal = await getProposalById(id);
+  // get group by proposal_id
+  const group = await groupRepository.findGroupByProposalId(proposal.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
 
-// const updateProposalPlagiarismById = async (id, payload) => {
-//     await getProposalById(id);
+  // delete/update proposal document
+  await proposalRepository.deleteProposalPaymentById(id);
+};
 
-//     const proposal = await proposalRepository.updateProposalPlagiarismById(id, payload);
-//     return proposal;
-// };
+//===================================================================
+// @description     Upload/Update bukti hasil cek plagiat
+// @route           PUT /proposal/proposal-plagiarism-check/:id
+// @access          MAHASISWA
+const updateProposalPlagiarismById = async (id, userId, payload) => {
+  // check proposal
+  const proposal = await getProposalById(id);
+  // get group by proposal_id
+  const group = await groupRepository.findGroupByProposalId(proposal.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
 
-// const getProposalPlagiarismById = async (id) => {
-//     const proposal = await proposalRepository.findProposalPlagiarismById(id);
-//     if (!proposal) {
-//       throw {
-//         status: 400,
-//         message: `Not found`,
-//       };
-//     }
-//     return proposal;
-// };
+  // update proposal plagiarism
+  const UpdatedProposal = await proposalRepository.updateProposalPlagiarismById(
+    id,
+    payload
+  );
+  return UpdatedProposal;
+};
 
-// const deleteProposalPlagiarismById = async (id) => {
-//   await getProposalById(id);
-//   await proposalRepository.deleteProposalPlagiarismById(id);
-// };
+//===================================================================
+// @description     Get bukti hasil cek plagiat
+// @route           PUT /proposal/proposal-plagiarism-check/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getProposalPlagiarismById = async (id) => {
+  const proposal = await proposalRepository.findProposalPlagiarismById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return proposal;
+};
 
-// const getProposalSchedule = async () => {
-//   const proposal = await proposalRepository.findProposalSchedule();
-//   if (!proposal) {
-//     throw {
-//       status: 400,
-//       message: `Not found`,
-//     };
-//   }
-//   return proposal;
-// };
+//===================================================================
+// @description     Delete/Update bukti hasil cek plagiat
+// @route           PUT /proposal/proposal-plagiarism-check/delete/:id
+// @access          MAHASISWA
+const deleteProposalPlagiarismById = async (id, userId) => {
+  // check proposal
+  const proposal = await getProposalById(id);
+  // get group by proposal_id
+  const group = await groupRepository.findGroupByProposalId(proposal.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
 
-// const updateProposalScheduleById = async (id, payload) => {
-//   await getProposalById(id);
+  // delete/update proposal plagiarism
+  await proposalRepository.deleteProposalPlagiarismById(id);
+};
 
-//   const proposal = await proposalRepository.updateProposalScheduleById(id, payload);
-//   return proposal;
-// };
+//===================================================================
+// @description     Get all proposal schedule
+// @route           GET /proposal/schedule
+// @access          OPERATOR_FAKULTAS
+const getAllProposalSchedule = async () => {
+  const proposal = await proposalRepository.findAllProposalSchedule();
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  // Get all proposal_id in here
+  const proposalIds = proposal.map((proposal) => proposal.id);
 
-// const getProposalScheduleById = async (id) => {
-//   const proposal = await proposalRepository.findProposalScheduleById(id);
-//   if (!proposal) {
-//     throw {
-//       status: 400,
-//       message: `Not found`,
-//     };
-//   }
-//   return proposal;
-// };
+  // Get group by proposalIds
+  const groups = await groupRepository.findManyGroupsByProposalIds(proposalIds);
+
+  // Menggabungkan data proposal dengan data grup
+  const result = proposal.map((proposal) => {
+    const group = groups.find((group) => group.proposal_id === proposal.id);
+    // Menggabungkan firstName dan lastName menjadi fullName
+    const advisorFullName = proposal.advisor
+      ? `${proposal.advisor.firstName} ${proposal.advisor.lastName || ""}`
+      : "";
+    const panelistChairmanFullName = proposal.panelist_chairman
+      ? `${proposal.panelist_chairman.firstName} ${
+          proposal.panelist_chairman.lastName || ""
+        }`
+      : "";
+    const panelistMemberFullName = proposal.panelist_member
+      ? `${proposal.panelist_member.firstName} ${
+          proposal.panelist_member.lastName || ""
+        }`
+      : "";
+    if (group) {
+      return {
+        group_id: group.id,
+        proposal_id: proposal.id,
+        title: group.title,
+        advisor: advisorFullName,
+        panelist_chairman: panelistChairmanFullName,
+        panelist_member: panelistMemberFullName,
+        start_defence: proposal.start_defence,
+        end_defence: proposal.end_defence,
+        defence_room: proposal.defence_room,
+        defence_date: proposal.defence_date,
+      };
+    }
+    return null;
+  });
+
+  // Filter null values (jika ada proposal tanpa grup)
+  const filteredResult = result.filter((item) => item !== null);
+
+  return filteredResult;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get dosen by id
+// @used            createSubmission, updateSubmissionById,
+const getDosenById = async (id) => {
+  const dosen = await employeeRepository.findEmployeeById(id);
+  if (!dosen) {
+    throw {
+      status: 400,
+      message: `Dosen not found`,
+    };
+  }
+  return dosen;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Check conflict between schedule
+// @used            updateProposalScheduleById
+const checkScheduleConflict = async (id, payload) => {
+  const { start_defence, end_defence, defence_room, defence_date } = payload;
+
+  // // Konversi tanggal payload ke format yang sesuai
+  // const formattedPayloadDate = formatDate(defence_date); // Anda perlu membuat fungsi formatDate
+
+  // Query database untuk jadwal yang relevan, kecuali jadwal yang akan diupdate
+  const conflictingSchedules =
+    await proposalRepository.findAllConflictingProposalSchedule(
+      id,
+      defence_date,
+      defence_room
+    );
+
+  // Periksa tabrakan
+  const isConflict = conflictingSchedules.some((schedule) => {
+    const scheduleStart = schedule.start_defence;
+    const scheduleEnd = schedule.end_defence;
+
+    return (
+      (start_defence >= scheduleStart && start_defence <= scheduleEnd) ||
+      (end_defence >= scheduleStart && end_defence <= scheduleEnd)
+    );
+  });
+
+  return isConflict;
+};
+
+//===================================================================
+// @description     Create/Update proposal schedule
+// @route           POST /proposal/schedule/:id
+// @access          OPERATOR_FAKULTAS
+const updateProposalScheduleById = async (id, payload) => {
+  // check proposal
+  const proposal = await getProposalById(id);
+  const { panelist_chairman_id, panelist_member_id } = payload;
+  if (
+    proposal.advisor_id !== panelist_chairman_id &&
+    proposal.advisor_id !== panelist_member_id &&
+    panelist_chairman_id !== panelist_member_id
+  ) {
+    // mengecek dosen
+    if (panelist_chairman_id) {
+      await getDosenById(panelist_chairman_id);
+    }
+    if (panelist_member_id) {
+      await getDosenById(panelist_member_id);
+    }
+
+    // check conflict between schedule
+    const isConflict = await checkScheduleConflict(proposal.id, payload);
+    console.log(isConflict);
+    if (isConflict) {
+      throw {
+        status: 400,
+        message: `Conflict`,
+      };
+    }
+
+    const updatedProposal = await proposalRepository.updateProposalScheduleById(
+      id,
+      payload
+    );
+    return updatedProposal;
+  } else {
+    throw {
+      status: 400,
+      message: `There are the same lecturers`,
+    };
+  }
+};
+
+//===================================================================
+// @description     Get proposal schedule
+// @route           GET /proposal/schedule/:id
+// @access          OPERATOR_FAKULTAS
+const getProposalScheduleById = async (id) => {
+  const proposal = await proposalRepository.findProposalScheduleById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  const group = await groupRepository.findGroupByProposalId(id);
+  const groupStudent = await groupStudentRepository.findGroupStudentByGroupId(
+    group.id
+  );
+  const students = await Promise.all(
+    groupStudent.map(async (student_id) => {
+      // get student in table student by student_id
+      const student = await studentRepository.findStudentById(student_id);
+      if (student) {
+        // Menggabungkan firstName dan lastName menjadi fullName
+        const fullName = `${student.firstName} ${student.lastName || ""}`;
+        return {
+          fullName: fullName,
+          nim: student.nim,
+          major: student.major,
+        };
+      } else {
+        throw {
+          status: 400,
+          message: `Student Not found`,
+        };
+      }
+    })
+  );
+  const formatNameWithDegree = (employee) => {
+    const { firstName, lastName, degree } = employee;
+    let fullName = `${firstName} ${lastName || ""}`;
+    if (degree) {
+      fullName += `, ${degree}`;
+    }
+    return fullName;
+  };
+
+  const panelistChairman = formatNameWithDegree(proposal.panelist_chairman);
+  const panelistMember = formatNameWithDegree(proposal.panelist_member);
+  const advisor = formatNameWithDegree(proposal.advisor);
+  const scheduleData = {
+    id: proposal.id,
+    title: group.title,
+    students,
+    panelist_chairman: panelistChairman,
+    panelist_member: panelistMember,
+    advisor: advisor,
+    start_defence: proposal.start_defence,
+    end_defence: proposal.end_defence,
+    defence_room: proposal.defence_room,
+    defence_date: proposal.defence_date,
+  };
+  return scheduleData;
+};
 
 // const openAccessProposalReportById = async (id) => {
 //   await getProposalById(id);
@@ -514,16 +760,16 @@ module.exports = {
   deleteProposalDocumentById,
   approveProposalDocumentById,
   rejectProposalDocumentById,
-  // updateProposalPaymentById,
-  // getProposalPaymentById,
-  // deleteProposalPaymentById,
-  // updateProposalPlagiarismById,
-  // getProposalPlagiarismById,
-  // deleteProposalPlagiarismById,
+  updateProposalPaymentById,
+  getProposalPaymentById,
+  deleteProposalPaymentById,
+  updateProposalPlagiarismById,
+  getProposalPlagiarismById,
+  deleteProposalPlagiarismById,
 
-  // getProposalSchedule,
-  // updateProposalScheduleById,
-  // getProposalScheduleById,
+  getAllProposalSchedule,
+  updateProposalScheduleById,
+  getProposalScheduleById,
 
   // openAccessProposalReportById,
   // getProposalReportById,

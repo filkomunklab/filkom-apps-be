@@ -222,9 +222,9 @@ const getSubmissionById = async (id) => {
       if (student) {
         // Menggabungkan firstName dan lastName menjadi fullName
         const fullName = `${student.firstName} ${student.lastName || ""}`;
-        console.log(
-          `Student ID: ${student_id}, FullName: ${fullName}, Nim: ${student.nim}, Major: ${student.major}`
-        );
+        // console.log(
+        //   `Student ID: ${student_id}, FullName: ${fullName}, Nim: ${student.nim}, Major: ${student.major}`
+        // );
         return {
           fullName: fullName,
           nim: student.nim,
