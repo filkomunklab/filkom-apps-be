@@ -10,13 +10,24 @@ const findAllStudentCertificate = async (nik) => {
   }
 };
 
+const viewOneStudentCertificate = async (certificateId) => {
+  try {
+    const certificate = await certificateRepository.findOneCertificate(
+      certificateId
+    );
+    return certificate;
+  } catch (error) {
+    return error;
+  }
+};
+
 const uploadCertificate = async (payload, nim) => {
   try {
     const certificate = await certificateRepository.insertCertificate(
       payload,
       nim
     );
-    console.log(certificate);
+    console.log("hello world", certificate);
   } catch (error) {
     return error;
   }
@@ -25,4 +36,5 @@ const uploadCertificate = async (payload, nim) => {
 module.exports = {
   uploadCertificate,
   findAllStudentCertificate,
+  viewOneStudentCertificate,
 };
