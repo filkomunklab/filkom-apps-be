@@ -31,6 +31,11 @@ const corsOptions = {
   ],
 };
 
+//-------------------------BIMBINGAN AKADEMIK------------
+const certificateRoutes = require("./app/api/v1/certificate/certificate.routes");
+
+//--------------------------------------------------------
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(logger("dev"));
@@ -54,6 +59,10 @@ app.use(`${URL}`, classroomRoutes);
 app.use(`${URL}`, submissionRoutes);
 app.use(`${URL}`, groupRoutes);
 app.use(`${URL}`, proposalRoutes);
+
+//--------BIMBINGAN AKADEMIK-------------------------------
+app.use(`${URL}`, certificateRoutes);
+//---------------------------------------------------
 
 app.use("/", (req, res) => {
   res.send({ message: "Welcome to API Filkom Apps" });

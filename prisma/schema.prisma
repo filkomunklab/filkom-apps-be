@@ -491,7 +491,7 @@ model Certificate {
   category    String
   description String
   submitDate  DateTime          @default(now())
-  status      String
+  status      status            @default(WAITING)
   transaction Transaction[]
   history     HistoryAcademic[]
 }
@@ -512,9 +512,9 @@ model Transaction {
   certificateId String?
   Activity      Activity?    @relation(fields: [activityId], references: [id])
   activityId    String?
-  Student       Student?     @relation(fields: [studentId], references: [id])
+  Student       Student?     @relation(fields: [studentId], references: [nim])
   studentId     String?
-  Employee      Employee?    @relation(fields: [employeeId], references: [id])
+  Employee      Employee?    @relation(fields: [employeeId], references: [nik])
   employeeId    String?
 }
 
