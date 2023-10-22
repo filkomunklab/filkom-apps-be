@@ -137,7 +137,7 @@ CREATE TABLE "Certificate" (
     "category" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "submitDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "status" TEXT NOT NULL,
+    "status" "status" NOT NULL DEFAULT 'WAITING',
 
     CONSTRAINT "Certificate_pkey" PRIMARY KEY ("id")
 );
