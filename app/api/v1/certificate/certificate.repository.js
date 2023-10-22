@@ -30,16 +30,43 @@ const findCertificate = async (nik) => {
   return certificate;
 };
 
-//find Certificate by category
-const findCertificateBycCategory = async (category, studentId) => {
+const findOneCertificate = async (certificateId) => {
   const certificate = await prisma.certificate.findUnique({
     where: {
-      category,
-      studentId,
+      id: certificateId,
     },
+    // include: {
+    //   transaction: {
+    //     include: {
+    //       Student: {
+    //         select: {
+    //           firstName: true,
+    //           lastName: true,
+    //         },
+    //       },
+    //       Employee: {
+    //         select: {
+    //           firstName: true,
+    //           lastName: true,
+    //         },
+    //       },
+    //     },
+    //   },
+    // },
   });
-  return category;
+  return certificate;
 };
+
+//find Certificate by category
+// const findCertificateBycCategory = async (category, studentId) => {
+//   const certificate = await prisma.certificate.findUnique({
+//     where: {
+//       category,
+//       studentId,
+//     },
+//   });
+//   return category;
+// };
 
 //add certification
 const insertCertificate = async (payload, nim) => {
@@ -60,11 +87,9 @@ const insertCertificate = async (payload, nim) => {
   return certificate;
 };
 
-const viewCertificate = async () => {};
-
 module.exports = {
   findCertificate,
   insertCertificate,
-  findCertificateBycCategory,
-  viewCertificate,
+  findOneCertificate,
+  // findCertificateBycCategory,
 };

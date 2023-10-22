@@ -12,10 +12,24 @@ const viewAllStudentCertificate = async (req, res) => {
   }
 };
 
+const viewStudentCertificate = async (req, res) => {
+  const { certificateId } = req.params;
+  try {
+    const certificate = await certificateService.viewOneStudentCertificate(
+      certificateId
+    );
+    console.log("hello world", certificate);
+    res.status(201).send({ status: "OK", data: certificate });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 const uploadCertificate = async (req, res) => {
   const payload = req.body;
-  const nim = req.params;
-  console.log("this payload", payload);
+  const { nim } = req.params;
   try {
     await certificateService.uploadCertificate(payload, nim);
     res.status(201).send({ status: "OK" });
@@ -29,4 +43,5 @@ const uploadCertificate = async (req, res) => {
 module.exports = {
   uploadCertificate,
   viewAllStudentCertificate,
+  viewStudentCertificate,
 };
