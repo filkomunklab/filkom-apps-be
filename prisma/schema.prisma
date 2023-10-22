@@ -72,22 +72,6 @@ model Employee {
   @@index([email])
 }
 
-enum Major {
-  SI
-  IF
-}
-
-enum StudentStatus {
-  GRADUATE
-  ACTIVE
-  INACTIVE
-}
-
-enum gender {
-  MALE
-  FEMALE
-}
-
 model Student {
   id             String    @id @default(uuid())
   reg_num        String?   @unique
@@ -146,28 +130,7 @@ model UserRole {
   updatedAt DateTime?
 }
 
-enum Role {
-  ADMIN
-  SUPER_ADMIN
-  MAHASISWA
-  ADMIN_LPMI
-  OPERATOR_LPMI
-  ALUMNI
-  DEKAN
-  KAPRODI
-  DOSEN
-  DOSEN_MK
-  OPERATOR_FAKULTAS
-  SEKRETARIS
-}
-
 //-------------------Klabat Bridge ----------------------//
-
-enum status {
-  WAITING
-  APPROVED
-  REJECTED
-}
 
 model FormSPT {
   id                String    @id @default(uuid())
@@ -224,24 +187,11 @@ model Group {
   History       History[]       @relation("History")
 }
 
-enum Progress {
-  Submission
-  Proposal
-  Skripsi
-  Finished
-}
-
 model Academic_Calendar {
   id        String      @id @default(uuid())
   semester  Semester
   year      String
   classroom Classroom[] @relation("Academic")
-}
-
-enum Semester {
-  Ganjil
-  Genap
-  Padat
 }
 
 model Classroom {
@@ -256,11 +206,6 @@ model Classroom {
   submission       Submission[]      @relation("SubmissionClassroom")
   proposal         Proposal[]        @relation("ProposalClassroom")
   skripsi          Skripsi[]         @relation("SkripsiClassroom")
-}
-
-enum Classroom_Name {
-  Proposal
-  Skripsi
 }
 
 model Submission {
@@ -281,12 +226,6 @@ model Submission {
   created_at              DateTime           @default(now())
   updated_at              DateTime?
   group                   Group?             @relation("Submission")
-}
-
-enum Submission_Approve {
-  Waiting
-  Approve
-  Rejected
 }
 
 model Proposal {
@@ -417,34 +356,6 @@ model Skripsi {
   group                                    Group?               @relation("Skripsi")
   assessment                               Skripsi_Assessment[] @relation("Assessment")
   changes                                  Skripsi_Changes[]    @relation("Changes")
-}
-
-enum Thesis_Approve {
-  Waiting
-  Approve
-  Rejected
-}
-
-enum Exam_Conclution {
-  Rejected
-  Approve
-}
-
-enum Changes_Conclusion {
-  Major
-  Minor
-}
-
-enum Pass {
-  Pass
-  Fail
-  Repeat
-}
-
-enum Revision_Approve {
-  Waiting
-  Approve
-  Rejected
 }
 
 model Proposal_Assessment {
@@ -617,4 +528,93 @@ model HistoryAcademic {
   certificateId     String?
   Activity          Activity?        @relation(fields: [activityId], references: [id])
   activityId        String?
+}
+
+enum Major {
+  SI
+  IF
+}
+
+enum StudentStatus {
+  GRADUATE
+  ACTIVE
+  INACTIVE
+}
+
+enum gender {
+  MALE
+  FEMALE
+}
+
+enum Thesis_Approve {
+  Waiting
+  Approve
+  Rejected
+}
+
+enum Submission_Approve {
+  Waiting
+  Approve
+  Rejected
+}
+
+enum Classroom_Name {
+  Proposal
+  Skripsi
+}
+
+enum Semester {
+  Ganjil
+  Genap
+  Padat
+}
+
+enum Progress {
+  Submission
+  Proposal
+  Skripsi
+  Finished
+}
+
+enum status {
+  WAITING
+  APPROVED
+  REJECTED
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+  MAHASISWA
+  ADMIN_LPMI
+  OPERATOR_LPMI
+  ALUMNI
+  DEKAN
+  KAPRODI
+  DOSEN
+  DOSEN_MK
+  OPERATOR_FAKULTAS
+  SEKRETARIS
+}
+
+enum Exam_Conclution {
+  Rejected
+  Approve
+}
+
+enum Changes_Conclusion {
+  Major
+  Minor
+}
+
+enum Pass {
+  Pass
+  Fail
+  Repeat
+}
+
+enum Revision_Approve {
+  Waiting
+  Approve
+  Rejected
 }
