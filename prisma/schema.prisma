@@ -487,6 +487,8 @@ model Message {
 
 model Certificate {
   id          String            @id @default(uuid())
+  filename    String
+  path        String
   title       String
   category    String
   description String

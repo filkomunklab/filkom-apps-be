@@ -21,13 +21,13 @@ const viewOneStudentCertificate = async (certificateId) => {
   }
 };
 
-const uploadCertificate = async (payload, nim) => {
+const uploadCertificate = async (payload, nim, certificateFile) => {
   try {
-    const certificate = await certificateRepository.insertCertificate(
+    await certificateRepository.insertCertificate(
       payload,
-      nim
+      nim,
+      certificateFile
     );
-    console.log("hello world", certificate);
   } catch (error) {
     return error;
   }
