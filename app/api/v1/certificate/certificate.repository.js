@@ -69,22 +69,29 @@ const findOneCertificate = async (certificateId) => {
 // };
 
 //add certification
-const insertCertificate = async (payload, nim) => {
+const insertCertificate = async (payload, nim, certificateFile) => {
   const { title, category, description, employeeId } = payload;
-  const certificate = await prisma.certificate.create({
-    data: {
-      title,
-      category,
-      description,
-      transaction: {
-        create: {
-          studentId: nim,
-          employeeId,
+  const { path, filename } = certificateFile;
+  try {
+    const certificate = await prisma.certificate.create({
+      data: {
+        title,
+        category,
+        description,
+        filename,
+        path,
+        transaction: {
+          create: {
+            studentId: nim,
+            employeeId,
+          },
         },
       },
-    },
-  });
-  return certificate;
+    });
+    return certificate;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = {
