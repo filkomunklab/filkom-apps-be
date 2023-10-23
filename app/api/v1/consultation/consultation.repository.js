@@ -7,7 +7,7 @@ const prisma = require("../../../database");
 // @access          DOSEN
 const insertConsultation = async (payload, userId) => {
   const { group_id, description, date } = payload;
-  const consultation = await prisma.consultation.create({
+  const consultation = await prisma.thesis_Consultation.create({
     data: {
       group_id,
       description,
@@ -24,7 +24,7 @@ const insertConsultation = async (payload, userId) => {
 // @route           GET /consultation/:id
 // @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
 const findAllConsultationByGroupId = async (group_id) => {
-  const consultation = await prisma.consultation.findMany({
+  const consultation = await prisma.thesis_Consultation.findMany({
     where: {
       group_id,
     },
