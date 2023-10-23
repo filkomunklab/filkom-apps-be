@@ -4,34 +4,6 @@
 const submissionService = require("./submission.service");
 const { policyFor } = require("../policy");
 
-// const getAllSubmission = async (req, res) => {
-//     const submission = await submissionService.getAllSubmission();
-//     res.send({ status: "OK", data: submission });
-// };
-
-// const deleteSubmissionById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         await submissionService.deleteSubmissionById(id);
-//         res.status(200).send({ status: "OK" });
-//     } catch (error) {
-//         res
-//         .status(error?.status || 500)
-//         .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
-
-// const deleteAllSubmission = async (req, res) => {
-//     try {
-//         await submissionService.deleteAllSubmission();
-//         res.status(200).send({ status: "OK" });
-//     } catch (error) {
-//         res
-//         .status(error?.status || 500)
-//         .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
-
 //===================================================================
 // @description     Create submission
 // @route           POST /submission

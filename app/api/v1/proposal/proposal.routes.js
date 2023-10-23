@@ -134,26 +134,112 @@ router.get(
   proposalController.getProposalScheduleById
 );
 
-// //       membuka akses berita acara
-// router.put("/proposal/proposal-report/open-access/:id", auth, proposalController.openAccessProposalReportById);
-// //       melihat berita acara
-// router.get("/proposal/proposal-report/:id", auth, proposalController.getProposalReportById);
-// //       mengisi berita acara
-// router.put("/proposal/proposal-report/:id", auth, proposalController.signProposalReportById);
-// //       mengisi kesimpulan sidang
-// router.put("/proposal/proposal-report/conclusion/:id", auth, proposalController.updateProposalConclusionById);
-// //       melihat kesimpulan sidang
-// router.get("/proposal/proposal-report/conclusion/:id", auth, proposalController.getProposalConclusionById);
+//===================================================================
+// @description     Open report
+// @access          DOSEN
+router.put(
+  "/proposal/proposal-report/open-access/:id",
+  auth,
+  proposalController.openAccessProposalReportById
+);
 
-// //       upload/update dokumen revisi proposal
-// router.put("/proposal/proposal-revision-document/:id", proposalController.updateProposalRevisionDocumentById);
-// //       melihat dokumen revisi proposal
-// router.get("/proposal/proposal-revision-document/:id", proposalController.getProposalRevisionDocumentById);
-// //       delete dokumen revisi proposal
-// router.delete("/proposal/proposal-revision-document/:id", proposalController.deleteProposalRevisionDocumentById);
-// //       menyetujui dokumen revisi proposal
-// router.put("/proposal/proposal-revision-document/approve/:id", proposalController.approveProposalRevisionDocumentById);
-// //       menolak dokumen revisi proposal
-// router.put("/proposal/proposal-revision-document/reject/:id", proposalController.rejectProposalRevisionDocumentById);
+//===================================================================
+// @description     Get all proposal assessment by id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/proposal/proposal-assessment/:id",
+  auth,
+  proposalController.getAllProposalAssessmentById
+);
+
+//===================================================================
+// @description     Get all proposal changes by id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/proposal/proposal-changes/:id",
+  auth,
+  proposalController.getAllProposalChangesById
+);
+
+//===================================================================
+// @description     Get report
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/proposal/proposal-report/:id",
+  auth,
+  proposalController.getProposalReportById
+);
+
+//===================================================================
+// @description     Fill/Update report
+// @access          DOSEN, DEKAN
+router.put(
+  "/proposal/proposal-report/:id",
+  auth,
+  proposalController.signProposalReportById
+);
+
+//===================================================================
+// @description     Fill/Update report conclusion
+// @access          DOSEN
+router.put(
+  "/proposal/proposal-report/conclusion/:id",
+  auth,
+  proposalController.updateProposalConclusionById
+);
+
+//===================================================================
+// @description     Get report conclusion
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/proposal/proposal-report/conclusion/:id",
+  auth,
+  proposalController.getProposalConclusionById
+);
+
+//===================================================================
+// @description     Upload/Update dokumen revisi proposal
+// @access          MAHASISWA
+router.put(
+  "/proposal/proposal-revision-document/:id",
+  auth,
+  proposalController.updateProposalRevisionDocumentById
+);
+
+//===================================================================
+// @description     Get dokumen revisi proposal
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/proposal/proposal-revision-document/:id",
+  auth,
+  proposalController.getProposalRevisionDocumentById
+);
+
+//===================================================================
+// @description     Delete/Update dokumen revisi proposal
+// @access          MAHASISWA
+router.put(
+  "/proposal/proposal-revision-document/delete/:id",
+  auth,
+  proposalController.deleteProposalRevisionDocumentById
+);
+
+//===================================================================
+// @description     Approve dokumen revisi proposal
+// @access          DOSEN
+router.put(
+  "/proposal/proposal-revision-document/approve/:id",
+  auth,
+  proposalController.approveProposalRevisionDocumentById
+);
+
+//===================================================================
+// @description     Reject dokumen revisi proposal
+// @access          DOSEN
+router.put(
+  "/proposal/proposal-revision-document/reject/:id",
+  auth,
+  proposalController.rejectProposalRevisionDocumentById
+);
 
 module.exports = router;

@@ -210,6 +210,7 @@ async function main() {
         id: "2eb35687-c414-4634-b010-1b64caa1bf27",
         firstName: "Lecturer1",
         lastName: "Dosen1",
+        degree: "MT, PhD",
         nik: "dosen1",
         major: "IF",
         password:
@@ -238,6 +239,7 @@ async function main() {
         id: "cebd73c8-9ad9-4136-a65a-50ad7b4d5896",
         firstName: "Lecturer2",
         lastName: "Dosen2",
+        degree: "SKom, MSc",
         nik: "dosen2",
         major: "SI",
         password:
@@ -266,6 +268,7 @@ async function main() {
         id: "9ddc8258-3fa2-40ea-8477-1a651c9039be",
         firstName: "Lecturer3",
         lastName: "Dosen3",
+        degree: "SKom, MDs, MM",
         nik: "dosen3",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
