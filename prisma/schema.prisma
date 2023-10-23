@@ -86,6 +86,7 @@ model Student {
   group_student       Group_Student[]       @relation("StudentMember")
   proposal_assessment Proposal_Assessment[] @relation("Student")
   skripsi_assessment  Skripsi_Assessment[]  @relation("Student")
+  FormSPT   FormSPT[]
 }
 
 model UserRole {
@@ -112,7 +113,34 @@ enum Role {
   OPERATOR_FAKULTAS
 }
 
-//-------------------Klabat Bridge ----------------------
+//-------------------Klabat Bridge ----------------------//
+
+enum statusSPT {
+  WAITING
+  APPROVED
+  REJECTED
+}
+
+enum gender {
+  LAKILAKI
+  PEREMPUAN
+}
+
+model FormSPT {
+  id                String    @id @default(uuid())
+  nik               String
+  date_of_birth     String // Mengubah ke tipe data String
+  gender            gender //male and female
+  birth_mother      String
+  graduate_plan     String //semester berapa?
+  remaining_credits String // perhatikan kembali untuk sisa jumlah sks
+  remaining_classes String
+  status            statusSPT @default(WAITING) // approved dan reject, default waiting
+  created_at        DateTime  @default(now())
+  updated_at        DateTime?
+  student           Student   @relation(fields: [studentId], references: [nim])
+  studentId         String
+}
 
 //-------------------Skripsi App ------------------------
 model Proposal_Student {
