@@ -13,6 +13,8 @@ const fileRoutes = require("./app/api/v1/file/file.routers");
 
 //--------------------KlabatBridge------------------------------
 const sptRoutes = require("./app/api/v1/spt/spt.routes");
+const tsRoutes = require("./app/api/v1/tracer_study/ts.routes");
+const alumniRoutes = require("./app/api/v1/alumni/alumni.routes");
 
 //------------------Ruter Skripsi App---------------------------
 const studentRoutes = require("./app/api/v1/student/student.routes");
@@ -53,6 +55,8 @@ app.use(`${URL}`, fileRoutes);
 
 //---------------Router KlabatBridge---------------------------
 app.use(`${URL}`, sptRoutes);
+app.use(`${URL}`, tsRoutes);
+app.use(`${URL}`, alumniRoutes);
 
 //------------------Ruter Skripsi App---------------------------
 app.use(`${URL}`, studentRoutes);
