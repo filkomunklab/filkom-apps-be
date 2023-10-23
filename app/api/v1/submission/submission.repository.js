@@ -1,38 +1,19 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
-// // get semua submission
-// const findAllSubmission = async () => {
-//   const submission = await prisma.submission.findMany();
-//   return submission;
-// };
-
-// // hapus 1 submission
-// const deleteSubmission = async (id) => {
-//   await prisma.submission.delete({
-//     where: {
-//       id,
-//     },
-//   });
-// };
-
-// // hapus All submission
-// const deleteAllSubmission = async () => {
-//   await prisma.submission.deleteMany({});
-// };
-
 //===================================================================
-// @description     Mengajukan judul
+// @description     Get submission
 // @route           POST /submission
 // @access          MAHASISWA
-const insertSubmission = async (classroom_id, payload) => {
+const insertSubmission = async (payload) => {
   const {
-      file_name,
-      file_size,
-      is_consultation,
-      proposed_advisor_id,
-      proposed_co_advisor1_id,
-      proposed_co_advisor2_id,
+    file_name,
+    file_size,
+    is_consultation,
+    proposed_advisor_id,
+    proposed_co_advisor1_id,
+    proposed_co_advisor2_id,
+    classroom_id,
   } = payload;
   const submission = await prisma.submission.create({
     data: {
@@ -51,7 +32,7 @@ const insertSubmission = async (classroom_id, payload) => {
 };
 
 //===================================================================
-// @description     Melihat pengajuan judul
+// @description     Get submission by id
 // @route           GET /submission/:id
 // @access          MAHASISWA
 const findSubmissionById = async (id) => {
@@ -64,7 +45,7 @@ const findSubmissionById = async (id) => {
 };
 
 //===================================================================
-// @description     Memperbarui pengajuan judul
+// @description     Update submission
 // @route           PUT /submission/:id
 // @access          MAHASISWA
 const updateSubmission = async (id, payload) => {
@@ -96,7 +77,7 @@ const updateSubmission = async (id, payload) => {
 };
 
 //===================================================================
-// @description     Mengganti advisor, co-advisor
+// @description     Change advisor, co-advisor
 // @route           PUT /submission/advisor-and-co-advisor/:id
 // @access          DOSEN_MK
 const updateAdvisorAndCoAdvisor = async (id, payload) => {
@@ -119,7 +100,7 @@ const updateAdvisorAndCoAdvisor = async (id, payload) => {
 };
 
 //===================================================================
-// @description     Approve pengajuan judul
+// @description     Approve submission
 // @route           PUT /submission/approve/:id
 // @access          DOSEN_MK
 const approveSubmissionById = async (id) => {
@@ -128,35 +109,34 @@ const approveSubmissionById = async (id) => {
       id,
     },
     data: {
-      is_approve: "Approve"
+      is_approve: "Approve",
     },
   });
 
   return submission;
 };
 
-// // reject submission
-// const rejectSubmission = async (id) => {
-//   const submission = await prisma.submission.update({
-//     where: {
-//       id,
-//     },
-//     data: {
-//       is_approve: "Rejected"
-//     },
-//   });
-//   return submission;
-// };
+//===================================================================
+// @description     Reject submission
+// @route           PUT /submission/reject/:id
+// @access          DOSEN_MK
+const rejectSubmission = async (id) => {
+  const submission = await prisma.submission.update({
+    where: {
+      id,
+    },
+    data: {
+      is_approve: "Rejected",
+    },
+  });
+  return submission;
+};
 
 module.exports = {
-  // findAllSubmission,
-  // deleteSubmission,
-  // deleteAllSubmission,
   insertSubmission,
   findSubmissionById,
   updateSubmission,
   updateAdvisorAndCoAdvisor,
   approveSubmissionById,
-  // rejectSubmission,
-  // updateGroupTitle,
-}
+  rejectSubmission,
+};

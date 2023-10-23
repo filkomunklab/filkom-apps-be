@@ -7,12 +7,33 @@ const academicController = require("./academic_calendar.controller");
 const { auth } = require("../../../middleware/auth");
 
 //-------------------Skripsi App ------------------------
-//       create tahun ajaran baru
-router.post("/academic-calendar", auth, academicController.createAcademic);
-//       view tahun ajaran
-router.get("/academic-calendar/:id", auth, academicController.getAcademicById);
-//       view all tahun ajaran
-router.get("/academic-calendar", auth, academicController.getAllAcademic);
+
+//===================================================================
+// @description     Create academic calendar
+// @access          DOSEN_MK
+router.post(
+  "/academic-calendar",
+  auth,
+  academicController.createAcademicCalendar
+);
+
+//===================================================================
+// @description     Get academic calendar
+// @access          DOSEN_MK
+router.get(
+  "/academic-calendar/:id",
+  auth,
+  academicController.getAcademicCalendarById
+);
+
+//===================================================================
+// @description     Get all academic calendar
+// @access          DOSEN_MK
+router.get(
+  "/academic-calendar",
+  auth,
+  academicController.getAllAcademicCalendar
+);
 // //       mengubah tahun ajaran
 // router.put("/academic-calendar/:id", auth, academicController.updateAcademicById);
 // //       hapus tahun ajaran

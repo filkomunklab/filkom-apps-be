@@ -177,6 +177,7 @@ async function main() {
   await prisma.student
     .create({
       data: {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c83",
         gender: "MALE",
         firstName: "Frances",
         lastName: "Yong",
@@ -200,6 +201,7 @@ async function main() {
   await prisma.student
     .create({
       data: {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9eb8",
         gender: "MALE",
         firstName: "Geovalga",
         lastName: "Lim",
@@ -224,11 +226,13 @@ async function main() {
   await prisma.employee
     .create({
       data: {
+        id: "2eb35687-c414-4634-b010-1b64caa1bf27",
         Address: "Manado",
         email: "dosen1@test.com",
         phoneNum: "0812374832",
         firstName: "Lecturer1",
         lastName: "Dosen1",
+        degree: "MT, PhD",
         nik: "dosen1",
         major: "IF",
         password:
@@ -254,11 +258,13 @@ async function main() {
   await prisma.employee
     .create({
       data: {
+        id: "cebd73c8-9ad9-4136-a65a-50ad7b4d5896",
         Address: "Manado",
         phoneNum: "082384701298",
         email: "dosen2@test.com",
         firstName: "Lecturer2",
         lastName: "Dosen2",
+        degree: "SKom, MSc",
         nik: "dosen2",
         major: "SI",
         password:
@@ -284,11 +290,13 @@ async function main() {
   await prisma.employee
     .create({
       data: {
+        id: "9ddc8258-3fa2-40ea-8477-1a651c9039be",
         Address: "Manado",
         phoneNum: "081283749",
         email: "dosen3@test.com",
         firstName: "Lecturer3",
         lastName: "Dosen3",
+        degree: "SKom, MDs, MM",
         nik: "dosen3",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -313,6 +321,7 @@ async function main() {
   await prisma.employee
     .create({
       data: {
+        id: "f6b7d2b0-b7f8-4393-9027-e4374e1eea52",
         Address: "Manado",
         phoneNum: "08128374982",
         email: "dosen4@test.com",

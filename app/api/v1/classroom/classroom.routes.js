@@ -7,19 +7,48 @@ const classroomController = require("./classroom.controller");
 const { auth } = require("../../../middleware/auth");
 
 //-------------------Skripsi App ------------------------
-//       create kelas baru
+
+//===================================================================
+// @description     Create classroom
+// @access          DOSEN_MK
 router.post("/classroom", auth, classroomController.createClassroom);
-//       view list kelas
+
+//===================================================================
+// @description     Get list classroom
+// @access          DOSEN_MK
 router.get("/classroom/list", auth, classroomController.getListClassroom);
-//       view kelas
+
+//===================================================================
+// @description     Get classroom by id
+// @access          DOSEN_MK
 router.get("/classroom/:id", auth, classroomController.getClassroomById);
-//       view all kelas
+
+//===================================================================
+// @description     Get all classroom
+// @access          DOSEN_MK
 router.get("/classroom", auth, classroomController.getAllClassroom);
-//       input student kedalam kelas
-router.post("/classroom/insert-student", auth, classroomController.inputStudent);
-//       delete kelas
+
+//===================================================================
+// @description     Input student into classroom
+// @access          DOSEN_MK
+router.post(
+  "/classroom/insert-student",
+  auth,
+  classroomController.inputStudent
+);
+
+//===================================================================
+// @description     Delete classroom by id
+// @access          DOSEN_MK
 router.delete("/classroom/:id", auth, classroomController.deleteClassroomById);
-//       delete mahasiswa skripsi
-router.delete("/classroom/delete-student/:id", auth, classroomController.deleteStudentById);
+
+//===================================================================
+// @description     Delete student by id
+// @access          DOSEN_MK
+router.delete(
+  "/classroom/delete-student/:id",
+  auth,
+  classroomController.deleteStudentById
+);
 
 module.exports = router;

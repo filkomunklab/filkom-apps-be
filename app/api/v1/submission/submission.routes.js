@@ -8,44 +8,55 @@ const { auth } = require("../../../middleware/auth");
 
 //-------------------Skripsi App ------------------------
 
-// //       melihat semua pengajuan
-// router.get("/submission", submissionController.getAllSubmission);
-// //       menghapus pengajuan
-// router.delete("/submission/:id", submissionController.deleteSubmissionById);
-// //       menghapus semua pengajuan
-// router.delete("/submission", submissionController.deleteAllSubmission);
-
 //===================================================================
-// @description     Mengajukan judul
+// @description     Create submission
 // @access          MAHASISWA
 router.post("/submission", auth, submissionController.createSubmission);
 
 //===================================================================
-// @description     Melihat pengajuan judul
+// @description     Get submission
 // @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN
 router.get("/submission/:id", auth, submissionController.getSubmissionById);
 
 //===================================================================
-// @description     Memperbarui pengajuan judul
+// @description     Update submission
 // @access          MAHASISWA
 router.put("/submission/:id", auth, submissionController.updateSubmissionById);
 
 //===================================================================
-// @description     Mengganti advisor, co-advisor
+// @description     Change advisor, co-advisor
 // @access          DOSEN_MK
-router.put("/submission/advisor-and-co-advisor/:id", auth, submissionController.updateAdvisorAndCoAdvisorById);
+router.put(
+  "/submission/advisor-and-co-advisor/:id",
+  auth,
+  submissionController.updateAdvisorAndCoAdvisorById
+);
 
 //===================================================================
-// @description     Approve pengajuan judul
+// @description     Approve submission
 // @access          DOSEN_MK
-router.put("/submission/approve/:id", auth, submissionController.approveSubmissionById);
+router.put(
+  "/submission/approve/:id",
+  auth,
+  submissionController.approveSubmissionById
+);
 
-// //       menolak pengajuan judul
-// router.put("/submission/reject/:id", auth, submissionController.rejectSubmissionById);
-// //       memperbarui judul
-// router.put("/submission/title/:id", auth, submissionController.updateGroupTitleById);
+//===================================================================
+// @description     Reject submission
+// @access          DOSEN_MK
+router.put(
+  "/submission/reject/:id",
+  auth,
+  submissionController.rejectSubmissionById
+);
 
-/* Note: Saat pengajuan judul, belum menggunakan student_id*/
-/* Classroom belum pasti*/
+//===================================================================
+// @description     Change title in group
+// @access          MAHASISWA
+router.put(
+  "/submission/title/:id",
+  auth,
+  submissionController.updateSubmissionTitleById
+);
 
 module.exports = router;

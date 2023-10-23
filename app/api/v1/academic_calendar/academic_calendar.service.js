@@ -1,26 +1,41 @@
 //Layer untuk handle business logic
 
-const academicRepository = require("./academic_calendar.repository")
+const academicRepository = require("./academic_calendar.repository");
 
-const getExistingAcademic = async (payload) => {
-    const academic = await academicRepository.findExistingAcademic(payload);
-    if (academic) {
-      throw {
-        status: 409,
-        message: `Data already exists`,
-      };
-    }
-    return academic;
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Find exist academic calendar
+// @used            createAcademicCalendar
+const getExistingAcademicCalendar = async (payload) => {
+  const academic = await academicRepository.findExistingAcademicCalendar(
+    payload
+  );
+  if (academic) {
+    throw {
+      status: 409,
+      message: `Data already exists`,
+    };
+  }
+  return academic;
 };
 
-const createAcademic = async (payload) => {
-    await getExistingAcademic(payload);
-    const academic = await academicRepository.insertAcademic(payload);
-    return academic;
+//===================================================================
+// @description     Create academic calendar
+// @route           POST /academic-calendar
+// @access          DOSEN_MK
+const createAcademicCalendar = async (payload) => {
+  // find exist academic calendar
+  await getExistingAcademicCalendar(payload);
+  // create academic calendar
+  const academic = await academicRepository.insertAcademicCalendar(payload);
+  return academic;
 };
 
-const getAcademicById = async (id) => {
-  const academic = await academicRepository.findAcademicById(id);
+//===================================================================
+// @description     Get academic calendar
+// @route           GET /academic-calendar/:id
+// @access          DOSEN_MK
+const getAcademicCalendarById = async (id) => {
+  const academic = await academicRepository.findAcademicCalendarById(id);
   if (!academic) {
     throw {
       status: 400,
@@ -30,8 +45,12 @@ const getAcademicById = async (id) => {
   return academic;
 };
 
-const getAllAcademic = async () => {
-  const academic = await academicRepository.findAllAcademic();
+//===================================================================
+// @description     Get all academic calendar
+// @route           GET /academic-calendar
+// @access          DOSEN_MK
+const getAllAcademicCalendar = async () => {
+  const academic = await academicRepository.findAllAcademicCalendar();
   if (!academic) {
     throw {
       status: 400,
@@ -42,8 +61,7 @@ const getAllAcademic = async () => {
 };
 
 module.exports = {
-  createAcademic,
-  getAcademicById,
-  getAllAcademic,
-  
-}
+  createAcademicCalendar,
+  getAcademicCalendarById,
+  getAllAcademicCalendar,
+};

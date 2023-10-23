@@ -6,6 +6,8 @@ const findEmployees = async () => {
   return employee;
 };
 
+// @description     Get employee by id
+// @used            Submission, Proposal
 const findEmployeeById = async (id) => {
   const employee = await prisma.employee.findUnique({
     where: {

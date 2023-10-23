@@ -1,19 +1,33 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
-// get student in group
+// @description     Get all group_student by group_id
+// @used            Submission, Proposal
 const findGroupStudentByGroupId = async (group_id) => {
-    const groupStudent = await prisma.group_Student.findMany({
-      where: {
-        group_id,
-      },
-    });
+  const groupStudent = await prisma.group_Student.findMany({
+    where: {
+      group_id,
+    },
+  });
   // Mengambil daftar student_id dari groupStudent
-    const studentIds = groupStudent.map(student => student.student_id);
-    return studentIds;
+  const studentIds = groupStudent.map((student) => student.student_id);
+  return studentIds;
 };
 
-// +++ create kelompok mahasiswa
+// @description     Get group_student by student_id & group_id
+// @used            Proposal
+const findGroupStudentByStudentIdAndGroupId = async (student_id, group_id) => {
+  const groupStudent = await prisma.group_Student.findFirst({
+    where: {
+      student_id,
+      group_id,
+    },
+  });
+  return groupStudent;
+};
+
+// @description     Create group_student (mengelompokkan student)
+// @used            Submission
 const insertGroupStudent = async (data) => {
   const { group_id, student_id } = data;
   const group_student = await prisma.group_Student.create({
@@ -26,6 +40,7 @@ const insertGroupStudent = async (data) => {
 };
 
 module.exports = {
-    findGroupStudentByGroupId,
-    insertGroupStudent
-}
+  findGroupStudentByGroupId,
+  findGroupStudentByStudentIdAndGroupId,
+  insertGroupStudent,
+};
