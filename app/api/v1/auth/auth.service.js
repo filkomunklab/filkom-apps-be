@@ -130,7 +130,8 @@ const signInStudent = async (username, password) => {
           id: checkNIM.id,
           nim: checkNIM.nim,
           name: `${checkNIM.firstName} ${checkNIM.lastName}`,
-          role: role,
+          status: checkNIM.status,
+          role: role[0],
         },
         token: token,
       };

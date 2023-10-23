@@ -7,7 +7,8 @@ const sptController = require("./spt.controller");
 
 router.get("/spt", sptController.getListSPT);
 router.get("/spt/sort-by", sptController.sortSPTby);
-router.get("/spt/detail/:id", sptController.getSPTById);
+router.get("/spt/detail/id/:id", sptController.getSPTById);
+router.get("/spt/detail/student/nim/:nim", sptController.getSPTByNIM);
 router.post("/spt", sptController.submitSPT);
 router.patch("/spt/fak-approval/:id", sptController.patchStatusByFak);
 router.patch("/spt/reg-approval/:id", sptController.patchStatusByReg);
