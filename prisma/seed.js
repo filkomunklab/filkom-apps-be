@@ -36,6 +36,7 @@ async function main() {
   await prisma.student
     .create({
       data: {
+        gender: "MALE",
         firstName: "John",
         lastName: "Doe",
         email: "student@mail.com",
@@ -56,29 +57,36 @@ async function main() {
     });
 
   // CREATE ALUMNI
-  await prisma.employee
-    .create({
-      data: {
-        firstName: "Alumni",
-        lastName: "Alumni",
-        nik: "alumni",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (employee) => {
-      await prisma.userRole.create({
-        data: {
-          userId: employee.nik,
-          role: "ALUMNI",
-        },
-      });
-    });
+  // TODO: solve this error
+  // await prisma.employee
+  //   .create({
+  //     data: {
+  //       Address: 'Manado',
+  //       phoneNum: '081287340823',
+  //       email: 'alumni@test.com',
+  //       firstName: "Alumni",
+  //       lastName: "Alumni",
+  //       nik: "alumni",
+  //       password:
+  //         "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+  //     },
+  //   })
+  //   .then(async (employee) => {
+  //     await prisma.userRole.create({
+  //       data: {
+  //         userId: employee.nik,
+  //         role: "ALUMNI",
+  //       },
+  //     });
+  //   });
 
   // CREATE DOSEN
   await prisma.employee
     .create({
       data: {
+        email: "dosen@test.com",
+        phoneNum: "081283498",
+        Address: "Manado",
         firstName: "Lecturer",
         lastName: "Dosen",
         nik: "dosen",
@@ -99,6 +107,9 @@ async function main() {
   await prisma.employee
     .create({
       data: {
+        Address: "Manado",
+        email: "dekan@test.com",
+        phoneNum: "08123874983",
         firstName: "Dekan",
         lastName: "Dekan",
         nik: "dekan",
@@ -119,6 +130,9 @@ async function main() {
   await prisma.employee
     .create({
       data: {
+        Address: "Manado",
+        phoneNum: "0819834412",
+        email: "kaprodi@test.com",
         firstName: "Kaprodi",
         lastName: "Kaprodi",
         nik: "kaprodi",
@@ -139,6 +153,9 @@ async function main() {
   await prisma.employee
     .create({
       data: {
+        email: "operator@test.com",
+        phoneNum: "08128347934",
+        Address: "Manado",
         firstName: "Operator",
         lastName: "LPMI",
         nik: "operatorlpmi",
@@ -161,6 +178,7 @@ async function main() {
     .create({
       data: {
         id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c83",
+        gender: "MALE",
         firstName: "Frances",
         lastName: "Yong",
         email: "frances@mail.com",
@@ -184,6 +202,7 @@ async function main() {
     .create({
       data: {
         id: "9036e2e9-3601-4f00-b74a-bf4e731c9eb8",
+        gender: "MALE",
         firstName: "Geovalga",
         lastName: "Lim",
         email: "geovalga@mail.com",
@@ -208,6 +227,9 @@ async function main() {
     .create({
       data: {
         id: "2eb35687-c414-4634-b010-1b64caa1bf27",
+        Address: "Manado",
+        email: "dosen1@test.com",
+        phoneNum: "0812374832",
         firstName: "Lecturer1",
         lastName: "Dosen1",
         degree: "MT, PhD",
@@ -237,6 +259,9 @@ async function main() {
     .create({
       data: {
         id: "cebd73c8-9ad9-4136-a65a-50ad7b4d5896",
+        Address: "Manado",
+        phoneNum: "082384701298",
+        email: "dosen2@test.com",
         firstName: "Lecturer2",
         lastName: "Dosen2",
         degree: "SKom, MSc",
@@ -266,6 +291,9 @@ async function main() {
     .create({
       data: {
         id: "9ddc8258-3fa2-40ea-8477-1a651c9039be",
+        Address: "Manado",
+        phoneNum: "081283749",
+        email: "dosen3@test.com",
         firstName: "Lecturer3",
         lastName: "Dosen3",
         degree: "SKom, MDs, MM",
@@ -322,6 +350,9 @@ async function main() {
     .create({
       data: {
         id: "f6b7d2b0-b7f8-4393-9027-e4374e1eea52",
+        Address: "Manado",
+        phoneNum: "08128374982",
+        email: "dosen4@test.com",
         firstName: "Sekretaris",
         lastName: "FILKOM",
         nik: "sekretarisfilkom",
@@ -337,6 +368,44 @@ async function main() {
         },
       });
     });
+  //--------------------------------------Klabat Bridge--------------------------------------------
+  // CREATE SPT
+  // await prisma.formSPT.create({
+  //   data: {
+  //     birth_mother: "Ariana",
+  //     date_of_birth: "27/06/1998",
+  //     gender: "LAKILAKI",
+  //     graduate_plan: "Semester 8",
+  //     nik: "12343567",
+  //     remaining_classes:
+  //       "[{subject: 'IGD', sks: '3'}, {subject: 'Entre', sks: '3'}, {subject: 'Web Design', sks: '3'}, {subject: 'Math', sks: '3'}, {subject: 'Family Living', sks: '3'}]",
+  //     remaining_credits: "3",
+  //     studentId: "student",
+  //   },
+  // });
+
+  await prisma.formSPT.createMany({
+    data: [
+      {
+        birth_mother: "Ariana",
+        graduate_plan: "Semester II 2023/2024",
+        nik: "12343567",
+        remaining_classes:
+          "[{subject: 'IGD', sks: '3'}, {subject: 'Entre', sks: '3'}, {subject: 'Web Design', sks: '3'}, {subject: 'Math', sks: '3'}, {subject: 'Family Living', sks: '3'}]",
+        remaining_credits: "3",
+        studentId: "student",
+      },
+      {
+        birth_mother: "Briana",
+        graduate_plan: "Semester II 2023/2024",
+        nik: "0987654321",
+        remaining_classes:
+          "[{subject: 'IGD', sks: '3'}, {subject: 'Entre', sks: '3'}, {subject: 'Web Design', sks: '3'}, {subject: 'Math', sks: '3'}, {subject: 'Family Living', sks: '3'}]",
+        remaining_credits: "15",
+        studentId: "student",
+      },
+    ],
+  });
 }
 
 main()
