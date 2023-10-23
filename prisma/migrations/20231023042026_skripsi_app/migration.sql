@@ -315,14 +315,14 @@ CREATE TABLE "Consultaion" (
 );
 
 -- CreateTable
-CREATE TABLE "History" (
+CREATE TABLE "Thesis_History" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "group_id" TEXT NOT NULL,
 
-    CONSTRAINT "History_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Thesis_History_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -461,4 +461,4 @@ ALTER TABLE "Consultaion" ADD CONSTRAINT "Consultaion_group_id_fkey" FOREIGN KEY
 ALTER TABLE "Consultaion" ADD CONSTRAINT "Consultaion_dosen_id_fkey" FOREIGN KEY ("dosen_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "History" ADD CONSTRAINT "History_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Thesis_History" ADD CONSTRAINT "Thesis_History_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
