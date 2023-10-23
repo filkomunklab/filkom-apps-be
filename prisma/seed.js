@@ -289,6 +289,34 @@ async function main() {
       }
     });
 
+  // CREATE DOSEN
+  await prisma.employee
+    .create({
+      data: {
+        id: "550e8400-e29b-41d4-a716-446655440000",
+        firstName: "Lecturer4",
+        lastName: "Dosen4",
+        degree: "MT, PhD",
+        nik: "dosen4",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
   // CREATE SEKRETARIS
   await prisma.employee
     .create({

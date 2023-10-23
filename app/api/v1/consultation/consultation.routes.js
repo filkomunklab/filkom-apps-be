@@ -7,9 +7,19 @@ const consultationController = require("./consultation.controller");
 const { auth } = require("../../../middleware/auth");
 
 //-------------------Skripsi App ------------------------
-//       mencatat konsultasi baru
-router.post("/consultation", consultationController.createConsultation);
-//       melihat konsultasi
-router.get("/consultation", consultationController.getConsultation);
+
+//===================================================================
+// @description     Create consultation
+// @access          DOSEN
+router.post("/consultation", auth, consultationController.createConsultation);
+
+//===================================================================
+// @description     Get all consultation by group id
+// @access          DOSEN
+router.get(
+  "/consultation/:id",
+  auth,
+  consultationController.getAllConsultationByGroupId
+);
 
 module.exports = router;

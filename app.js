@@ -18,6 +18,7 @@ const groupRoutes = require("./app/api/v1/group/group.routes");
 const proposalRoutes = require("./app/api/v1/proposal/proposal.routes");
 const proposalAssessmentRoutes = require("./app/api/v1/proposal_assessment/proposal_assessment.routes");
 const proposalChangesRoutes = require("./app/api/v1/proposal_changes/proposal_changes.routes");
+const consultationRoutes = require("./app/api/v1/consultation/consultation.routes");
 
 const URL = "/api/v1";
 
@@ -46,6 +47,7 @@ app.use(`${URL}`, groupRoutes);
 app.use(`${URL}`, proposalRoutes);
 app.use(`${URL}`, proposalAssessmentRoutes);
 app.use(`${URL}`, proposalChangesRoutes);
+app.use(`${URL}`, consultationRoutes);
 
 app.use("/", (req, res) => {
   res.send({ message: "Welcome to API Filkom Apps" });

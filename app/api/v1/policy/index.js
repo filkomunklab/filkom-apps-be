@@ -41,6 +41,8 @@ const policyFor = ({ user }) => {
     can("read", "Proposal_Changes");
     // Sekertaris view proposal revisi document
     can("read", "proposal_revision_document");
+    // Sekertaris view Consultation
+    can("read", "Consultation");
   }
 
   if (hasRole("DEKAN")) {
@@ -66,6 +68,8 @@ const policyFor = ({ user }) => {
     can("read", "Proposal_Changes");
     // Dekan view proposal revisi document
     can("read", "proposal_revision_document");
+    // Dekan view Consultation
+    can("read", "Consultation");
   }
 
   if (hasRole("KAPRODI")) {
@@ -87,6 +91,8 @@ const policyFor = ({ user }) => {
     can("read", "Proposal_Changes");
     // Kaprodi view proposal revisi document
     can("read", "proposal_revision_document");
+    // Kaprodi view Consultation
+    can("read", "Consultation");
   }
 
   if (hasRole("DOSEN")) {
@@ -122,6 +128,10 @@ const policyFor = ({ user }) => {
     can("read", "proposal_revision_document");
     // (Dosen: Ketua, Anggota, Advisor) approve document revisi proposal
     can("update", "is_proposal_revision_approve");
+    // Advisor, Co-advisor create Consultation
+    can("create", "Consultation");
+    // Advisor, Co-advisor view Consultation
+    can("read", "Consultation");
   }
 
   if (hasRole("DOSEN_MK")) {
@@ -155,6 +165,8 @@ const policyFor = ({ user }) => {
     can("read", "Proposal_Changes");
     // Dosen MK view proposal revisi document
     can("read", "proposal_revision_document");
+    // Dosen MK view Consultation
+    can("read", "Consultation");
   }
 
   if (hasRole("MAHASISWA")) {
@@ -181,6 +193,8 @@ const policyFor = ({ user }) => {
     can("update", "proposal_revision_document");
     // Mahasiswa view proposal revisi document
     can("read", "proposal_revision_document");
+    // Mahasiswa view Consultation
+    can("read", "Consultation");
   }
 
   if (hasRole("ALUMNI")) {
