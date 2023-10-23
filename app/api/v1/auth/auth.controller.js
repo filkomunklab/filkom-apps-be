@@ -66,8 +66,8 @@ const signOutEmployee = async (req, res) => {
 
 const signInStudent = async (req, res) => {
   try {
-    const { nim, password } = req.body;
-    const student = await authService.signInStudent(nim, password);
+    const { username, password } = req.body;
+    const student = await authService.signInStudent(username, password);
     res.status(200).send({ status: "SUCCESS", data: student });
   } catch (error) {
     res

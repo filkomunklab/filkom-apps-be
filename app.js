@@ -4,11 +4,15 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const app = express();
+const moment = require("moment");
 
 const authRoutes = require("./app/api/v1/auth/auth.routes");
 const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
-const sptRoutes = require("./app/api/v1/spt/spt.routes")
+const fileRoutes = require("./app/api/v1/file/file.routers");
+
+//--------------------KlabatBridge------------------------------
+const sptRoutes = require("./app/api/v1/spt/spt.routes");
 
 //------------------Ruter Skripsi App---------------------------
 const studentRoutes = require("./app/api/v1/student/student.routes");
@@ -23,8 +27,16 @@ const proposalChangesRoutes = require("./app/api/v1/proposal_changes/proposal_ch
 const URL = "/api/v1";
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: [
+    "http://localhost:3000",
+    "https://development-filkom-apps-fe.vercel.app",
+  ],
 };
+
+//-------------------------BIMBINGAN AKADEMIK------------
+const certificateRoutes = require("./app/api/v1/certificate/certificate.routes");
+
+//--------------------------------------------------------
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -37,6 +49,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(`${URL}`, authRoutes);
 app.use(`${URL}`, adminRoutes);
 app.use(`${URL}`, employeeRoutes);
+app.use(`${URL}`, fileRoutes);
+
+//---------------Router KlabatBridge---------------------------
 app.use(`${URL}`, sptRoutes);
 
 //------------------Ruter Skripsi App---------------------------
@@ -48,6 +63,10 @@ app.use(`${URL}`, groupRoutes);
 app.use(`${URL}`, proposalRoutes);
 app.use(`${URL}`, proposalAssessmentRoutes);
 app.use(`${URL}`, proposalChangesRoutes);
+
+//--------BIMBINGAN AKADEMIK-------------------------------
+app.use(`${URL}`, certificateRoutes);
+//---------------------------------------------------
 
 app.use("/", (req, res) => {
   res.send({ message: "Welcome to API Filkom Apps" });

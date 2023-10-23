@@ -31,6 +31,9 @@ model Employee {
   password                  String
   firstName                 String
   lastName                  String
+  email                     String                @unique
+  phoneNum                  String                @unique
+  Address                   String
   degree                    String?
   major                     Major?
   token                     String?               @unique
@@ -57,20 +60,37 @@ model Employee {
   skripsi_assessment        Skripsi_Assessment[]  @relation("Dosen")
   proposal_changes          Proposal_Changes[]    @relation("Dosen")
   skripsi_changes           Skripsi_Changes[]     @relation("Dosen")
-}
 
-enum Major {
-  SI
-  IF
+  supervisior Consultation[]    @relation("supervisior")
+  reciever    Consultation[]    @relation("consultationRecivier")
+  preRegis    PreRegistration[]
+  transaction Transaction[]
+  message     Message[]
+  student     Student[]
+
+  @@unique([firstName, lastName])
+  @@index([email])
 }
 
 model Student {
-  id                  String                @id @default(uuid())
-  reg_num             String?               @unique
-  nim                 String                @unique
-  password            String
-  firstName           String
-  lastName            String?
+  id             String    @id @default(uuid())
+  reg_num        String?   @unique
+  nim            String    @unique
+  password       String
+  firstName      String
+  lastName       String?
+  dateOfBirth    DateTime?
+  gender         gender
+  religion       String?
+  bloodType      String?
+  marriageStatus String?
+  studentEmail   String?   @unique
+  curriculum     String?
+  highSchoolGrad String?
+
+  currentAdresss      String?
+  status              StudentStatus         @default(ACTIVE)
+  personalEmail       String?               @unique
   faculty             String?
   major               Major?
   address             String?
@@ -86,7 +106,19 @@ model Student {
   group_student       Group_Student[]       @relation("StudentMember")
   proposal_assessment Proposal_Assessment[] @relation("Student")
   skripsi_assessment  Skripsi_Assessment[]  @relation("Student")
-  FormSPT   FormSPT[]
+  FormSPT             FormSPT[]
+
+  consultation      Consultation[]
+  preRegis          PreRegistration[]
+  transaction       Transaction[]
+  message           Message[]
+  Employee          Employee?         @relation(fields: [employeeId], references: [id])
+  employeeId        String?
+  StudentGuardian   StudentGuardian?  @relation(fields: [studentGuardianId], references: [id])
+  studentGuardianId String?
+
+  @@unique([firstName, lastName])
+  @@index([studentEmail, personalEmail])
 }
 
 model UserRole {
@@ -99,43 +131,18 @@ model UserRole {
   updatedAt DateTime?
 }
 
-enum Role {
-  ADMIN
-  SUPER_ADMIN
-  MAHASISWA
-  ADMIN_LPMI
-  OPERATOR_LPMI
-  ALUMNI
-  DEKAN
-  KAPRODI
-  DOSEN
-  DOSEN_MK
-  OPERATOR_FAKULTAS
-}
-
 //-------------------Klabat Bridge ----------------------//
-
-enum statusSPT {
-  WAITING
-  APPROVED
-  REJECTED
-}
-
-enum gender {
-  LAKILAKI
-  PEREMPUAN
-}
 
 model FormSPT {
   id                String    @id @default(uuid())
-  nik               String
-  date_of_birth     String // Mengubah ke tipe data String
-  gender            gender //male and female
+  nik               String    @unique
   birth_mother      String
   graduate_plan     String //semester berapa?
+  minor             String?
   remaining_credits String // perhatikan kembali untuk sisa jumlah sks
   remaining_classes String
-  status            statusSPT @default(WAITING) // approved dan reject, default waiting
+  approvalFak       status    @default(WAITING) // approved dan reject, default waiting
+  approvalReg       status    @default(WAITING)
   created_at        DateTime  @default(now())
   updated_at        DateTime?
   student           Student   @relation(fields: [studentId], references: [nim])
@@ -187,24 +194,11 @@ model Group {
   History       Thesis_History[] @relation("History")
 }
 
-enum Progress {
-  Submission
-  Proposal
-  Skripsi
-  Finished
-}
-
 model Academic_Calendar {
   id        String      @id @default(uuid())
   semester  Semester
   year      String
   classroom Classroom[] @relation("Academic")
-}
-
-enum Semester {
-  Ganjil
-  Genap
-  Padat
 }
 
 model Classroom {
@@ -219,11 +213,6 @@ model Classroom {
   submission       Submission[]       @relation("SubmissionClassroom")
   proposal         Proposal[]         @relation("ProposalClassroom")
   skripsi          Skripsi[]          @relation("SkripsiClassroom")
-}
-
-enum Classroom_Name {
-  Proposal
-  Skripsi
 }
 
 model Submission {
@@ -244,12 +233,6 @@ model Submission {
   created_at              DateTime           @default(now())
   updated_at              DateTime?
   group                   Group?             @relation("Submission")
-}
-
-enum Submission_Approve {
-  Waiting
-  Approve
-  Rejected
 }
 
 model Proposal {
@@ -382,34 +365,6 @@ model Skripsi {
   changes                                  Skripsi_Changes[]    @relation("Changes")
 }
 
-enum Thesis_Approve {
-  Waiting
-  Approve
-  Rejected
-}
-
-enum Exam_Conclution {
-  Rejected
-  Approve
-}
-
-enum Changes_Conclusion {
-  Major
-  Minor
-}
-
-enum Pass {
-  Pass
-  Fail
-  Repeat
-}
-
-enum Revision_Approve {
-  Waiting
-  Approve
-  Rejected
-}
-
 model Proposal_Assessment {
   id          String   @id @default(uuid())
   proposal    Proposal @relation("Assessment", fields: [proposal_id], references: [id])
@@ -469,4 +424,206 @@ model Thesis_History {
   group_id    String
 }
 
-//-------------------Bimbingan Akademik-------------------
+//-------------------Bimbingan Akademik-------------------/
+
+model StudentGuardian {
+  id             String    @id @default(uuid())
+  firstName      String
+  lastName       String
+  edicationLevel String
+  religion       String
+  familyRelation String
+  email          String
+  phoneNo        String
+  address        String
+  student        Student[]
+}
+
+model Subject {
+  id           String            @id @default(uuid())
+  sub_code     String
+  sub_name     String
+  grade        String
+  Type         String
+  preRequisite String
+  Status       String
+  preRegis     PreRegistration[]
+}
+
+model PreRegistration {
+  id          String            @id @default(uuid())
+  submitDate  DateTime          @default(now())
+  approveDate DateTime?
+  status      String
+  description String
+  comments    String
+  history     HistoryAcademic[]
+  Subject     Subject?          @relation(fields: [subjectId], references: [id])
+  subjectId   String?
+  Employee    Employee?         @relation(fields: [employeeId], references: [id])
+  employeeId  String?
+  Student     Student?          @relation(fields: [studentId], references: [id])
+  studentId   String?
+}
+
+model Consultation {
+  id         String            @id @default(uuid())
+  topic      String
+  submitDate DateTime
+  status     String
+  message    Message[]
+  history    HistoryAcademic[]
+  Dosen      Employee?         @relation("supervisior", fields: [DosenId], references: [id])
+  DosenId    String?
+  Employee   Employee?         @relation("consultationRecivier", fields: [employeeId], references: [id])
+  employeeId String?
+  Student    Student?          @relation(fields: [studentId], references: [id])
+  studentId  String?
+}
+
+model Message {
+  id             String        @id @default(uuid())
+  Consultation   Consultation? @relation(fields: [consultationId], references: [id])
+  consultationId String?
+  sendTime       DateTime      @default(now())
+  Student        Student?      @relation(fields: [studentId], references: [id])
+  studentId      String?
+  Employee       Employee?     @relation(fields: [employeeId], references: [id])
+  employeeId     String?
+}
+
+model Certificate {
+  id          String            @id @default(uuid())
+  filename    String
+  path        String
+  title       String
+  category    String
+  description String
+  submitDate  DateTime          @default(now())
+  status      status            @default(WAITING)
+  transaction Transaction[]
+  history     HistoryAcademic[]
+}
+
+model Activity {
+  id          String            @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  time        String
+  transaction Transaction[]
+  history     HistoryAcademic[]
+}
+
+model Transaction {
+  id            String       @id @default(uuid())
+  Certificate   Certificate? @relation(fields: [certificateId], references: [id])
+  certificateId String?
+  Activity      Activity?    @relation(fields: [activityId], references: [id])
+  activityId    String?
+  Student       Student?     @relation(fields: [studentId], references: [nim])
+  studentId     String?
+  Employee      Employee?    @relation(fields: [employeeId], references: [nik])
+  employeeId    String?
+}
+
+model HistoryAcademic {
+  id                String           @id @default(uuid())
+  PreRegistration   PreRegistration? @relation(fields: [preRegistrationId], references: [id])
+  preRegistrationId String?
+  Consultation      Consultation?    @relation(fields: [consultationId], references: [id])
+  consultationId    String?
+  Certificate       Certificate?     @relation(fields: [certificateId], references: [id])
+  certificateId     String?
+  Activity          Activity?        @relation(fields: [activityId], references: [id])
+  activityId        String?
+}
+
+enum Major {
+  SI
+  IF
+}
+
+enum StudentStatus {
+  GRADUATE
+  ACTIVE
+  INACTIVE
+}
+
+enum gender {
+  MALE
+  FEMALE
+}
+
+enum Thesis_Approve {
+  Waiting
+  Approve
+  Rejected
+}
+
+enum Submission_Approve {
+  Waiting
+  Approve
+  Rejected
+}
+
+enum Classroom_Name {
+  Proposal
+  Skripsi
+}
+
+enum Semester {
+  Ganjil
+  Genap
+  Padat
+}
+
+enum Progress {
+  Submission
+  Proposal
+  Skripsi
+  Finished
+}
+
+enum status {
+  WAITING
+  APPROVED
+  REJECTED
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+  MAHASISWA
+  ADMIN_LPMI
+  OPERATOR_LPMI
+  ALUMNI
+  DEKAN
+  KAPRODI
+  DOSEN
+  DOSEN_MK
+  OPERATOR_FAKULTAS
+  SEKRETARIS
+}
+
+enum Exam_Conclution {
+  Rejected
+  Approve
+}
+
+enum Changes_Conclusion {
+  Major
+  Minor
+}
+
+enum Pass {
+  Pass
+  Fail
+  Repeat
+}
+
+enum Revision_Approve {
+  Waiting
+  Approve
+  Rejected
+}
