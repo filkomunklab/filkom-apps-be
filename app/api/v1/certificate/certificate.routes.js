@@ -34,5 +34,9 @@ router.get(
   "/certificate/student/:certificateId",
   certificateController.viewStudentCertificate
 ); //View student certificate
+router.get(
+  "/certificate/category/",
+  certificateController.viewCertificateCategory
+);
 
 module.exports = router;

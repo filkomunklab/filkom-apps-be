@@ -35,38 +35,60 @@ const findOneCertificate = async (certificateId) => {
     where: {
       id: certificateId,
     },
-    // include: {
-    //   transaction: {
-    //     include: {
-    //       Student: {
-    //         select: {
-    //           firstName: true,
-    //           lastName: true,
-    //         },
-    //       },
-    //       Employee: {
-    //         select: {
-    //           firstName: true,
-    //           lastName: true,
-    //         },
-    //       },
-    //     },
-    //   },
-    // },
+    include: {
+      transaction: {
+        include: {
+          Student: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
+          },
+          Employee: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      },
+    },
   });
   return certificate;
 };
 
-//find Certificate by category
-// const findCertificateBycCategory = async (category, studentId) => {
-//   const certificate = await prisma.certificate.findUnique({
-//     where: {
-//       category,
-//       studentId,
-//     },
-//   });
-//   return category;
-// };
+// find Certificate by category
+const findCertificateByCategory = async (category, nik) => {
+  try {
+    const certificate = await prisma.certificate.findMany({
+      where: {
+        category,
+        transaction: {
+          some: { employeeId: nik },
+        },
+      },
+      orderBy: {
+        submitDate: "desc",
+      },
+      // include: {
+      //   transaction: {
+      //     include: {
+      //       student: {
+      //         select: {
+      //           firstName: true,
+      //           lastName: true,
+      //         },
+      //       },
+      //     },
+      //   },
+      // },
+    });
+    console.log(certificate);
+    return certificate;
+  } catch (error) {
+    return error;
+  }
+};
 
 //add certification
 const insertCertificate = async (payload, nim, certificateFile) => {
@@ -98,5 +120,5 @@ module.exports = {
   findCertificate,
   insertCertificate,
   findOneCertificate,
-  // findCertificateBycCategory,
+  findCertificateByCategory,
 };
