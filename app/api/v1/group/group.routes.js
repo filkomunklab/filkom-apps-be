@@ -8,12 +8,28 @@ const { auth } = require("../../../middleware/auth");
 
 //-------------------Skripsi App ------------------------
 
-//       membuat kelompok baru -> submission
+//===================================================================
+// @description     Get list submission
+// @access          MAHASISWA
+router.get("/group/submission_list", auth, groupController.getSubmissionList);
 
-//       melihat daftar submission
-router.get("/group_student/submission_list", groupController.getSubmissionListById);
-//       melihat detail submission
-router.get("/group_student/submission_details/:id", groupController.getSubmissionDetailsById);
+//===================================================================
+// @description     Get details submission by id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN
+router.get(
+  "/group/submission_details/:id",
+  auth,
+  groupController.getSubmissionDetailsById
+);
+
+//===================================================================
+// @description     Get all student in the same proposal classroom
+// @access          MAHASISWA
+router.get(
+  "/group/classroom/students/:id",
+  auth,
+  groupController.getAllStudentByClassroomId
+);
 
 // //       melihat kelompok mahasiswa
 // router.get("/group_student/:id", groupController.getGroupStudentById);

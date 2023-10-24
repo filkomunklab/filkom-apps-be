@@ -141,7 +141,7 @@ const findManyGroupsByProposalIds = async (proposalIds) => {
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get group by id
-// @used            Consultation
+// @used            Consultation, getSubmissionList
 const findGroupById = async (id) => {
   const groups = await prisma.group.findUnique({
     where: {

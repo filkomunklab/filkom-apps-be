@@ -2,31 +2,75 @@
 //Biasanya juga handle validasi body
 
 const groupService = require("./group.service");
+const { policyFor } = require("../policy");
 
-const getSubmissionListById = async (req, res) => {
-    try {
-        // get user id
-        // const student_id = userid;
-        const student_id = "f3fa4d77-0c7b-49a0-b84d-7a9be9b3faf0";
-        const group_student = await groupService.getSubmissionListById(student_id);
-        res.send({ status: "OK", data: group_student });
-    } catch (error) {
-        res
-            .status(error?.status || 500)
-            .send({ status: "FAILED", data: { error: error?.message || error } });
-    }
+//===================================================================
+// @description     Get list submission
+// @route           GET /group_student/submission_list
+// @access          MAHASISWA
+const getSubmissionList = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "submission_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getSubmissionList(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
 };
 
+//===================================================================
+// @description     Get details submission by id
+// @route           GET /group_student/submission_details/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN
 const getSubmissionDetailsById = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const group_student = await groupService.getSubmissionDetailsById(id);
-        res.send({ status: "OK", data: group_student });
-    } catch (error) {
-        res
-            .status(error?.status || 500)
-            .send({ status: "FAILED", data: { error: error?.message || error } });
-    }
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "submission_details")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const group = await groupService.getSubmissionDetailsById(id);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get all student in the same proposal classroom
+// @route           GET /group/classroom/students/:id
+// @access          MAHASISWA
+const getAllStudentByClassroomId = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "thesis_student_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const group = await groupService.getAllStudentByClassroomId(id);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
 };
 
 // const getGroupStudentById = async (req, res) => {
@@ -82,9 +126,10 @@ const getSubmissionDetailsById = async (req, res) => {
 // };
 
 module.exports = {
-    getSubmissionListById,
-    getSubmissionDetailsById
-    // getGroupStudentById,
-    // updateMetadataById,
-    // getMetadataById,
-}
+  getSubmissionList,
+  getSubmissionDetailsById,
+  getAllStudentByClassroomId,
+  // getGroupStudentById,
+  // updateMetadataById,
+  // getMetadataById,
+};
