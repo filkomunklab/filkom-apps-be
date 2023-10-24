@@ -21,7 +21,19 @@ const viewOneStudentCertificate = async (certificateId) => {
   }
 };
 
-const uploadCertificate = async (payload, nim, certificateFile) => {
+const viewCertifiacateByCategory = async (category, nik) => {
+  try {
+    const certificate = await certificateRepository.findCertificateByCategory(
+      category,
+      nik
+    );
+    return certificate;
+  } catch (error) {
+    return error;
+  }
+};
+
+const uploadCertificate = async (payload, nim) => {
   try {
     await certificateRepository.insertCertificate(
       payload,
@@ -37,4 +49,5 @@ module.exports = {
   uploadCertificate,
   findAllStudentCertificate,
   viewOneStudentCertificate,
+  viewCertifiacateByCategory,
 };

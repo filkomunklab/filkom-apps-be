@@ -25,12 +25,14 @@ const findStudentByNim = async (nim) => {
 
 // create submission
 const insertStudent = async (payload) => {
-  const { nim, password, firstName, faculty, major, gender } = payload;
+  const { nim, password, firstName, lastName, faculty, major, gender } =
+    payload;
   const student = await prisma.student.create({
     data: {
       nim,
       password,
       firstName,
+      lastName,
       faculty,
       major,
       gender,
