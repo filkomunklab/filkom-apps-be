@@ -43,12 +43,6 @@ const createClassroom = async (userId, payload) => {
 // @access          DOSEN_MK
 const getListClassroom = async (userId) => {
   const classroom = await classroomRepository.findListClassroom(userId);
-  if (!classroom) {
-    throw {
-      status: 400,
-      message: `Not found`,
-    };
-  }
   return classroom;
 };
 
@@ -109,10 +103,7 @@ const getAllClassroom = async (userId) => {
   // find all dosen classroom
   const classrooms = await classroomRepository.findClassroomsByDosenMk(userId);
   if (!classrooms || classrooms.length === 0) {
-    throw {
-      status: 400,
-      message: `You don't have a class`,
-    };
+    return classrooms;
   }
 
   // Iterate through classrooms and fetch students for each classroom

@@ -51,12 +51,6 @@ const getAcademicCalendarById = async (id) => {
 // @access          DOSEN_MK
 const getAllAcademicCalendar = async () => {
   const academic = await academicRepository.findAllAcademicCalendar();
-  if (!academic) {
-    throw {
-      status: 400,
-      message: `Not found`,
-    };
-  }
   return academic;
 };
 
