@@ -9,7 +9,7 @@ const { auth } = require("../../../middleware/auth");
 //-------------------Skripsi App ------------------------
 
 //===================================================================
-// @description     Get thesis
+// @description     Get thesis list
 // @access          MAHASISWA
 router.get("/group/thesis_list", auth, groupController.getThesisList);
 
@@ -49,6 +49,33 @@ router.get(
 // @description     Get committee list
 // @access          DOSEN
 router.get("/group/committee-list", auth, groupController.getCommitteeList);
+
+//===================================================================
+// @description     Get submission list dosen mk
+// @access          DOSEN_MK
+router.get(
+  "/group/submission-list-mk",
+  auth,
+  groupController.getSubmissionListMK
+);
+
+//===================================================================
+// @description     Get submission list kaprodi
+// @access          KAPRODI
+router.get(
+  "/group/submission-list-kaprodi",
+  auth,
+  groupController.getSubmissionListKaprodi
+);
+
+//===================================================================
+// @description     Get submission list dekan
+// @access          DEKAN
+router.get(
+  "/group/submission-list-dekan",
+  auth,
+  groupController.getSubmissionListDekan
+);
 
 // //       melihat kelompok mahasiswa
 // router.get("/group_student/:id", groupController.getGroupStudentById);

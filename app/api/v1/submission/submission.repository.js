@@ -156,6 +156,30 @@ const findAllSubmissionByIsApproveId = async (is_approve) => {
   return submission;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all submission by classroom_id & is_approve
+// @used            Group,
+const findAllSubmissionByClassroomIdAndIsApprove = async (
+  classroom_id,
+  is_approve
+) => {
+  const submission = await prisma.submission.findMany({
+    where: {
+      classroom_id,
+      is_approve,
+    },
+  });
+  return submission;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all submission
+// @used            Group,
+const findAllSubmission = async () => {
+  const submission = await prisma.submission.findMany();
+  return submission;
+};
+
 module.exports = {
   insertSubmission,
   findSubmissionById,
@@ -165,4 +189,7 @@ module.exports = {
   rejectSubmission,
   findAllSubmissionByClassroomId,
   findAllSubmissionByIsApproveId,
+  findAllSubmissionByClassroomIdAndIsApprove,
+  findAllSubmission,
+  // findAllSubmissionBy,
 };

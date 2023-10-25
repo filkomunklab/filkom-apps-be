@@ -76,6 +76,8 @@ const policyFor = ({ user }) => {
     can("read", "submission_details");
     // Dekan view advisor team
     can("read", "advisor_team");
+    // Dekan view submission list dekan
+    can("read", "submission_list_dekan");
   }
 
   if (hasRole("KAPRODI")) {
@@ -103,6 +105,8 @@ const policyFor = ({ user }) => {
     can("read", "submission_details");
     // Kaprodi view advisor team
     can("read", "advisor_team");
+    // Kaprodi view submission list kaprodi
+    can("read", "submission_list_kaprodi");
   }
 
   if (hasRole("DOSEN")) {
@@ -147,7 +151,7 @@ const policyFor = ({ user }) => {
     // (Dosen: All) view advisor team
     can("read", "advisor_team");
     // Dosen view committee list
-    can("read", "committee-list");
+    can("read", "committee_list");
   }
 
   if (hasRole("DOSEN_MK")) {
@@ -185,6 +189,8 @@ const policyFor = ({ user }) => {
     can("read", "Consultation");
     // Dosen MK view submission details
     can("read", "submission_details");
+    // Dosen MK view submission list dosen mk
+    can("read", "submission_list_mk");
   }
 
   if (hasRole("MAHASISWA")) {
@@ -213,8 +219,8 @@ const policyFor = ({ user }) => {
     can("read", "proposal_revision_document");
     // Mahasiswa view Consultation
     can("read", "Consultation");
-    // Mahasiswa view submission list
-    can("read", "submission_list");
+    // Mahasiswa view thesis list
+    can("read", "thesis_list");
     // Mahasiswa view submission details
     can("read", "submission_details");
     // Mahasiswa view thesis student list

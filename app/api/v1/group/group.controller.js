@@ -10,7 +10,7 @@ const { policyFor } = require("../policy");
 // @access          MAHASISWA
 const getThesisList = async (req, res) => {
   const policy = policyFor(req.user);
-  if (!policy.can("read", "submission_list")) {
+  if (!policy.can("read", "thesis_list")) {
     return res.status(401).send({
       status: "FAILED",
       data: { error: "You don't have permission to perform this action" },
@@ -124,7 +124,7 @@ const getAdvisorTeamById = async (req, res) => {
 // @access          DOSEN
 const getCommitteeList = async (req, res) => {
   const policy = policyFor(req.user);
-  if (!policy.can("read", "committee-list")) {
+  if (!policy.can("read", "committee_list")) {
     return res.status(401).send({
       status: "FAILED",
       data: { error: "You don't have permission to perform this action" },
@@ -132,6 +132,75 @@ const getCommitteeList = async (req, res) => {
   }
   try {
     const group = await groupService.getCommitteeList();
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get submission list dosen mk
+// @route           GET /group/submission-list-mk
+// @access          DOSEN_MK
+const getSubmissionListMK = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "submission_list_mk")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getSubmissionListMK(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get submission list kaprodi
+// @route           GET /group/submission-list-kaprodi
+// @access          KAPRODI
+const getSubmissionListKaprodi = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "submission_list_kaprodi")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getSubmissionListKaprodi(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get submission list dekan
+// @route           GET /group/submission-list-dekan
+// @access          DEKAN
+const getSubmissionListDekan = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "submission_list_dekan")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getSubmissionListDekan(userId);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -199,6 +268,10 @@ module.exports = {
   getDosenList,
   getAdvisorTeamById,
   getCommitteeList,
+  getSubmissionList,
+  getSubmissionListMK,
+  getSubmissionListKaprodi,
+  getSubmissionListDekan,
   // getGroupStudentById,
   // updateMetadataById,
   // getMetadataById,

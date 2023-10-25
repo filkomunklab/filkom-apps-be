@@ -67,6 +67,7 @@ const findClassroomById = async (id) => {
 // @description     Get all classroom
 // @route           GET /classroom
 // @access          DOSEN_MK
+// @used            Group
 const findClassroomsByDosenMk = async (dosen_mk_id) => {
   const classrooms = await prisma.classroom.findMany({
     where: {

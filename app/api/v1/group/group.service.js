@@ -12,7 +12,7 @@ const proposalStudentRepository = require("../proposal_student/proposal_student.
 const userManagementRepository = require("../user_management/user_namagement.repository");
 
 //===================================================================
-// @description     Get list submission
+// @description     Get thesis list
 // @route           GET /group_student/submission_list
 // @access          MAHASISWA
 const getThesisList = async (userId) => {
@@ -334,9 +334,7 @@ const getStudentListByClassroomId = async (id) => {
 // @access          MAHASISWA
 const getDosenList = async () => {
   // Get all dosen
-  const userDosen = await userManagementRepository.findAllUserDosenByRole(
-    "DOSEN"
-  );
+  const userDosen = await userManagementRepository.findAllUserByRole("DOSEN");
 
   const dosenList = [];
   for (const entry of userDosen) {
@@ -496,6 +494,412 @@ const getCommitteeList = async () => {
   return committeeListData;
 };
 
+//===================================================================
+// @description     Get submission list dosen mk
+// @route           GET /group/submission-list-mk
+// @access          DOSEN_MK
+const getSubmissionListMK = async (userId) => {
+  const classrooms = await classroomRepository.findClassroomsByDosenMk(userId);
+  const submissionList = [];
+  for (const classroom of classrooms) {
+    const submissions =
+      await submissionRepository.findAllSubmissionByClassroomId(classroom.id);
+    for (const entry of submissions) {
+      const group = await groupRepository.findGroupBySubmissionId(entry.id);
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+      const getEmployeeNameAndDegree = async (employeeId) => {
+        const employee = await employeeRepository.findEmployeeById(employeeId);
+        let name = employee.firstName;
+
+        if (employee.lastName) {
+          name += ` ${employee.lastName}`;
+        }
+
+        if (employee.degree) {
+          name += `, ${employee.degree}`;
+        }
+
+        return name;
+      };
+
+      let advisorName = null;
+      let coAdvisor1Name = null;
+      let coAdvisor2Name = null;
+
+      if (entry.proposed_advisor_id) {
+        advisorName = await getEmployeeNameAndDegree(entry.proposed_advisor_id);
+      }
+      if (entry.proposed_co_advisor1_id) {
+        coAdvisor1Name = await getEmployeeNameAndDegree(
+          entry.proposed_co_advisor1_id
+        );
+      }
+      if (entry.proposed_co_advisor2_id) {
+        coAdvisor2Name = await getEmployeeNameAndDegree(
+          entry.proposed_co_advisor2_id
+        );
+      }
+
+      const students = await Promise.all(
+        groupStudents.map(async (student_id) => {
+          const student = await studentRepository.findStudentById(student_id);
+          let fullName = student.firstName;
+
+          if (student.lastName) {
+            fullName += ` ${student.lastName}`;
+          }
+
+          return {
+            id: student.id,
+            fullName: fullName,
+          };
+        })
+      );
+
+      const submissionData = {
+        group_id: group.id,
+        submission_id: entry.id,
+        students,
+        title: group.title,
+        proposed_advisor: advisorName,
+        proposed_co_advisor1: coAdvisor1Name,
+        proposed_co_advisor2: coAdvisor2Name,
+        is_consultation: entry.is_consultation,
+        is_approve: entry.is_approve,
+      };
+
+      submissionList.push(submissionData);
+    }
+  }
+
+  return submissionList;
+};
+
+//===================================================================
+// @description     Get submission list kaprodi
+// @route           GET /group/submission-list-kaprodi
+// @access          KAPRODI
+const getSubmissionListKaprodi = async (userId) => {
+  // check user if dosen mk
+  const kaprodi = await employeeRepository.findEmployeeById(userId);
+  const userKaprodi = await userManagementRepository.findUserByNIKAndRole(
+    kaprodi.nik,
+    "KAPRODI"
+  );
+  const submissionList = [];
+  if (userKaprodi && kaprodi.major === "IF") {
+    // get all proposal_student
+    const proposalStudents =
+      await proposalStudentRepository.findAllProposalStudent();
+
+    const groupsIF = [];
+    for (const entry of proposalStudents) {
+      // check all group of student
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByStudentId(
+          entry.student_id
+        );
+      for (const entry of groupStudents) {
+        // get student
+        const student = await studentRepository.findStudentById(
+          entry.student_id
+        );
+        if (student.major === "IF") {
+          // get group_student
+          const groupStudentsIF =
+            await groupStudentRepository.findGroupStudentByStudentId(
+              student.id
+            );
+          for (const entry of groupStudentsIF) {
+            // get group
+            const group = await groupRepository.findGroupById(entry.group_id);
+            groupsIF.push(group);
+          }
+        }
+      }
+    }
+    for (const entry of groupsIF) {
+      // get all submission
+      const submission = await submissionRepository.findSubmissionById(
+        entry.submission_id
+      );
+      // get group
+      const group = await groupRepository.findGroupBySubmissionId(
+        submission.id
+      );
+      // get all group_student
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+      async function getEmployeeNameAndDegree(employeeId) {
+        const employee = await employeeRepository.findEmployeeById(employeeId);
+        let name = employee.firstName;
+
+        if (employee.lastName) {
+          name += ` ${employee.lastName}`;
+        }
+
+        if (employee.degree) {
+          name += `, ${employee.degree}`;
+        }
+
+        return name;
+      }
+
+      let advisorName = null;
+      let coAdvisor1Name = null;
+      let coAdvisor2Name = null;
+      if (submission.proposed_advisor_id) {
+        advisorName = await getEmployeeNameAndDegree(
+          submission.proposed_advisor_id
+        );
+      }
+      if (submission.proposed_co_advisor1_id) {
+        coAdvisor1Name = await getEmployeeNameAndDegree(
+          submission.proposed_co_advisor1_id
+        );
+      }
+      if (submission.proposed_co_advisor2_id) {
+        coAdvisor2Name = await getEmployeeNameAndDegree(
+          submission.proposed_co_advisor2_id
+        );
+      }
+
+      // get student all student data
+      const students = await Promise.all(
+        groupStudents.map(async (student_id) => {
+          // get student in table student by student_id
+          const student = await studentRepository.findStudentById(student_id);
+
+          // Menggabungkan firstName dan lastName menjadi fullName
+          let fullName = student.firstName;
+          if (student.lastName) {
+            fullName += ` ${student.lastName}`;
+          }
+          return {
+            id: student.id,
+            fullName: fullName,
+          };
+        })
+      );
+      const submissionData = {
+        group_id: group.id,
+        submission_id: submission.id,
+        students,
+        title: group.title,
+        proposed_advisor: advisorName,
+        proposed_co_advisor1: coAdvisor1Name,
+        proposed_co_advisor2: coAdvisor2Name,
+        is_consultation: submission.is_consultation,
+        is_approve: submission.is_approve,
+      };
+      submissionList.push(submissionData);
+    }
+  }
+  if (userKaprodi && kaprodi.major === "SI") {
+    // get all proposal_student
+    const proposalStudents =
+      await proposalStudentRepository.findAllProposalStudent();
+
+    const groupsSI = [];
+    for (const entry of proposalStudents) {
+      // check all group of student
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByStudentId(
+          entry.student_id
+        );
+      for (const entry of groupStudents) {
+        // get student
+        const student = await studentRepository.findStudentById(
+          entry.student_id
+        );
+        if (student.major === "SI") {
+          // get group_student
+          const groupStudentsSI =
+            await groupStudentRepository.findGroupStudentByStudentId(
+              student.id
+            );
+          for (const entry of groupStudentsSI) {
+            // get group
+            const group = await groupRepository.findGroupById(entry.group_id);
+            groupsSI.push(group);
+          }
+        }
+      }
+    }
+    for (const entry of groupsSI) {
+      // get all submission
+      const submission = await submissionRepository.findSubmissionById(
+        entry.submission_id
+      );
+      // get group
+      const group = await groupRepository.findGroupBySubmissionId(
+        submission.id
+      );
+      // get all group_student
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByGroupId(submission.id);
+
+      async function getEmployeeNameAndDegree(employeeId) {
+        const employee = await employeeRepository.findEmployeeById(employeeId);
+        let name = employee.firstName;
+
+        if (employee.lastName) {
+          name += ` ${employee.lastName}`;
+        }
+
+        if (employee.degree) {
+          name += `, ${employee.degree}`;
+        }
+
+        return name;
+      }
+
+      let advisorName = null;
+      let coAdvisor1Name = null;
+      let coAdvisor2Name = null;
+      if (submission.proposed_advisor_id) {
+        advisorName = await getEmployeeNameAndDegree(
+          submission.proposed_advisor_id
+        );
+      }
+      if (submission.proposed_co_advisor1_id) {
+        coAdvisor1Name = await getEmployeeNameAndDegree(
+          submission.proposed_co_advisor1_id
+        );
+      }
+      if (submission.proposed_co_advisor2_id) {
+        coAdvisor2Name = await getEmployeeNameAndDegree(
+          submission.proposed_co_advisor2_id
+        );
+      }
+
+      // get student all student data
+      const students = await Promise.all(
+        groupStudents.map(async (student_id) => {
+          // get student in table student by student_id
+          const student = await studentRepository.findStudentById(student_id);
+
+          // Menggabungkan firstName dan lastName menjadi fullName
+          let fullName = student.firstName;
+          if (student.lastName) {
+            fullName += ` ${student.lastName}`;
+          }
+          return {
+            id: student.id,
+            fullName: fullName,
+          };
+        })
+      );
+      const submissionData = {
+        group_id: group.id,
+        submission_id: entry.id,
+        students,
+        title: group.title,
+        proposed_advisor: advisorName,
+        proposed_co_advisor1: coAdvisor1Name,
+        proposed_co_advisor2: coAdvisor2Name,
+        is_consultation: entry.is_consultation,
+        is_approve: entry.is_approve,
+      };
+      submissionList.push(submissionData);
+    }
+  }
+
+  return submissionList;
+};
+
+//===================================================================
+// @description     Get submission list dekan
+// @route           GET /group/submission-list-dekan
+// @access          DEKAN
+const getSubmissionListDekan = async (userId) => {
+  const dekan = await employeeRepository.findEmployeeById(userId);
+  const userDekan = await userManagementRepository.findUserByNIKAndRole(
+    dekan.nik,
+    "DEKAN"
+  );
+
+  const submissionList = [];
+
+  if (userDekan) {
+    const submissions = await submissionRepository.findAllSubmission();
+
+    for (const entry of submissions) {
+      const group = await groupRepository.findGroupBySubmissionId(entry.id);
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+      const getEmployeeNameAndDegree = async (employeeId) => {
+        const employee = await employeeRepository.findEmployeeById(employeeId);
+        let name = employee.firstName;
+
+        if (employee.lastName) {
+          name += ` ${employee.lastName}`;
+        }
+
+        if (employee.degree) {
+          name += `, ${employee.degree}`;
+        }
+
+        return name;
+      };
+
+      let advisorName = null;
+      let coAdvisor1Name = null;
+      let coAdvisor2Name = null;
+
+      if (entry.proposed_advisor_id) {
+        advisorName = await getEmployeeNameAndDegree(entry.proposed_advisor_id);
+      }
+      if (entry.proposed_co_advisor1_id) {
+        coAdvisor1Name = await getEmployeeNameAndDegree(
+          entry.proposed_co_advisor1_id
+        );
+      }
+      if (entry.proposed_co_advisor2_id) {
+        coAdvisor2Name = await getEmployeeNameAndDegree(
+          entry.proposed_co_advisor2_id
+        );
+      }
+
+      const students = await Promise.all(
+        groupStudents.map(async (student_id) => {
+          const student = await studentRepository.findStudentById(student_id);
+          let fullName = student.firstName;
+
+          if (student.lastName) {
+            fullName += ` ${student.lastName}`;
+          }
+
+          return {
+            id: student.id,
+            fullName: fullName,
+          };
+        })
+      );
+
+      const submissionData = {
+        group_id: group.id,
+        submission_id: entry.id,
+        students,
+        title: group.title,
+        proposed_advisor: advisorName,
+        proposed_co_advisor1: coAdvisor1Name,
+        proposed_co_advisor2: coAdvisor2Name,
+        is_consultation: entry.is_consultation,
+        is_approve: entry.is_approve,
+      };
+
+      submissionList.push(submissionData);
+    }
+  }
+
+  return submissionList;
+};
+
 // const getGroupStudentById = async (id) => {
 //     const student_group = await groupRepository.findGroupStudentById(id);
 //     if (!student_group) {
@@ -532,6 +936,9 @@ module.exports = {
   getDosenList,
   getAdvisorTeamById,
   getCommitteeList,
+  getSubmissionListMK,
+  getSubmissionListKaprodi,
+  getSubmissionListDekan,
   // getGroupStudentById,
   // updateMetadataById,
   // getMetadataById,

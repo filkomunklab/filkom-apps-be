@@ -2,9 +2,9 @@
 const prisma = require("../../../database");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @description     Get all user with role DOSEN
+// @description     Get all user with role
 // @used            Group
-const findAllUserDosenByRole = async (role) => {
+const findAllUserByRole = async (role) => {
   const userRole = await prisma.userRole.findMany({
     where: {
       role,
@@ -13,6 +13,20 @@ const findAllUserDosenByRole = async (role) => {
   return userRole;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get user with userId & role
+// @used            Group
+const findUserByNIKAndRole = async (userId, role) => {
+  const userRole = await prisma.userRole.findFirst({
+    where: {
+      userId,
+      role,
+    },
+  });
+  return userRole;
+};
+
 module.exports = {
-  findAllUserDosenByRole,
+  findAllUserByRole,
+  findUserByNIKAndRole,
 };
