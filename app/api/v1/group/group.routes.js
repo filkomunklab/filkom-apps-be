@@ -9,9 +9,9 @@ const { auth } = require("../../../middleware/auth");
 //-------------------Skripsi App ------------------------
 
 //===================================================================
-// @description     Get list submission
+// @description     Get thesis
 // @access          MAHASISWA
-router.get("/group/submission_list", auth, groupController.getSubmissionList);
+router.get("/group/thesis_list", auth, groupController.getThesisList);
 
 //===================================================================
 // @description     Get details submission by id

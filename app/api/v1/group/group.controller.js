@@ -5,10 +5,10 @@ const groupService = require("./group.service");
 const { policyFor } = require("../policy");
 
 //===================================================================
-// @description     Get list submission
-// @route           GET /group_student/submission_list
+// @description     Get thesis list
+// @route           GET /group_student/thesis_list
 // @access          MAHASISWA
-const getSubmissionList = async (req, res) => {
+const getThesisList = async (req, res) => {
   const policy = policyFor(req.user);
   if (!policy.can("read", "submission_list")) {
     return res.status(401).send({
@@ -18,7 +18,7 @@ const getSubmissionList = async (req, res) => {
   }
   try {
     const userId = req.user.user.id;
-    const group = await groupService.getSubmissionList(userId);
+    const group = await groupService.getThesisList(userId);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -193,7 +193,7 @@ const getCommitteeList = async (req, res) => {
 // };
 
 module.exports = {
-  getSubmissionList,
+  getThesisList,
   getSubmissionDetailsById,
   getStudentListByClassroomId,
   getDosenList,

@@ -15,7 +15,7 @@ const userManagementRepository = require("../user_management/user_namagement.rep
 // @description     Get list submission
 // @route           GET /group_student/submission_list
 // @access          MAHASISWA
-const getSubmissionList = async (userId) => {
+const getThesisList = async (userId) => {
   const groupStudent = await groupStudentRepository.findGroupStudentByStudentId(
     userId
   );
@@ -526,7 +526,7 @@ const getCommitteeList = async () => {
 // };
 
 module.exports = {
-  getSubmissionList,
+  getThesisList,
   getSubmissionDetailsById,
   getStudentListByClassroomId,
   getDosenList,
