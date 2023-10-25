@@ -5,12 +5,10 @@ const logger = require("morgan");
 const cors = require("cors");
 const app = express();
 const bodyParser = require("body-parser");
-const moment = require("moment");
 
 const authRoutes = require("./app/api/v1/auth/auth.routes");
 const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
-const fileRoutes = require("./app/api/v1/file/file.routers");
 
 //--------------------KlabatBridge------------------------------
 const sptRoutes = require("./app/api/v1/spt/spt.routes");
@@ -53,7 +51,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(`${URL}`, authRoutes);
 app.use(`${URL}`, adminRoutes);
 app.use(`${URL}`, employeeRoutes);
-// app.use(`${URL}`, fileRoutes);
 
 //---------------Router KlabatBridge---------------------------
 app.use(`${URL}`, sptRoutes);
