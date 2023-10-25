@@ -3,6 +3,7 @@
 const consultationRepository = require("./consultation.repository");
 const groupRepository = require("../group/group.repository");
 const proposalRepository = require("../proposal/proposal.repository");
+const employeeRepository = require("../employee/employee.repository");
 
 //===================================================================
 // @description     Create consultation
@@ -24,8 +25,12 @@ const createConsultation = async (userId, payload) => {
     userId === proposal.co_advisor1_id ||
     userId === proposal.co_advisor2_id
   ) {
+    // Mengonversi format tanggal
+    const userDate = payload.date;
+    const [day, month, year] = userDate.split("/");
+    const isoDate = `${year}-${month}-${day}T00:00:00.000Z`;
     const consultation = await consultationRepository.insertConsultation(
-      payload,
+      { ...payload, date: isoDate }, // Menggunakan tanggal yang telah dikonversi
       userId
     );
     return consultation;
@@ -47,16 +52,39 @@ const createConsultation = async (userId, payload) => {
 // @route           GET /consultation/:id
 // @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
 const getAllConsultationByGroupId = async (id) => {
-  const consultation = await employeeRepository.findAllConsultationByGroupId(
-    id
-  );
-  if (!consultation) {
+  const consultations =
+    await consultationRepository.findAllConsultationByGroupId(id);
+  if (!consultations) {
     throw {
       status: 400,
       message: `Consultation not found`,
     };
   }
-  return consultation;
+
+  const consultationData = {
+    group_id: id,
+    constultation: [],
+  };
+  for (const entry of consultations) {
+    const employee = await employeeRepository.findEmployeeById(entry.dosen_id);
+    let name = employee.firstName;
+
+    if (employee.lastName) {
+      name += ` ${employee.lastName}`;
+    }
+
+    if (employee.degree) {
+      name += `, ${employee.degree}`;
+    }
+    const data = {
+      id: entry.id,
+      description: entry.description,
+      date: entry.date,
+      dosen: name,
+    };
+    consultationData.constultation.push(data);
+  }
+  return consultationData;
 };
 
 module.exports = {
