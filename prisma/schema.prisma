@@ -700,6 +700,7 @@ enum Role {
   DOSEN_MK
   OPERATOR_FAKULTAS
   SEKRETARIS
+  REGISTER
 }
 
 enum Exam_Conclution {
