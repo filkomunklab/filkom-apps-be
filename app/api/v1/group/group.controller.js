@@ -95,6 +95,29 @@ const getDosenList = async (req, res) => {
   }
 };
 
+//===================================================================
+// @description     Get advisor team by id
+// @route           GET /group/advisor-group/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getAdvisorTeamById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "advisor_team")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const group = await groupService.getAdvisorTeamById(id);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 // const getGroupStudentById = async (req, res) => {
 //     try {
 //         const id = req.params.id;
@@ -152,6 +175,7 @@ module.exports = {
   getSubmissionDetailsById,
   getStudentListByClassroomId,
   getDosenList,
+  getAdvisorTeamById,
   // getGroupStudentById,
   // updateMetadataById,
   // getMetadataById,

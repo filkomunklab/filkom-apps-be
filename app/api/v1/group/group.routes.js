@@ -36,10 +36,14 @@ router.get(
 // @access          MAHASISWA
 router.get("/group/dosen-list", auth, groupController.getDosenList);
 
-// //===================================================================
-// // @description     Get advisor group
-// // @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
-// router.get("/group/advisor-group", auth, groupController.getAdvisorGroup);
+//===================================================================
+// @description     Get advisor team by id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/group/advisor-group/:id",
+  auth,
+  groupController.getAdvisorTeamById
+);
 
 // //       melihat kelompok mahasiswa
 // router.get("/group_student/:id", groupController.getGroupStudentById);

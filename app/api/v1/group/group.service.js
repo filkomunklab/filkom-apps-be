@@ -332,7 +332,7 @@ const getStudentListByClassroomId = async (id) => {
 // @description     Get dosen list
 // @route           GET /group/dosen-list
 // @access          MAHASISWA
-const getDosenList = async (id) => {
+const getDosenList = async () => {
   // Get all dosen
   const userDosen = await userManagementRepository.findAllUserDosenByRole(
     "DOSEN"
@@ -361,6 +361,59 @@ const getDosenList = async (id) => {
     dosenList.push(data);
   }
   return dosenList;
+};
+
+//===================================================================
+// @description     Get advisor team by id
+// @route           GET /group/advisor-group/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getAdvisorTeamById = async (id) => {
+  const group = await groupRepository.findGroupById(id);
+  if (!group || !group.proposal_id) {
+    const advisorTeamData = {
+      advisor: null,
+      co_advisor1: null,
+      co_advisor2: null,
+    };
+    return advisorTeamData;
+  }
+  const proposal = await proposalRepository.findProposalById(group.proposal_id);
+
+  async function getEmployeeNameAndDegree(employeeId) {
+    const employee = await employeeRepository.findEmployeeById(employeeId);
+    let name = employee.firstName;
+
+    if (employee.lastName) {
+      name += ` ${employee.lastName}`;
+    }
+
+    if (employee.degree) {
+      name += `, ${employee.degree}`;
+    }
+
+    return name;
+  }
+
+  let advisorName = null;
+  let coAdvisor1Name = null;
+  let coAdvisor2Name = null;
+  if (proposal.advisor_id) {
+    advisorName = await getEmployeeNameAndDegree(proposal.advisor_id);
+  }
+  if (proposal.co_advisor1_id) {
+    coAdvisor1Name = await getEmployeeNameAndDegree(proposal.co_advisor1_id);
+  }
+  if (proposal.co_advisor2_id) {
+    coAdvisor2Name = await getEmployeeNameAndDegree(proposal.co_advisor2_id);
+  }
+
+  const advisorTeamData = {
+    advisor: advisorName,
+    co_advisor1: coAdvisor1Name,
+    co_advisor2: coAdvisor2Name,
+  };
+
+  return advisorTeamData;
 };
 
 // const getGroupStudentById = async (id) => {
@@ -397,6 +450,7 @@ module.exports = {
   getSubmissionDetailsById,
   getStudentListByClassroomId,
   getDosenList,
+  getAdvisorTeamById,
   // getGroupStudentById,
   // updateMetadataById,
   // getMetadataById,
