@@ -1,5 +1,7 @@
+const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 const { insertAdmin } = require("../admin/admin.repository");
 const certificateRepository = require("./certificate.repository");
+const { storage } = require("../../../config/firebase");
 
 const findAllStudentCertificate = async (nik) => {
   try {
@@ -34,14 +36,22 @@ const viewCertifiacateByCategory = async (category, nik) => {
 };
 
 const uploadCertificate = async (payload, nim) => {
+  const storageRef = ref(
+    storage,
+    `certificate/${nim}/${payload.certificateFile.filename}`
+  );
+  const metadata = { contentType: "application/pdf" };
   try {
-    await certificateRepository.insertCertificate(
-      payload,
-      nim,
-      certificateFile
-    );
+    const binaryString = atob(payload.certificateFile.buffer);
+    const byteArray = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      byteArray[i] = binaryString.charCodeAt(i);
+    }
+    await uploadBytes(storageRef, byteArray, metadata);
+    const path = await getDownloadURL(storageRef);
+    await certificateRepository.insertCertificate(payload, nim, path);
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
