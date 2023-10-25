@@ -209,6 +209,8 @@ const policyFor = ({ user }) => {
     can("read", "submission_details");
     // Mahasiswa view thesis student list
     can("read", "thesis_student_list");
+    // Mahasiswa view dosen list
+    can("read", "dosen_list");
   }
 
   if (hasRole("ALUMNI")) {

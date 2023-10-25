@@ -9,6 +9,7 @@ const studentRepository = require("../student/student.repository");
 const employeeRepository = require("../employee/employee.repository");
 const classroomRepository = require("../classroom/classroom.repository");
 const proposalStudentRepository = require("../proposal_student/proposal_student.repository");
+const userManagementRepository = require("../user_management/user_namagement.repository");
 
 //===================================================================
 // @description     Get list submission
@@ -157,6 +158,7 @@ const getSubmissionDetailsById = async (id) => {
   // data beranda submission
   const submissionData = {
     group_id: group.id,
+    progress: group.progress,
     title: group.title,
     students: [],
     submission_status: {
@@ -166,6 +168,7 @@ const getSubmissionDetailsById = async (id) => {
   // data beranda proposal
   const proposalData = {
     group_id: group.id,
+    progress: group.progress,
     title: group.title,
     students: [],
     proposal_status: {
@@ -209,6 +212,7 @@ const getSubmissionDetailsById = async (id) => {
   // data beranda skripsi
   const skripsiData = {
     group_id: group.id,
+    progress: group.progress,
     title: group.title,
     students: [],
     skripsi_status: {
@@ -277,33 +281,86 @@ const getSubmissionDetailsById = async (id) => {
 // @description     Get all student in the same proposal classroom
 // @route           GET /group/classroom/students/:id
 // @access          MAHASISWA
-const getAllStudentByClassroomId = async (id) => {
+const getStudentListByClassroomId = async (id) => {
   // check classroom
   const classroom = await classroomRepository.findClassroomById(id);
   if (!classroom) {
-    throw {
-      status: 400,
-      message: `Not found`,
-    };
+    return classroom;
   }
   // get all proposal student by classroom_id
   const proposalStudent =
     await proposalStudentRepository.findProposalStudentByClassroomId(id);
 
+  const submissions = await submissionRepository.findAllSubmissionByClassroomId(
+    id
+  );
+  const otherTeamPartners = [];
+  for (const entry of submissions) {
+    const group = await groupRepository.findGroupBySubmissionId(entry.id);
+    const groupStudents =
+      await groupStudentRepository.findGroupStudentByGroupId(group.id);
+    for (const entry of groupStudents) {
+      otherTeamPartners.push({ student_id: entry.student_id });
+    }
+  }
+
   const studentData = [];
   for (const entry of proposalStudent) {
     // get student
     const student = await studentRepository.findStudentById(entry.student_id);
-    // concatenate name
-    const fullName = `${student.firstName} ${student.lastName || ""}`;
-    const data = {
-      id: student.id,
-      fullName,
-    };
-    studentData.push(data);
+
+    // Check if the student is not in otherTeamPartners
+    const isNotInOtherTeamPartners = !otherTeamPartners.some(
+      (partner) => partner.student_id === entry.student_id
+    );
+
+    if (isNotInOtherTeamPartners) {
+      // concatenate name
+      const fullName = `${student.firstName} ${student.lastName || ""}`;
+      const data = {
+        id: student.id,
+        fullName,
+      };
+      studentData.push(data);
+    }
   }
 
   return studentData;
+};
+
+//===================================================================
+// @description     Get dosen list
+// @route           GET /group/dosen-list
+// @access          MAHASISWA
+const getDosenList = async (id) => {
+  // Get all dosen
+  const userDosen = await userManagementRepository.findAllUserDosenByRole(
+    "DOSEN"
+  );
+
+  const dosenList = [];
+  for (const entry of userDosen) {
+    // Get employee
+    const employee = await employeeRepository.findEmployeeByNIK(entry.userId);
+    let name = employee.firstName;
+
+    // Tambahkan lastName jika ada
+    if (employee.lastName) {
+      name += ` ${employee.lastName}`;
+    }
+
+    // Tambahkan degree jika tidak null
+    if (employee.degree) {
+      name += `, ${employee.degree}`;
+    }
+
+    const data = {
+      id: employee.id,
+      name,
+    };
+    dosenList.push(data);
+  }
+  return dosenList;
 };
 
 // const getGroupStudentById = async (id) => {
@@ -338,7 +395,8 @@ const getAllStudentByClassroomId = async (id) => {
 module.exports = {
   getSubmissionList,
   getSubmissionDetailsById,
-  getAllStudentByClassroomId,
+  getStudentListByClassroomId,
+  getDosenList,
   // getGroupStudentById,
   // updateMetadataById,
   // getMetadataById,

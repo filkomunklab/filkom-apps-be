@@ -23,13 +23,23 @@ router.get(
 );
 
 //===================================================================
-// @description     Get all student in the same proposal classroom
+// @description     Get student list in the same proposal classroom
 // @access          MAHASISWA
 router.get(
-  "/group/classroom/students/:id",
+  "/group/classroom/students-list/:id",
   auth,
-  groupController.getAllStudentByClassroomId
+  groupController.getStudentListByClassroomId
 );
+
+//===================================================================
+// @description     Get dosen list
+// @access          MAHASISWA
+router.get("/group/dosen-list", auth, groupController.getDosenList);
+
+// //===================================================================
+// // @description     Get advisor group
+// // @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+// router.get("/group/advisor-group", auth, groupController.getAdvisorGroup);
 
 // //       melihat kelompok mahasiswa
 // router.get("/group_student/:id", groupController.getGroupStudentById);

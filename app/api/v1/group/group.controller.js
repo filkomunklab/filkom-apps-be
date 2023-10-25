@@ -51,10 +51,10 @@ const getSubmissionDetailsById = async (req, res) => {
 };
 
 //===================================================================
-// @description     Get all student in the same proposal classroom
-// @route           GET /group/classroom/students/:id
+// @description     Get student list in the same proposal classroom
+// @route           GET /group/classroom/students-list/:id
 // @access          MAHASISWA
-const getAllStudentByClassroomId = async (req, res) => {
+const getStudentListByClassroomId = async (req, res) => {
   const policy = policyFor(req.user);
   if (!policy.can("read", "thesis_student_list")) {
     return res.status(401).send({
@@ -64,7 +64,29 @@ const getAllStudentByClassroomId = async (req, res) => {
   }
   try {
     const id = req.params.id;
-    const group = await groupService.getAllStudentByClassroomId(id);
+    const group = await groupService.getStudentListByClassroomId(id);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get dosen list
+// @route           GET /group/dosen-list
+// @access          MAHASISWA
+const getDosenList = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "dosen_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const group = await groupService.getDosenList();
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -128,7 +150,8 @@ const getAllStudentByClassroomId = async (req, res) => {
 module.exports = {
   getSubmissionList,
   getSubmissionDetailsById,
-  getAllStudentByClassroomId,
+  getStudentListByClassroomId,
+  getDosenList,
   // getGroupStudentById,
   // updateMetadataById,
   // getMetadataById,

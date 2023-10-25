@@ -322,6 +322,9 @@ async function main() {
     .create({
       data: {
         id: "550e8400-e29b-41d4-a716-446655440000",
+        Address: "Airmadidi",
+        phoneNum: "081226789",
+        email: "dosen4@test.com",
         firstName: "Lecturer4",
         lastName: "Dosen4",
         degree: "MT, PhD",
@@ -352,7 +355,7 @@ async function main() {
         id: "f6b7d2b0-b7f8-4393-9027-e4374e1eea52",
         Address: "Manado",
         phoneNum: "08128374982",
-        email: "dosen4@test.com",
+        email: "sekretaris@test.com",
         firstName: "Sekretaris",
         lastName: "FILKOM",
         nik: "sekretarisfilkom",
