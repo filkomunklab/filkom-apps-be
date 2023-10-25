@@ -46,13 +46,8 @@ const viewCertificateCategory = async (req, res) => {
 const uploadCertificate = async (req, res) => {
   const payload = req.body;
   const { nim } = req.params;
-  const { filename } = req.file;
-  const path = `${req.protocol}://${req.get("host")}/certificate/${filename}`;
   try {
-    await certificateService.uploadCertificate(payload, nim, {
-      path,
-      filename,
-    });
+    await certificateService.uploadCertificate(payload, nim);
     res.status(201).send({ status: "OK" });
   } catch (error) {
     res

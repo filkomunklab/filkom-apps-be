@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const app = express();
+const bodyParser = require("body-parser");
 const moment = require("moment");
 
 const authRoutes = require("./app/api/v1/auth/auth.routes");
@@ -41,6 +42,7 @@ const certificateRoutes = require("./app/api/v1/certificate/certificate.routes")
 //--------------------------------------------------------
 
 app.use(cors(corsOptions));
+app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.json());
 app.use(logger("dev"));
 app.use(express.json());
@@ -51,7 +53,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(`${URL}`, authRoutes);
 app.use(`${URL}`, adminRoutes);
 app.use(`${URL}`, employeeRoutes);
-app.use(`${URL}`, fileRoutes);
+// app.use(`${URL}`, fileRoutes);
 
 //---------------Router KlabatBridge---------------------------
 app.use(`${URL}`, sptRoutes);
