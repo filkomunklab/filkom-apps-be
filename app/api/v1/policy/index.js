@@ -146,6 +146,8 @@ const policyFor = ({ user }) => {
     can("read", "submission_details");
     // (Dosen: All) view advisor team
     can("read", "advisor_team");
+    // Dosen view committee list
+    can("read", "committee-list");
   }
 
   if (hasRole("DOSEN_MK")) {

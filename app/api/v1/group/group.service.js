@@ -416,6 +416,86 @@ const getAdvisorTeamById = async (id) => {
   return advisorTeamData;
 };
 
+//===================================================================
+// @description     Get committee list
+// @route           GET /group/committee-list
+// @access          DOSEN
+const getCommitteeList = async () => {
+  const submissions = await submissionRepository.findAllSubmissionByIsApproveId(
+    "Waiting"
+  );
+  const committeeListData = [];
+  // looping to get all submission
+  for (const entry of submissions) {
+    const group = await groupRepository.findGroupBySubmissionId(entry.id);
+    const groupStudents =
+      await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+    async function getEmployeeNameAndDegree(employeeId) {
+      const employee = await employeeRepository.findEmployeeById(employeeId);
+      let name = employee.firstName;
+
+      if (employee.lastName) {
+        name += ` ${employee.lastName}`;
+      }
+
+      if (employee.degree) {
+        name += `, ${employee.degree}`;
+      }
+
+      return name;
+    }
+
+    let advisorName = null;
+    let coAdvisor1Name = null;
+    let coAdvisor2Name = null;
+    if (entry.proposed_advisor_id) {
+      advisorName = await getEmployeeNameAndDegree(entry.proposed_advisor_id);
+    }
+    if (entry.proposed_co_advisor1_id) {
+      coAdvisor1Name = await getEmployeeNameAndDegree(
+        entry.proposed_co_advisor1_id
+      );
+    }
+    if (entry.proposed_co_advisor2_id) {
+      coAdvisor2Name = await getEmployeeNameAndDegree(
+        entry.proposed_co_advisor2_id
+      );
+    }
+
+    // get student all student data
+    const students = await Promise.all(
+      groupStudents.map(async (student_id) => {
+        // get student in table student by student_id
+        const student = await studentRepository.findStudentById(student_id);
+
+        // Menggabungkan firstName dan lastName menjadi fullName
+        let fullName = student.firstName;
+        if (student.lastName) {
+          fullName += ` ${student.lastName}`;
+        }
+        return {
+          id: student.id,
+          fullName: fullName,
+        };
+      })
+    );
+    const submissionData = {
+      group_id: group.id,
+      submission_id: entry.id,
+      students,
+      title: group.title,
+      proposed_advisor: advisorName,
+      proposed_co_advisor1: coAdvisor1Name,
+      proposed_co_advisor2: coAdvisor2Name,
+      is_consultation: entry.is_consultation,
+      is_approve: entry.is_approve,
+    };
+    committeeListData.push(submissionData);
+  }
+  return committeeListData;
+};
+
 // const getGroupStudentById = async (id) => {
 //     const student_group = await groupRepository.findGroupStudentById(id);
 //     if (!student_group) {
@@ -451,6 +531,7 @@ module.exports = {
   getStudentListByClassroomId,
   getDosenList,
   getAdvisorTeamById,
+  getCommitteeList,
   // getGroupStudentById,
   // updateMetadataById,
   // getMetadataById,

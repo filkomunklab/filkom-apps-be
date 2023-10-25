@@ -45,6 +45,11 @@ router.get(
   groupController.getAdvisorTeamById
 );
 
+//===================================================================
+// @description     Get committee list
+// @access          DOSEN
+router.get("/group/committee-list", auth, groupController.getCommitteeList);
+
 // //       melihat kelompok mahasiswa
 // router.get("/group_student/:id", groupController.getGroupStudentById);
 

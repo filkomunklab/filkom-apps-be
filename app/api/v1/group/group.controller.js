@@ -118,6 +118,28 @@ const getAdvisorTeamById = async (req, res) => {
   }
 };
 
+//===================================================================
+// @description     Get committee list
+// @route           GET /group/committee-list
+// @access          DOSEN
+const getCommitteeList = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "committee-list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const group = await groupService.getCommitteeList();
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 // const getGroupStudentById = async (req, res) => {
 //     try {
 //         const id = req.params.id;
@@ -176,6 +198,7 @@ module.exports = {
   getStudentListByClassroomId,
   getDosenList,
   getAdvisorTeamById,
+  getCommitteeList,
   // getGroupStudentById,
   // updateMetadataById,
   // getMetadataById,
