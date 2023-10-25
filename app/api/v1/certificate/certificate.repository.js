@@ -59,6 +59,7 @@ const findOneCertificate = async (certificateId) => {
 
 // find Certificate by category
 const findCertificateByCategory = async (category, nik) => {
+  console.log("object");
   try {
     const certificate = await prisma.certificate.findMany({
       where: {
@@ -70,22 +71,23 @@ const findCertificateByCategory = async (category, nik) => {
       orderBy: {
         submitDate: "desc",
       },
-      // include: {
-      //   transaction: {
-      //     include: {
-      //       student: {
-      //         select: {
-      //           firstName: true,
-      //           lastName: true,
-      //         },
-      //       },
-      //     },
-      //   },
-      // },
+      include: {
+        transaction: {
+          select: {
+            Student: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+      },
     });
     console.log(certificate);
     return certificate;
   } catch (error) {
+    console.log(error);
     return error;
   }
 };
