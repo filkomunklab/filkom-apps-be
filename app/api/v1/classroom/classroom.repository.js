@@ -104,6 +104,22 @@ const findClassroomByIdAndDosenMK = async (id, dosen_mk_id) => {
   return classroom;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get classroom by dosen_mk_id & name
+// @used            Submission
+const findClassroomsByDosenMkAndName = async (dosen_mk_id, name) => {
+  const classrooms = await prisma.classroom.findMany({
+    where: {
+      dosen_mk_id,
+      name,
+    },
+    include: {
+      academic: true,
+    },
+  });
+  return classrooms;
+};
+
 module.exports = {
   findExistingClassroom,
   insertClassroom,
@@ -113,4 +129,5 @@ module.exports = {
   findClassroomById,
   deleteClassroomById,
   findClassroomByIdAndDosenMK,
+  findClassroomsByDosenMkAndName,
 };

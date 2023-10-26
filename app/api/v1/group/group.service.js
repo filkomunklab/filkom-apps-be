@@ -499,7 +499,11 @@ const getCommitteeList = async () => {
 // @route           GET /group/submission-list-mk
 // @access          DOSEN_MK
 const getSubmissionListMK = async (userId) => {
-  const classrooms = await classroomRepository.findClassroomsByDosenMk(userId);
+  // get all proposal classroom
+  const classrooms = await classroomRepository.findClassroomsByDosenMkAndName(
+    userId,
+    "Proposal"
+  );
   const submissionBySemester = {};
   for (const classroom of classrooms) {
     const submissions =
@@ -970,9 +974,13 @@ const getProposalListAdvisorAndCo = async (userId) => {
     userId
   );
 
-  const proposalList = [];
+  const proposalBySemester = {};
 
   for (const entry of advisorOrCo) {
+    // get classroom
+    const classroom = await classroomRepository.findClassroomById(
+      entry.classroom_id
+    );
     const group = await groupRepository.findGroupByProposalId(entry.id);
     const groupStudents =
       await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -1003,8 +1011,20 @@ const getProposalListAdvisorAndCo = async (userId) => {
       approve_by_co_advisor2: entry.is_proposal_approve_by_co_advisor2,
     };
 
-    proposalList.push(proposalData);
+    // Create a semester key based on the Academic_Calendar data
+    const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+    if (!proposalBySemester[semesterKey]) {
+      proposalBySemester[semesterKey] = {
+        semester: semesterKey,
+        submissions: [],
+      };
+    }
+
+    proposalBySemester[semesterKey].submissions.push(proposalData);
   }
+  // Convert the submissionBySemester object into an array of semesters
+  const proposalList = Object.values(proposalBySemester);
   return proposalList;
 };
 
@@ -1016,9 +1036,15 @@ const getProposalListChairmanAndMember = async (userId) => {
   // check user if chairman or member
   const chairmanOrMember =
     await proposalRepository.findAllProposalByChairmanOrMember(userId);
-  const proposalList = [];
+
+  const proposalBySemester = {};
 
   for (const entry of chairmanOrMember) {
+    // get classroom
+    const classroom = await classroomRepository.findClassroomById(
+      entry.classroom_id
+    );
+
     const group = await groupRepository.findGroupByProposalId(entry.id);
     const groupStudents =
       await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -1050,8 +1076,20 @@ const getProposalListChairmanAndMember = async (userId) => {
       approve_advisor: entry.is_revision_approve_by_advisor,
     };
 
-    proposalList.push(proposalData);
+    // Create a semester key based on the Academic_Calendar data
+    const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+    if (!proposalBySemester[semesterKey]) {
+      proposalBySemester[semesterKey] = {
+        semester: semesterKey,
+        submissions: [],
+      };
+    }
+
+    proposalBySemester[semesterKey].submissions.push(proposalData);
   }
+  // Convert the submissionBySemester object into an array of semesters
+  const proposalList = Object.values(proposalBySemester);
   return proposalList;
 };
 
@@ -1060,11 +1098,15 @@ const getProposalListChairmanAndMember = async (userId) => {
 // @route           GET /group/proposal-list-mk
 // @access          DOSEN_MK
 const getProposalListMK = async (userId) => {
-  const classrooms = await classroomRepository.findClassroomsByDosenMk(userId);
-  const proposalList = [];
-  for (const entry of classrooms) {
+  // get all proposal classroom
+  const classrooms = await classroomRepository.findClassroomsByDosenMkAndName(
+    userId,
+    "Proposal"
+  );
+  const proposalBySemester = {};
+  for (const classroom of classrooms) {
     const proposals = await proposalRepository.findAllProposalByClassroomId(
-      entry.id
+      classroom.id
     );
     for (const entry of proposals) {
       const group = await groupRepository.findGroupByProposalId(entry.id);
@@ -1096,9 +1138,21 @@ const getProposalListMK = async (userId) => {
         approve_by_co_advisor1: entry.is_proposal_approve_by_co_advisor1,
         approve_by_co_advisor2: entry.is_proposal_approve_by_co_advisor2,
       };
-      proposalList.push(proposalData);
+      // Create a semester key based on the Academic_Calendar data
+      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+      if (!proposalBySemester[semesterKey]) {
+        proposalBySemester[semesterKey] = {
+          semester: semesterKey,
+          submissions: [],
+        };
+      }
+
+      proposalBySemester[semesterKey].submissions.push(proposalData);
     }
   }
+  // Convert the submissionBySemester object into an array of semesters
+  const proposalList = Object.values(proposalBySemester);
   return proposalList;
 };
 
@@ -1110,7 +1164,8 @@ const getProposalListKaprodi = async (userId, userRole) => {
   // check user if dosen mk
   const kaprodi = await employeeRepository.findEmployeeById(userId);
 
-  const proposalList = [];
+  const proposalBySemester = {};
+
   if (userRole.includes("KAPRODI") && kaprodi.major === "IF") {
     // get all proposal_student
     const proposalStudents =
@@ -1147,6 +1202,12 @@ const getProposalListKaprodi = async (userId, userRole) => {
       const proposal = await proposalRepository.findProposalById(
         entry.proposal_id
       );
+
+      // get classroom
+      const classroom = await classroomRepository.findClassroomById(
+        proposal.classroom_id
+      );
+
       // get group
       const group = await groupRepository.findGroupByProposalId(proposal.id);
       // get all group_student
@@ -1177,7 +1238,17 @@ const getProposalListKaprodi = async (userId, userRole) => {
         title: group.title,
         is_pass: proposal.is_pass,
       };
-      proposalList.push(proposalData);
+      // Create a semester key based on the Academic_Calendar data
+      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+      if (!proposalBySemester[semesterKey]) {
+        proposalBySemester[semesterKey] = {
+          semester: semesterKey,
+          submissions: [],
+        };
+      }
+
+      proposalBySemester[semesterKey].submissions.push(proposalData);
     }
   }
   if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
@@ -1216,6 +1287,12 @@ const getProposalListKaprodi = async (userId, userRole) => {
       const proposal = await proposalRepository.findProposalById(
         entry.proposal_id
       );
+
+      // get classroom
+      const classroom = await classroomRepository.findClassroomById(
+        proposal.classroom_id
+      );
+
       // get group
       const group = await groupRepository.findGroupByProposalId(proposal.id);
       // get all group_student
@@ -1246,10 +1323,22 @@ const getProposalListKaprodi = async (userId, userRole) => {
         title: group.title,
         is_pass: proposal.is_pass,
       };
-      proposalList.push(proposalData);
+      // Create a semester key based on the Academic_Calendar data
+      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+      if (!proposalBySemester[semesterKey]) {
+        proposalBySemester[semesterKey] = {
+          semester: semesterKey,
+          submissions: [],
+        };
+      }
+
+      proposalBySemester[semesterKey].submissions.push(proposalData);
     }
   }
 
+  // Convert the submissionBySemester object into an array of semesters
+  const proposalList = Object.values(proposalBySemester);
   return proposalList;
 };
 
@@ -1260,12 +1349,16 @@ const getProposalListKaprodi = async (userId, userRole) => {
 const getProposalListDekan = async (userId, userRole) => {
   const dekan = await employeeRepository.findEmployeeById(userId);
 
-  const proposalList = [];
+  const proposalBySemester = {};
 
   if (userRole.includes("DEKAN") && dekan) {
     const proposal = await proposalRepository.findAllProposal();
 
     for (const entry of proposal) {
+      // get classroom
+      const classroom = await classroomRepository.findClassroomById(
+        entry.classroom_id
+      );
       const group = await groupRepository.findGroupByProposalId(entry.id);
       const groupStudents =
         await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -1294,10 +1387,22 @@ const getProposalListDekan = async (userId, userRole) => {
         is_pass: entry.is_pass,
       };
 
-      proposalList.push(proposalData);
+      // Create a semester key based on the Academic_Calendar data
+      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+      if (!proposalBySemester[semesterKey]) {
+        proposalBySemester[semesterKey] = {
+          semester: semesterKey,
+          submissions: [],
+        };
+      }
+
+      proposalBySemester[semesterKey].submissions.push(proposalData);
     }
   }
 
+  // Convert the submissionBySemester object into an array of semesters
+  const proposalList = Object.values(proposalBySemester);
   return proposalList;
 };
 
@@ -1306,11 +1411,15 @@ const getProposalListDekan = async (userId, userRole) => {
 // @route           GET /group/proposal-list-sekretaris
 // @access          OPERATOR_FAKULTAS
 const getProposalListSekretaris = async () => {
-  const proposalList = [];
+  const proposalBySemester = {};
 
   const proposal = await proposalRepository.findAllProposal();
 
   for (const entry of proposal) {
+    // get classroom
+    const classroom = await classroomRepository.findClassroomById(
+      entry.classroom_id
+    );
     const group = await groupRepository.findGroupByProposalId(entry.id);
     const groupStudents =
       await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -1354,9 +1463,21 @@ const getProposalListSekretaris = async () => {
       plagiarism: plagiarism,
     };
 
-    proposalList.push(proposalData);
+    // Create a semester key based on the Academic_Calendar data
+    const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+    if (!proposalBySemester[semesterKey]) {
+      proposalBySemester[semesterKey] = {
+        semester: semesterKey,
+        submissions: [],
+      };
+    }
+
+    proposalBySemester[semesterKey].submissions.push(proposalData);
   }
 
+  // Convert the submissionBySemester object into an array of semesters
+  const proposalList = Object.values(proposalBySemester);
   return proposalList;
 };
 
