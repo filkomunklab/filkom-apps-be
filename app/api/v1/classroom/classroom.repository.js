@@ -42,6 +42,9 @@ const findListClassroom = async (dosen_mk_id) => {
     where: {
       dosen_mk_id,
     },
+    include: {
+      academic: true,
+    },
   });
   return classroom;
 };
