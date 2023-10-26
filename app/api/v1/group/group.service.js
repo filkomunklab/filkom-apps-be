@@ -500,7 +500,7 @@ const getCommitteeList = async () => {
 // @access          DOSEN_MK
 const getSubmissionListMK = async (userId) => {
   const classrooms = await classroomRepository.findClassroomsByDosenMk(userId);
-  const submissionList = [];
+  const submissionBySemester = {};
   for (const classroom of classrooms) {
     const submissions =
       await submissionRepository.findAllSubmissionByClassroomId(classroom.id);
@@ -570,10 +570,21 @@ const getSubmissionListMK = async (userId) => {
         is_approve: entry.is_approve,
       };
 
-      submissionList.push(submissionData);
+      // Create a semester key based on the Academic_Calendar data
+      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+      if (!submissionBySemester[semesterKey]) {
+        submissionBySemester[semesterKey] = {
+          semester: semesterKey,
+          submissions: [],
+        };
+      }
+
+      submissionBySemester[semesterKey].submissions.push(submissionData);
     }
   }
-
+  // Convert the submissionBySemester object into an array of semesters
+  const submissionList = Object.values(submissionBySemester);
   return submissionList;
 };
 
@@ -588,7 +599,7 @@ const getSubmissionListKaprodi = async (userId) => {
     kaprodi.nik,
     "KAPRODI"
   );
-  const submissionList = [];
+  const submissionBySemester = {};
   if (userKaprodi && kaprodi.major === "IF") {
     // get all proposal_student
     const proposalStudents =
@@ -625,6 +636,12 @@ const getSubmissionListKaprodi = async (userId) => {
       const submission = await submissionRepository.findSubmissionById(
         entry.submission_id
       );
+
+      // get classroom
+      const classroom = await classroomRepository.findClassroomById(
+        submission.classroom_id
+      );
+
       // get group
       const group = await groupRepository.findGroupBySubmissionId(
         submission.id
@@ -695,7 +712,17 @@ const getSubmissionListKaprodi = async (userId) => {
         is_consultation: submission.is_consultation,
         is_approve: submission.is_approve,
       };
-      submissionList.push(submissionData);
+      // Create a semester key based on the Academic_Calendar data
+      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+      if (!submissionBySemester[semesterKey]) {
+        submissionBySemester[semesterKey] = {
+          semester: semesterKey,
+          submissions: [],
+        };
+      }
+
+      submissionBySemester[semesterKey].submissions.push(submissionData);
     }
   }
   if (userKaprodi && kaprodi.major === "SI") {
@@ -734,6 +761,12 @@ const getSubmissionListKaprodi = async (userId) => {
       const submission = await submissionRepository.findSubmissionById(
         entry.submission_id
       );
+
+      // get classroom
+      const classroom = await classroomRepository.findClassroomById(
+        submission.classroom_id
+      );
+
       // get group
       const group = await groupRepository.findGroupBySubmissionId(
         submission.id
@@ -804,10 +837,22 @@ const getSubmissionListKaprodi = async (userId) => {
         is_consultation: entry.is_consultation,
         is_approve: entry.is_approve,
       };
-      submissionList.push(submissionData);
+      // Create a semester key based on the Academic_Calendar data
+      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+      if (!submissionBySemester[semesterKey]) {
+        submissionBySemester[semesterKey] = {
+          semester: semesterKey,
+          submissions: [],
+        };
+      }
+
+      submissionBySemester[semesterKey].submissions.push(submissionData);
     }
   }
 
+  // Convert the submissionBySemester object into an array of semesters
+  const submissionList = Object.values(submissionBySemester);
   return submissionList;
 };
 
@@ -822,12 +867,16 @@ const getSubmissionListDekan = async (userId) => {
     "DEKAN"
   );
 
-  const submissionList = [];
+  const submissionBySemester = {};
 
   if (userDekan) {
     const submissions = await submissionRepository.findAllSubmission();
 
     for (const entry of submissions) {
+      // get classroom
+      const classroom = await classroomRepository.findClassroomById(
+        entry.classroom_id
+      );
       const group = await groupRepository.findGroupBySubmissionId(entry.id);
       const groupStudents =
         await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -892,11 +941,22 @@ const getSubmissionListDekan = async (userId) => {
         is_consultation: entry.is_consultation,
         is_approve: entry.is_approve,
       };
+      // Create a semester key based on the Academic_Calendar data
+      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
 
-      submissionList.push(submissionData);
+      if (!submissionBySemester[semesterKey]) {
+        submissionBySemester[semesterKey] = {
+          semester: semesterKey,
+          submissions: [],
+        };
+      }
+
+      submissionBySemester[semesterKey].submissions.push(submissionData);
     }
   }
 
+  // Convert the submissionBySemester object into an array of semesters
+  const submissionList = Object.values(submissionBySemester);
   return submissionList;
 };
 
