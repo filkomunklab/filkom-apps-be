@@ -34,9 +34,32 @@ router.get(
   auth,
   academicController.getAllAcademicCalendar
 );
-// //       mengubah tahun ajaran
-// router.put("/academic-calendar/:id", auth, academicController.updateAcademicById);
-// //       hapus tahun ajaran
-// router.delete("/academic-calendar/:id", auth, academicController.deleteAcademicById);
+
+//===================================================================
+// @description     Get academic calendar list
+// @access          DOSEN_MK
+router.get(
+  "/academic-calendar-list",
+  auth,
+  academicController.getAcademicCalendarList
+);
+
+//===================================================================
+// @description     Update academic calendar
+// @access          DOSEN_MK
+router.put(
+  "/academic-calendar/:id",
+  auth,
+  academicController.updateAcademicCalendaryId
+);
+
+//===================================================================
+// @description     Delete academic calendar
+// @access          DOSEN_MK
+router.delete(
+  "/academic-calendar/:id",
+  auth,
+  academicController.deleteAcademicCalendarById
+);
 
 module.exports = router;

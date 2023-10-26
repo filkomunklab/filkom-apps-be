@@ -54,8 +54,50 @@ const getAllAcademicCalendar = async () => {
   return academic;
 };
 
+//===================================================================
+// @description     Get all academic calendar
+// @route           GET /academic-calendar-list
+// @access          DOSEN_MK
+const getAcademicCalendarList = async () => {
+  const academics = await academicRepository.findAllAcademicCalendar();
+  const academicList = [];
+  for (const entry of academics) {
+    const semester = `${entry.semester}-${entry.year}`;
+
+    const academicData = {
+      id: entry.id,
+      semester: semester,
+    };
+    academicList.push(academicData);
+  }
+  return academicList;
+};
+
+//===================================================================
+// @description     Update academic calendar list
+// @route           PUT /academic-calendar/:id
+// @access          DOSEN_MK
+const updateAcademicCalendaryId = async (id, payload) => {
+  const academic = await academicRepository.updateAcademicCalendaryId(
+    id,
+    payload
+  );
+  return academic;
+};
+
+//===================================================================
+// @description     Delete academic calendar
+// @route           DELETE /academic-calendar/:id
+// @access          DOSEN_MK
+const deleteAcademicCalendarById = async (id) => {
+  await academicRepository.deleteAcademicCalendaryId(id);
+};
+
 module.exports = {
   createAcademicCalendar,
   getAcademicCalendarById,
   getAllAcademicCalendar,
+  getAcademicCalendarList,
+  updateAcademicCalendaryId,
+  deleteAcademicCalendarById,
 };
