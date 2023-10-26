@@ -221,10 +221,11 @@ const getSubmissionById = async (id) => {
       const student = await studentRepository.findStudentById(student_id);
       if (student) {
         // Menggabungkan firstName dan lastName menjadi fullName
-        const fullName = `${student.firstName} ${student.lastName || ""}`;
-        // console.log(
-        //   `Student ID: ${student_id}, FullName: ${fullName}, Nim: ${student.nim}, Major: ${student.major}`
-        // );
+        let fullName = student.firstName;
+
+        if (student.lastName) {
+          fullName += ` ${student.lastName}`;
+        }
         return {
           fullName: fullName,
           nim: student.nim,
