@@ -49,8 +49,28 @@ const findAllProposalAssessmentByProposalId = async (proposal_id) => {
   return proposalAssessment;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Create empty assessment for all student by panelist team
+// @used            Proposal
+const insertEmptyProposalAssessment = async (
+  proposal_id,
+  student_id,
+  dosen_id
+) => {
+  const proposalAssessment = await prisma.proposal_Assessment.create({
+    data: {
+      proposal_id,
+      student_id,
+      dosen_id,
+    },
+  });
+
+  return proposalAssessment;
+};
+
 module.exports = {
   insertProposalAssessment,
+  insertEmptyProposalAssessment,
   findProposalAssessmentByProposalIdAndStudentIdAndDosenId,
   findAllProposalAssessmentByProposalId,
 };

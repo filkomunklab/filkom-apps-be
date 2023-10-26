@@ -10,19 +10,19 @@
 CREATE TYPE "Major" AS ENUM ('SI', 'IF');
 
 -- CreateEnum
-CREATE TYPE "Progress" AS ENUM ('Submission', 'Proposal', 'Skripsi', 'Finished');
-
--- CreateEnum
-CREATE TYPE "Semester" AS ENUM ('Ganjil', 'Genap', 'Padat');
-
--- CreateEnum
-CREATE TYPE "Classroom_Name" AS ENUM ('Proposal', 'Skripsi');
+CREATE TYPE "Thesis_Approve" AS ENUM ('Waiting', 'Approve', 'Rejected');
 
 -- CreateEnum
 CREATE TYPE "Submission_Approve" AS ENUM ('Waiting', 'Approve', 'Rejected');
 
 -- CreateEnum
-CREATE TYPE "Thesis_Approve" AS ENUM ('Waiting', 'Approve', 'Rejected');
+CREATE TYPE "Classroom_Name" AS ENUM ('Proposal', 'Skripsi');
+
+-- CreateEnum
+CREATE TYPE "Semester" AS ENUM ('Ganjil', 'Genap', 'Padat');
+
+-- CreateEnum
+CREATE TYPE "Progress" AS ENUM ('Submission', 'Proposal', 'Skripsi', 'Finished');
 
 -- CreateEnum
 CREATE TYPE "Exam_Conclution" AS ENUM ('Rejected', 'Approve');
@@ -267,7 +267,7 @@ CREATE TABLE "Proposal_Assessment" (
     "proposal_id" TEXT NOT NULL,
     "student_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
-    "value" TEXT NOT NULL,
+    "value" TEXT,
 
     CONSTRAINT "Proposal_Assessment_pkey" PRIMARY KEY ("id")
 );
@@ -278,7 +278,7 @@ CREATE TABLE "Skripsi_Assessment" (
     "skripsi_id" TEXT NOT NULL,
     "student_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
-    "value" TEXT NOT NULL,
+    "value" TEXT,
 
     CONSTRAINT "Skripsi_Assessment_pkey" PRIMARY KEY ("id")
 );
@@ -288,7 +288,7 @@ CREATE TABLE "Proposal_Changes" (
     "id" TEXT NOT NULL,
     "proposal_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
-    "changes" TEXT NOT NULL,
+    "changes" TEXT,
 
     CONSTRAINT "Proposal_Changes_pkey" PRIMARY KEY ("id")
 );
@@ -298,7 +298,7 @@ CREATE TABLE "Skripsi_Changes" (
     "id" TEXT NOT NULL,
     "skripsi_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
-    "changes" TEXT NOT NULL,
+    "changes" TEXT,
 
     CONSTRAINT "Skripsi_Changes_pkey" PRIMARY KEY ("id")
 );

@@ -46,8 +46,23 @@ const findAllProposalChangesByProposalId = async (proposal_id) => {
   return proposalChanges;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Create empty change for group by panelist team
+// @used            Proposal
+const insertEmptyProposalChanges = async (proposal_id, dosen_id) => {
+  const proposalChanges = await prisma.proposal_Changes.create({
+    data: {
+      proposal_id,
+      dosen_id,
+    },
+  });
+
+  return proposalChanges;
+};
+
 module.exports = {
   insertProposalChanges,
   findProposalChangesByProposalIdAndDosenId,
   findAllProposalChangesByProposalId,
+  insertEmptyProposalChanges,
 };

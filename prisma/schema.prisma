@@ -373,7 +373,7 @@ model Proposal_Assessment {
   student_id  String
   dosen       Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id    String
-  value       String
+  value       String?
 }
 
 model Skripsi_Assessment {
@@ -384,7 +384,7 @@ model Skripsi_Assessment {
   student_id String
   dosen      Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id   String
-  value      String
+  value      String?
 }
 
 model Proposal_Changes {
@@ -393,7 +393,7 @@ model Proposal_Changes {
   proposal_id String
   dosen       Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id    String
-  changes     String
+  changes     String?
 }
 
 model Skripsi_Changes {
@@ -402,7 +402,7 @@ model Skripsi_Changes {
   skripsi_id String
   dosen      Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id   String
-  changes    String
+  changes    String?
 }
 
 model Thesis_Consultation {

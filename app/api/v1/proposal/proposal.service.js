@@ -716,8 +716,60 @@ const openAccessProposalReportById = async (id, userId) => {
   const proposal = await getProposalById(id);
   // check if dosen is panelist chairman
   if (proposal.panelist_chairman_id === userId) {
+    // check if already openend
+    if (proposal.is_report_open) {
+      throw {
+        status: 400,
+        message: `Report has opened`,
+      };
+    }
     const updatedProposal =
       await proposalRepository.openAccessProposalReportById(id);
+    // check if success open report
+    if (updatedProposal) {
+      // get group
+      const group = await groupRepository.findGroupByProposalId(proposal.id);
+      // get group_student -> student_id
+      const studentIds = await groupStudentRepository.findGroupStudentByGroupId(
+        group.id
+      );
+      // looping to create empty assessment for all student
+      for (const student of studentIds) {
+        // create empty assessment for chairman
+        await proposalAssessmentRepository.insertEmptyProposalAssessment(
+          proposal.id,
+          student,
+          proposal.panelist_chairman_id
+        );
+        // create empty assessment for member
+        await proposalAssessmentRepository.insertEmptyProposalAssessment(
+          proposal.id,
+          student,
+          proposal.panelist_member_id
+        );
+        // create empty assessment for advisor
+        await proposalAssessmentRepository.insertEmptyProposalAssessment(
+          proposal.id,
+          student,
+          proposal.advisor_id
+        );
+      }
+      // create empty change for chairman
+      await proposalChangesRepository.insertEmptyProposalChanges(
+        proposal.id,
+        proposal.panelist_chairman_id
+      );
+      // create empty change for member
+      await proposalChangesRepository.insertEmptyProposalChanges(
+        proposal.id,
+        proposal.panelist_member_id
+      );
+      // create empty change for advisor
+      await proposalChangesRepository.insertEmptyProposalChanges(
+        proposal.id,
+        proposal.advisor_id
+      );
+    }
     return updatedProposal;
   } else {
     throw {
