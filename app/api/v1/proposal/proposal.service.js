@@ -487,50 +487,65 @@ const getAllProposalSchedule = async () => {
       message: `Not found`,
     };
   }
-  // Get all proposal_id in here
+  // Dapatkan semua proposal_id di sini
   const proposalIds = proposal.map((proposal) => proposal.id);
 
-  // Get group by proposalIds
+  // Dapatkan grup berdasarkan proposalIds
   const groups = await groupRepository.findManyGroupsByProposalIds(proposalIds);
 
   // Menggabungkan data proposal dengan data grup
-  const result = proposal.map((proposal) => {
-    const group = groups.find((group) => group.proposal_id === proposal.id);
-    // Menggabungkan firstName dan lastName menjadi fullName
-    const advisorFullName = proposal.advisor
-      ? `${proposal.advisor.firstName} ${proposal.advisor.lastName || ""}`
-      : "";
-    const panelistChairmanFullName = proposal.panelist_chairman
-      ? `${proposal.panelist_chairman.firstName} ${
-          proposal.panelist_chairman.lastName || ""
-        }`
-      : "";
-    const panelistMemberFullName = proposal.panelist_member
-      ? `${proposal.panelist_member.firstName} ${
-          proposal.panelist_member.lastName || ""
-        }`
-      : "";
-    if (group) {
-      return {
-        group_id: group.id,
-        proposal_id: proposal.id,
-        title: group.title,
-        advisor: advisorFullName,
-        panelist_chairman: panelistChairmanFullName,
-        panelist_member: panelistMemberFullName,
-        start_defence: proposal.start_defence,
-        end_defence: proposal.end_defence,
-        defence_room: proposal.defence_room,
-        defence_date: proposal.defence_date,
+  const result = await Promise.all(
+    proposal.map(async (proposal) => {
+      const group = groups.find((group) => group.proposal_id === proposal.id);
+      // Menggabungkan firstName dan lastName menjadi fullName
+      const getEmployeeNameAndDegree = async (firstName, lastName, degree) => {
+        let name = firstName;
+
+        if (lastName) {
+          name += ` ${lastName}`;
+        }
+
+        if (degree) {
+          name += `, ${degree}`;
+        }
+
+        return name;
       };
-    }
-    return null;
-  });
+      const advisorName = await getEmployeeNameAndDegree(
+        proposal.advisor.firstName,
+        proposal.advisor.lastName,
+        proposal.advisor.degree
+      );
+      const panelistChairmanName = await getEmployeeNameAndDegree(
+        proposal.panelist_chairman.firstName,
+        proposal.panelist_chairman.lastName,
+        proposal.panelist_chairman.degree
+      );
+      const panelistMemberName = await getEmployeeNameAndDegree(
+        proposal.panelist_member.firstName,
+        proposal.panelist_member.lastName,
+        proposal.panelist_member.degree
+      );
 
-  // Filter null values (jika ada proposal tanpa grup)
-  const filteredResult = result.filter((item) => item !== null);
+      if (group) {
+        return {
+          group_id: group.id,
+          proposal_id: proposal.id,
+          title: group.title,
+          advisor: advisorName,
+          panelist_chairman: panelistChairmanName,
+          panelist_member: panelistMemberName,
+          start_defence: proposal.start_defence,
+          end_defence: proposal.end_defence,
+          defence_room: proposal.defence_room,
+          defence_date: proposal.defence_date,
+        };
+      }
+      return null;
+    })
+  );
 
-  return filteredResult;
+  return result;
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -644,7 +659,11 @@ const getProposalScheduleById = async (id) => {
       const student = await studentRepository.findStudentById(student_id);
       if (student) {
         // Menggabungkan firstName dan lastName menjadi fullName
-        const fullName = `${student.firstName} ${student.lastName || ""}`;
+        let fullName = student.firstName;
+
+        if (student.lastName) {
+          fullName += ` ${student.lastName}`;
+        }
         return {
           fullName: fullName,
           nim: student.nim,
@@ -660,11 +679,14 @@ const getProposalScheduleById = async (id) => {
   );
   const formatNameWithDegree = (employee) => {
     const { firstName, lastName, degree } = employee;
-    let fullName = `${firstName} ${lastName || ""}`;
-    if (degree) {
-      fullName += `, ${degree}`;
+    let name = firstName;
+    if (lastName) {
+      name += ` ${lastName}`;
     }
-    return fullName;
+    if (degree) {
+      name += `, ${degree}`;
+    }
+    return name;
   };
 
   const panelistChairman = formatNameWithDegree(proposal.panelist_chairman);
