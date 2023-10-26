@@ -209,6 +209,145 @@ const getSubmissionListDekan = async (req, res) => {
   }
 };
 
+//===================================================================
+// @description     Get proposal list dosen (advisor/co)
+// @route           GET /group/proposal-list-advisor-co-advisor
+// @access          DOSEN
+const getProposalListAdvisorAndCo = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "proposal_list_advisor_co_advisor")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getProposalListAdvisorAndCo(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get proposal list dosen (panelist)
+// @route           GET /group/proposal-list-chairman-member
+// @access          DOSEN
+const getProposalListChairmanAndMember = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "proposal_list_chairman_member")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getProposalListChairmanAndMember(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get proposal list mk
+// @route           GET /group/proposal-list-mk
+// @access          DOSEN_MK
+const getProposalListMK = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "proposal_list_mk")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getProposalListMK(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get proposal list kaprodi IF/SI
+// @route           GET /group/proposal-list-kaprodi
+// @access          KAPRODI
+const getProposalListKaprodi = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "proposal_list_kaprodi")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const userRole = req.user.user.role;
+    const group = await groupService.getProposalListKaprodi(userId, userRole);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get proposal list dekan
+// @route           GET /group/proposal-list-dekan
+// @access          DEKAN
+const getProposalListDekan = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "proposal_list_dekan")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const userRole = req.user.user.role;
+    const group = await groupService.getProposalListDekan(userId, userRole);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get proposal list operator fakultas/filkom
+// @route           GET /group/proposal-list-sekretaris
+// @access          OPERATOR_FAKULTAS
+const getProposalListSekretaris = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "proposal_list_sekretaris")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const group = await groupService.getProposalListSekretaris();
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 // const getGroupStudentById = async (req, res) => {
 //     try {
 //         const id = req.params.id;
@@ -268,10 +407,15 @@ module.exports = {
   getDosenList,
   getAdvisorTeamById,
   getCommitteeList,
-  getSubmissionList,
   getSubmissionListMK,
   getSubmissionListKaprodi,
   getSubmissionListDekan,
+  getProposalListAdvisorAndCo,
+  getProposalListChairmanAndMember,
+  getProposalListMK,
+  getProposalListKaprodi,
+  getProposalListDekan,
+  getProposalListSekretaris,
   // getGroupStudentById,
   // updateMetadataById,
   // getMetadataById,

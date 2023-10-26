@@ -45,6 +45,8 @@ const policyFor = ({ user }) => {
     can("read", "Consultation");
     // Sekertaris view advisor team
     can("read", "advisor_team");
+    // Sekertaris view proposal list sekretaris
+    can("read", "proposal_list_sekretaris");
   }
 
   if (hasRole("DEKAN")) {
@@ -78,6 +80,8 @@ const policyFor = ({ user }) => {
     can("read", "advisor_team");
     // Dekan view submission list dekan
     can("read", "submission_list_dekan");
+    // Dekan view proposal list dekan
+    can("read", "proposal_list_dekan");
   }
 
   if (hasRole("KAPRODI")) {
@@ -107,6 +111,8 @@ const policyFor = ({ user }) => {
     can("read", "advisor_team");
     // Kaprodi view submission list kaprodi
     can("read", "submission_list_kaprodi");
+    // Kaprodi view proposal list kaprodi
+    can("read", "proposal_list_kaprodi");
   }
 
   if (hasRole("DOSEN")) {
@@ -152,6 +158,10 @@ const policyFor = ({ user }) => {
     can("read", "advisor_team");
     // Dosen view committee list
     can("read", "committee_list");
+    // Dosen view proposal list advisor and co
+    can("read", "proposal_list_advisor_co_advisor");
+    // Dosen view proposal list chairman and member
+    can("read", "proposal_list_chairman_member");
   }
 
   if (hasRole("DOSEN_MK")) {
@@ -191,6 +201,8 @@ const policyFor = ({ user }) => {
     can("read", "submission_details");
     // Dosen MK view submission list dosen mk
     can("read", "submission_list_mk");
+    // Dosen MK view proposal list dosen mk
+    can("read", "proposal_list_mk");
   }
 
   if (hasRole("MAHASISWA")) {

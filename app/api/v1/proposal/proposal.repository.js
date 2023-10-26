@@ -1147,6 +1147,67 @@ const rejectProposalRevisionDocumentByAdvisorById = async (id) => {
   return proposal;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by advisor/co-advisor id
+// @used            Group,
+const findAllProposalByAdvisorOrCoId = async (userId) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      OR: [
+        {
+          advisor_id: userId,
+        },
+        {
+          co_advisor1_id: userId,
+        },
+        {
+          co_advisor2_id: userId,
+        },
+      ],
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by chairman/member
+// @used            Group,
+const findAllProposalByChairmanOrMember = async (userId) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      OR: [
+        {
+          panelist_chairman_id: userId,
+        },
+        {
+          panelist_member_id: userId,
+        },
+      ],
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by classroom_id
+// @used            Group,
+const findAllProposalByClassroomId = async (classroom_id) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      classroom_id,
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal
+// @used            Group,
+const findAllProposal = async () => {
+  const proposal = await prisma.proposal.findMany();
+  return proposal;
+};
+
 module.exports = {
   insertProposal,
   findProposalById,
@@ -1206,4 +1267,9 @@ module.exports = {
   rejectProposalRevisionDocumentByChairmanById,
   rejectProposalRevisionDocumentByMemberById,
   rejectProposalRevisionDocumentByAdvisorById,
+
+  findAllProposalByAdvisorOrCoId,
+  findAllProposalByChairmanOrMember,
+  findAllProposalByClassroomId,
+  findAllProposal,
 };

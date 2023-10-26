@@ -900,6 +900,406 @@ const getSubmissionListDekan = async (userId) => {
   return submissionList;
 };
 
+//===================================================================
+// @description     Get proposal list dosen (advisor/co)
+// @route           GET /group/proposal-list-advisor-co-advisor
+// @access          DOSEN
+const getProposalListAdvisorAndCo = async (userId) => {
+  // check user if advisor or co-advisor
+  const advisorOrCo = await proposalRepository.findAllProposalByAdvisorOrCoId(
+    userId
+  );
+
+  const proposalList = [];
+
+  for (const entry of advisorOrCo) {
+    const group = await groupRepository.findGroupByProposalId(entry.id);
+    const groupStudents =
+      await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+    const students = await Promise.all(
+      groupStudents.map(async (student_id) => {
+        const student = await studentRepository.findStudentById(student_id);
+        let fullName = student.firstName;
+
+        if (student.lastName) {
+          fullName += ` ${student.lastName}`;
+        }
+
+        return {
+          id: student.id,
+          fullName: fullName,
+        };
+      })
+    );
+
+    const proposalData = {
+      group_id: group.id,
+      proposal_id: entry.id,
+      students,
+      title: group.title,
+      approve_by_advisor: entry.is_proposal_approve_by_advisor,
+      approve_by_co_advisor1: entry.is_proposal_approve_by_co_advisor1,
+      approve_by_co_advisor2: entry.is_proposal_approve_by_co_advisor2,
+    };
+
+    proposalList.push(proposalData);
+  }
+  return proposalList;
+};
+
+//===================================================================
+// @description     Get proposal list dosen (panelist)
+// @route           GET /group/proposal-list-chairman-member
+// @access          DOSEN
+const getProposalListChairmanAndMember = async (userId) => {
+  // check user if chairman or member
+  const chairmanOrMember =
+    await proposalRepository.findAllProposalByChairmanOrMember(userId);
+  const proposalList = [];
+
+  for (const entry of chairmanOrMember) {
+    const group = await groupRepository.findGroupByProposalId(entry.id);
+    const groupStudents =
+      await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+    const students = await Promise.all(
+      groupStudents.map(async (student_id) => {
+        const student = await studentRepository.findStudentById(student_id);
+        let fullName = student.firstName;
+
+        if (student.lastName) {
+          fullName += ` ${student.lastName}`;
+        }
+
+        return {
+          id: student.id,
+          fullName: fullName,
+        };
+      })
+    );
+
+    const proposalData = {
+      group_id: group.id,
+      proposal_id: entry.id,
+      students,
+      title: group.title,
+      defence_status: entry.is_pass,
+      approve_chairman: entry.is_revision_approve_by_panelist_chairman,
+      approve_member: entry.is_revision_approve_by_panelist_member,
+      approve_advisor: entry.is_revision_approve_by_advisor,
+    };
+
+    proposalList.push(proposalData);
+  }
+  return proposalList;
+};
+
+//===================================================================
+// @description     Get proposal list mk
+// @route           GET /group/proposal-list-mk
+// @access          DOSEN_MK
+const getProposalListMK = async (userId) => {
+  const classrooms = await classroomRepository.findClassroomsByDosenMk(userId);
+  const proposalList = [];
+  for (const entry of classrooms) {
+    const proposals = await proposalRepository.findAllProposalByClassroomId(
+      entry.id
+    );
+    for (const entry of proposals) {
+      const group = await groupRepository.findGroupByProposalId(entry.id);
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+      const students = await Promise.all(
+        groupStudents.map(async (student_id) => {
+          const student = await studentRepository.findStudentById(student_id);
+          let fullName = student.firstName;
+
+          if (student.lastName) {
+            fullName += ` ${student.lastName}`;
+          }
+
+          return {
+            id: student.id,
+            fullName: fullName,
+          };
+        })
+      );
+
+      const proposalData = {
+        group_id: group.id,
+        proposal_id: entry.id,
+        students,
+        title: group.title,
+        approve_by_advisor: entry.is_proposal_approve_by_advisor,
+        approve_by_co_advisor1: entry.is_proposal_approve_by_co_advisor1,
+        approve_by_co_advisor2: entry.is_proposal_approve_by_co_advisor2,
+      };
+      proposalList.push(proposalData);
+    }
+  }
+  return proposalList;
+};
+
+//===================================================================
+// @description     Get proposal list kaprodi IF/SI
+// @route           GET /group/proposal-list-kaprodi
+// @access          KAPRODI
+const getProposalListKaprodi = async (userId, userRole) => {
+  // check user if dosen mk
+  const kaprodi = await employeeRepository.findEmployeeById(userId);
+
+  const proposalList = [];
+  if (userRole.includes("KAPRODI") && kaprodi.major === "IF") {
+    // get all proposal_student
+    const proposalStudents =
+      await proposalStudentRepository.findAllProposalStudent();
+
+    const groupsIF = [];
+    for (const entry of proposalStudents) {
+      // check all group of student
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByStudentId(
+          entry.student_id
+        );
+      for (const entry of groupStudents) {
+        // get student
+        const student = await studentRepository.findStudentById(
+          entry.student_id
+        );
+        if (student.major === "IF") {
+          // get group_student
+          const groupStudentsIF =
+            await groupStudentRepository.findGroupStudentByStudentId(
+              student.id
+            );
+          for (const entry of groupStudentsIF) {
+            // get group
+            const group = await groupRepository.findGroupById(entry.group_id);
+            groupsIF.push(group);
+          }
+        }
+      }
+    }
+    for (const entry of groupsIF) {
+      // get all proposal
+      const proposal = await proposalRepository.findProposalById(
+        entry.proposal_id
+      );
+      // get group
+      const group = await groupRepository.findGroupByProposalId(proposal.id);
+      // get all group_student
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+      // get student all student data
+      const students = await Promise.all(
+        groupStudents.map(async (student_id) => {
+          // get student in table student by student_id
+          const student = await studentRepository.findStudentById(student_id);
+
+          // Menggabungkan firstName dan lastName menjadi fullName
+          let fullName = student.firstName;
+          if (student.lastName) {
+            fullName += ` ${student.lastName}`;
+          }
+          return {
+            id: student.id,
+            fullName: fullName,
+          };
+        })
+      );
+      const proposalData = {
+        group_id: group.id,
+        proposal_id: proposal.id,
+        students,
+        title: group.title,
+        is_pass: proposal.is_pass,
+      };
+      proposalList.push(proposalData);
+    }
+  }
+  if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
+    // get all proposal_student
+    const proposalStudents =
+      await proposalStudentRepository.findAllProposalStudent();
+
+    const groupsSI = [];
+    for (const entry of proposalStudents) {
+      // check all group of student
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByStudentId(
+          entry.student_id
+        );
+      for (const entry of groupStudents) {
+        // get student
+        const student = await studentRepository.findStudentById(
+          entry.student_id
+        );
+        if (student.major === "SI") {
+          // get group_student
+          const groupStudentsSI =
+            await groupStudentRepository.findGroupStudentByStudentId(
+              student.id
+            );
+          for (const entry of groupStudentsSI) {
+            // get group
+            const group = await groupRepository.findGroupById(entry.group_id);
+            groupsSI.push(group);
+          }
+        }
+      }
+    }
+    for (const entry of groupsSI) {
+      // get all proposal
+      const proposal = await proposalRepository.findProposalById(
+        entry.proposal_id
+      );
+      // get group
+      const group = await groupRepository.findGroupByProposalId(proposal.id);
+      // get all group_student
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+      // get student all student data
+      const students = await Promise.all(
+        groupStudents.map(async (student_id) => {
+          // get student in table student by student_id
+          const student = await studentRepository.findStudentById(student_id);
+
+          // Menggabungkan firstName dan lastName menjadi fullName
+          let fullName = student.firstName;
+          if (student.lastName) {
+            fullName += ` ${student.lastName}`;
+          }
+          return {
+            id: student.id,
+            fullName: fullName,
+          };
+        })
+      );
+      const proposalData = {
+        group_id: group.id,
+        proposal_id: proposal.id,
+        students,
+        title: group.title,
+        is_pass: proposal.is_pass,
+      };
+      proposalList.push(proposalData);
+    }
+  }
+
+  return proposalList;
+};
+
+//===================================================================
+// @description     Get proposal list dekan
+// @route           GET /group/proposal-list-dekan
+// @access          DEKAN
+const getProposalListDekan = async (userId, userRole) => {
+  const dekan = await employeeRepository.findEmployeeById(userId);
+
+  const proposalList = [];
+
+  if (userRole.includes("DEKAN") && dekan) {
+    const proposal = await proposalRepository.findAllProposal();
+
+    for (const entry of proposal) {
+      const group = await groupRepository.findGroupByProposalId(entry.id);
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+      const students = await Promise.all(
+        groupStudents.map(async (student_id) => {
+          const student = await studentRepository.findStudentById(student_id);
+          let fullName = student.firstName;
+
+          if (student.lastName) {
+            fullName += ` ${student.lastName}`;
+          }
+
+          return {
+            id: student.id,
+            fullName: fullName,
+          };
+        })
+      );
+
+      const proposalData = {
+        group_id: group.id,
+        proposal_id: entry.id,
+        students,
+        title: group.title,
+        is_pass: entry.is_pass,
+      };
+
+      proposalList.push(proposalData);
+    }
+  }
+
+  return proposalList;
+};
+
+//===================================================================
+// @description     Get proposal list operator fakultas/filkom
+// @route           GET /group/proposal-list-sekretaris
+// @access          OPERATOR_FAKULTAS
+const getProposalListSekretaris = async () => {
+  const proposalList = [];
+
+  const proposal = await proposalRepository.findAllProposal();
+
+  for (const entry of proposal) {
+    const group = await groupRepository.findGroupByProposalId(entry.id);
+    const groupStudents =
+      await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+    const students = await Promise.all(
+      groupStudents.map(async (student_id) => {
+        const student = await studentRepository.findStudentById(student_id);
+        let fullName = student.firstName;
+
+        if (student.lastName) {
+          fullName += ` ${student.lastName}`;
+        }
+
+        return {
+          id: student.id,
+          fullName: fullName,
+        };
+      })
+    );
+
+    let documentProposal = false;
+    let payment = false;
+    let plagiarism = false;
+    if (entry.file_name_proposal) {
+      documentProposal = true;
+    }
+    if (entry.file_name_payment) {
+      payment = true;
+    }
+    if (entry.file_name_plagiarismcheck) {
+      plagiarism = true;
+    }
+
+    const proposalData = {
+      group_id: group.id,
+      proposal_id: entry.id,
+      students,
+      title: group.title,
+      proposal_status: documentProposal,
+      paymant_status: payment,
+      plagiarism: plagiarism,
+    };
+
+    proposalList.push(proposalData);
+  }
+
+  return proposalList;
+};
+
 // const getGroupStudentById = async (id) => {
 //     const student_group = await groupRepository.findGroupStudentById(id);
 //     if (!student_group) {
@@ -939,6 +1339,12 @@ module.exports = {
   getSubmissionListMK,
   getSubmissionListKaprodi,
   getSubmissionListDekan,
+  getProposalListAdvisorAndCo,
+  getProposalListChairmanAndMember,
+  getProposalListMK,
+  getProposalListKaprodi,
+  getProposalListDekan,
+  getProposalListSekretaris,
   // getGroupStudentById,
   // updateMetadataById,
   // getMetadataById,

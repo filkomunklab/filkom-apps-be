@@ -77,6 +77,56 @@ router.get(
   groupController.getSubmissionListDekan
 );
 
+//===================================================================
+// @description     Get proposal list dosen (advisor/co)
+// @access          DOSEN
+router.get(
+  "/group/proposal-list-advisor-co-advisor",
+  auth,
+  groupController.getProposalListAdvisorAndCo
+);
+
+//===================================================================
+// @description     Get proposal list dosen (panelist)
+// @access          DOSEN
+router.get(
+  "/group/proposal-list-chairman-member",
+  auth,
+  groupController.getProposalListChairmanAndMember
+);
+
+//===================================================================
+// @description     Get proposal list mk
+// @access          DOSEN_MK
+router.get("/group/proposal-list-mk", auth, groupController.getProposalListMK);
+
+//===================================================================
+// @description     Get proposal list kaprodi IF/SI
+// @access          KAPRODI
+router.get(
+  "/group/proposal-list-kaprodi",
+  auth,
+  groupController.getProposalListKaprodi
+);
+
+//===================================================================
+// @description     Get proposal list dekan
+// @access          DEKAN
+router.get(
+  "/group/proposal-list-dekan",
+  auth,
+  groupController.getProposalListDekan
+);
+
+//===================================================================
+// @description     Get proposal list operator fakultas/filkom
+// @access          OPERATOR_FAKULTAS
+router.get(
+  "/group/proposal-list-sekretaris",
+  auth,
+  groupController.getProposalListSekretaris
+);
+
 // //       melihat kelompok mahasiswa
 // router.get("/group_student/:id", groupController.getGroupStudentById);
 
