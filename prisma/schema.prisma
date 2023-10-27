@@ -93,6 +93,7 @@ model Student {
   personalEmail       String?               @unique
   faculty             String?
   major               Major?
+  graduate_year       String?
   address             String?
   email               String?               @unique
   phoneNo             String?
@@ -139,7 +140,6 @@ model FormSPT {
   nik               String
   birth_mother      String
   graduate_plan     String
-  graduate_year     String?
   minor             String?
   remaining_credits String
   remaining_classes String

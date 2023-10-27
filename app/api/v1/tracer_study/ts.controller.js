@@ -16,7 +16,7 @@ const submitTS = async (req, res) => {
     const dataTS = req.body;
     const tracerStudy = await tsService.createTS(dataTS);
     res.status(201).send({
-      status: "Tracer Study data has been created",
+      status: "Your data has submitted, thank you",
       data: tracerStudy,
     });
   } catch (error) {
