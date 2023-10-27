@@ -1,5 +1,7 @@
 //Layer untuk handle business logic
 
+const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
+const { storage } = require("../../../config/firebase");
 const submissionRepository = require("./submission.repository");
 const groupRepository = require("../group/group.repository");
 const groupStudentRepository = require("../group_student/group_student.repository");
@@ -140,8 +142,22 @@ const createSubmission = async (userId, payload) => {
     await getDosenById(proposed_co_advisor2_id);
   }
 
+  // file
+  const storageRef = ref(
+    storage,
+    `submission/${submission.id}/${payload.submission_file.file_name}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.submission_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
   // create submission
-  const submission = await submissionRepository.insertSubmission(payload);
+  const submission = await submissionRepository.insertSubmission(payload, path);
 
   // create group
   const group = await groupRepository.insertGroup(payload, submission.id);

@@ -5,7 +5,7 @@ const prisma = require("../../../database");
 // @description     Get submission
 // @route           POST /submission
 // @access          MAHASISWA
-const insertSubmission = async (payload) => {
+const insertSubmission = async (payload, path) => {
   const {
     file_name,
     file_size,
@@ -20,6 +20,7 @@ const insertSubmission = async (payload) => {
       file_name,
       upload_date: new Date(),
       file_size,
+      file_path: path,
       is_consultation,
       proposed_advisor_id,
       proposed_co_advisor1_id: proposed_co_advisor1_id || null,

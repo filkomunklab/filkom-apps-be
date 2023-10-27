@@ -220,6 +220,7 @@ model Submission {
   file_name               String
   upload_date             DateTime
   file_size               String
+  file_path               String
   is_consultation         Boolean
   proposed_advisor        Employee           @relation("ProposedAdvisor", fields: [proposed_advisor_id], references: [id])
   proposed_advisor_id     String
@@ -246,6 +247,9 @@ model Proposal {
   file_size_proposal                       String?
   file_size_payment                        String?
   file_size_plagiarismcheck                String?
+  file_path_proposal                       String?
+  file_path_payment                        String?
+  file_path_plagiarismcheck                String?
   advisor                                  Employee              @relation("ProposalAdvisor", fields: [advisor_id], references: [id])
   advisor_id                               String
   co_advisor1                              Employee?             @relation("ProposalCoAdvisor1", fields: [co_advisor1_id], references: [id])
@@ -281,6 +285,7 @@ model Proposal {
   file_name_revision                       String?
   upload_date_revision                     DateTime?
   file_size_revision                       String?
+  file_path_revision                       String?
   is_revision_approve_by_panelist_chairman Revision_Approve?
   is_revision_approve_by_panelist_member   Revision_Approve?
   is_revision_approve_by_advisor           Revision_Approve?
@@ -303,6 +308,9 @@ model Skripsi {
   file_size_skripsi                        String?
   file_size_payment                        String?
   file_size_plagiarismcheck                String?
+  file_path_skripsi                        String?
+  file_path_payment                        String?
+  file_path_plagiarismcheck                String?
   advisor                                  Employee             @relation("SkripsiAdvisor", fields: [advisor_id], references: [id])
   advisor_id                               String
   co_advisor1                              Employee?            @relation("SkripsiCoAdvisor1", fields: [co_advisor1_id], references: [id])
@@ -338,6 +346,7 @@ model Skripsi {
   file_name_revision                       String?
   upload_date_revision                     DateTime?
   file_size_revision                       String?
+  file_path_revision                       String?
   is_revision_approve_by_panelist_chairman Revision_Approve?
   is_revision_approve_by_panelist_member   Revision_Approve?
   is_revision_approve_by_advisor           Revision_Approve?
