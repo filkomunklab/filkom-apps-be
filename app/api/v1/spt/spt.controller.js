@@ -101,7 +101,7 @@ const listApprovedSPTbyReg = async (req, res) => {
   }
 };
 
-const sortSPTby = async (req, res) => {
+const filterSPTBy = async (req, res) => {
   const filter = {
     graduate_plan: req.query.graduate_plan,
     approval_fac: req.query.approval_fac,
@@ -109,12 +109,24 @@ const sortSPTby = async (req, res) => {
   };
 
   try {
-    const sortedSPT = await sptService.sortSPT(filter);
-    res.send({ status: "OK", data: sortedSPT });
+    const filteredSPT = await sptService.filterSPT(filter);
+    res.send({ status: "OK", data: filteredSPT });
   } catch (error) {
     res
       .status(error?.status || 500)
       .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//cek FORM SPT - ADA TIDAK
+const checkAvSPT = async (req, res) => {
+  const studentId = req.params.studentId;
+  try {
+    const status = await sptService.checkFormSPT(studentId);
+    res.json({ status });
+  } catch (error) {
+    console.error("Error checking SPT status:", error.message);
+    res.status(404).json({ error: error.message });
   }
 };
 
@@ -127,5 +139,6 @@ module.exports = {
   listApprovedSPTbyFak,
   patchStatusByReg,
   listApprovedSPTbyReg,
-  sortSPTby,
+  filterSPTBy,
+  checkAvSPT,
 };

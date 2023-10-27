@@ -47,8 +47,18 @@ const sptApprovedbyReg = async () => {
   return sptRepository.listApprovalSPTbyReg();
 };
 
-const sortSPT = async (filter) => {
-  return await sptRepository.sortSPT(filter);
+const filterSPT = async (filter) => {
+  return await sptRepository.filterSPT(filter);
+};
+
+//checkFormSPT
+
+const checkFormSPT = async (studentId) => {
+  try {
+    return await sptRepository.checkFormSPT(studentId);
+  } catch (error) {
+    throw error; // Re-throw the error
+  }
 };
 
 module.exports = {
@@ -60,5 +70,6 @@ module.exports = {
   sptApprovedbyFak,
   approvalByReg,
   sptApprovedbyReg,
-  sortSPT,
+  filterSPT,
+  checkFormSPT,
 };

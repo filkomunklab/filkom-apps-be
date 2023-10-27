@@ -6,7 +6,7 @@ const moment = require("moment");
 const listSPT = async () => {
   return await prisma.formSPT.findMany({
     orderBy: {
-      graduate_plan: "desc",
+      created_at: "desc",
     },
     include: {
       student: {
@@ -20,6 +20,7 @@ const listSPT = async () => {
           faculty: true,
           major: true,
           phoneNo: true,
+          personalEmail: true,
         },
       },
     },
@@ -101,7 +102,7 @@ const insertSPT = async (dataSPT) => {
 
   const spt = await prisma.formSPT.create({
     data: {
-      graduate_year: graduateYear,
+      // graduate_year: graduateYear,
       nik: dataSPT.nik,
       birth_mother: dataSPT.birth_mother,
       graduate_plan: dataSPT.graduate_plan,
@@ -195,7 +196,7 @@ const listApprovalSPTbyReg = async () => {
 };
 
 //menampilkan data berdasarkan
-const sortSPT = async (filter) => {
+const filterSPT = async (filter) => {
   const where = {};
   if (filter.graduate_plan) {
     where.graduate_plan = filter.graduate_plan;
@@ -227,6 +228,41 @@ const sortSPT = async (filter) => {
   });
 };
 
+//cek form SPT: APPROVED, REJECTED, WAITING, DAN DATA NOT FOUND
+const checkFormSPT = async (studentId) => {
+  const spt = await prisma.student.findUnique({
+    where: {
+      nim: studentId,
+    },
+    include: {
+      FormSPT: {
+        orderBy: {
+          created_at: "desc",
+        },
+        distinct: "studentId",
+      },
+    },
+  });
+
+  //yang jadi cuma waiting, approved dg rejected belum jadi
+  console.log(spt);
+  if (!spt) {
+    throw new Error("Data not found");
+  } else if (
+    spt.FormSPT[0].approval_fac === "APPROVED" &&
+    spt.FormSPT[0].approval_reg === "APPROVED"
+  ) {
+    return "APPROVED";
+  } else if (
+    spt.FormSPT[0].approval_fac === "REJECTED" &&
+    spt.FormSPT[0].approval_reg === "REJECTED"
+  ) {
+    return "REJECTED";
+  } else {
+    return "WAITING";
+  }
+};
+
 module.exports = {
   insertSPT,
   listSPT,
@@ -236,5 +272,6 @@ module.exports = {
   listApprovalSPTbyFak,
   patchapprovalByReg,
   listApprovalSPTbyReg,
-  sortSPT,
+  filterSPT,
+  checkFormSPT,
 };
