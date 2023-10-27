@@ -417,7 +417,38 @@ const openAccessProposalReportById = async (req, res) => {
 };
 
 //===================================================================
-// @description     Get proposal assessment by id
+// @description     Update proposal assessment by id
+// @route           PUT /proposal/proposal-assessment/:id
+// @access          DOSEN
+const updateProposalAssessmentById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "Proposal_Assessment")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const payload = req.body;
+    if (!(payload.student_id && payload.value)) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const proposalAssessment =
+      await proposalService.updateProposalAssessmentById(id, userId, payload);
+    res.send({ status: "OK", data: proposalAssessment });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get all proposal assessment by id
 // @route           GET /proposal/proposal-assessment/:id
 // @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
 const getAllProposalAssessmentById = async (req, res) => {
@@ -441,8 +472,42 @@ const getAllProposalAssessmentById = async (req, res) => {
 };
 
 //===================================================================
-// @description     Get proposal assessment by id
-// @route           GET /proposal/proposal-assessment/:id
+// @description     Update proposal changes by id
+// @route           PUT /proposal/proposal-changes/:id
+// @access          DOSEN
+const updateProposalChangesById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "Proposal_Changes")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const payload = req.body;
+    if (!payload.changes) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const proposalAssessment = await proposalService.updateProposalChangesById(
+      id,
+      userId,
+      payload
+    );
+    res.send({ status: "OK", data: proposalAssessment });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get all proposal changes by id
+// @route           GET /proposal/proposal-changes/:id
 // @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
 const getAllProposalChangesById = async (req, res) => {
   const policy = policyFor(req.user);
@@ -727,7 +792,9 @@ module.exports = {
   getProposalScheduleById,
 
   openAccessProposalReportById,
+  updateProposalAssessmentById,
   getAllProposalAssessmentById,
+  updateProposalChangesById,
   getAllProposalChangesById,
   getProposalReportById,
   signProposalReportById,

@@ -137,11 +137,11 @@ const policyFor = ({ user }) => {
     // (Dosen: Ketua, Anggota, Advisor) view proposal report conclusion
     can("read", "proposal_report_conclusion");
     // (Dosen: Ketua, Anggota, Advisor) create Proposal_Assessment
-    can("create", "Proposal_Assessment");
+    can("update", "Proposal_Assessment");
     // (Dosen: Ketua, Anggota, Advisor) view Proposal_Assessment
     can("read", "Proposal_Assessment");
     // (Dosen: Ketua, Anggota, Advisor, Co-Advisor) create Proposal_Changes
-    can("create", "Proposal_Changes");
+    can("update", "Proposal_Changes");
     // (Dosen: Ketua, Anggota, Advisor, Co-Advisor) view Proposal_Changes
     can("read", "Proposal_Changes");
     // (Dosen: Ketua, Anggota, Advisor, Co-Advisor) view proposal revisi document

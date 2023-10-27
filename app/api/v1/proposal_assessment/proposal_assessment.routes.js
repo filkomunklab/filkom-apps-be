@@ -8,13 +8,13 @@ const { auth } = require("../../../middleware/auth");
 
 //-------------------Skripsi App ------------------------
 
-//===================================================================
-// @description     Create proposal assessment
-// @access          DOSEN
-router.post(
-  "/proposal-assessment",
-  auth,
-  proposalAssessmentController.createProposalAssessment
-);
+// //===================================================================
+// // @description     Create proposal assessment
+// // @access          DOSEN
+// router.post(
+//   "/proposal-assessment",
+//   auth,
+//   proposalAssessmentController.createProposalAssessment
+// );
 
 module.exports = router;

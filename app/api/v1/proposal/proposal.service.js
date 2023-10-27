@@ -794,8 +794,35 @@ const openAccessProposalReportById = async (id, userId) => {
 };
 
 //===================================================================
-// @description     Get proposal assessment by id
-// @route           GET /proposal-assessment/:id
+// @description     Update proposal assessment by id
+// @route           PUT /proposal/proposal-assessment/:id
+// @access          DOSEN
+const updateProposalAssessmentById = async (id, userId, payload) => {
+  // check existing assessment
+  const assessment =
+    await proposalAssessmentRepository.findProposalAssessmentByProposalIdAndStudentIdAndDosenId(
+      id,
+      payload.student_id,
+      userId
+    );
+  if (!assessment) {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+  // update assessment
+  const updateAssessment =
+    await proposalAssessmentRepository.updateProposalAssessmentById(
+      assessment.id,
+      payload.value
+    );
+  return updateAssessment;
+};
+
+//===================================================================
+// @description     Get all proposal assessment by id
+// @route           GET /proposal/proposal-assessment/:id
 // @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
 const getAllProposalAssessmentById = async (id) => {
   // check proposal
@@ -846,8 +873,11 @@ const getAllProposalAssessmentById = async (id) => {
     );
 
     const studentData = {
+      proposal_id: proposal.id,
       student_id: student.id,
       fullName: fullName,
+      nim: student.nim,
+      major: student.major,
       value_by_chairman: chairmanValue ? chairmanValue.value : null,
       value_by_member: memberValue ? memberValue.value : null,
       value_by_advisor: advisorValue ? advisorValue.value : null,
@@ -860,8 +890,33 @@ const getAllProposalAssessmentById = async (id) => {
 };
 
 //===================================================================
-// @description     Get proposal assessment by id
-// @route           GET /proposal/proposal-assessment/:id
+// @description     Update proposal changes by id
+// @route           PUT /proposal/proposal-changes/:id
+// @access          DOSEN
+const updateProposalChangesById = async (id, userId, payload) => {
+  // check existing change
+  const change =
+    await proposalChangesRepository.findProposalChangesByProposalIdAndDosenId(
+      id,
+      userId
+    );
+  if (!change) {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+  // update change
+  const updateChange = await proposalChangesRepository.updateProposalChangeById(
+    change.id,
+    payload.changes
+  );
+  return updateChange;
+};
+
+//===================================================================
+// @description     Get all proposal changes by id
+// @route           GET /proposal/proposal-changes/:id
 // @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
 const getAllProposalChangesById = async (id) => {
   // check proposal
@@ -1472,7 +1527,9 @@ module.exports = {
   getProposalScheduleById,
 
   openAccessProposalReportById,
+  updateProposalAssessmentById,
   getAllProposalAssessmentById,
+  updateProposalChangesById,
   getAllProposalChangesById,
   getProposalReportById,
   signProposalReportById,
