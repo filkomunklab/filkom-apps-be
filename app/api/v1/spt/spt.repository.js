@@ -1,146 +1,277 @@
 const { status } = require("@prisma/client");
 const prisma = require("../../../database");
-const moment = require('moment');
+const moment = require("moment");
 
 //menampilkan list SPT, diurutkan dari created_at paling akhir
 const listSPT = async () => {
-    return await prisma.formSPT.findMany({
-      orderBy: {
-          graduate_plan: 'desc' // 'asc' untuk urutan menaik, 'desc' untuk urutan menurun
+  return await prisma.formSPT.findMany({
+    orderBy: {
+      created_at: "desc",
+    },
+    include: {
+      student: {
+        select: {
+          firstName: true,
+          lastName: true,
+          reg_num: true,
+          dateOfBirth: true,
+          gender: true,
+          nim: true,
+          faculty: true,
+          major: true,
+          phoneNo: true,
+          personalEmail: true,
+        },
+      },
+    },
+  });
+};
+
+const findSPTById = async (id) => {
+  return await prisma.formSPT.findUnique({
+    where: { id },
+    include: {
+      student: {
+        select: {
+          firstName: true,
+          lastName: true,
+          reg_num: true,
+          dateOfBirth: true,
+          gender: true,
+          nim: true,
+          faculty: true,
+          major: true,
+          phoneNo: true,
+        },
+      },
+    },
+  });
+};
+
+const findSPTByNIM = async (nim) => {
+  const spt = await prisma.formSPT.findMany({
+    where: {
+      studentId: nim,
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+    include: {
+      student: {
+        select: {
+          firstName: true,
+          lastName: true,
+          reg_num: true,
+          dateOfBirth: true,
+          gender: true,
+          nim: true,
+          faculty: true,
+          major: true,
+          phoneNo: true,
+        },
+      },
+    },
+    take: 1,
+  });
+  return spt[0];
+};
+
+const insertSPT = async (dataSPT) => {
+  //mengambil tanggal saat ini
+  const currentDate = moment().format("DD/MM/YYYY");
+  console.log(currentDate);
+
+  //menambahkan logika perhitungan tahun ajaran
+  const semester =
+    parseInt(currentDate.split("/")[1], 10) > 6 ? "Semester I" : "Semester II";
+  const tahunLulus = moment(currentDate, "DD/MM/YYYY").format("YYYY");
+  const tahunAjaran =
+    semester === "Semester I"
+      ? `${tahunLulus}/${parseInt(tahunLulus, 10) + 1}` //2023/2024
+      : `${parseInt(tahunLulus, 10)}/${parseInt(tahunLulus, 10) + 1}`;
+
+  const semesterLulus =
+    semester === "Semester I" ? "Semester II" : "Semester I";
+  const graduateYear =
+    semesterLulus === "Semester I"
+      ? moment(tahunLulus, "YYYY").format("YYYY")
+      : moment(tahunLulus, "YYYY").add(1, "y").format("YYYY");
+
+  // Mengisi kolom 'graduate_plan' dengan hasil perhitungan
+  dataSPT.graduate_plan = `${semesterLulus} ${tahunAjaran}`;
+
+  const spt = await prisma.formSPT.create({
+    data: {
+      // graduate_year: graduateYear,
+      nik: dataSPT.nik,
+      birth_mother: dataSPT.birth_mother,
+      graduate_plan: dataSPT.graduate_plan,
+      minor: dataSPT.minor,
+      remaining_credits: dataSPT.remaining_credits,
+      remaining_classes: dataSPT.remaining_classes,
+      approval_fac: dataSPT.approval_fac,
+      approval_reg: dataSPT.approval_reg,
+      student: { connect: { nim: dataSPT.studentId } }, // Menghubungkan SPT ke mahasiswa berdasarkan nim
+    },
+  });
+  return spt;
+};
+
+const patchapprovalByFak = async (id, status) => {
+  try {
+    return await prisma.formSPT.update({
+      where: { id },
+      data: {
+        approval_fac: status,
       },
       include: {
         student: true,
       },
-  });
-}
-
-const findSPTById = async (id) => {
-    return await prisma.formSPT.findUnique({
-        where: { id },
-        include: {
-            student: true,
-        }
     });
-};
-
-const insertSPT = async (dataSPT) => {
-    //mengambil tanggal saat ini
-    const currentDate = moment().format("DD/MM/YYYY");
-
-    //menambahkan logika perhitungan tahun ajaran
-    const semester = parseInt(currentDate.split("/")[1], 10) > 6 ? "Semester I" : "Semester II";
-    const tahunLulus = moment(currentDate, "DD/MM/YYYY").format("YYYY");
-    const tahunAjaran =
-    semester === "Semester I"
-    ? `${tahunLulus}/${parseInt(tahunLulus, 10) + 1}`
-    : `${parseInt(tahunLulus, 10)}/${parseInt(tahunLulus, 10) + 1}`;
-
-  const semesterLulus = semester === "Semester I" ? "Semester II" : "Semester I";
-
-    // Mengisi kolom 'graduate_plan' dengan hasil perhitungan
-    dataSPT.graduate_plan = `${semesterLulus} ${tahunAjaran}`;
-
-    const spt = await prisma.formSPT.create({
-      data: {
-        nik: dataSPT.nik,
-        date_of_birth: dataSPT.date_of_birth,
-        gender: dataSPT.gender,
-        birth_mother: dataSPT.birth_mother,
-        graduate_plan: dataSPT.graduate_plan,
-        minor: dataSPT.minor,
-        remaining_credits: dataSPT.remaining_credits,
-        remaining_classes: dataSPT.remaining_classes,
-        approvalFak: dataSPT.approvalFak,
-        approvalReg: dataSPT.approvalReg,
-        student: { connect: { nim: dataSPT.studentId } }, // Menghubungkan SPT ke mahasiswa berdasarkan nim
-    },
-    });
-    return spt;
-};
-
-const patchapprovalByFak = async (id, status) => {
-    try {
-        return await prisma.formSPT.update({
-        where: { id },
-        data: {
-            approvalFak: status,
-        },
-        include: {
-            student: true,
-          },
-        });
-    } catch (error) {
-        throw error;
-    }
+  } catch (error) {
+    throw error;
+  }
 };
 
 const listApprovalSPTbyFak = async () => {
-return await prisma.formSPT.findMany({
+  return await prisma.formSPT.findMany({
     where: {
-        approvalFak: 'APPROVED',
+      approval_fac: "APPROVED",
     },
     include: {
-        student: true,
+      student: {
+        select: {
+          firstName: true,
+          lastName: true,
+          reg_num: true,
+          dateOfBirth: true,
+          gender: true,
+          nim: true,
+          faculty: true,
+          major: true,
+          phoneNo: true,
+        },
       },
-});
+    },
+  });
 };
 
 const patchapprovalByReg = async (id, status) => {
-    try {
-        return await prisma.formSPT.update({
-        where: { id },
-        data: {
-            approvalReg: status,
-        },
-        include: {
-            student: true,
-          },
-        });
-    } catch (error) {
-        throw error;
-    }
+  try {
+    return await prisma.formSPT.update({
+      where: { id },
+      data: {
+        approval_reg: status,
+      },
+      include: {
+        student: true,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
 };
 
 const listApprovalSPTbyReg = async () => {
-    return await prisma.formSPT.findMany({
-        where: {
-            approvalReg: 'APPROVED',
+  return await prisma.formSPT.findMany({
+    where: {
+      approval_reg: "APPROVED",
+    },
+    include: {
+      student: {
+        select: {
+          firstName: true,
+          lastName: true,
+          reg_num: true,
+          dateOfBirth: true,
+          gender: true,
+          nim: true,
+          faculty: true,
+          major: true,
+          phoneNo: true,
         },
-        include: {
-            student: true,
-          },
-    });
+      },
+    },
+  });
 };
 
 //menampilkan data berdasarkan
-const sortSPT = async (filter) => {
-    const where = {};
-    if (filter.graduate_plan){
-        where.graduate_plan = filter.graduate_plan;
-    }
-    if (filter.approvalFak){
-        where.approvalFak = filter.approvalFak;
-    }
-    if (filter.approvalReg){
-        where.approvalReg = filter.approvalReg;
-    }
+const filterSPT = async (filter) => {
+  const where = {};
+  if (filter.graduate_plan) {
+    where.graduate_plan = filter.graduate_plan;
+  }
+  if (filter.approval_fac) {
+    where.approval_fac = filter.approval_fac;
+  }
+  if (filter.approval_reg) {
+    where.approval_reg = filter.approval_reg;
+  }
 
-    return await prisma.formSPT.findMany({
-        where,
-        include: {
-            student: true,
-        }
-    })
-}
+  return await prisma.formSPT.findMany({
+    where,
+    include: {
+      student: {
+        select: {
+          firstName: true,
+          lastName: true,
+          reg_num: true,
+          dateOfBirth: true,
+          gender: true,
+          nim: true,
+          faculty: true,
+          major: true,
+          phoneNo: true,
+        },
+      },
+    },
+  });
+};
 
+//cek form SPT: APPROVED, REJECTED, WAITING, DAN DATA NOT FOUND
+const checkFormSPT = async (studentId) => {
+  const spt = await prisma.student.findUnique({
+    where: {
+      nim: studentId,
+    },
+    include: {
+      FormSPT: {
+        orderBy: {
+          created_at: "desc",
+        },
+        distinct: "studentId",
+      },
+    },
+  });
+
+  //yang jadi cuma waiting, approved dg rejected belum jadi
+  console.log(spt);
+  if (!spt) {
+    throw new Error("Data not found");
+  } else if (
+    spt.FormSPT[0].approval_fac === "APPROVED" &&
+    spt.FormSPT[0].approval_reg === "APPROVED"
+  ) {
+    return "APPROVED";
+  } else if (
+    spt.FormSPT[0].approval_fac === "REJECTED" &&
+    spt.FormSPT[0].approval_reg === "REJECTED"
+  ) {
+    return "REJECTED";
+  } else {
+    return "WAITING";
+  }
+};
 
 module.exports = {
-    insertSPT,
-    listSPT,
-    findSPTById,
-    patchapprovalByFak,
-    listApprovalSPTbyFak,
-    patchapprovalByReg,
-    listApprovalSPTbyReg,
-    sortSPT,
-}
+  insertSPT,
+  listSPT,
+  findSPTById,
+  findSPTByNIM,
+  patchapprovalByFak,
+  listApprovalSPTbyFak,
+  patchapprovalByReg,
+  listApprovalSPTbyReg,
+  filterSPT,
+  checkFormSPT,
+};

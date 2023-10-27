@@ -4,15 +4,16 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const app = express();
-const moment = require("moment");
+const bodyParser = require("body-parser");
 
 const authRoutes = require("./app/api/v1/auth/auth.routes");
 const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
-const fileRoutes = require("./app/api/v1/file/file.routers");
 
 //--------------------KlabatBridge------------------------------
 const sptRoutes = require("./app/api/v1/spt/spt.routes");
+const tsRoutes = require("./app/api/v1/tracer_study/ts.routes");
+const alumniRoutes = require("./app/api/v1/alumni/alumni.routes");
 
 //------------------Ruter Skripsi App---------------------------
 const studentRoutes = require("./app/api/v1/student/student.routes");
@@ -40,6 +41,7 @@ const certificateRoutes = require("./app/api/v1/certificate/certificate.routes")
 //--------------------------------------------------------
 
 app.use(cors(corsOptions));
+app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.json());
 app.use(logger("dev"));
 app.use(express.json());
@@ -50,10 +52,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(`${URL}`, authRoutes);
 app.use(`${URL}`, adminRoutes);
 app.use(`${URL}`, employeeRoutes);
-app.use(`${URL}`, fileRoutes);
 
 //---------------Router KlabatBridge---------------------------
 app.use(`${URL}`, sptRoutes);
+app.use(`${URL}`, tsRoutes);
+app.use(`${URL}`, alumniRoutes);
 
 //------------------Ruter Skripsi App---------------------------
 app.use(`${URL}`, studentRoutes);

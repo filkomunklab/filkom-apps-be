@@ -149,6 +149,52 @@ async function main() {
       });
     });
 
+  // CREATE SEKRETARIS
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Manado",
+        phoneNum: "08193834412",
+        email: "sekretaris@test.com",
+        firstName: "Sekretaris",
+        lastName: "Sekretaris",
+        nik: "sekretaris",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      await prisma.userRole.create({
+        data: {
+          userId: employee.nik,
+          role: "SEKRETARIS",
+        },
+      });
+    });
+
+  // CREATE REGISTER
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Manado",
+        phoneNum: "083834412",
+        email: "register@test.com",
+        firstName: "Register",
+        lastName: "Register",
+        nik: "register",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      await prisma.userRole.create({
+        data: {
+          userId: employee.nik,
+          role: "REGISTER",
+        },
+      });
+    });
+
   // CREATE OPERATOR
   await prisma.employee
     .create({

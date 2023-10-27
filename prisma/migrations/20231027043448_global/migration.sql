@@ -1,0 +1,120 @@
+/*
+  Warnings:
+
+  - You are about to drop the column `approvalFak` on the `FormSPT` table. All the data in the column will be lost.
+  - You are about to drop the column `approvalReg` on the `FormSPT` table. All the data in the column will be lost.
+
+*/
+-- AlterEnum
+ALTER TYPE "Role" ADD VALUE 'REGISTER';
+
+-- DropIndex
+DROP INDEX "FormSPT_nik_key";
+
+-- AlterTable
+ALTER TABLE "FormSPT" DROP COLUMN "approvalFak",
+DROP COLUMN "approvalReg",
+ADD COLUMN     "approval_fac" "status" NOT NULL DEFAULT 'WAITING',
+ADD COLUMN     "approval_reg" "status" NOT NULL DEFAULT 'WAITING';
+
+-- AlterTable
+ALTER TABLE "Student" ADD COLUMN     "graduate_year" TEXT;
+
+-- CreateTable
+CREATE TABLE "Tracer_Study" (
+    "id" TEXT NOT NULL,
+    "kdptimsmh" TEXT NOT NULL,
+    "kdpstmsmh" TEXT NOT NULL,
+    "nimhsmsmh" TEXT NOT NULL,
+    "nmmhsmsmh" TEXT NOT NULL,
+    "telpomsmh" TEXT NOT NULL,
+    "emailmsmh" TEXT NOT NULL,
+    "tahun_lulus" TEXT NOT NULL,
+    "nik" TEXT NOT NULL,
+    "npwp" TEXT NOT NULL,
+    "f8" TEXT NOT NULL,
+    "f504" TEXT NOT NULL,
+    "f502" TEXT NOT NULL,
+    "f505" TEXT NOT NULL,
+    "f506" TEXT NOT NULL,
+    "f5a1" TEXT NOT NULL,
+    "f5a2" TEXT NOT NULL,
+    "f1101" TEXT NOT NULL,
+    "f1102" TEXT NOT NULL,
+    "f5b" TEXT NOT NULL,
+    "f5c" TEXT NOT NULL,
+    "f5d" TEXT NOT NULL,
+    "f18a" TEXT NOT NULL,
+    "f18b" TEXT NOT NULL,
+    "f18c" TEXT NOT NULL,
+    "f18d" TEXT NOT NULL,
+    "f1201" TEXT NOT NULL,
+    "f1202" TEXT NOT NULL,
+    "f14" TEXT NOT NULL,
+    "f15" TEXT NOT NULL,
+    "f1761" TEXT NOT NULL,
+    "f1762" TEXT NOT NULL,
+    "f1763" TEXT NOT NULL,
+    "f1764" TEXT NOT NULL,
+    "f1765" TEXT NOT NULL,
+    "f1766" TEXT NOT NULL,
+    "f1767" TEXT NOT NULL,
+    "f1768" TEXT NOT NULL,
+    "f1769" TEXT NOT NULL,
+    "f1770" TEXT NOT NULL,
+    "f1771" TEXT NOT NULL,
+    "f1772" TEXT NOT NULL,
+    "f1773" TEXT NOT NULL,
+    "f1774" TEXT NOT NULL,
+    "f21" TEXT NOT NULL,
+    "f22" TEXT NOT NULL,
+    "f23" TEXT NOT NULL,
+    "f24" TEXT NOT NULL,
+    "f25" TEXT NOT NULL,
+    "f26" TEXT NOT NULL,
+    "f27" TEXT NOT NULL,
+    "f301" TEXT NOT NULL,
+    "f302" TEXT NOT NULL,
+    "f303" TEXT NOT NULL,
+    "f401" TEXT NOT NULL,
+    "f402" TEXT NOT NULL,
+    "f403" TEXT NOT NULL,
+    "f404" TEXT NOT NULL,
+    "f405" TEXT NOT NULL,
+    "f406" TEXT NOT NULL,
+    "f407" TEXT NOT NULL,
+    "f408" TEXT NOT NULL,
+    "f409" TEXT NOT NULL,
+    "f410" TEXT NOT NULL,
+    "f411" TEXT NOT NULL,
+    "f412" TEXT NOT NULL,
+    "f413" TEXT NOT NULL,
+    "f414" TEXT NOT NULL,
+    "f415" TEXT NOT NULL,
+    "f416" TEXT NOT NULL,
+    "f6" TEXT NOT NULL,
+    "f7" TEXT NOT NULL,
+    "f7a" TEXT NOT NULL,
+    "f1001" TEXT NOT NULL,
+    "f1002" TEXT NOT NULL,
+    "f1601" TEXT NOT NULL,
+    "f1602" TEXT NOT NULL,
+    "f1603" TEXT NOT NULL,
+    "f1604" TEXT NOT NULL,
+    "f1605" TEXT NOT NULL,
+    "f1606" TEXT NOT NULL,
+    "f1607" TEXT NOT NULL,
+    "f1608" TEXT NOT NULL,
+    "f1609" TEXT NOT NULL,
+    "f1610" TEXT NOT NULL,
+    "f1611" TEXT NOT NULL,
+    "f1612" TEXT NOT NULL,
+    "f1613" TEXT NOT NULL,
+    "f1614" TEXT NOT NULL,
+    "studentId" TEXT NOT NULL,
+
+    CONSTRAINT "Tracer_Study_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "Tracer_Study" ADD CONSTRAINT "Tracer_Study_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("nim") ON DELETE RESTRICT ON UPDATE CASCADE;
