@@ -101,7 +101,7 @@ const createTS = async (dataTS) => {
       f1612: dataTS.f1612,
       f1613: dataTS.f1613,
       f1614: dataTS.f1614,
-      student: { connect: { nim: dataTS.student } },
+      student: { connect: { nim: dataTS.studentId } },
     },
   });
 };
