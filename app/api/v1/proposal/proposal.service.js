@@ -769,6 +769,20 @@ const openAccessProposalReportById = async (id, userId) => {
         proposal.id,
         proposal.advisor_id
       );
+      if (proposal.co_advisor1_id) {
+        // create empty change for co-advisor1
+        await proposalChangesRepository.insertEmptyProposalChanges(
+          proposal.id,
+          proposal.co_advisor1_id
+        );
+      }
+      if (proposal.co_advisor2_id) {
+        // create empty change for co-advisor2
+        await proposalChangesRepository.insertEmptyProposalChanges(
+          proposal.id,
+          proposal.co_advisor2_id
+        );
+      }
     }
     return updatedProposal;
   } else {
@@ -814,6 +828,11 @@ const getAllProposalAssessmentById = async (id) => {
 
   for (const studentId in groupedProposalAssessment) {
     const student = await studentRepository.findStudentById(studentId);
+    let fullName = student.firstName;
+    if (student.lastName) {
+      fullName += ` ${student.lastName}`;
+    }
+
     const chairmanValue = groupedProposalAssessment[studentId].find(
       (assessment) => assessment.dosen_id === proposal.panelist_chairman_id
     );
@@ -828,10 +847,10 @@ const getAllProposalAssessmentById = async (id) => {
 
     const studentData = {
       student_id: student.id,
-      fullName: `${student.firstName} ${student.lastName || ""}`,
-      value_by_chairman: chairmanValue ? chairmanValue.value : "",
-      value_by_member: memberValue ? memberValue.value : "",
-      value_by_advisor: advisorValue ? advisorValue.value : "",
+      fullName: fullName,
+      value_by_chairman: chairmanValue ? chairmanValue.value : null,
+      value_by_member: memberValue ? memberValue.value : null,
+      value_by_advisor: advisorValue ? advisorValue.value : null,
     };
 
     result.push(studentData);
@@ -880,11 +899,15 @@ const getAllProposalChangesById = async (id) => {
 
   const changesData = {
     proposal_id: proposal.id,
-    changes_by_chairman: chairmanChanges ? chairmanChanges.changes : "",
-    changes_by_member: memberChanges ? memberChanges.changes : "",
-    changes_by_advisor: advisorChanges ? advisorChanges.changes : "",
-    changes_by_co_advisor1: coAdvisor1Changes ? coAdvisor1Changes.changes : "",
-    changes_by_co_advisor2: coAdvisor2Changes ? coAdvisor2Changes.changes : "",
+    changes_by_chairman: chairmanChanges ? chairmanChanges.changes : null,
+    changes_by_member: memberChanges ? memberChanges.changes : null,
+    changes_by_advisor: advisorChanges ? advisorChanges.changes : null,
+    changes_by_co_advisor1: coAdvisor1Changes
+      ? coAdvisor1Changes.changes
+      : null,
+    changes_by_co_advisor2: coAdvisor2Changes
+      ? coAdvisor2Changes.changes
+      : null,
   };
 
   return changesData;
