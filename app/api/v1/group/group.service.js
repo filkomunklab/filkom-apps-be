@@ -589,7 +589,44 @@ const getSubmissionListMK = async (userId) => {
   }
   // Convert the submissionBySemester object into an array of semesters
   const submissionList = Object.values(submissionBySemester);
-  return submissionList;
+
+  // Initialize dashboard data
+  const dashboard = {
+    total_group: 0,
+    not_submitted: 0,
+    has_submitted: 0,
+    approved: 0,
+    rejected: 0,
+  };
+
+  for (const semesterKey in submissionBySemester) {
+    const semesterData = submissionBySemester[semesterKey];
+
+    // Iterate through submissions in the semester
+    for (const submission of semesterData.submissions) {
+      dashboard.total_group++; // Increment total_group count
+
+      if (submission.title === null) {
+        dashboard.not_submitted++; // Increment not_submitted count
+      } else {
+        dashboard.has_submitted++; // Increment has_submitted count
+      }
+
+      if (submission.is_approve === "Approve") {
+        dashboard.approved++; // Increment approved count
+      } else if (submission.is_approve === "Rejected") {
+        dashboard.rejected++; // Increment rejected count
+      }
+    }
+  }
+
+  // Add the dashboard data to the result
+  const result = {
+    dashboard: dashboard,
+    semesterData: submissionList,
+  };
+
+  return result;
 };
 
 //===================================================================
@@ -857,7 +894,44 @@ const getSubmissionListKaprodi = async (userId) => {
 
   // Convert the submissionBySemester object into an array of semesters
   const submissionList = Object.values(submissionBySemester);
-  return submissionList;
+
+  // Initialize dashboard data
+  const dashboard = {
+    total_group: 0,
+    not_submitted: 0,
+    has_submitted: 0,
+    approved: 0,
+    rejected: 0,
+  };
+
+  for (const semesterKey in submissionBySemester) {
+    const semesterData = submissionBySemester[semesterKey];
+
+    // Iterate through submissions in the semester
+    for (const submission of semesterData.submissions) {
+      dashboard.total_group++; // Increment total_group count
+
+      if (submission.title === null) {
+        dashboard.not_submitted++; // Increment not_submitted count
+      } else {
+        dashboard.has_submitted++; // Increment has_submitted count
+      }
+
+      if (submission.is_approve === "Approve") {
+        dashboard.approved++; // Increment approved count
+      } else if (submission.is_approve === "Rejected") {
+        dashboard.rejected++; // Increment rejected count
+      }
+    }
+  }
+
+  // Add the dashboard data to the result
+  const result = {
+    dashboard: dashboard,
+    semesterData: submissionList,
+  };
+
+  return result;
 };
 
 //===================================================================
@@ -961,7 +1035,44 @@ const getSubmissionListDekan = async (userId) => {
 
   // Convert the submissionBySemester object into an array of semesters
   const submissionList = Object.values(submissionBySemester);
-  return submissionList;
+
+  // Initialize dashboard data
+  const dashboard = {
+    total_group: 0,
+    not_submitted: 0,
+    has_submitted: 0,
+    approved: 0,
+    rejected: 0,
+  };
+
+  for (const semesterKey in submissionBySemester) {
+    const semesterData = submissionBySemester[semesterKey];
+
+    // Iterate through submissions in the semester
+    for (const submission of semesterData.submissions) {
+      dashboard.total_group++; // Increment total_group count
+
+      if (submission.title === null) {
+        dashboard.not_submitted++; // Increment not_submitted count
+      } else {
+        dashboard.has_submitted++; // Increment has_submitted count
+      }
+
+      if (submission.is_approve === "Approve") {
+        dashboard.approved++; // Increment approved count
+      } else if (submission.is_approve === "Rejected") {
+        dashboard.rejected++; // Increment rejected count
+      }
+    }
+  }
+
+  // Add the dashboard data to the result
+  const result = {
+    dashboard: dashboard,
+    semesterData: submissionList,
+  };
+
+  return result;
 };
 
 //===================================================================
@@ -1001,10 +1112,16 @@ const getProposalListAdvisorAndCo = async (userId) => {
       })
     );
 
+    // variable to know if group has submit proposal
+    let uploaded = false;
+    if (entry.file_path_proposal) {
+      uploaded = true;
+    }
     const proposalData = {
       group_id: group.id,
       proposal_id: entry.id,
       students,
+      uploaded,
       title: group.title,
       approve_by_advisor: entry.is_proposal_approve_by_advisor,
       approve_by_co_advisor1: entry.is_proposal_approve_by_co_advisor1,
@@ -1017,15 +1134,60 @@ const getProposalListAdvisorAndCo = async (userId) => {
     if (!proposalBySemester[semesterKey]) {
       proposalBySemester[semesterKey] = {
         semester: semesterKey,
-        submissions: [],
+        proposals: [],
       };
     }
 
-    proposalBySemester[semesterKey].submissions.push(proposalData);
+    proposalBySemester[semesterKey].proposals.push(proposalData);
   }
   // Convert the submissionBySemester object into an array of semesters
   const proposalList = Object.values(proposalBySemester);
-  return proposalList;
+
+  // Initialize dashboard data
+  const dashboard = {
+    total_group: 0,
+    not_submitted: 0,
+    has_submitted: 0,
+    approved: 0,
+    rejected: 0,
+  };
+
+  for (const semesterKey in proposalBySemester) {
+    const semesterData = proposalBySemester[semesterKey];
+
+    // Iterate through submissions in the semester
+    for (const proposal of semesterData.proposals) {
+      dashboard.total_group++; // Increment total_group count
+
+      if (proposal.uploaded === false) {
+        dashboard.not_submitted++; // Increment not_submitted count
+      } else {
+        dashboard.has_submitted++; // Increment has_submitted count
+      }
+
+      if (
+        proposal.is_proposal_approve_by_advisor === "Approve" &&
+        proposal.is_proposal_approve_by_co_advisor1 === "Approve" &&
+        proposal.is_proposal_approve_by_co_advisor2 === "Approve"
+      ) {
+        dashboard.approved++; // Increment approved count
+      } else if (
+        proposal.is_proposal_approve_by_advisor === "Rejected" &&
+        proposal.is_proposal_approve_by_co_advisor1 === "Rejected" &&
+        proposal.is_proposal_approve_by_co_advisor2 === "Rejected"
+      ) {
+        dashboard.rejected++; // Increment rejected count
+      }
+    }
+  }
+
+  // Add the dashboard data to the result
+  const result = {
+    dashboard: dashboard,
+    semesterData: proposalList,
+  };
+
+  return result;
 };
 
 //===================================================================
@@ -1082,15 +1244,60 @@ const getProposalListChairmanAndMember = async (userId) => {
     if (!proposalBySemester[semesterKey]) {
       proposalBySemester[semesterKey] = {
         semester: semesterKey,
-        submissions: [],
+        proposals: [],
       };
     }
 
-    proposalBySemester[semesterKey].submissions.push(proposalData);
+    proposalBySemester[semesterKey].proposals.push(proposalData);
   }
   // Convert the submissionBySemester object into an array of semesters
   const proposalList = Object.values(proposalBySemester);
-  return proposalList;
+
+  // Initialize dashboard data
+  const dashboard = {
+    total_group: 0,
+    not_defence: 0,
+    has_defence: 0,
+    has_revision: 0,
+    not_revision: 0,
+  };
+
+  for (const semesterKey in proposalBySemester) {
+    const semesterData = proposalBySemester[semesterKey];
+
+    // Iterate through submissions in the semester
+    for (const proposal of semesterData.proposals) {
+      dashboard.total_group++; // Increment total_group count
+
+      if (proposal.defence_status === null) {
+        dashboard.not_defence++; // Increment not_defence count
+      } else {
+        dashboard.has_defence++; // Increment has_defence count
+      }
+
+      if (
+        proposal.is_revision_approve_by_panelist_chairman === "Approve" &&
+        proposal.is_revision_approve_by_panelist_member === "Approve" &&
+        proposal.is_revision_approve_by_advisor === "Approve"
+      ) {
+        dashboard.approved++; // Increment approved count
+      } else if (
+        proposal.is_revision_approve_by_panelist_chairman === "Rejected" &&
+        proposal.is_revision_approve_by_panelist_member === "Rejected" &&
+        proposal.is_revision_approve_by_advisor === "Rejected"
+      ) {
+        dashboard.rejected++; // Increment rejected count
+      }
+    }
+  }
+
+  // Add the dashboard data to the result
+  const result = {
+    dashboard: dashboard,
+    semesterData: proposalList,
+  };
+
+  return result;
 };
 
 //===================================================================
@@ -1129,10 +1336,16 @@ const getProposalListMK = async (userId) => {
         })
       );
 
+      // variable to know if group has submit proposal
+      let uploaded = false;
+      if (entry.file_path_proposal) {
+        uploaded = true;
+      }
       const proposalData = {
         group_id: group.id,
         proposal_id: entry.id,
         students,
+        uploaded,
         title: group.title,
         approve_by_advisor: entry.is_proposal_approve_by_advisor,
         approve_by_co_advisor1: entry.is_proposal_approve_by_co_advisor1,
@@ -1144,16 +1357,61 @@ const getProposalListMK = async (userId) => {
       if (!proposalBySemester[semesterKey]) {
         proposalBySemester[semesterKey] = {
           semester: semesterKey,
-          submissions: [],
+          proposals: [],
         };
       }
 
-      proposalBySemester[semesterKey].submissions.push(proposalData);
+      proposalBySemester[semesterKey].proposals.push(proposalData);
     }
   }
   // Convert the submissionBySemester object into an array of semesters
   const proposalList = Object.values(proposalBySemester);
-  return proposalList;
+
+  // Initialize dashboard data
+  const dashboard = {
+    total_group: 0,
+    not_submitted: 0,
+    has_submitted: 0,
+    approved: 0,
+    rejected: 0,
+  };
+
+  for (const semesterKey in proposalBySemester) {
+    const semesterData = proposalBySemester[semesterKey];
+
+    // Iterate through submissions in the semester
+    for (const proposal of semesterData.proposals) {
+      dashboard.total_group++; // Increment total_group count
+
+      if (proposal.uploaded === false) {
+        dashboard.not_submitted++; // Increment not_submitted count
+      } else {
+        dashboard.has_submitted++; // Increment has_submitted count
+      }
+
+      if (
+        proposal.is_proposal_approve_by_advisor === "Approve" &&
+        proposal.is_proposal_approve_by_co_advisor1 === "Approve" &&
+        proposal.is_proposal_approve_by_co_advisor2 === "Approve"
+      ) {
+        dashboard.approved++; // Increment approved count
+      } else if (
+        proposal.is_proposal_approve_by_advisor === "Rejected" &&
+        proposal.is_proposal_approve_by_co_advisor1 === "Rejected" &&
+        proposal.is_proposal_approve_by_co_advisor2 === "Rejected"
+      ) {
+        dashboard.rejected++; // Increment rejected count
+      }
+    }
+  }
+
+  // Add the dashboard data to the result
+  const result = {
+    dashboard: dashboard,
+    semesterData: proposalList,
+  };
+
+  return result;
 };
 
 //===================================================================
@@ -1244,11 +1502,11 @@ const getProposalListKaprodi = async (userId, userRole) => {
       if (!proposalBySemester[semesterKey]) {
         proposalBySemester[semesterKey] = {
           semester: semesterKey,
-          submissions: [],
+          proposals: [],
         };
       }
 
-      proposalBySemester[semesterKey].submissions.push(proposalData);
+      proposalBySemester[semesterKey].proposals.push(proposalData);
     }
   }
   if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
@@ -1329,17 +1587,57 @@ const getProposalListKaprodi = async (userId, userRole) => {
       if (!proposalBySemester[semesterKey]) {
         proposalBySemester[semesterKey] = {
           semester: semesterKey,
-          submissions: [],
+          proposals: [],
         };
       }
 
-      proposalBySemester[semesterKey].submissions.push(proposalData);
+      proposalBySemester[semesterKey].proposals.push(proposalData);
     }
   }
 
   // Convert the submissionBySemester object into an array of semesters
   const proposalList = Object.values(proposalBySemester);
-  return proposalList;
+
+  // Initialize dashboard data
+  const dashboard = {
+    total_group: 0,
+    not_defence: 0,
+    has_defence: 0,
+    pass: 0,
+    repeat: 0,
+    not_pass: 0,
+  };
+
+  for (const semesterKey in proposalBySemester) {
+    const semesterData = proposalBySemester[semesterKey];
+
+    // Iterate through submissions in the semester
+    for (const proposal of semesterData.proposals) {
+      dashboard.total_group++; // Increment total_group count
+
+      if (proposal.is_pass === null) {
+        dashboard.not_defence++; // Increment not_defence count
+      } else {
+        dashboard.has_defence++; // Increment has_defence count
+      }
+
+      if (proposal.is_pass === "Pass") {
+        dashboard.pass++;
+      } else if (proposal.is_pass === "Repeat") {
+        dashboard.repeat++;
+      } else if (proposal.is_pass === "Fail") {
+        dashboard.not_pass++;
+      }
+    }
+  }
+
+  // Add the dashboard data to the result
+  const result = {
+    dashboard: dashboard,
+    semesterData: proposalList,
+  };
+
+  return result;
 };
 
 //===================================================================
@@ -1393,17 +1691,57 @@ const getProposalListDekan = async (userId, userRole) => {
       if (!proposalBySemester[semesterKey]) {
         proposalBySemester[semesterKey] = {
           semester: semesterKey,
-          submissions: [],
+          proposals: [],
         };
       }
 
-      proposalBySemester[semesterKey].submissions.push(proposalData);
+      proposalBySemester[semesterKey].proposals.push(proposalData);
     }
   }
 
   // Convert the submissionBySemester object into an array of semesters
   const proposalList = Object.values(proposalBySemester);
-  return proposalList;
+
+  // Initialize dashboard data
+  const dashboard = {
+    total_group: 0,
+    not_defence: 0,
+    has_defence: 0,
+    pass: 0,
+    repeat: 0,
+    not_pass: 0,
+  };
+
+  for (const semesterKey in proposalBySemester) {
+    const semesterData = proposalBySemester[semesterKey];
+
+    // Iterate through submissions in the semester
+    for (const proposal of semesterData.proposals) {
+      dashboard.total_group++; // Increment total_group count
+
+      if (proposal.is_pass === null) {
+        dashboard.not_defence++; // Increment not_defence count
+      } else {
+        dashboard.has_defence++; // Increment has_defence count
+      }
+
+      if (proposal.is_pass === "Pass") {
+        dashboard.pass++;
+      } else if (proposal.is_pass === "Repeat") {
+        dashboard.repeat++;
+      } else if (proposal.is_pass === "Fail") {
+        dashboard.not_pass++;
+      }
+    }
+  }
+
+  // Add the dashboard data to the result
+  const result = {
+    dashboard: dashboard,
+    semesterData: proposalList,
+  };
+
+  return result;
 };
 
 //===================================================================
@@ -1453,10 +1791,16 @@ const getProposalListSekretaris = async () => {
       plagiarism = true;
     }
 
+    // variable to know if group have schedule
+    let schedule = false;
+    if (entry.defence_date) {
+      schedule = true;
+    }
     const proposalData = {
       group_id: group.id,
       proposal_id: entry.id,
       students,
+      schedule,
       title: group.title,
       proposal_status: documentProposal,
       paymant_status: payment,
@@ -1469,16 +1813,57 @@ const getProposalListSekretaris = async () => {
     if (!proposalBySemester[semesterKey]) {
       proposalBySemester[semesterKey] = {
         semester: semesterKey,
-        submissions: [],
+        proposals: [],
       };
     }
 
-    proposalBySemester[semesterKey].submissions.push(proposalData);
+    proposalBySemester[semesterKey].proposals.push(proposalData);
   }
 
   // Convert the submissionBySemester object into an array of semesters
   const proposalList = Object.values(proposalBySemester);
-  return proposalList;
+
+  // Initialize dashboard data
+  const dashboard = {
+    total_group: 0,
+    ready: 0,
+    not_ready: 0,
+    have_schedule: 0,
+    not_schedule: 0,
+  };
+
+  for (const semesterKey in proposalBySemester) {
+    const semesterData = proposalBySemester[semesterKey];
+
+    // Iterate through submissions in the semester
+    for (const proposal of semesterData.proposals) {
+      dashboard.total_group++; // Increment total_group count
+
+      if (
+        proposal.proposal_status === false &&
+        proposal.paymant_status === false &&
+        proposal.plagiarism === false
+      ) {
+        dashboard.not_ready++; // Increment not_ready count
+      } else {
+        dashboard.ready++; // Increment ready count
+      }
+
+      if (proposal.schedule === true) {
+        dashboard.have_schedule++;
+      } else {
+        dashboard.not_schedule++;
+      }
+    }
+  }
+
+  // Add the dashboard data to the result
+  const result = {
+    dashboard: dashboard,
+    semesterData: proposalList,
+  };
+
+  return result;
 };
 
 // const getGroupStudentById = async (id) => {
