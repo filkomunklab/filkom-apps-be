@@ -1,3 +1,4 @@
+const { student } = require("../../../database");
 const prisma = require("../../../database");
 
 //daftar alumni
@@ -80,9 +81,650 @@ const getAlumniEmails = async (nim) => {
   return personalEmails;
 };
 
+// ================================================================================== JERICO
+const countTotalRowsAlumniHasTracerStudyBySearch = async (search_query) => {
+  try {
+    const totalRows = await prisma.tracer_Study.groupBy({
+      where: {
+        student: {
+          AND: [
+            { status: "GRADUATE" },
+            {
+              OR: [
+                {
+                  firstName: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  lastName: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  nim: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+      by: ["studentId"],
+      _count: {
+        studentId: true,
+      },
+    });
+
+    return totalRows.length;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const countTotalRowsAlumniHasTracerStudyBySearchWithFilterByGraduateYear = async (search_query, filterValue) => {
+  try {
+    const totalRows = await prisma.tracer_Study.groupBy({
+      where: {
+        student: {
+          AND: [
+            { status: "GRADUATE" },
+            {
+              OR: [
+                {
+                  firstName: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  lastName: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  nim: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+              ],
+            },
+            {
+              graduate_year: filterValue,
+            },
+          ],
+        },
+      },
+      by: ["studentId"],
+      _count: {
+        studentId: true,
+      },
+    });
+    return totalRows.length;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const countTotalRowsAlumniHasTracerStudyBySearchWithFilterByMajor = async (search_query, filterValue) => {
+  try {
+    const totalRows = await prisma.tracer_Study.groupBy({
+      where: {
+        student: {
+          AND: [
+            { status: "GRADUATE" },
+            {
+              OR: [
+                {
+                  firstName: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  lastName: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  nim: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+              ],
+            },
+            {
+              major: filterValue,
+            },
+          ],
+        },
+      },
+      by: ["studentId"],
+      _count: {
+        studentId: true,
+      },
+    });
+
+    return totalRows.length;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const findAlumniHasTracerStudyListPagination = async (search_query, page, limit, offset) => {
+  try {
+    const result = await prisma.tracer_Study.findMany({
+      where: {
+        student: {
+          AND: [
+            { status: "GRADUATE" },
+            {
+              OR: [
+                {
+                  firstName: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  lastName: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  nim: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+      select: {
+        student: {
+          select: {
+            firstName: true,
+            lastName: true,
+            nim: true,
+            major: true,
+            faculty: true,
+            graduate_year: true,
+          },
+        },
+      },
+      skip: offset,
+      take: limit,
+      orderBy: [
+        {
+          student: {
+            createdAt: "desc",
+          },
+        },
+      ],
+      distinct: ["studentId"],
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const findAlumniHasTracerStudyListPaginationFilterByGraduateYear = async (search_query, page, limit, offset, filterValue) => {
+  try {
+    const result = await prisma.tracer_Study.findMany({
+      where: {
+        student: {
+          AND: [
+            { status: "GRADUATE" },
+            {
+              OR: [
+                {
+                  firstName: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  lastName: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  nim: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+              ],
+            },
+            {
+              graduate_year: filterValue,
+            },
+          ],
+        },
+      },
+      select: {
+        student: {
+          select: {
+            firstName: true,
+            lastName: true,
+            nim: true,
+            major: true,
+            faculty: true,
+            graduate_year: true,
+          },
+        },
+      },
+      skip: offset,
+      take: limit,
+      orderBy: [
+        {
+          student: {
+            createdAt: "desc",
+          },
+        },
+      ],
+      distinct: ["studentId"],
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const findAlumniHasTracerStudyListPaginationFilterByMajor = async (search_query, page, limit, offset, filterValue) => {
+  try {
+    const result = await prisma.tracer_Study.findMany({
+      where: {
+        student: {
+          AND: [
+            { status: "GRADUATE" },
+            {
+              OR: [
+                {
+                  firstName: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  lastName: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  nim: {
+                    contains: search_query,
+                    mode: "insensitive",
+                  },
+                },
+              ],
+            },
+            {
+              major: filterValue,
+            },
+          ],
+        },
+      },
+      select: {
+        student: {
+          select: {
+            firstName: true,
+            lastName: true,
+            nim: true,
+            major: true,
+            faculty: true,
+            graduate_year: true,
+          },
+        },
+      },
+      skip: offset,
+      take: limit,
+      orderBy: [
+        {
+          student: {
+            createdAt: "desc",
+          },
+        },
+      ],
+      distinct: ["studentId"],
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+// ================ get all alumni
+const countTotalRowsAlumniBySearch = async (search_query) => {
+  try {
+    const totalRows = await prisma.student.count({
+      where: {
+        AND: [
+          {
+            status: "GRADUATE",
+          },
+          {
+            OR: [
+              {
+                firstName: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                lastName: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                nim: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    return totalRows;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const countTotalRowsAlumniBySearchWithFilterByGraduateYear = async (search_query, filterValue) => {
+  try {
+    const totalRows = await prisma.student.count({
+      where: {
+        AND: [
+          {
+            status: "GRADUATE",
+          },
+          {
+            OR: [
+              {
+                firstName: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                lastName: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                nim: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            graduate_year: filterValue,
+          },
+        ],
+      },
+    });
+
+    return totalRows;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const countTotalRowsAlumniBySearchWithFilterByMajor = async (search_query, filterValue) => {
+  try {
+    const totalRows = await prisma.student.count({
+      where: {
+        AND: [
+          {
+            status: "GRADUATE",
+          },
+          {
+            OR: [
+              {
+                firstName: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                lastName: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                nim: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            major: filterValue,
+          },
+        ],
+      },
+    });
+
+    return totalRows;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const findAlumniListPagination = async (search_query, page, limit, offset) => {
+  try {
+    const result = await prisma.student.findMany({
+      where: {
+        AND: [
+          { status: "GRADUATE" },
+          {
+            OR: [
+              {
+                firstName: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                lastName: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                nim: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+        ],
+      },
+      select: {
+        firstName: true,
+        lastName: true,
+        nim: true,
+        major: true,
+        faculty: true,
+        graduate_year: true,
+        personalEmail: true,
+      },
+      skip: offset,
+      take: limit,
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+      ],
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const findAlumniListPaginationFilterByGraduateYear = async (search_query, page, limit, offset, filterValue) => {
+  try {
+    const result = await prisma.student.findMany({
+      where: {
+        AND: [
+          { status: "GRADUATE" },
+          {
+            OR: [
+              {
+                firstName: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                lastName: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                nim: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            graduate_year: filterValue,
+          },
+        ],
+      },
+      select: {
+        firstName: true,
+        lastName: true,
+        nim: true,
+        major: true,
+        faculty: true,
+        graduate_year: true,
+        personalEmail: true,
+      },
+      skip: offset,
+      take: limit,
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+      ],
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const findAlumniListPaginationFilterByMajor = async (search_query, page, limit, offset, filterValue) => {
+  try {
+    const result = await prisma.student.findMany({
+      where: {
+        AND: [
+          { status: "GRADUATE" },
+          {
+            OR: [
+              {
+                firstName: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                lastName: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                nim: {
+                  contains: search_query,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+          {
+            major: filterValue,
+          },
+        ],
+      },
+      select: {
+        firstName: true,
+        lastName: true,
+        nim: true,
+        major: true,
+        faculty: true,
+        graduate_year: true,
+        personalEmail: true,
+      },
+      skip: offset,
+      take: limit,
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+      ],
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   getAlumniList,
   filterAlumni,
   alumniTS,
   getAlumniEmails,
+
+  countTotalRowsAlumniHasTracerStudyBySearch,
+  countTotalRowsAlumniHasTracerStudyBySearchWithFilterByGraduateYear,
+  countTotalRowsAlumniHasTracerStudyBySearchWithFilterByMajor,
+
+  findAlumniHasTracerStudyListPagination,
+  findAlumniHasTracerStudyListPaginationFilterByGraduateYear,
+  findAlumniHasTracerStudyListPaginationFilterByMajor,
+
+  countTotalRowsAlumniBySearch,
+  countTotalRowsAlumniBySearchWithFilterByGraduateYear,
+  countTotalRowsAlumniBySearchWithFilterByMajor,
+
+  findAlumniListPagination,
+  findAlumniListPaginationFilterByGraduateYear,
+  findAlumniListPaginationFilterByMajor,
 };
