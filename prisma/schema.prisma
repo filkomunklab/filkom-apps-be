@@ -277,8 +277,8 @@ model Group {
   keywords            String?
   abstrak             String?
   reference           String?
-  submission          Submission            @relation("Submission", fields: [submission_id], references: [id])
-  submission_id       String                @unique
+  submission          Submission?           @relation("Submission", fields: [submission_id], references: [id])
+  submission_id       String?               @unique
   proposal            Proposal?             @relation("Proposal", fields: [proposal_id], references: [id])
   proposal_id         String?               @unique
   skripsi             Skripsi?              @relation("Skripsi", fields: [skripsi_id], references: [id])

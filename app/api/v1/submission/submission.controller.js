@@ -22,11 +22,12 @@ const createSubmission = async (req, res) => {
     if (
       !(
         payload.title &&
-        payload.file_name &&
-        payload.file_size &&
         payload.is_consultation &&
         payload.proposed_advisor_id &&
-        payload.classroom_id
+        payload.classroom_id &&
+        payload.submission_file.file_name &&
+        payload.submission_file.file_size &&
+        payload.submission_file.buffer
       )
     ) {
       return res
@@ -87,10 +88,11 @@ const updateSubmissionById = async (req, res) => {
     if (
       !(
         payload.title &&
-        payload.file_name &&
-        payload.file_size &&
         payload.is_consultation &&
-        payload.proposed_advisor_id
+        payload.proposed_advisor_id &&
+        payload.submission_file.file_name &&
+        payload.submission_file.file_size &&
+        payload.submission_file.buffer
       )
     ) {
       return res

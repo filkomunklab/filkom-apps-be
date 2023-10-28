@@ -1,5 +1,13 @@
 //Layer untuk handle business logic
 
+const {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  getStorage,
+  deleteObject,
+} = require("firebase/storage");
+const { storage } = require("../../../config/firebase");
 const proposalRepository = require("./proposal.repository");
 const groupRepository = require("../group/group.repository");
 const groupStudentRepository = require("../group_student/group_student.repository");
@@ -63,10 +71,38 @@ const updateProposalDocumentById = async (userId, id, payload) => {
   // check student in group_student
   await getGroupStudentByStudentIdAndGroupId(userId, group.id);
 
+  // delete existing file
+  if (proposal.file_name_proposal) {
+    // file
+    const storage = getStorage();
+    // Create a reference to the file to delete
+    const desertRef = ref(
+      storage,
+      `proposal/${group.id}/${proposal.file_name_proposal}`
+    );
+    // Delete the file
+    await deleteObject(desertRef);
+  }
+
+  // file
+  const storageRef = ref(
+    storage,
+    `proposal/${group.id}/${payload.proposal_file.file_name_proposal}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.proposal_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
   // update proposal document
   const UpdatedProposal = await proposalRepository.updateProposalDocumentById(
     id,
-    payload
+    payload,
+    path
   );
 
   // check approve by advisor
@@ -90,6 +126,7 @@ const updateProposalDocumentById = async (userId, id, payload) => {
     file_name_proposal: UpdatedProposal.file_name_proposal,
     upload_date_proposal: UpdatedProposal.upload_date_proposal,
     file_size_proposal: UpdatedProposal.file_size_proposal,
+    file_path_proposal: UpdatedProposal.file_path_proposal,
     is_proposal_approve_by_advisor:
       lastUpdatedProposal.is_proposal_approve_by_advisor,
     is_proposal_approve_by_co_advisor1:
@@ -117,6 +154,7 @@ const getProposalDocumentById = async (id) => {
     file_name_proposal: proposal.file_name_proposal,
     upload_date_proposal: proposal.upload_date_proposal,
     file_size_proposal: proposal.file_size_proposal,
+    file_path_proposal: proposal.file_path_proposal,
     is_proposal_approve_by_advisor: proposal.is_proposal_approve_by_advisor,
     is_proposal_approve_by_co_advisor1:
       proposal.is_proposal_approve_by_co_advisor1,
@@ -137,6 +175,16 @@ const deleteProposalDocumentById = async (userId, id) => {
   const group = await groupRepository.findGroupByProposalId(proposal.id);
   // check student in group_student
   await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // file
+  const storage = getStorage();
+  // Create a reference to the file to delete
+  const desertRef = ref(
+    storage,
+    `proposal/${group.id}/${proposal.file_name_proposal}`
+  );
+  // Delete the file
+  await deleteObject(desertRef);
 
   // delete/update proposal document
   const UpdatedProposal = await proposalRepository.deleteProposalDocumentById(
@@ -385,10 +433,38 @@ const updateProposalPaymentById = async (id, userId, payload) => {
   // check student in group_student
   await getGroupStudentByStudentIdAndGroupId(userId, group.id);
 
+  // delete existing file
+  if (proposal.file_path_payment) {
+    // file
+    const storage = getStorage();
+    // Create a reference to the file to delete
+    const desertRef = ref(
+      storage,
+      `proposal/${group.id}/${proposal.file_name_payment}`
+    );
+    // Delete the file
+    await deleteObject(desertRef);
+  }
+
+  // file
+  const storageRef = ref(
+    storage,
+    `proposal/${group.id}/${payload.payment_file.file_name_payment}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.payment_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
   // update proposal document
   const UpdatedProposal = await proposalRepository.updateProposalPaymentById(
     id,
-    payload
+    payload,
+    path
   );
   return UpdatedProposal;
 };
@@ -420,6 +496,16 @@ const deleteProposalPaymentById = async (id, userId) => {
   // check student in group_student
   await getGroupStudentByStudentIdAndGroupId(userId, group.id);
 
+  // file
+  const storage = getStorage();
+  // Create a reference to the file to delete
+  const desertRef = ref(
+    storage,
+    `proposal/${group.id}/${proposal.file_name_payment}`
+  );
+  // Delete the file
+  await deleteObject(desertRef);
+
   // delete/update proposal document
   await proposalRepository.deleteProposalPaymentById(id);
 };
@@ -436,10 +522,38 @@ const updateProposalPlagiarismById = async (id, userId, payload) => {
   // check student in group_student
   await getGroupStudentByStudentIdAndGroupId(userId, group.id);
 
+  // delete existing file
+  if (proposal.file_name_plagiarismcheck) {
+    // file
+    const storage = getStorage();
+    // Create a reference to the file to delete
+    const desertRef = ref(
+      storage,
+      `proposal/${group.id}/${proposal.file_name_plagiarismcheck}`
+    );
+    // Delete the file
+    await deleteObject(desertRef);
+  }
+
+  // file
+  const storageRef = ref(
+    storage,
+    `proposal/${group.id}/${payload.plagiarism_file.file_name_plagiarismcheck}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.plagiarism_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
   // update proposal plagiarism
   const UpdatedProposal = await proposalRepository.updateProposalPlagiarismById(
     id,
-    payload
+    payload,
+    path
   );
   return UpdatedProposal;
 };
@@ -470,6 +584,16 @@ const deleteProposalPlagiarismById = async (id, userId) => {
   const group = await groupRepository.findGroupByProposalId(proposal.id);
   // check student in group_student
   await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // file
+  const storage = getStorage();
+  // Create a reference to the file to delete
+  const desertRef = ref(
+    storage,
+    `proposal/${group.id}/${proposal.file_name_plagiarismcheck}`
+  );
+  // Delete the file
+  await deleteObject(desertRef);
 
   // delete/update proposal plagiarism
   await proposalRepository.deleteProposalPlagiarismById(id);
@@ -1144,9 +1268,40 @@ const updateProposalRevisionDocumentById = async (id, userId, payload) => {
   // check student in group_student
   await getGroupStudentByStudentIdAndGroupId(userId, group.id);
 
+  // delete existing file
+  if (proposal.file_name_revision) {
+    // file
+    const storage = getStorage();
+    // Create a reference to the file to delete
+    const desertRef = ref(
+      storage,
+      `proposal/${group.id}/${proposal.file_name_revision}`
+    );
+    // Delete the file
+    await deleteObject(desertRef);
+  }
+
+  // file
+  const storageRef = ref(
+    storage,
+    `proposal/${group.id}/${payload.revision_file.file_name_revision}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.revision_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
   // update proposal revision document
   const updatedProposal =
-    await proposalRepository.updateProposalRevisionDocumentById(id, payload);
+    await proposalRepository.updateProposalRevisionDocumentById(
+      id,
+      payload,
+      path
+    );
 
   // check approve by chairman
   if (updatedProposal.is_revision_approve_by_panelist_chairman !== "Approve") {
@@ -1175,6 +1330,7 @@ const updateProposalRevisionDocumentById = async (id, userId, payload) => {
     file_name_revision: updatedProposal.file_name_revision,
     upload_date_revision: updatedProposal.upload_date_revision,
     file_size_revision: updatedProposal.file_size_revision,
+    file_path_revision: updatedProposal.file_path_revision,
     is_revision_approve_by_panelist_chairman:
       lastUpdatedProposal.is_revision_approve_by_panelist_chairman,
     is_revision_approve_by_panelist_member:
@@ -1204,6 +1360,7 @@ const getProposalRevisionDocumentById = async (id) => {
     file_name_revision: proposal.file_name_revision,
     upload_date_revision: proposal.upload_date_revision,
     file_size_revision: proposal.file_size_revision,
+    file_path_revision: proposal.file_path_revision,
     is_revision_approve_by_panelist_chairman:
       proposal.is_revision_approve_by_panelist_chairman,
     is_revision_approve_by_panelist_member:
@@ -1224,6 +1381,16 @@ const deleteProposalRevisionDocumentById = async (id, userId) => {
   const group = await groupRepository.findGroupByProposalId(proposal.id);
   // check student in group_student
   await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // file
+  const storage = getStorage();
+  // Create a reference to the file to delete
+  const desertRef = ref(
+    storage,
+    `proposal/${group.id}/${proposal.file_name_revision}`
+  );
+  // Delete the file
+  await deleteObject(desertRef);
 
   // delete/update proposal revision document
   const updatedProposal =

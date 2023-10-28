@@ -23,14 +23,28 @@ const findGroupByProposalId = async (proposal_id) => {
   return group;
 };
 
-// @description     Create group from submission by title & submission_id
+// @description     Create group from submission by title
 // @used            Submission
-const insertGroup = async (payload, submission_id) => {
+const insertGroup = async (payload) => {
   const { title } = payload;
   const group = await prisma.group.create({
     data: {
       title,
       progress: "Submission",
+    },
+  });
+
+  return group;
+};
+
+// @description     Update group from submission by id & submission_id
+// @used            Submission
+const updateGroupByIdAndSubmissionId = async (id, submission_id) => {
+  const group = await prisma.group.update({
+    where: {
+      id,
+    },
+    data: {
       submission_id,
     },
   });
@@ -300,6 +314,7 @@ module.exports = {
   findGroupBySubmissionId,
   findGroupByProposalId,
   insertGroup,
+  updateGroupByIdAndSubmissionId,
   updateGroupTitleBySubmissionId,
   updateGroupProposalIdBySubmissionId,
   updateGroupSkripsiIdBySubmissionId,

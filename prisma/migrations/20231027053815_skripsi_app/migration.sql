@@ -97,7 +97,7 @@ CREATE TABLE "Group" (
     "keywords" TEXT,
     "abstrak" TEXT,
     "reference" TEXT,
-    "submission_id" TEXT NOT NULL,
+    "submission_id" TEXT,
     "proposal_id" TEXT,
     "skripsi_id" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -371,7 +371,7 @@ ALTER TABLE "Group_Student" ADD CONSTRAINT "Group_Student_group_id_fkey" FOREIGN
 ALTER TABLE "Group_Student" ADD CONSTRAINT "Group_Student_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Group" ADD CONSTRAINT "Group_submission_id_fkey" FOREIGN KEY ("submission_id") REFERENCES "Submission"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Group" ADD CONSTRAINT "Group_submission_id_fkey" FOREIGN KEY ("submission_id") REFERENCES "Submission"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Group" ADD CONSTRAINT "Group_proposal_id_fkey" FOREIGN KEY ("proposal_id") REFERENCES "Proposal"("id") ON DELETE SET NULL ON UPDATE CASCADE;
