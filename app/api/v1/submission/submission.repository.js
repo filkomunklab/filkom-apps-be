@@ -7,19 +7,18 @@ const prisma = require("../../../database");
 // @access          MAHASISWA
 const insertSubmission = async (payload, path) => {
   const {
-    file_name,
-    file_size,
     is_consultation,
     proposed_advisor_id,
     proposed_co_advisor1_id,
     proposed_co_advisor2_id,
     classroom_id,
+    submission_file,
   } = payload;
   const submission = await prisma.submission.create({
     data: {
-      file_name,
+      file_name: submission_file.file_name,
       upload_date: new Date(),
-      file_size,
+      file_size: submission_file.file_size,
       file_path: path,
       is_consultation,
       proposed_advisor_id,
@@ -49,22 +48,22 @@ const findSubmissionById = async (id) => {
 // @description     Update submission
 // @route           PUT /submission/:id
 // @access          MAHASISWA
-const updateSubmission = async (id, payload) => {
+const updateSubmission = async (id, payload, path) => {
   const {
-    file_name,
-    file_size,
     is_consultation,
     proposed_advisor_id,
     proposed_co_advisor1_id,
     proposed_co_advisor2_id,
+    submission_file,
   } = payload;
   const submission = await prisma.submission.update({
     where: {
       id,
     },
     data: {
-      file_name,
-      file_size,
+      file_name: submission_file.file_name,
+      file_size: submission_file.file_size,
+      file_path: path,
       upload_date: new Date(),
       is_consultation,
       proposed_advisor_id,

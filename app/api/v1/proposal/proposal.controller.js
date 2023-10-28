@@ -20,7 +20,13 @@ const updateProposalDocumentById = async (req, res) => {
     const userId = req.user.user.id;
     const id = req.params.id;
     const payload = req.body;
-    if (!(payload.file_name_proposal && payload.file_size_proposal)) {
+    if (
+      !(
+        payload.proposal_file.file_name_proposal &&
+        payload.proposal_file.file_size_proposal &&
+        payload.proposal_file.buffer
+      )
+    ) {
       return res
         .status(400)
         .send({ status: "FAILED", data: { error: "some field is missing" } });
@@ -155,7 +161,13 @@ const updateProposalPaymentById = async (req, res) => {
     const id = req.params.id;
     const userId = req.user.user.id;
     const payload = req.body;
-    if (!(payload.file_name_payment && payload.file_size_payment)) {
+    if (
+      !(
+        payload.payment_file.file_name_payment &&
+        payload.payment_file.file_size_payment &&
+        payload.payment_file.buffer
+      )
+    ) {
       return res
         .status(400)
         .send({ status: "FAILED", data: { error: "some field is missing" } });
@@ -237,7 +249,11 @@ const updateProposalPlagiarismById = async (req, res) => {
     const userId = req.user.user.id;
     const payload = req.body;
     if (
-      !(payload.file_name_plagiarismcheck && payload.file_size_plagiarismcheck)
+      !(
+        payload.plagiarism_file.file_name_plagiarismcheck &&
+        payload.plagiarism_file.file_size_plagiarismcheck &&
+        payload.plagiarism_file.buffer
+      )
     ) {
       return res
         .status(400)
@@ -655,7 +671,13 @@ const updateProposalRevisionDocumentById = async (req, res) => {
     const id = req.params.id;
     const userId = req.user.user.id;
     const payload = req.body;
-    if (!(payload.file_name_revision && payload.file_size_revision)) {
+    if (
+      !(
+        payload.revision_file.file_name_revision &&
+        payload.revision_file.file_size_revision &&
+        payload.revision_file.buffer
+      )
+    ) {
       return res
         .status(400)
         .send({ status: "FAILED", data: { error: "some field is missing" } });
