@@ -95,7 +95,6 @@ model Student {
   major               Major?
   graduate_year       String?
   address             String?
-  email               String?               @unique
   phoneNo             String?
   token               String?               @unique
   createdBy           String?
