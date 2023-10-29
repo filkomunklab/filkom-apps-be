@@ -78,21 +78,39 @@ router.get(
 );
 
 //===================================================================
-// @description     Get proposal list dosen (advisor/co)
+// @description     Get proposal list advisor
 // @access          DOSEN
 router.get(
-  "/group/proposal-list-advisor-co-advisor",
+  "/group/proposal-list-advisor",
   auth,
-  groupController.getProposalListAdvisorAndCo
+  groupController.getProposalListAdvisor
 );
 
 //===================================================================
-// @description     Get proposal list dosen (panelist)
+// @description     Get proposal list co-advisor
 // @access          DOSEN
 router.get(
-  "/group/proposal-list-chairman-member",
+  "/group/proposal-list-co-advisor",
   auth,
-  groupController.getProposalListChairmanAndMember
+  groupController.getProposalListCoAdvisor
+);
+
+//===================================================================
+// @description     Get proposal list chairman
+// @access          DOSEN
+router.get(
+  "/group/proposal-list-chairman",
+  auth,
+  groupController.getProposalListChairman
+);
+
+//===================================================================
+// @description     Get proposal list member
+// @access          DOSEN
+router.get(
+  "/group/proposal-list-member",
+  auth,
+  groupController.getProposalListMember
 );
 
 //===================================================================

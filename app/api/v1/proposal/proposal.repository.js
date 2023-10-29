@@ -46,7 +46,7 @@ const updateProposalDocumentById = async (id, payload, path) => {
     data: {
       file_name_proposal: proposal_file.file_name_proposal,
       upload_date_proposal: new Date(),
-      file_size_proposal: proposal_file.file_name_proposal,
+      file_size_proposal: proposal_file.file_size_proposal,
       file_path_proposal: path,
     },
     select: {
@@ -730,7 +730,7 @@ const signAdvisorProposalReportById = async (id) => {
   return proposal;
 };
 
-//==============================(34=====================================
+//==============================(4)=====================================
 // @description     Fill/Update report
 // @route           PUT /proposal/proposal-report/:id
 // @access          DOSEN, DEKAN
@@ -924,12 +924,14 @@ const deleteProposalRevisionDocumentById = async (id) => {
       file_name_revision: null,
       upload_date_revision: null,
       file_size_revision: null,
+      file_path_revision: null,
     },
     select: {
       id: true,
       file_name_revision: true,
       upload_date_revision: true,
       file_size_revision: true,
+      file_path_revision: true,
       is_revision_approve_by_panelist_chairman: true,
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
@@ -1154,15 +1156,24 @@ const rejectProposalRevisionDocumentByAdvisorById = async (id) => {
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @description     Get all proposal by advisor/co-advisor id
+// @description     Get all proposal by advisor id
 // @used            Group,
-const findAllProposalByAdvisorOrCoId = async (userId) => {
+const findAllProposalByAdvisorId = async (userId) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      advisor_id: userId,
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by co-advisor id
+// @used            Group,
+const findAllProposalByCoAdvisorId = async (userId) => {
   const proposal = await prisma.proposal.findMany({
     where: {
       OR: [
-        {
-          advisor_id: userId,
-        },
         {
           co_advisor1_id: userId,
         },
@@ -1176,19 +1187,24 @@ const findAllProposalByAdvisorOrCoId = async (userId) => {
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @description     Get all proposal by chairman/member
+// @description     Get all proposal by chairman
 // @used            Group,
-const findAllProposalByChairmanOrMember = async (userId) => {
+const findAllProposalByChairman = async (userId) => {
   const proposal = await prisma.proposal.findMany({
     where: {
-      OR: [
-        {
-          panelist_chairman_id: userId,
-        },
-        {
-          panelist_member_id: userId,
-        },
-      ],
+      panelist_chairman_id: userId,
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by member
+// @used            Group,
+const findAllProposalByMember = async (userId) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      panelist_member_id: userId,
     },
   });
   return proposal;
@@ -1274,8 +1290,10 @@ module.exports = {
   rejectProposalRevisionDocumentByMemberById,
   rejectProposalRevisionDocumentByAdvisorById,
 
-  findAllProposalByAdvisorOrCoId,
-  findAllProposalByChairmanOrMember,
+  findAllProposalByAdvisorId,
+  findAllProposalByCoAdvisorId,
+  findAllProposalByChairman,
+  findAllProposalByMember,
   findAllProposalByClassroomId,
   findAllProposal,
 };

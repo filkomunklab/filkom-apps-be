@@ -210,12 +210,12 @@ const getSubmissionListDekan = async (req, res) => {
 };
 
 //===================================================================
-// @description     Get proposal list dosen (advisor/co)
-// @route           GET /group/proposal-list-advisor-co-advisor
+// @description     Get proposal list advisor
+// @route           GET /group/proposal-list-advisor
 // @access          DOSEN
-const getProposalListAdvisorAndCo = async (req, res) => {
+const getProposalListAdvisor = async (req, res) => {
   const policy = policyFor(req.user);
-  if (!policy.can("read", "proposal_list_advisor_co_advisor")) {
+  if (!policy.can("read", "proposal_list_advisor")) {
     return res.status(401).send({
       status: "FAILED",
       data: { error: "You don't have permission to perform this action" },
@@ -223,7 +223,7 @@ const getProposalListAdvisorAndCo = async (req, res) => {
   }
   try {
     const userId = req.user.user.id;
-    const group = await groupService.getProposalListAdvisorAndCo(userId);
+    const group = await groupService.getProposalListAdvisor(userId);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -233,12 +233,12 @@ const getProposalListAdvisorAndCo = async (req, res) => {
 };
 
 //===================================================================
-// @description     Get proposal list dosen (panelist)
-// @route           GET /group/proposal-list-chairman-member
+// @description     Get proposal list co-advisor
+// @route           GET /group/proposal-list-co-advisor
 // @access          DOSEN
-const getProposalListChairmanAndMember = async (req, res) => {
+const getProposalListCoAdvisor = async (req, res) => {
   const policy = policyFor(req.user);
-  if (!policy.can("read", "proposal_list_chairman_member")) {
+  if (!policy.can("read", "proposal_list_co_advisor")) {
     return res.status(401).send({
       status: "FAILED",
       data: { error: "You don't have permission to perform this action" },
@@ -246,7 +246,53 @@ const getProposalListChairmanAndMember = async (req, res) => {
   }
   try {
     const userId = req.user.user.id;
-    const group = await groupService.getProposalListChairmanAndMember(userId);
+    const group = await groupService.getProposalListCoAdvisor(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get proposal list chairman
+// @route           GET /group/proposal-list-chairman
+// @access          DOSEN
+const getProposalListChairman = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "proposal_list_chairman")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getProposalListChairman(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get proposal list member
+// @route           GET /group/proposal-list-member
+// @access          DOSEN
+const getProposalListMember = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "proposal_list_member")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getProposalListMember(userId);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -410,8 +456,10 @@ module.exports = {
   getSubmissionListMK,
   getSubmissionListKaprodi,
   getSubmissionListDekan,
-  getProposalListAdvisorAndCo,
-  getProposalListChairmanAndMember,
+  getProposalListAdvisor,
+  getProposalListCoAdvisor,
+  getProposalListChairman,
+  getProposalListMember,
   getProposalListMK,
   getProposalListKaprodi,
   getProposalListDekan,

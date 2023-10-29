@@ -638,7 +638,7 @@ const updateProposalConclusionById = async (req, res) => {
 // @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
 const getProposalConclusionById = async (req, res) => {
   const policy = policyFor(req.user);
-  if (!policy.can("read", "proposal_report_approve")) {
+  if (!policy.can("read", "proposal_report_conclusion")) {
     return res.status(401).send({
       status: "FAILED",
       data: { error: "You don't have permission to perform this action" },

@@ -1076,12 +1076,12 @@ const getSubmissionListDekan = async (userId) => {
 };
 
 //===================================================================
-// @description     Get proposal list dosen (advisor/co)
-// @route           GET /group/proposal-list-advisor-co-advisor
+// @description     Get proposal list advisor
+// @route           GET /group/proposal-list-advisor
 // @access          DOSEN
-const getProposalListAdvisorAndCo = async (userId) => {
-  // check user if advisor or co-advisor
-  const advisorOrCo = await proposalRepository.findAllProposalByAdvisorOrCoId(
+const getProposalListAdvisor = async (userId) => {
+  // check user if advisor / get all proposal
+  const advisorOrCo = await proposalRepository.findAllProposalByAdvisorId(
     userId
   );
 
@@ -1191,13 +1191,240 @@ const getProposalListAdvisorAndCo = async (userId) => {
 };
 
 //===================================================================
-// @description     Get proposal list dosen (panelist)
-// @route           GET /group/proposal-list-chairman-member
+// @description     Get proposal list co-advisor
+// @route           GET /group/proposal-list-co-advisor
 // @access          DOSEN
-const getProposalListChairmanAndMember = async (userId) => {
-  // check user if chairman or member
-  const chairmanOrMember =
-    await proposalRepository.findAllProposalByChairmanOrMember(userId);
+const getProposalListCoAdvisor = async (userId) => {
+  // check user if advisor / get all proposal
+  const advisorOrCo = await proposalRepository.findAllProposalByCoAdvisorId(
+    userId
+  );
+
+  const proposalBySemester = {};
+
+  for (const entry of advisorOrCo) {
+    // get classroom
+    const classroom = await classroomRepository.findClassroomById(
+      entry.classroom_id
+    );
+    const group = await groupRepository.findGroupByProposalId(entry.id);
+    const groupStudents =
+      await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+    const students = await Promise.all(
+      groupStudents.map(async (student_id) => {
+        const student = await studentRepository.findStudentById(student_id);
+        let fullName = student.firstName;
+
+        if (student.lastName) {
+          fullName += ` ${student.lastName}`;
+        }
+
+        return {
+          id: student.id,
+          fullName: fullName,
+        };
+      })
+    );
+
+    // variable to know if group has submit proposal
+    let uploaded = false;
+    if (entry.file_path_proposal) {
+      uploaded = true;
+    }
+    const proposalData = {
+      group_id: group.id,
+      proposal_id: entry.id,
+      students,
+      uploaded,
+      title: group.title,
+      approve_by_advisor: entry.is_proposal_approve_by_advisor,
+      approve_by_co_advisor1: entry.is_proposal_approve_by_co_advisor1,
+      approve_by_co_advisor2: entry.is_proposal_approve_by_co_advisor2,
+    };
+
+    // Create a semester key based on the Academic_Calendar data
+    const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+    if (!proposalBySemester[semesterKey]) {
+      proposalBySemester[semesterKey] = {
+        semester: semesterKey,
+        proposals: [],
+      };
+    }
+
+    proposalBySemester[semesterKey].proposals.push(proposalData);
+  }
+  // Convert the submissionBySemester object into an array of semesters
+  const proposalList = Object.values(proposalBySemester);
+
+  // Initialize dashboard data
+  const dashboard = {
+    total_group: 0,
+    not_submitted: 0,
+    has_submitted: 0,
+    approved: 0,
+    rejected: 0,
+  };
+
+  for (const semesterKey in proposalBySemester) {
+    const semesterData = proposalBySemester[semesterKey];
+
+    // Iterate through submissions in the semester
+    for (const proposal of semesterData.proposals) {
+      dashboard.total_group++; // Increment total_group count
+
+      if (proposal.uploaded === false) {
+        dashboard.not_submitted++; // Increment not_submitted count
+      } else {
+        dashboard.has_submitted++; // Increment has_submitted count
+      }
+
+      if (
+        proposal.is_proposal_approve_by_advisor === "Approve" &&
+        proposal.is_proposal_approve_by_co_advisor1 === "Approve" &&
+        proposal.is_proposal_approve_by_co_advisor2 === "Approve"
+      ) {
+        dashboard.approved++; // Increment approved count
+      } else if (
+        proposal.is_proposal_approve_by_advisor === "Rejected" &&
+        proposal.is_proposal_approve_by_co_advisor1 === "Rejected" &&
+        proposal.is_proposal_approve_by_co_advisor2 === "Rejected"
+      ) {
+        dashboard.rejected++; // Increment rejected count
+      }
+    }
+  }
+
+  // Add the dashboard data to the result
+  const result = {
+    dashboard: dashboard,
+    semesterData: proposalList,
+  };
+
+  return result;
+};
+
+//===================================================================
+// @description     Get proposal list chairman
+// @route           GET /group/proposal-list-chairman
+// @access          DOSEN
+const getProposalListChairman = async (userId) => {
+  // check user if chairman / get all proposal
+  const chairmanOrMember = await proposalRepository.findAllProposalByChairman(
+    userId
+  );
+
+  const proposalBySemester = {};
+
+  for (const entry of chairmanOrMember) {
+    // get classroom
+    const classroom = await classroomRepository.findClassroomById(
+      entry.classroom_id
+    );
+
+    const group = await groupRepository.findGroupByProposalId(entry.id);
+    const groupStudents =
+      await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+    const students = await Promise.all(
+      groupStudents.map(async (student_id) => {
+        const student = await studentRepository.findStudentById(student_id);
+        let fullName = student.firstName;
+
+        if (student.lastName) {
+          fullName += ` ${student.lastName}`;
+        }
+
+        return {
+          id: student.id,
+          fullName: fullName,
+        };
+      })
+    );
+
+    const proposalData = {
+      group_id: group.id,
+      proposal_id: entry.id,
+      students,
+      title: group.title,
+      defence_status: entry.is_pass,
+      approve_chairman: entry.is_revision_approve_by_panelist_chairman,
+      approve_member: entry.is_revision_approve_by_panelist_member,
+      approve_advisor: entry.is_revision_approve_by_advisor,
+    };
+
+    // Create a semester key based on the Academic_Calendar data
+    const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+    if (!proposalBySemester[semesterKey]) {
+      proposalBySemester[semesterKey] = {
+        semester: semesterKey,
+        proposals: [],
+      };
+    }
+
+    proposalBySemester[semesterKey].proposals.push(proposalData);
+  }
+  // Convert the submissionBySemester object into an array of semesters
+  const proposalList = Object.values(proposalBySemester);
+
+  // Initialize dashboard data
+  const dashboard = {
+    total_group: 0,
+    not_defence: 0,
+    has_defence: 0,
+    has_revision: 0,
+    not_revision: 0,
+  };
+
+  for (const semesterKey in proposalBySemester) {
+    const semesterData = proposalBySemester[semesterKey];
+
+    // Iterate through submissions in the semester
+    for (const proposal of semesterData.proposals) {
+      dashboard.total_group++; // Increment total_group count
+
+      if (proposal.defence_status === null) {
+        dashboard.not_defence++; // Increment not_defence count
+      } else {
+        dashboard.has_defence++; // Increment has_defence count
+      }
+
+      if (
+        proposal.is_revision_approve_by_panelist_chairman === "Approve" &&
+        proposal.is_revision_approve_by_panelist_member === "Approve" &&
+        proposal.is_revision_approve_by_advisor === "Approve"
+      ) {
+        dashboard.approved++; // Increment approved count
+      } else if (
+        proposal.is_revision_approve_by_panelist_chairman === "Rejected" &&
+        proposal.is_revision_approve_by_panelist_member === "Rejected" &&
+        proposal.is_revision_approve_by_advisor === "Rejected"
+      ) {
+        dashboard.rejected++; // Increment rejected count
+      }
+    }
+  }
+
+  // Add the dashboard data to the result
+  const result = {
+    dashboard: dashboard,
+    semesterData: proposalList,
+  };
+
+  return result;
+};
+
+//===================================================================
+// @description     Get proposal list member
+// @route           GET /group/proposal-list-member
+// @access          DOSEN
+const getProposalListMember = async (userId) => {
+  // check user if member / get all proposal
+  const chairmanOrMember = await proposalRepository.findAllProposalByMember(
+    userId
+  );
 
   const proposalBySemester = {};
 
@@ -1905,8 +2132,10 @@ module.exports = {
   getSubmissionListMK,
   getSubmissionListKaprodi,
   getSubmissionListDekan,
-  getProposalListAdvisorAndCo,
-  getProposalListChairmanAndMember,
+  getProposalListAdvisor,
+  getProposalListCoAdvisor,
+  getProposalListChairman,
+  getProposalListMember,
   getProposalListMK,
   getProposalListKaprodi,
   getProposalListDekan,
