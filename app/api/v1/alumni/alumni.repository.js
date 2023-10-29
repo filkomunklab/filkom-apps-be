@@ -15,6 +15,7 @@ const getAlumniList = async () => {
       faculty: true,
       graduate_year: true,
       personalEmail: true,
+      phoneNo: true,
     },
   });
   return alumniList;
@@ -68,17 +69,15 @@ const filterAlumni = async (filter) => {
   });
 };
 
-//send mail
-const getAlumniEmails = async (nim) => {
-  const personalEmails = await prisma.student.findMany({
-    where: {
-      nim: nim,
-    },
+const phoneNumbers = async () => {
+  const phoneNo = await prisma.student.findMany({
     select: {
-      personalEmail: true,
+      firstName: true,
+      lastName: true,
+      phoneNo: true,
     },
   });
-  return personalEmails;
+  return phoneNo.map((student) => student.phoneNo);
 };
 
 // ================================================================================== JERICO
@@ -126,53 +125,57 @@ const countTotalRowsAlumniHasTracerStudyBySearch = async (search_query) => {
   }
 };
 
-const countTotalRowsAlumniHasTracerStudyBySearchWithFilterByGraduateYear = async (search_query, filterValue) => {
-  try {
-    const totalRows = await prisma.tracer_Study.groupBy({
-      where: {
-        student: {
-          AND: [
-            { status: "GRADUATE" },
-            {
-              OR: [
-                {
-                  firstName: {
-                    contains: search_query,
-                    mode: "insensitive",
+const countTotalRowsAlumniHasTracerStudyBySearchWithFilterByGraduateYear =
+  async (search_query, filterValue) => {
+    try {
+      const totalRows = await prisma.tracer_Study.groupBy({
+        where: {
+          student: {
+            AND: [
+              { status: "GRADUATE" },
+              {
+                OR: [
+                  {
+                    firstName: {
+                      contains: search_query,
+                      mode: "insensitive",
+                    },
                   },
-                },
-                {
-                  lastName: {
-                    contains: search_query,
-                    mode: "insensitive",
+                  {
+                    lastName: {
+                      contains: search_query,
+                      mode: "insensitive",
+                    },
                   },
-                },
-                {
-                  nim: {
-                    contains: search_query,
-                    mode: "insensitive",
+                  {
+                    nim: {
+                      contains: search_query,
+                      mode: "insensitive",
+                    },
                   },
-                },
-              ],
-            },
-            {
-              graduate_year: filterValue,
-            },
-          ],
+                ],
+              },
+              {
+                graduate_year: filterValue,
+              },
+            ],
+          },
         },
-      },
-      by: ["studentId"],
-      _count: {
-        studentId: true,
-      },
-    });
-    return totalRows.length;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+        by: ["studentId"],
+        _count: {
+          studentId: true,
+        },
+      });
+      return totalRows.length;
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
-const countTotalRowsAlumniHasTracerStudyBySearchWithFilterByMajor = async (search_query, filterValue) => {
+const countTotalRowsAlumniHasTracerStudyBySearchWithFilterByMajor = async (
+  search_query,
+  filterValue
+) => {
   try {
     const totalRows = await prisma.tracer_Study.groupBy({
       where: {
@@ -219,7 +222,12 @@ const countTotalRowsAlumniHasTracerStudyBySearchWithFilterByMajor = async (searc
   }
 };
 
-const findAlumniHasTracerStudyListPagination = async (search_query, page, limit, offset) => {
+const findAlumniHasTracerStudyListPagination = async (
+  search_query,
+  page,
+  limit,
+  offset
+) => {
   try {
     const result = await prisma.tracer_Study.findMany({
       where: {
@@ -281,7 +289,13 @@ const findAlumniHasTracerStudyListPagination = async (search_query, page, limit,
   }
 };
 
-const findAlumniHasTracerStudyListPaginationFilterByGraduateYear = async (search_query, page, limit, offset, filterValue) => {
+const findAlumniHasTracerStudyListPaginationFilterByGraduateYear = async (
+  search_query,
+  page,
+  limit,
+  offset,
+  filterValue
+) => {
   try {
     const result = await prisma.tracer_Study.findMany({
       where: {
@@ -346,7 +360,13 @@ const findAlumniHasTracerStudyListPaginationFilterByGraduateYear = async (search
   }
 };
 
-const findAlumniHasTracerStudyListPaginationFilterByMajor = async (search_query, page, limit, offset, filterValue) => {
+const findAlumniHasTracerStudyListPaginationFilterByMajor = async (
+  search_query,
+  page,
+  limit,
+  offset,
+  filterValue
+) => {
   try {
     const result = await prisma.tracer_Study.findMany({
       where: {
@@ -452,7 +472,10 @@ const countTotalRowsAlumniBySearch = async (search_query) => {
   }
 };
 
-const countTotalRowsAlumniBySearchWithFilterByGraduateYear = async (search_query, filterValue) => {
+const countTotalRowsAlumniBySearchWithFilterByGraduateYear = async (
+  search_query,
+  filterValue
+) => {
   try {
     const totalRows = await prisma.student.count({
       where: {
@@ -495,7 +518,10 @@ const countTotalRowsAlumniBySearchWithFilterByGraduateYear = async (search_query
   }
 };
 
-const countTotalRowsAlumniBySearchWithFilterByMajor = async (search_query, filterValue) => {
+const countTotalRowsAlumniBySearchWithFilterByMajor = async (
+  search_query,
+  filterValue
+) => {
   try {
     const totalRows = await prisma.student.count({
       where: {
@@ -592,7 +618,13 @@ const findAlumniListPagination = async (search_query, page, limit, offset) => {
   }
 };
 
-const findAlumniListPaginationFilterByGraduateYear = async (search_query, page, limit, offset, filterValue) => {
+const findAlumniListPaginationFilterByGraduateYear = async (
+  search_query,
+  page,
+  limit,
+  offset,
+  filterValue
+) => {
   try {
     const result = await prisma.student.findMany({
       where: {
@@ -649,7 +681,13 @@ const findAlumniListPaginationFilterByGraduateYear = async (search_query, page, 
   }
 };
 
-const findAlumniListPaginationFilterByMajor = async (search_query, page, limit, offset, filterValue) => {
+const findAlumniListPaginationFilterByMajor = async (
+  search_query,
+  page,
+  limit,
+  offset,
+  filterValue
+) => {
   try {
     const result = await prisma.student.findMany({
       where: {
@@ -710,6 +748,7 @@ module.exports = {
   getAlumniList,
   filterAlumni,
   alumniTS,
+  phoneNumbers,
   getAlumniEmails,
 
   countTotalRowsAlumniHasTracerStudyBySearch,

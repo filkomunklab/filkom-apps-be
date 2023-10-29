@@ -26,4 +26,10 @@ router.get("/operator/alumni/tracer-study/done", alumniController.getAlumniHasTr
 //@access          Public
 router.get("/fakultas/alumni", alumniController.getAllAlumni);
 
+//broadcast WA
+router.post(
+  "/operator/alumni/send-broadcast-whatsapp",
+  alumniController.broadcastWAChat
+);
+
 module.exports = router;
