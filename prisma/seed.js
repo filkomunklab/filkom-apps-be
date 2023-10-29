@@ -43,7 +43,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (student) => {
@@ -65,7 +66,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201002",
@@ -75,7 +77,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201003",
@@ -85,7 +88,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201004",
@@ -95,7 +99,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201005",
@@ -105,7 +110,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201006",
@@ -115,7 +121,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201007",
@@ -125,7 +132,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201008",
@@ -135,7 +143,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201009",
@@ -145,7 +154,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201010",
@@ -155,7 +165,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201011",
@@ -165,7 +176,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201012",
@@ -175,7 +187,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201013",
@@ -185,7 +198,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201014",
@@ -195,7 +209,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201015",
@@ -205,7 +220,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201016",
@@ -215,7 +231,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201017",
@@ -225,7 +242,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201018",
@@ -235,7 +253,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201019",
@@ -245,7 +264,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
         nim: "10502201020",
@@ -255,7 +275,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     ],
   });
@@ -379,7 +400,8 @@ async function main() {
         firstName: "Lecturer",
         lastName: "Dosen",
         nik: "dosen",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (employee) => {
@@ -401,7 +423,8 @@ async function main() {
         firstName: "Dekan",
         lastName: "Dekan",
         nik: "dekan",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (employee) => {
@@ -423,7 +446,8 @@ async function main() {
         firstName: "Kaprodi",
         lastName: "Kaprodi",
         nik: "kaprodi",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (employee) => {
@@ -441,11 +465,12 @@ async function main() {
       data: {
         Address: "Manado",
         phoneNum: "08193834412",
-        email: "sekretaris@test.com",
+        email: "sekretaris1@test.com",
         firstName: "Sekretaris",
         lastName: "Sekretaris",
         nik: "sekretaris",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (employee) => {
@@ -467,7 +492,8 @@ async function main() {
         firstName: "Register",
         lastName: "Register",
         nik: "register",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (employee) => {
@@ -489,7 +515,8 @@ async function main() {
         firstName: "Operator",
         lastName: "LPMI",
         nik: "operatorlpmi",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (employee) => {
@@ -514,7 +541,8 @@ async function main() {
         nim: "frances",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (student) => {
@@ -537,7 +565,8 @@ async function main() {
         nim: "geovalga",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (student) => {
@@ -562,7 +591,8 @@ async function main() {
         degree: "MT, PhD",
         nik: "dosen1",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (employee) => {
@@ -593,7 +623,8 @@ async function main() {
         degree: "SKom, MSc",
         nik: "dosen2",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (employee) => {
@@ -623,7 +654,8 @@ async function main() {
         lastName: "Dosen3",
         degree: "SKom, MDs, MM",
         nik: "dosen3",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (employee) => {
@@ -683,7 +715,8 @@ async function main() {
         firstName: "Sekretaris",
         lastName: "FILKOM",
         nik: "sekretarisfilkom",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (employee) => {
@@ -706,7 +739,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2022",
       },
@@ -718,7 +752,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2022",
       },
@@ -730,7 +765,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2022",
       },
@@ -742,7 +778,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2022",
       },
@@ -754,7 +791,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2022",
       },
@@ -766,7 +804,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2022",
       },
@@ -778,7 +817,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2022",
       },
@@ -790,7 +830,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2022",
       },
@@ -802,7 +843,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2022",
       },
@@ -814,7 +856,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2022",
       },
@@ -826,7 +869,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2023",
       },
@@ -838,7 +882,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2023",
       },
@@ -850,7 +895,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2023",
       },
@@ -862,7 +908,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2023",
       },
@@ -874,7 +921,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2023",
       },
@@ -886,7 +934,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2023",
       },
@@ -898,7 +947,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2023",
       },
@@ -910,7 +960,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2023",
       },
@@ -922,7 +973,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2023",
       },
@@ -934,7 +986,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
-        password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
         graduate_year: "2023",
       },
@@ -2403,7 +2456,8 @@ async function main() {
         birth_mother: "Ariana",
         graduate_plan: "Semester II 2023/2024",
         nik: "12343567",
-        remaining_classes: "[{subject: 'IGD', sks: '3'}, {subject: 'Entre', sks: '3'}, {subject: 'Web Design', sks: '3'}, {subject: 'Math', sks: '3'}, {subject: 'Family Living', sks: '3'}]",
+        remaining_classes:
+          "[{subject: 'IGD', sks: '3'}, {subject: 'Entre', sks: '3'}, {subject: 'Web Design', sks: '3'}, {subject: 'Math', sks: '3'}, {subject: 'Family Living', sks: '3'}]",
         remaining_credits: "3",
         studentId: "student",
       },
@@ -2411,7 +2465,8 @@ async function main() {
         birth_mother: "Briana",
         graduate_plan: "Semester II 2023/2024",
         nik: "0987654321",
-        remaining_classes: "[{subject: 'IGD', sks: '3'}, {subject: 'Entre', sks: '3'}, {subject: 'Web Design', sks: '3'}, {subject: 'Math', sks: '3'}, {subject: 'Family Living', sks: '3'}]",
+        remaining_classes:
+          "[{subject: 'IGD', sks: '3'}, {subject: 'Entre', sks: '3'}, {subject: 'Web Design', sks: '3'}, {subject: 'Math', sks: '3'}, {subject: 'Family Living', sks: '3'}]",
         remaining_credits: "15",
         studentId: "student",
       },

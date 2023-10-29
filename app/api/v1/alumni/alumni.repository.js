@@ -749,7 +749,6 @@ module.exports = {
   filterAlumni,
   alumniTS,
   phoneNumbers,
-  getAlumniEmails,
 
   countTotalRowsAlumniHasTracerStudyBySearch,
   countTotalRowsAlumniHasTracerStudyBySearchWithFilterByGraduateYear,
