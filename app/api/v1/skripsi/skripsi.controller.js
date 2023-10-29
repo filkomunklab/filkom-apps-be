@@ -648,6 +648,147 @@ const getSkripsiConclusionById = async (req, res) => {
   }
 };
 
+//===================================================================
+// @description     Upload/Update dokumen revisi skripsi
+// @route           PUT /skripsi/skripsi-revision-document/:id
+// @access          MAHASISWA
+const updateSkripsiRevisionDocumentById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "skripsi_revision_document")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const payload = req.body;
+    if (
+      !(
+        payload.revision_file.file_name_revision &&
+        payload.revision_file.file_size_revision &&
+        payload.revision_file.buffer
+      )
+    ) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const skripsi = await skripsiService.updateSkripsiRevisionDocumentById(
+      id,
+      userId,
+      payload
+    );
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get dokumen revisi skripsi
+// @route           GET /skripsi/skripsi-revision-document/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getSkripsiRevisionDocumentById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_revision_document")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const skripsi = await skripsiService.getSkripsiRevisionDocumentById(id);
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Delete/Update dokumen revisi skripsi
+// @route           PUT /skripsi/skripsi-revision-document/delete/:id
+// @access          MAHASISWA
+const deleteSkripsiRevisionDocumentById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "skripsi_revision_document")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    await skripsiService.deleteSkripsiRevisionDocumentById(id, userId);
+    res.status(200).send({ status: "OK" });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Approve dokumen revisi skripsi
+// @route           PUT /skripsi/skripsi-revision-document/approve/:id
+// @access          DOSEN
+const approveSkripsiRevisionDocumentById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "is_skripsi_revision_approve")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const skripsi = await skripsiService.approveSkripsiRevisionDocumentById(
+      id,
+      userId
+    );
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Reject dokumen revisi skripsi
+// @route           PUT /skripsi/skripsi-revision-document/reject/:id
+// @access          DOSEN
+const rejectSkripsiRevisionDocumentById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "is_skripsi_revision_approve")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const skripsi = await skripsiService.rejectSkripsiRevisionDocumentById(
+      id,
+      userId
+    );
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   updateSkripsiDocumentById,
   getSkripsiDocumentById,
@@ -676,4 +817,10 @@ module.exports = {
   signSkripsiReportById,
   updateSkripsiConclusionById,
   getSkripsiConclusionById,
+
+  updateSkripsiRevisionDocumentById,
+  getSkripsiRevisionDocumentById,
+  deleteSkripsiRevisionDocumentById,
+  approveSkripsiRevisionDocumentById,
+  rejectSkripsiRevisionDocumentById,
 };

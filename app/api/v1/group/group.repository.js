@@ -114,8 +114,9 @@ const updateGroupSkripsiIdBySubmissionId = async (
   return group;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Update group progress by proposal_id
-// @used            Proposal
+// @used            Proposal,
 const updateGroupProgressByProposalId = async (proposal_id) => {
   const group = await prisma.group.update({
     where: {
@@ -123,6 +124,22 @@ const updateGroupProgressByProposalId = async (proposal_id) => {
     },
     data: {
       progress: "Skripsi",
+    },
+  });
+
+  return group;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update group progress by skripsi_id
+// @used            Skripsi,
+const updateGroupProgressBySkripsiId = async (skripsi_id) => {
+  const group = await prisma.group.update({
+    where: {
+      skripsi_id,
+    },
+    data: {
+      progress: "Finished",
     },
   });
 
@@ -351,6 +368,7 @@ module.exports = {
   updateGroupSkripsiIdBySubmissionId,
   updateGroupProgressByProposalId,
   updateGroupProgressBySubmissionId,
+  updateGroupProgressBySkripsiId,
   findManyGroupsByProposalIds,
   findManyGroupsBySkripsiIds,
   findGroupById,

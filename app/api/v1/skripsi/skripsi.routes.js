@@ -211,6 +211,51 @@ router.get(
   skripsiController.getSkripsiConclusionById
 );
 
+//===================================================================
+// @description     Upload/Update dokumen revisi skripsi
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-revision-document/:id",
+  auth,
+  skripsiController.updateSkripsiRevisionDocumentById
+);
+
+//===================================================================
+// @description     Get dokumen revisi skripsi
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-revision-document/:id",
+  auth,
+  skripsiController.getSkripsiRevisionDocumentById
+);
+
+//===================================================================
+// @description     Delete/Update dokumen revisi skripsi
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-revision-document/delete/:id",
+  auth,
+  skripsiController.deleteSkripsiRevisionDocumentById
+);
+
+//===================================================================
+// @description     Approve dokumen revisi skripsi
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-revision-document/approve/:id",
+  auth,
+  skripsiController.approveSkripsiRevisionDocumentById
+);
+
+//===================================================================
+// @description     Reject dokumen revisi skripsi
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-revision-document/reject/:id",
+  auth,
+  skripsiController.rejectSkripsiRevisionDocumentById
+);
+
 // //       upload/update hki
 // router.put("/skripsi/hki/:id", skripsiController.updateHKIById);
 // //       melihat hki

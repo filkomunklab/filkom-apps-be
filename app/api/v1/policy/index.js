@@ -70,6 +70,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_report");
     // Sekertaris view skripsi report conclusion
     can("read", "skripsi_report_conclusion");
+    // Sekertaris view skripsi revisi document
+    can("read", "skripsi_revision_document");
   }
 
   if (hasRole("DEKAN")) {
@@ -126,6 +128,8 @@ const policyFor = ({ user }) => {
     can("update", "skripsi_report_approve");
     // Dekan view skripsi report conclusion
     can("read", "skripsi_report_conclusion");
+    // Dekan view skripsi revisi document
+    can("read", "skripsi_revision_document");
   }
 
   if (hasRole("KAPRODI")) {
@@ -177,6 +181,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_report");
     // Kaprodi view skripsi report conclusion
     can("read", "skripsi_report_conclusion");
+    // Kaprodi view skripsi revisi document
+    can("read", "skripsi_revision_document");
   }
 
   if (hasRole("DOSEN")) {
@@ -262,6 +268,10 @@ const policyFor = ({ user }) => {
     can("update", "skripsi_report_conclusion");
     // (Dosen: Ketua, Anggota, Advisor) view skripsi report conclusion
     can("read", "skripsi_report_conclusion");
+    // (Dosen: Ketua, Anggota, Advisor, Co-Advisor) view skripsi revisi document
+    can("read", "skripsi_revision_document");
+    // (Dosen: Ketua, Anggota, Advisor) approve document revisi skripsi
+    can("update", "is_skripsi_revision_approve");
   }
 
   if (hasRole("DOSEN_MK")) {
@@ -325,6 +335,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_report");
     // Dosen MK view skripsi report conclusion
     can("read", "skripsi_report_conclusion");
+    // Dosen MK view skripsi revisi document
+    can("read", "skripsi_revision_document");
   }
 
   if (hasRole("MAHASISWA")) {
@@ -377,10 +389,14 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_payment");
     // Mahasiswa upload/update skripsi payment
     can("update", "skripsi_payment");
-    // Mahasiswa view proposal plagiarism
+    // Mahasiswa view skripsi plagiarism
     can("read", "skripsi_plagiarism");
-    // Mahasiswa upload/update proposal plagiarism
+    // Mahasiswa upload/update skripsi plagiarism
     can("update", "skripsi_plagiarism");
+    // Mahasiswa upload/update skripsi revisi document
+    can("update", "skripsi_revision_document");
+    // Mahasiswa view skripsi revisi document
+    can("read", "skripsi_revision_document");
   }
 
   if (hasRole("ALUMNI")) {

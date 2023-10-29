@@ -812,6 +812,357 @@ const findSkripsiConclusionById = async (id) => {
   return skripsi;
 };
 
+//===================================================================
+// @description     Upload/Update dokumen revisi skripsi
+// @route           PUT /skripsi/skripsi-revision-document/:id
+// @access          MAHASISWA
+const updateSkripsiRevisionDocumentById = async (id, payload, path) => {
+  const { revision_file } = payload;
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_revision: revision_file.file_name_revision,
+      upload_date_revision: new Date(),
+      file_size_revision: revision_file.file_size_revision,
+      file_path_revision: path,
+    },
+    select: {
+      id: true,
+      file_name_revision: true,
+      upload_date_revision: true,
+      file_size_revision: true,
+      file_path_revision: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++(1)++++++++++++++++++++++++++++++++++++++
+// @description     Update skripsi revision approve by advisor
+// @used            updateSkripsiRevisionDocumentById
+const updateSkripsiRevisionDocumentApproveByChairmanById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_panelist_chairman: "Waiting",
+    },
+    select: {
+      is_revision_approve_by_panelist_chairman: true,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++(2)++++++++++++++++++++++++++++++++++++++
+// @description     Update skripsi revision approve by member
+// @used            updateSkripsiRevisionDocumentById
+const updateSkripsiRevisionDocumentApproveByMemberById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_panelist_member: "Waiting",
+    },
+    select: {
+      is_revision_approve_by_panelist_member: true,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++(3)++++++++++++++++++++++++++++++++++++++
+// @description     Update skripsi revision approve by advisor
+// @used            updateSkripsiRevisionDocumentById
+const updateSkripsiRevisionDocumentApproveByAdvisorById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_advisor: "Waiting",
+    },
+    select: {
+      is_revision_approve_by_advisor: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Get dokumen revisi skripsi
+// @route           GET /skripsi/skripsi-revision-document/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const findSkripsiRevisionDocumentById = async (id) => {
+  const skripsi = await prisma.skripsi.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      file_name_revision: true,
+      upload_date_revision: true,
+      file_size_revision: true,
+      file_path_revision: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update dokumen revisi skripsi
+// @route           PUT /skripsi/skripsi-revision-document/delete/:id
+// @access          MAHASISWA
+const deleteSkripsiRevisionDocumentById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_revision: null,
+      upload_date_revision: null,
+      file_size_revision: null,
+      file_path_revision: null,
+    },
+    select: {
+      id: true,
+      file_name_revision: true,
+      upload_date_revision: true,
+      file_size_revision: true,
+      file_path_revision: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++(1)++++++++++++++++++++++++++++++++++++++
+// @description     Delete/Update skripsi revision approve by chairman
+// @used            deleteSkripsiRevisionDocumentById
+const deleteSkripsiRevisionDocumentApproveByChairmanById = async (id) => {
+  await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_panelist_chairman: null,
+    },
+  });
+};
+
+// ++++++++++++++++++++++++++++(2)++++++++++++++++++++++++++++++++++++++
+// @description     Delete/Update skripsi revision approve by member
+// @used            deleteSkripsiRevisionDocumentById
+const deleteSkripsiRevisionDocumentApproveByMemberById = async (id) => {
+  await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_panelist_member: null,
+    },
+  });
+};
+
+// ++++++++++++++++++++++++++++(3)++++++++++++++++++++++++++++++++++++++
+// @description     Delete/Update skripsi revision approve by advisor
+// @used            deleteSkripsiRevisionDocumentById
+const deleteSkripsiRevisionDocumentApproveByAdvisorById = async (id) => {
+  await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_advisor: null,
+    },
+  });
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get chairman in skripsi by skripsi_id & panelist_chairman_id
+// @used            rejectSkripsiRevisionDocumentById
+const findChairmanInSkripsiByIdAndChairmanId = async (
+  id,
+  panelist_chairman_id
+) => {
+  const skripsi = await prisma.skripsi.findFirst({
+    where: {
+      id,
+      panelist_chairman_id,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get member in skripsi by skripsi_id & panelist_member_id
+// @used            rejectSkripsiRevisionDocumentById
+const findMemberInSkripsiByIdAndMemberId = async (id, panelist_member_id) => {
+  const skripsi = await prisma.skripsi.findFirst({
+    where: {
+      id,
+      panelist_member_id,
+    },
+  });
+  return skripsi;
+};
+
+//===============================(1)====================================
+// @description     Approve dokumen revisi skripsi by chairman
+// @route           PUT /skripsi/skripsi-revision-document/approve/:id
+// @access          DOSEN
+const approveSkripsiRevisionDocumentByChairmanById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_panelist_chairman: "Approve",
+      panelist_chairman_revision_approve_date: new Date(),
+    },
+    select: {
+      id: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+      panelist_chairman_revision_approve_date: true,
+    },
+  });
+  return skripsi;
+};
+
+//===============================(2)====================================
+// @description     Approve dokumen revisi skripsi by member
+// @route           PUT /skripsi/skripsi-revision-document/approve/:id
+// @access          DOSEN
+const approveSkripsiRevisionDocumentByMemberById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_panelist_member: "Approve",
+      panelist_member_revision_approve_date: new Date(),
+    },
+    select: {
+      id: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+      panelist_member_revision_approve_date: true,
+    },
+  });
+  return skripsi;
+};
+
+//===============================(3)====================================
+// @description     Approve dokumen revisi skripsi by advisor
+// @route           PUT /skripsi/skripsi-revision-document/approve/:id
+// @access          DOSEN
+const approveSkripsiRevisionDocumentByAdvisorById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_advisor: "Approve",
+      advisor_revision_approve_date: new Date(),
+    },
+    select: {
+      id: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+      advisor_revision_approve_date: true,
+    },
+  });
+  return skripsi;
+};
+
+//===============================(1)====================================
+// @description     Reject dokumen revisi skripsi by chairman
+// @route           PUT /skripsi/skripsi-revision-document/reject/:id
+// @access          DOSEN
+const rejectSkripsiRevisionDocumentByChairmanById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_panelist_chairman: "Rejected",
+      panelist_chairman_revision_approve_date: new Date(),
+    },
+    select: {
+      id: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+      panelist_chairman_revision_approve_date: true,
+    },
+  });
+  return skripsi;
+};
+
+//===============================(2)====================================
+// @description     Reject dokumen revisi skripsi by member
+// @route           PUT /skripsi/skripsi-revision-document/reject/:id
+// @access          DOSEN
+const rejectSkripsiRevisionDocumentByMemberById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_panelist_member: "Rejected",
+      panelist_member_revision_approve_date: new Date(),
+    },
+    select: {
+      id: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+      panelist_member_revision_approve_date: true,
+    },
+  });
+  return skripsi;
+};
+
+//===============================(3)====================================
+// @description     Reject dokumen revisi skripsi by member
+// @route           PUT /skripsi/skripsi-revision-document/reject/:id
+// @access          DOSEN
+const rejectSkripsiRevisionDocumentByAdvisorById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_advisor: "Rejected",
+      advisor_revision_approve_date: new Date(),
+    },
+    select: {
+      id: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+      advisor_revision_approve_date: true,
+    },
+  });
+  return skripsi;
+};
+
 module.exports = {
   insertSkripsi,
   updateSkripsiChairmanAndMemberById,
@@ -857,4 +1208,22 @@ module.exports = {
   signDekanSkripsiReportById,
   updateSkripsiConclusionById,
   findSkripsiConclusionById,
+
+  updateSkripsiRevisionDocumentById,
+  updateSkripsiRevisionDocumentApproveByChairmanById,
+  updateSkripsiRevisionDocumentApproveByMemberById,
+  updateSkripsiRevisionDocumentApproveByAdvisorById,
+  findSkripsiRevisionDocumentById,
+  deleteSkripsiRevisionDocumentById,
+  deleteSkripsiRevisionDocumentApproveByChairmanById,
+  deleteSkripsiRevisionDocumentApproveByMemberById,
+  deleteSkripsiRevisionDocumentApproveByAdvisorById,
+  findChairmanInSkripsiByIdAndChairmanId,
+  findMemberInSkripsiByIdAndMemberId,
+  approveSkripsiRevisionDocumentByChairmanById,
+  approveSkripsiRevisionDocumentByMemberById,
+  approveSkripsiRevisionDocumentByAdvisorById,
+  rejectSkripsiRevisionDocumentByChairmanById,
+  rejectSkripsiRevisionDocumentByMemberById,
+  rejectSkripsiRevisionDocumentByAdvisorById,
 };

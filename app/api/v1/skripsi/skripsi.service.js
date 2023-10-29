@@ -1227,6 +1227,405 @@ const getSkripsiConclusionById = async (id) => {
   return skripsi;
 };
 
+//===================================================================
+// @description     Upload/Update dokumen revisi skripsi
+// @route           PUT /skripsi/skripsi-revision-document/:id
+// @access          MAHASISWA
+const updateSkripsiRevisionDocumentById = async (id, userId, payload) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // delete existing file
+  if (skripsi.file_name_revision) {
+    // file
+    const storage = getStorage();
+    // Create a reference to the file to delete
+    const desertRef = ref(
+      storage,
+      `skripsi/${group.id}/${skripsi.file_name_revision}`
+    );
+    // Delete the file
+    await deleteObject(desertRef);
+  }
+
+  // file
+  const storageRef = ref(
+    storage,
+    `skripsi/${group.id}/${payload.revision_file.file_name_revision}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.revision_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
+  // update skripsi revision document
+  const updatedSkripsi =
+    await skripsiRepository.updateSkripsiRevisionDocumentById(
+      id,
+      payload,
+      path
+    );
+
+  // check approve by chairman
+  if (updatedSkripsi.is_revision_approve_by_panelist_chairman !== "Approve") {
+    await skripsiRepository.updateSkripsiRevisionDocumentApproveByChairmanById(
+      id
+    );
+  }
+  // check approve by member
+  if (updatedSkripsi.is_revision_approve_by_panelist_member !== "Approve") {
+    await skripsiRepository.updateSkripsiRevisionDocumentApproveByMemberById(
+      id
+    );
+  }
+  // check approve by advisor
+  if (updatedSkripsi.is_revision_approve_by_advisor !== "Approve") {
+    await skripsiRepository.updateSkripsiRevisionDocumentApproveByAdvisorById(
+      id
+    );
+  }
+
+  // last check skripsi
+  const lastUpdatedSkripsi = await getSkripsiById(id);
+
+  const Data = {
+    id: updatedSkripsi.id,
+    file_name_revision: updatedSkripsi.file_name_revision,
+    upload_date_revision: updatedSkripsi.upload_date_revision,
+    file_size_revision: updatedSkripsi.file_size_revision,
+    file_path_revision: updatedSkripsi.file_path_revision,
+    is_revision_approve_by_panelist_chairman:
+      lastUpdatedSkripsi.is_revision_approve_by_panelist_chairman,
+    is_revision_approve_by_panelist_member:
+      lastUpdatedSkripsi.is_revision_approve_by_panelist_member,
+    is_revision_approve_by_advisor:
+      lastUpdatedSkripsi.is_revision_approve_by_advisor,
+  };
+  return Data;
+};
+
+//===================================================================
+// @description     Get dokumen revisi skripsi
+// @route           GET /skripsi/skripsi-revision-document/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getSkripsiRevisionDocumentById = async (id) => {
+  const skripsi = await skripsiRepository.findSkripsiRevisionDocumentById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  const Data = {
+    id: skripsi.id,
+    file_name_revision: skripsi.file_name_revision,
+    upload_date_revision: skripsi.upload_date_revision,
+    file_size_revision: skripsi.file_size_revision,
+    file_path_revision: skripsi.file_path_revision,
+    is_revision_approve_by_panelist_chairman:
+      skripsi.is_revision_approve_by_panelist_chairman,
+    is_revision_approve_by_panelist_member:
+      skripsi.is_revision_approve_by_panelist_member,
+    is_revision_approve_by_advisor: skripsi.is_revision_approve_by_advisor,
+  };
+  return Data;
+};
+
+//===================================================================
+// @description     Delete/Update dokumen revisi skripsi
+// @route           PUT /skripsi/skripsi-revision-document/delete/:id
+// @access          MAHASISWA
+const deleteSkripsiRevisionDocumentById = async (id, userId) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // file
+  const storage = getStorage();
+  // Create a reference to the file to delete
+  const desertRef = ref(
+    storage,
+    `skripsi/${group.id}/${skripsi.file_name_revision}`
+  );
+  // Delete the file
+  await deleteObject(desertRef);
+
+  // delete/update skripsi revision document
+  const updatedSkripsi =
+    await skripsiRepository.deleteSkripsiRevisionDocumentById(id);
+
+  // check approve by chairman
+  if (
+    updatedSkripsi.is_revision_approve_by_panelist_chairman !== "Approve" &&
+    updatedSkripsi.is_revision_approve_by_panelist_chairman !== "Rejected"
+  ) {
+    await skripsiRepository.deleteSkripsiRevisionDocumentApproveByChairmanById(
+      id
+    );
+  }
+  // check approve by member
+  if (
+    updatedSkripsi.is_revision_approve_by_panelist_member !== "Approve" &&
+    updatedSkripsi.is_revision_approve_by_panelist_member !== "Rejected"
+  ) {
+    await skripsiRepository.deleteSkripsiRevisionDocumentApproveByMemberById(
+      id
+    );
+  }
+  // check approve by advisor
+  if (
+    updatedSkripsi.is_revision_approve_by_advisor !== "Approve" &&
+    updatedSkripsi.is_revision_approve_by_advisor !== "Rejected"
+  ) {
+    await skripsiRepository.deleteSkripsiRevisionDocumentApproveByAdvisorById(
+      id
+    );
+  }
+};
+
+//===================================================================
+// @description     Approve dokumen revisi skripsi
+// @route           PUT /skripsi/skripsi-revision-document/approve/:id
+// @access          DOSEN
+const approveSkripsiRevisionDocumentById = async (id, userId) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+
+  // check exist skripsi document
+  if (
+    skripsi.file_name_revision === null &&
+    skripsi.file_size_revision === null
+  ) {
+    throw {
+      status: 400,
+      message: `There are no files to approve`,
+    };
+  }
+  // check apakah chairman
+  const chairman =
+    await skripsiRepository.findChairmanInSkripsiByIdAndChairmanId(
+      skripsi.id,
+      userId
+    );
+  // check apakah member
+  const member = await skripsiRepository.findMemberInSkripsiByIdAndMemberId(
+    skripsi.id,
+    userId
+  );
+  // check apakah advisor
+  const advisor = await skripsiRepository.findAdvisorInSkripsiByIdAndAdvisorId(
+    skripsi.id,
+    userId
+  );
+
+  // if user is chairman
+  if (chairman) {
+    if (chairman.is_revision_approve_by_panelist_chairman === "Approve") {
+      throw {
+        status: 400,
+        message: `Revision has been approved`,
+      };
+    } else {
+      // approve revisi
+      const UpdatedSkripsi =
+        await skripsiRepository.approveSkripsiRevisionDocumentByChairmanById(
+          id
+        );
+      // if all panelis approved
+      if (
+        UpdatedSkripsi.is_revision_approve_by_panelist_chairman === "Approve" &&
+        UpdatedSkripsi.is_revision_approve_by_panelist_member === "Approve" &&
+        UpdatedSkripsi.is_revision_approve_by_advisor === "Approve"
+      ) {
+        // update progress in group to "Skripsi"
+        await groupRepository.updateGroupProgressBySkripsiId(UpdatedSkripsi.id);
+      }
+      const Data = {
+        is_revision_approve_by_panelist_chairman:
+          UpdatedSkripsi.is_revision_approve_by_panelist_chairman,
+        panelist_chairman_revision_approve_date:
+          UpdatedSkripsi.panelist_chairman_revision_approve_date,
+      };
+      return Data;
+    }
+  }
+  // if user is member
+  if (member) {
+    if (member.is_revision_approve_by_panelist_member === "Approve") {
+      throw {
+        status: 400,
+        message: `Revision has been approved`,
+      };
+    } else {
+      // approve revisi
+      const UpdatedSkripsi =
+        await skripsiRepository.approveSkripsiRevisionDocumentByMemberById(id);
+      // if all panelis approved
+      if (
+        UpdatedSkripsi.is_revision_approve_by_panelist_chairman === "Approve" &&
+        UpdatedSkripsi.is_revision_approve_by_panelist_member === "Approve" &&
+        UpdatedSkripsi.is_revision_approve_by_advisor === "Approve"
+      ) {
+        // update progress in group to "Skripsi"
+        await groupRepository.updateGroupProgressBySkripsiId(UpdatedSkripsi.id);
+      }
+      const Data = {
+        is_revision_approve_by_panelist_member:
+          UpdatedSkripsi.is_revision_approve_by_panelist_member,
+        panelist_member_revision_approve_date:
+          UpdatedSkripsi.panelist_member_revision_approve_date,
+      };
+      return Data;
+    }
+  }
+  // if user is advisor
+  if (advisor) {
+    if (advisor.is_revision_approve_by_advisor === "Approve") {
+      throw {
+        status: 400,
+        message: `Revision has been approved`,
+      };
+    } else {
+      // approve revisi
+      const UpdatedSkripsi =
+        await skripsiRepository.approveSkripsiRevisionDocumentByAdvisorById(id);
+      // if all panelis approved
+      if (
+        UpdatedSkripsi.is_revision_approve_by_panelist_chairman === "Approve" &&
+        UpdatedSkripsi.is_revision_approve_by_panelist_member === "Approve" &&
+        UpdatedSkripsi.is_revision_approve_by_advisor === "Approve"
+      ) {
+        // update progress in group to "Skripsi"
+        await groupRepository.updateGroupProgressBySkripsiId(UpdatedSkripsi.id);
+      }
+      const Data = {
+        is_revision_approve_by_advisor:
+          UpdatedSkripsi.is_revision_approve_by_advisor,
+        advisor_revision_approve_date:
+          UpdatedSkripsi.advisor_revision_approve_date,
+      };
+      return Data;
+    }
+  }
+};
+
+//===================================================================
+// @description     Reject dokumen revisi skripsi
+// @route           PUT /skripsi/skripsi-revision-document/reject/:id
+// @access          DOSEN
+const rejectSkripsiRevisionDocumentById = async (id, userId) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+
+  // check exist skripsi document
+  if (
+    skripsi.file_name_revision === null &&
+    skripsi.file_size_revision === null
+  ) {
+    throw {
+      status: 400,
+      message: `There are no files to approve`,
+    };
+  }
+  // check apakah chairman
+  const chairman =
+    await skripsiRepository.findChairmanInSkripsiByIdAndChairmanId(
+      skripsi.id,
+      userId
+    );
+  // check apakah member
+  const member = await skripsiRepository.findMemberInSkripsiByIdAndMemberId(
+    skripsi.id,
+    userId
+  );
+  // check apakah advisor
+  const advisor = await skripsiRepository.findAdvisorInSkripsiByIdAndAdvisorId(
+    skripsi.id,
+    userId
+  );
+
+  // if user is chairman
+  if (chairman) {
+    if (
+      chairman.is_revision_approve_by_panelist_chairman === "Rejected" ||
+      chairman.is_revision_approve_by_panelist_chairman === "Approve"
+    ) {
+      throw {
+        status: 400,
+        message: `Revision has been approved`,
+      };
+    } else {
+      // reject revisi
+      const UpdatedSkripsi =
+        await skripsiRepository.rejectSkripsiRevisionDocumentByChairmanById(id);
+      const Data = {
+        is_revision_approve_by_panelist_chairman:
+          UpdatedSkripsi.is_revision_approve_by_panelist_chairman,
+        panelist_chairman_revision_approve_date:
+          UpdatedSkripsi.panelist_chairman_revision_approve_date,
+      };
+      return Data;
+    }
+  }
+  // if user is member
+  if (member) {
+    if (
+      member.is_revision_approve_by_panelist_member === "Rejected" ||
+      member.is_revision_approve_by_panelist_member === "Approve"
+    ) {
+      throw {
+        status: 400,
+        message: `Revision has been approved`,
+      };
+    } else {
+      // reject revisi
+      const UpdatedSkripsi =
+        await skripsiRepository.rejectSkripsiRevisionDocumentByMemberById(id);
+      const Data = {
+        is_revision_approve_by_panelist_member:
+          UpdatedSkripsi.is_revision_approve_by_panelist_member,
+        panelist_member_revision_approve_date:
+          UpdatedSkripsi.panelist_member_revision_approve_date,
+      };
+      return Data;
+    }
+  }
+  // if user is member
+  if (advisor) {
+    if (
+      advisor.is_revision_approve_by_advisor === "Rejected" ||
+      advisor.is_revision_approve_by_advisor === "Approve"
+    ) {
+      throw {
+        status: 400,
+        message: `Revision has been rejected or approved`,
+      };
+    } else {
+      // reject revisi
+      const UpdatedSkripsi =
+        await skripsiRepository.rejectSkripsiRevisionDocumentByAdvisorById(id);
+      const Data = {
+        is_revision_approve_by_advisor:
+          UpdatedSkripsi.is_revision_approve_by_advisor,
+        advisor_revision_approve_date:
+          UpdatedSkripsi.advisor_revision_approve_date,
+      };
+      return Data;
+    }
+  }
+};
+
 module.exports = {
   updateSkripsiDocumentById,
   getSkripsiDocumentById,
@@ -1255,4 +1654,10 @@ module.exports = {
   signSkripsiReportById,
   updateSkripsiConclusionById,
   getSkripsiConclusionById,
+
+  updateSkripsiRevisionDocumentById,
+  getSkripsiRevisionDocumentById,
+  deleteSkripsiRevisionDocumentById,
+  approveSkripsiRevisionDocumentById,
+  rejectSkripsiRevisionDocumentById,
 };
