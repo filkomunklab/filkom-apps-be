@@ -669,20 +669,6 @@ const getAllSkripsiSchedule = async () => {
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @description     Get dosen by id
-// @used            updateSkripsiScheduleById
-const getDosenById = async (id) => {
-  const dosen = await employeeRepository.findEmployeeById(id);
-  if (!dosen) {
-    throw {
-      status: 400,
-      message: `Dosen not found`,
-    };
-  }
-  return dosen;
-};
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Check conflict between schedule
 // @used            updateSkripsiScheduleById
 const checkScheduleConflict = async (id, payload) => {
@@ -816,6 +802,266 @@ const getSkripsiScheduleById = async (id) => {
   return scheduleData;
 };
 
+//===================================================================
+// @description     Open report
+// @route           PUT /skripsi/skripsi-report/open-access/:id
+// @access          DOSEN
+const openAccessSkripsiReportById = async (id, userId) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // check if dosen is panelist chairman
+  if (skripsi.panelist_chairman_id === userId) {
+    // check if already openend
+    if (skripsi.is_report_open) {
+      throw {
+        status: 400,
+        message: `Report has opened`,
+      };
+    }
+    const updatedSkripsi = await skripsiRepository.openAccessSkripsiReportById(
+      id
+    );
+    // check if success open report
+    if (updatedSkripsi) {
+      // get group
+      const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+
+      // get group_student -> student_id
+      const studentIds = await groupStudentRepository.findGroupStudentByGroupId(
+        group.id
+      );
+      // looping to create empty assessment for all student
+      for (const student of studentIds) {
+        // create empty assessment for chairman
+        await skripsiAssessmentRepository.insertEmptySkripsiAssessment(
+          skripsi.id,
+          student,
+          skripsi.panelist_chairman_id
+        );
+        // create empty assessment for member
+        await skripsiAssessmentRepository.insertEmptySkripsiAssessment(
+          skripsi.id,
+          student,
+          skripsi.panelist_member_id
+        );
+        // create empty assessment for advisor
+        await skripsiAssessmentRepository.insertEmptySkripsiAssessment(
+          skripsi.id,
+          student,
+          skripsi.advisor_id
+        );
+      }
+      // create empty change for chairman
+      await skripsiChangesRepository.insertEmptySkripsiChanges(
+        skripsi.id,
+        skripsi.panelist_chairman_id
+      );
+      // create empty change for member
+      await skripsiChangesRepository.insertEmptySkripsiChanges(
+        skripsi.id,
+        skripsi.panelist_member_id
+      );
+      // create empty change for advisor
+      await skripsiChangesRepository.insertEmptySkripsiChanges(
+        skripsi.id,
+        skripsi.advisor_id
+      );
+      if (skripsi.co_advisor1_id) {
+        // create empty change for co-advisor1
+        await skripsiChangesRepository.insertEmptySkripsiChanges(
+          skripsi.id,
+          skripsi.co_advisor1_id
+        );
+      }
+      if (skripsi.co_advisor2_id) {
+        // create empty change for co-advisor2
+        await skripsiChangesRepository.insertEmptySkripsiChanges(
+          skripsi.id,
+          skripsi.co_advisor2_id
+        );
+      }
+    }
+    return updatedSkripsi;
+  } else {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+};
+
+//===================================================================
+// @description     Update skripsi assessment by id
+// @route           PUT /skripsi/skripsi-assessment/:id
+// @access          DOSEN
+const updateSkripsiAssessmentById = async (id, userId, payload) => {
+  // check existing assessment
+  const assessment =
+    await skripsiAssessmentRepository.findSkripsiAssessmentBySkripsiIdAndStudentIdAndDosenId(
+      id,
+      payload.student_id,
+      userId
+    );
+  if (!assessment) {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+  // update assessment
+  const updateAssessment =
+    await skripsiAssessmentRepository.updateSkripsiAssessmentById(
+      assessment.id,
+      payload.value
+    );
+  return updateAssessment;
+};
+
+//===================================================================
+// @description     Get all skripsi assessment by id
+// @route           GET /skripsi/skripsi-assessment/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getAllSkripsiAssessmentById = async (id) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+
+  const skripsiAssessment =
+    await skripsiAssessmentRepository.findAllSkripsiAssessmentBySkripsiId(id);
+  if (!skripsiAssessment) {
+    throw {
+      status: 400,
+      message: `Skripsi assessment not found`,
+    };
+  }
+
+  const groupedSkripsiAssessment = {};
+  // Kelompokkan skripsi_assessment berdasarkan student_id
+  skripsiAssessment.forEach((assessment) => {
+    const studentId = assessment.student_id;
+
+    if (!groupedSkripsiAssessment[studentId]) {
+      groupedSkripsiAssessment[studentId] = [];
+    }
+
+    groupedSkripsiAssessment[studentId].push(assessment);
+  });
+
+  const result = [];
+
+  for (const studentId in groupedSkripsiAssessment) {
+    const student = await studentRepository.findStudentById(studentId);
+    let fullName = student.firstName;
+    if (student.lastName) {
+      fullName += ` ${student.lastName}`;
+    }
+
+    const chairmanValue = groupedSkripsiAssessment[studentId].find(
+      (assessment) => assessment.dosen_id === skripsi.panelist_chairman_id
+    );
+
+    const memberValue = groupedSkripsiAssessment[studentId].find(
+      (assessment) => assessment.dosen_id === skripsi.panelist_member_id
+    );
+
+    const advisorValue = groupedSkripsiAssessment[studentId].find(
+      (assessment) => assessment.dosen_id === skripsi.advisor_id
+    );
+
+    const studentData = {
+      skripsi_id: skripsi.id,
+      student_id: student.id,
+      fullName: fullName,
+      nim: student.nim,
+      major: student.major,
+      value_by_chairman: chairmanValue ? chairmanValue.value : null,
+      value_by_member: memberValue ? memberValue.value : null,
+      value_by_advisor: advisorValue ? advisorValue.value : null,
+    };
+
+    result.push(studentData);
+  }
+
+  return result;
+};
+
+//===================================================================
+// @description     Update skripsi changes by id
+// @route           PUT /skripsi/skripsi-changes/:id
+// @access          DOSEN
+const updateSkripsiChangesById = async (id, userId, payload) => {
+  // check existing change
+  const change =
+    await skripsiChangesRepository.findSkripsiChangesBySkripsiIdAndDosenId(
+      id,
+      userId
+    );
+  if (!change) {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+  // update change
+  const updateChange = await skripsiChangesRepository.updateSkripsiChangeById(
+    change.id,
+    payload.changes
+  );
+  return updateChange;
+};
+
+//===================================================================
+// @description     Get all skripsi changes by id
+// @route           GET /skripsi/skripsi-changes/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getAllSkripsiChangesById = async (id) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+
+  const skripsiChanges =
+    await skripsiChangesRepository.findAllSkripsiChangesBySkripsiId(id);
+  if (!skripsiChanges) {
+    throw {
+      status: 400,
+      message: `Skripsi changes not found`,
+    };
+  }
+
+  const chairmanChanges = skripsiChanges.find(
+    (changes) => changes.dosen_id === skripsi.panelist_chairman_id
+  );
+
+  const memberChanges = skripsiChanges.find(
+    (changes) => changes.dosen_id === skripsi.panelist_member_id
+  );
+
+  const advisorChanges = skripsiChanges.find(
+    (changes) => changes.dosen_id === skripsi.advisor_id
+  );
+
+  const coAdvisor1Changes = skripsiChanges.find(
+    (changes) => changes.dosen_id === skripsi.co_advisor1_id
+  );
+
+  const coAdvisor2Changes = skripsiChanges.find(
+    (changes) => changes.dosen_id === skripsi.co_advisor2_id
+  );
+
+  const changesData = {
+    skripsi_id: skripsi.id,
+    changes_by_chairman: chairmanChanges ? chairmanChanges.changes : null,
+    changes_by_member: memberChanges ? memberChanges.changes : null,
+    changes_by_advisor: advisorChanges ? advisorChanges.changes : null,
+    changes_by_co_advisor1: coAdvisor1Changes
+      ? coAdvisor1Changes.changes
+      : null,
+    changes_by_co_advisor2: coAdvisor2Changes
+      ? coAdvisor2Changes.changes
+      : null,
+  };
+
+  return changesData;
+};
+
 module.exports = {
   updateSkripsiDocumentById,
   getSkripsiDocumentById,
@@ -834,4 +1080,10 @@ module.exports = {
   getAllSkripsiSchedule,
   updateSkripsiScheduleById,
   getSkripsiScheduleById,
+
+  openAccessSkripsiReportById,
+  updateSkripsiAssessmentById,
+  getAllSkripsiAssessmentById,
+  updateSkripsiChangesById,
+  getAllSkripsiChangesById,
 };

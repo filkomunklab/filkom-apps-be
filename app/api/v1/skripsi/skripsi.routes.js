@@ -130,6 +130,51 @@ router.get(
   skripsiController.getSkripsiScheduleById
 );
 
+//===================================================================
+// @description     Open report
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-report/open-access/:id",
+  auth,
+  skripsiController.openAccessSkripsiReportById
+);
+
+//===================================================================
+// @description     Update skripsi assessment by id
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-assessment/:id",
+  auth,
+  skripsiController.updateSkripsiAssessmentById
+);
+
+//===================================================================
+// @description     Get all skripsi assessment by id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-assessment/:id",
+  auth,
+  skripsiController.getAllSkripsiAssessmentById
+);
+
+//===================================================================
+// @description     Update skripsi changes by id
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-changes/:id",
+  auth,
+  skripsiController.updateSkripsiChangesById
+);
+
+//===================================================================
+// @description     Get all skripsi changes by id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-changes/:id",
+  auth,
+  skripsiController.getAllSkripsiChangesById
+);
+
 // //       upload/update hki
 // router.put("/skripsi/hki/:id", skripsiController.updateHKIById);
 // //       melihat hki

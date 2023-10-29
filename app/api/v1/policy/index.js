@@ -62,6 +62,10 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_schedule");
     // Sekertaris update skripsi schedule
     can("update", "skripsi_schedule");
+    // Sekertaris view Skripsi_Assessment
+    can("read", "Skripsi_Assessment");
+    // Sekertaris view Skripsi_Changes
+    can("read", "Skripsi_Changes");
   }
 
   if (hasRole("DEKAN")) {
@@ -108,6 +112,10 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_payment");
     // Dekan view proposal plagiarism
     can("read", "skripsi_plagiarism");
+    // Dekan view Skripsi_Assessment
+    can("read", "Skripsi_Assessment");
+    // Dekan view view Skripsi_Changes
+    can("read", "Skripsi_Changes");
   }
 
   if (hasRole("KAPRODI")) {
@@ -151,6 +159,10 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_payment");
     // Kaprodi view proposal plagiarism
     can("read", "skripsi_plagiarism");
+    // Kaprodi view Skripsi_Assessment
+    can("read", "Skripsi_Assessment");
+    // Kaprodi view view Skripsi_Changes
+    can("read", "Skripsi_Changes");
   }
 
   if (hasRole("DOSEN")) {
@@ -218,6 +230,16 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_payment");
     // Dosen view proposal plagiarism
     can("read", "skripsi_plagiarism");
+    // Ketua Panelis update is_report_open in skripsi
+    can("update", "open_skripsi_report");
+    // (Dosen: Ketua, Anggota, Advisor) create Skripsi_Assessment
+    can("update", "Skripsi_Assessment");
+    // (Dosen: Ketua, Anggota, Advisor) view Skripsi_Assessment
+    can("read", "Skripsi_Assessment");
+    // (Dosen: Ketua, Anggota, Advisor, Co-Advisor) create Skripsi_Changes
+    can("update", "Skripsi_Changes");
+    // (Dosen: Ketua, Anggota, Advisor, Co-Advisor) view Skripsi_Changes
+    can("read", "Skripsi_Changes");
   }
 
   if (hasRole("DOSEN_MK")) {
@@ -273,6 +295,10 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_payment");
     // Dosen MK view proposal plagiarism
     can("read", "skripsi_plagiarism");
+    // Dosen MK view Skripsi_Assessment
+    can("read", "Skripsi_Assessment");
+    // Dosen MK view Skripsi_Changes
+    can("read", "Skripsi_Changes");
   }
 
   if (hasRole("MAHASISWA")) {

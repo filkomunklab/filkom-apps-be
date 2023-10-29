@@ -22,7 +22,7 @@ const insertSkripsi = async (submission) => {
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Update skripsi chairman and member by id
-// @used            Submission
+// @used            Proposal
 const updateSkripsiChairmanAndMemberById = async (
   id,
   panelist_chairman_id,
@@ -638,6 +638,26 @@ const findSkripsiScheduleById = async (id) => {
   return skripsi;
 };
 
+//===================================================================
+// @description     Open report
+// @route           PUT /skripsi/skripsi-report/open-access/:id
+// @access          DOSEN
+const openAccessSkripsiReportById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_report_open: true,
+    },
+    select: {
+      id: true,
+      is_report_open: true,
+    },
+  });
+  return skripsi;
+};
+
 module.exports = {
   insertSkripsi,
   updateSkripsiChairmanAndMemberById,
@@ -674,4 +694,6 @@ module.exports = {
   findAllConflictingSkripsiSchedule,
   updateSkripsiScheduleById,
   findSkripsiScheduleById,
+
+  openAccessSkripsiReportById,
 };

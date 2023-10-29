@@ -20,7 +20,7 @@ const insertProposalChanges = async (userId, payload) => {
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get proposal_changes by proposal_id, & dosen_id
-// @used            createProposalChanges
+// @used            createProposalChanges, Proposal
 const findProposalChangesByProposalIdAndDosenId = async (
   proposal_id,
   dosen_id
