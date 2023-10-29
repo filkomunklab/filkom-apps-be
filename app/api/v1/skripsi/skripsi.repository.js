@@ -4,21 +4,403 @@ const prisma = require("../../../database");
 // @description     Create empty skripsi
 // @used            Submission
 const insertSkripsi = async (submission) => {
-    const {
-      proposed_advisor_id,
-      proposed_co_advisor1_id,
-      proposed_co_advisor2_id,
-    } = submission;
-    const skripsi = await prisma.skripsi.create({
-      data: {
-        advisor_id: proposed_advisor_id,
-        co_advisor1_id: proposed_co_advisor1_id,
-        co_advisor2_id: proposed_co_advisor2_id,
-      },
-    });
-    return skripsi;
-}
+  const {
+    proposed_advisor_id,
+    proposed_co_advisor1_id,
+    proposed_co_advisor2_id,
+  } = submission;
+  const skripsi = await prisma.skripsi.create({
+    data: {
+      advisor_id: proposed_advisor_id,
+      co_advisor1_id: proposed_co_advisor1_id,
+      co_advisor2_id: proposed_co_advisor2_id,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get skripsi by id
+// @used            getSkripsiById, Skripsi_Assessment
+const findSkripsiById = async (id) => {
+  const skripsi = await prisma.skripsi.findUnique({
+    where: {
+      id,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Upload dokumen skripsi
+// @route           PUT /skripsi/skripsi-document/:id
+// @access          MAHASISWA
+const updateSkripsiDocumentById = async (id, payload, path) => {
+  const { skripsi_file } = payload;
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_skripsi: skripsi_file.file_name_skripsi,
+      upload_date_skripsi: new Date(),
+      file_size_skripsi: skripsi_file.file_size_skripsi,
+      file_path_skripsi: path,
+    },
+    select: {
+      id: true,
+      file_name_skripsi: true,
+      upload_date_skripsi: true,
+      file_size_skripsi: true,
+      file_path_skripsi: true,
+      is_skripsi_approve_by_advisor: true,
+      is_skripsi_approve_by_co_advisor1: true,
+      is_skripsi_approve_by_co_advisor2: true,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++(1)++++++++++++++++++++++++++++++++++++++
+// @description     Update skripsi approve by advisor
+// @used            updateSkripsiDocumentById
+const updateSkripsiDocumentApproveByAdvisorById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_skripsi_approve_by_advisor: "Waiting",
+    },
+    select: {
+      is_skripsi_approve_by_advisor: true,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++(2)++++++++++++++++++++++++++++++++++++++
+// @description     Update skripsi approve by co-advisor1
+// @used            updateSkripsiDocumentById
+const updateSkripsiDocumentApproveByCoAdvisor1ById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_skripsi_approve_by_co_advisor1: "Waiting",
+    },
+    select: {
+      is_skripsi_approve_by_co_advisor1: true,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++(3)++++++++++++++++++++++++++++++++++++++
+// @description     Update skripsi approve by co-advisor2
+// @used            updateSkripsiDocumentById
+const updateSkripsiDocumentApproveByCoAdvisor2ById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_skripsi_approve_by_co_advisor2: "Waiting",
+    },
+    select: {
+      is_skripsi_approve_by_co_advisor2: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Get dokumen skripsi
+// @route           GET /skripsi/skripsi-document/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN
+const findSkripsiDocumentById = async (id) => {
+  const skripsi = await prisma.skripsi.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      file_name_skripsi: true,
+      upload_date_skripsi: true,
+      file_size_skripsi: true,
+      file_path_skripsi: true,
+      is_skripsi_approve_by_advisor: true,
+      is_skripsi_approve_by_co_advisor1: true,
+      is_skripsi_approve_by_co_advisor2: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update dokumen skripsi
+// @route           PUT /skripsi/skripsi-document/delete/:id
+// @access          MAHASISWA
+const deleteSkripsiDocumentById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_skripsi: null,
+      upload_date_skripsi: null,
+      file_size_skripsi: null,
+      file_path_skripsi: null,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++(1)++++++++++++++++++++++++++++++++++++++
+// @description     Delete/Update skripsi approve by advisor
+// @used            deleteSkripsiDocumentById
+const deleteSkripsiDocumentApproveByAdvisorById = async (id) => {
+  await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_skripsi_approve_by_advisor: null,
+    },
+  });
+};
+
+// ++++++++++++++++++++++++++++(2)++++++++++++++++++++++++++++++++++++++
+// @description     Delete/Update skripsi approve by co-advisor1
+// @used            deleteSkripsiDocumentById
+const deleteSkripsiDocumentApproveByCoAdvisor1ById = async (id) => {
+  await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_skripsi_approve_by_co_advisor1: null,
+    },
+  });
+};
+
+// ++++++++++++++++++++++++++++(3)++++++++++++++++++++++++++++++++++++++
+// @description     Delete/Update skripsi approve by co-advisor2
+// @used            deleteSkripsiDocumentById
+const deleteSkripsiDocumentApproveByCoAdvisor2ById = async (id) => {
+  await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_skripsi_approve_by_co_advisor2: null,
+    },
+  });
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get advisor in skripsi by skripsi_id & advisor_id
+// @used            approveSkripsiDocumentById, rejectSkripsiRevisionDocumentById
+const findAdvisorInSkripsiByIdAndAdvisorId = async (id, advisor_id) => {
+  const skripsi = await prisma.skripsi.findFirst({
+    where: {
+      id,
+      advisor_id,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get co-advisor1 in skripsi by skripsi_id & co_advisor1_id
+// @used            approveSkripsiDocumentById
+const findCoAdvisor1InSkripsiByIdAndAdvisorId = async (id, co_advisor1_id) => {
+  const skripsi = await prisma.skripsi.findFirst({
+    where: {
+      id,
+      co_advisor1_id,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get co-advisor2 in skripsi by skripsi_id & co_advisor2_id
+// @used            approveSkripsiDocumentById
+const findCoAdvisor2InSkripsiByIdAndAdvisorId = async (id, co_advisor2_id) => {
+  const skripsi = await prisma.skripsi.findFirst({
+    where: {
+      id,
+      co_advisor2_id,
+    },
+  });
+  return skripsi;
+};
+
+//=============================(1)======================================
+// @description     Approve dokumen skripsi
+// @route           PUT /skripsi/skripsi-document/approve/:id
+// @access          DOSEN
+const approveSkripsiDocumentByAdvisorById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_skripsi_approve_by_advisor: "Approve",
+      advisor_skripsi_approved_date: new Date(),
+    },
+    select: {
+      id: true,
+      is_skripsi_approve_by_advisor: true,
+      is_skripsi_approve_by_co_advisor1: true,
+      is_skripsi_approve_by_co_advisor2: true,
+      advisor_skripsi_approved_date: true,
+    },
+  });
+  return skripsi;
+};
+
+//=============================(2)======================================
+// @description     Approve dokumen skripsi
+// @route           PUT /skripsi/skripsi-document/approve/:id
+// @access          DOSEN
+const approveSkripsiDocumentByCoAdvisor1ById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_skripsi_approve_by_co_advisor1: "Approve",
+      co_advisor1_skripsi_approved_date: new Date(),
+    },
+    select: {
+      id: true,
+      is_skripsi_approve_by_advisor: true,
+      is_skripsi_approve_by_co_advisor1: true,
+      is_skripsi_approve_by_co_advisor2: true,
+      co_advisor1_skripsi_approved_date: true,
+    },
+  });
+  return skripsi;
+};
+
+//=============================(3)======================================
+// @description     Approve dokumen skripsi
+// @route           PUT /skripsi/skripsi-document/approve/:id
+// @access          DOSEN
+const approveSkripsiDocumentByCoAdvisor2ById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_skripsi_approve_by_co_advisor2: "Approve",
+      co_advisor2_skripsi_approved_date: new Date(),
+    },
+    select: {
+      id: true,
+      is_skripsi_approve_by_advisor: true,
+      is_skripsi_approve_by_co_advisor1: true,
+      is_skripsi_approve_by_co_advisor2: true,
+      co_advisor2_skripsi_approved_date: true,
+    },
+  });
+  return skripsi;
+};
+
+//=============================(1)======================================
+// @description     Reject dokumen skripsi
+// @route           PUT /skripsi/skripsi-document/reject/:id
+// @access          DOSEN
+const rejectSkripsiDocumentByAdvisorById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_skripsi_approve_by_advisor: "Rejected",
+      advisor_skripsi_approved_date: new Date(),
+    },
+    select: {
+      id: true,
+      is_skripsi_approve_by_advisor: true,
+      is_skripsi_approve_by_co_advisor1: true,
+      is_skripsi_approve_by_co_advisor2: true,
+      advisor_skripsi_approved_date: true,
+    },
+  });
+  return skripsi;
+};
+
+//=============================(2)======================================
+// @description     Reject dokumen skripsi
+// @route           PUT /skripsi/skripsi-document/reject/:id
+// @access          DOSEN
+const rejectSkripsiDocumentByCoAdvisor1ById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_skripsi_approve_by_co_advisor1: "Rejected",
+      co_advisor1_skripsi_approved_date: new Date(),
+    },
+    select: {
+      id: true,
+      is_skripsi_approve_by_advisor: true,
+      is_skripsi_approve_by_co_advisor1: true,
+      is_skripsi_approve_by_co_advisor2: true,
+      co_advisor1_skripsi_approved_date: true,
+    },
+  });
+  return skripsi;
+};
+
+//=============================(3)======================================
+// @description     Reject dokumen skripsi
+// @route           PUT /skripsi/skripsi-document/reject/:id
+// @access          DOSEN
+const rejectSkripsiDocumentByCoAdvisor2ById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_skripsi_approve_by_co_advisor2: "Rejected",
+      co_advisor2_skripsi_approved_date: new Date(),
+    },
+    select: {
+      id: true,
+      is_skripsi_approve_by_advisor: true,
+      is_skripsi_approve_by_co_advisor1: true,
+      is_skripsi_approve_by_co_advisor2: true,
+      co_advisor2_skripsi_approved_date: true,
+    },
+  });
+  return skripsi;
+};
 
 module.exports = {
-    insertSkripsi,
-}
+  insertSkripsi,
+  findSkripsiById,
+  updateSkripsiDocumentById,
+  updateSkripsiDocumentApproveByAdvisorById,
+  updateSkripsiDocumentApproveByCoAdvisor1ById,
+  updateSkripsiDocumentApproveByCoAdvisor2ById,
+  findSkripsiDocumentById,
+  deleteSkripsiDocumentById,
+  deleteSkripsiDocumentApproveByAdvisorById,
+  deleteSkripsiDocumentApproveByCoAdvisor1ById,
+  deleteSkripsiDocumentApproveByCoAdvisor2ById,
+  findAdvisorInSkripsiByIdAndAdvisorId,
+  findCoAdvisor1InSkripsiByIdAndAdvisorId,
+  findCoAdvisor2InSkripsiByIdAndAdvisorId,
+  approveSkripsiDocumentByAdvisorById,
+  approveSkripsiDocumentByCoAdvisor1ById,
+  approveSkripsiDocumentByCoAdvisor2ById,
+  rejectSkripsiDocumentByAdvisorById,
+  rejectSkripsiDocumentByCoAdvisor1ById,
+  rejectSkripsiDocumentByCoAdvisor2ById,
+};

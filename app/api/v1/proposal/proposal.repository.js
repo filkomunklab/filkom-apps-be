@@ -46,7 +46,7 @@ const updateProposalDocumentById = async (id, payload, path) => {
     data: {
       file_name_proposal: proposal_file.file_name_proposal,
       upload_date_proposal: new Date(),
-      file_size_proposal: proposal_file.file_name_proposal,
+      file_size_proposal: proposal_file.file_size_proposal,
       file_path_proposal: path,
     },
     select: {
