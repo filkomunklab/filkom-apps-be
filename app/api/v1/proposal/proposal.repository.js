@@ -1154,15 +1154,24 @@ const rejectProposalRevisionDocumentByAdvisorById = async (id) => {
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @description     Get all proposal by advisor/co-advisor id
+// @description     Get all proposal by advisor id
 // @used            Group,
-const findAllProposalByAdvisorOrCoId = async (userId) => {
+const findAllProposalByAdvisorId = async (userId) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      advisor_id: userId,
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by co-advisor id
+// @used            Group,
+const findAllProposalByCoAdvisorId = async (userId) => {
   const proposal = await prisma.proposal.findMany({
     where: {
       OR: [
-        {
-          advisor_id: userId,
-        },
         {
           co_advisor1_id: userId,
         },
@@ -1176,19 +1185,24 @@ const findAllProposalByAdvisorOrCoId = async (userId) => {
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @description     Get all proposal by chairman/member
+// @description     Get all proposal by chairman
 // @used            Group,
-const findAllProposalByChairmanOrMember = async (userId) => {
+const findAllProposalByChairman = async (userId) => {
   const proposal = await prisma.proposal.findMany({
     where: {
-      OR: [
-        {
-          panelist_chairman_id: userId,
-        },
-        {
-          panelist_member_id: userId,
-        },
-      ],
+      panelist_chairman_id: userId,
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by member
+// @used            Group,
+const findAllProposalByMember = async (userId) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      panelist_member_id: userId,
     },
   });
   return proposal;
@@ -1274,8 +1288,10 @@ module.exports = {
   rejectProposalRevisionDocumentByMemberById,
   rejectProposalRevisionDocumentByAdvisorById,
 
-  findAllProposalByAdvisorOrCoId,
-  findAllProposalByChairmanOrMember,
+  findAllProposalByAdvisorId,
+  findAllProposalByCoAdvisorId,
+  findAllProposalByChairman,
+  findAllProposalByMember,
   findAllProposalByClassroomId,
   findAllProposal,
 };

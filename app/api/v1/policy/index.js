@@ -158,10 +158,14 @@ const policyFor = ({ user }) => {
     can("read", "advisor_team");
     // Dosen view committee list
     can("read", "committee_list");
-    // Dosen view proposal list advisor and co
-    can("read", "proposal_list_advisor_co_advisor");
-    // Dosen view proposal list chairman and member
-    can("read", "proposal_list_chairman_member");
+    // Dosen view proposal list advisor
+    can("read", "proposal_list_advisor");
+    // Dosen view proposal list co-advisor
+    can("read", "proposal_list_co_advisor");
+    // Dosen view proposal list chairman
+    can("read", "proposal_list_chairman");
+    // Dosen view proposal list member
+    can("read", "proposal_list_member");
   }
 
   if (hasRole("DOSEN_MK")) {
