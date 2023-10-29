@@ -54,9 +54,42 @@ const sendBroadcastEmail = async (req, res) => {
   }
 };
 
+//broadcast WhatsApp
+// const broadcastWAChat = async (req, res) => {
+//   try {
+//     let phoneNo = req.query.phoneNo;
+//     const pesan = req.query.pesan;
+//     const result = await alumniService.sendBroadcastWA(phoneNo, pesan);
+
+//     if (result.status === "success") {
+//       res.status(200).send(result);
+//     } else {
+//       res.status(400).send(result);
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ status: "error", pesan: "error server" });
+//   }
+// };
+
+const broadcastWAChat = async (req, res) => {
+  try {
+    const pesan = "Pesan broadcast ke#4 dari Klabatbridge. Ganbatte <3";
+    const results = await alumniService.sendBroadcastWA(pesan);
+
+    // Proses hasil dari pengiriman pesan
+    // Anda dapat menangani hasil ini sesuai kebutuhan Anda
+    res.status(200).send(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: "error", pesan: "error server" });
+  }
+};
+
 module.exports = {
   getAlumniList,
   filterAlumniBy,
   alumniStatusTS,
   sendBroadcastEmail,
+  broadcastWAChat,
 };

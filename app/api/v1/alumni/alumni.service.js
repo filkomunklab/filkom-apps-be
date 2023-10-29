@@ -1,5 +1,23 @@
 const alumniRepository = require("./alumni.repository");
 const nodemailer = require("nodemailer");
+const { Client, LocalAuth } = require("whatsapp-web.js");
+const qrCode = require("qrcode-terminal");
+const fs = require("fs");
+
+//broadcast WA
+const client = new Client({
+  authStrategy: new LocalAuth(),
+});
+
+client.on("qr", (qr) => {
+  qrCode.generate(qr, { small: true });
+});
+
+client.on("ready", () => {
+  console.log("WhatsApp Client Is Ready");
+});
+
+client.initialize();
 
 //daftar alumni
 const getAlumniList = async () => {
@@ -32,7 +50,7 @@ const sendEmail = async () => {
     from: "<no-reply>", // sender address
     bcc: alumniList.map((student) => student.personalEmail).join(", "),
     subject: "Undangan Seminar Teknologi Terbaru #3", // Subject line
-    html: `Kepada Darell Mona,
+    html: `Kepada Jerico Katong,
     
     Salam Hormat,
     
@@ -69,9 +87,98 @@ const sendEmail = async () => {
   }
 };
 
+//send whatsapp
+// const sendBroadcastWA = async () => {
+//   const phoneNumbers = await alumniRepository.getPhoneNo();
+
+//   try {
+//     client.sendMessage(phoneNumbers, message);
+//     console.log(`Message sent to ${phoneNumbers}`);
+//   } catch (error) {
+//     console.error(`Error sending message to ${phoneNumbers}: ${error}`);
+//   }
+
+//   client.on("qr", (qrCode) => {
+//     console.log("Scan the QR code: ");
+//     console.log(qrCode);
+//   });
+
+//   client.on("ready", async () => {
+//     console.log("Client is ready");
+
+//     for (const phoneNumber of phoneNumbers) {
+//       await sendBroadcastWA(phoneNumbers);
+//     }
+
+//     client.destroy();
+//   });
+//   client.initialize();
+// };
+
+// const sendBroadcastWA = async (phoneNo, pesan) => {
+//   try {
+//     if (phoneNo.startsWith("0")) {
+//       phoneNo = "62" + phoneNo.slice(1) + "@c.us";
+//     } else if (phoneNo.startsWith("62")) {
+//       phoneNo = phoneNo + "@c.us";
+//     } else {
+//       phoneNo = "62" + phoneNo + "@c.us";
+//     }
+
+//     const user = await client.isRegisteredUser(phoneNo);
+//     if (user) {
+//       await client.sendMessage(phoneNo, pesan);
+//       return { status: "success", pesan: "Pesan Terkirim!" };
+//     } else {
+//       return { status: "GAGAL", pesan: "nomor WA tidak terdaftar" };
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     throw error;
+//   }
+// };
+
+const sendBroadcastWA = async (pesan) => {
+  try {
+    const phoneNumbers = await alumniRepository.phoneNumbers();
+
+    const results = await Promise.all(
+      phoneNumbers.map(async (phoneNo) => {
+        // Proses pengiriman pesan ke setiap nomor telepon
+        // Anda dapat menggunakan kode yang sebelumnya telah Anda buat
+        // dalam loop ini.
+        if (phoneNo.startsWith("0")) {
+          phoneNo = "62" + phoneNo.slice(1) + "@c.us";
+        } else if (phoneNo.startsWith("62")) {
+          phoneNo = phoneNo + "@c.us";
+        } else {
+          phoneNo = "62" + phoneNo + "@c.us";
+        }
+
+        const user = await client.isRegisteredUser(phoneNo);
+        if (user) {
+          await client.sendMessage(phoneNo, pesan);
+          return { status: "success", pesan: `Pesan Terkirim ke ${phoneNo} !` };
+        } else {
+          return {
+            status: "GAGAL",
+            pesan: `nomor ${phoneNo} tidak terdaftar di WhatsApp`,
+          };
+        }
+      })
+    );
+
+    return results;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 module.exports = {
   getAlumniList,
   filterAlumni,
   alumniTS,
   sendEmail,
+  sendBroadcastWA,
 };

@@ -17,4 +17,10 @@ router.post(
   alumniController.sendBroadcastEmail
 );
 
+//broadcast WA
+router.post(
+  "/operator/alumni/send-broadcast-whatsapp",
+  alumniController.broadcastWAChat
+);
+
 module.exports = router;

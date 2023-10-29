@@ -14,6 +14,7 @@ const getAlumniList = async () => {
       faculty: true,
       graduate_year: true,
       personalEmail: true,
+      phoneNo: true,
     },
   });
   return alumniList;
@@ -67,22 +68,20 @@ const filterAlumni = async (filter) => {
   });
 };
 
-//send mail
-const getAlumniEmails = async (nim) => {
-  const personalEmails = await prisma.student.findMany({
-    where: {
-      nim: nim,
-    },
+const phoneNumbers = async () => {
+  const phoneNo = await prisma.student.findMany({
     select: {
-      personalEmail: true,
+      firstName: true,
+      lastName: true,
+      phoneNo: true,
     },
   });
-  return personalEmails;
+  return phoneNo.map((student) => student.phoneNo);
 };
 
 module.exports = {
   getAlumniList,
   filterAlumni,
   alumniTS,
-  getAlumniEmails,
+  phoneNumbers,
 };
