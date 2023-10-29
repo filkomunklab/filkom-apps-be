@@ -8,12 +8,142 @@ const { auth } = require("../../../middleware/auth");
 
 //-------------------Skripsi App ------------------------
 
-//       membuat kelompok baru -> submission
+//===================================================================
+// @description     Get thesis list
+// @access          MAHASISWA
+router.get("/group/thesis_list", auth, groupController.getThesisList);
 
-//       melihat daftar submission
-router.get("/group_student/submission_list", groupController.getSubmissionListById);
-//       melihat detail submission
-router.get("/group_student/submission_details/:id", groupController.getSubmissionDetailsById);
+//===================================================================
+// @description     Get details submission by id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN
+router.get(
+  "/group/submission_details/:id",
+  auth,
+  groupController.getSubmissionDetailsById
+);
+
+//===================================================================
+// @description     Get student list in the same proposal classroom
+// @access          MAHASISWA
+router.get(
+  "/group/classroom/students-list/:id",
+  auth,
+  groupController.getStudentListByClassroomId
+);
+
+//===================================================================
+// @description     Get dosen list
+// @access          MAHASISWA
+router.get("/group/dosen-list", auth, groupController.getDosenList);
+
+//===================================================================
+// @description     Get advisor team by id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/group/advisor-group/:id",
+  auth,
+  groupController.getAdvisorTeamById
+);
+
+//===================================================================
+// @description     Get committee list
+// @access          DOSEN
+router.get("/group/committee-list", auth, groupController.getCommitteeList);
+
+//===================================================================
+// @description     Get submission list dosen mk
+// @access          DOSEN_MK
+router.get(
+  "/group/submission-list-mk",
+  auth,
+  groupController.getSubmissionListMK
+);
+
+//===================================================================
+// @description     Get submission list kaprodi
+// @access          KAPRODI
+router.get(
+  "/group/submission-list-kaprodi",
+  auth,
+  groupController.getSubmissionListKaprodi
+);
+
+//===================================================================
+// @description     Get submission list dekan
+// @access          DEKAN
+router.get(
+  "/group/submission-list-dekan",
+  auth,
+  groupController.getSubmissionListDekan
+);
+
+//===================================================================
+// @description     Get proposal list advisor
+// @access          DOSEN
+router.get(
+  "/group/proposal-list-advisor",
+  auth,
+  groupController.getProposalListAdvisor
+);
+
+//===================================================================
+// @description     Get proposal list co-advisor
+// @access          DOSEN
+router.get(
+  "/group/proposal-list-co-advisor",
+  auth,
+  groupController.getProposalListCoAdvisor
+);
+
+//===================================================================
+// @description     Get proposal list chairman
+// @access          DOSEN
+router.get(
+  "/group/proposal-list-chairman",
+  auth,
+  groupController.getProposalListChairman
+);
+
+//===================================================================
+// @description     Get proposal list member
+// @access          DOSEN
+router.get(
+  "/group/proposal-list-member",
+  auth,
+  groupController.getProposalListMember
+);
+
+//===================================================================
+// @description     Get proposal list mk
+// @access          DOSEN_MK
+router.get("/group/proposal-list-mk", auth, groupController.getProposalListMK);
+
+//===================================================================
+// @description     Get proposal list kaprodi IF/SI
+// @access          KAPRODI
+router.get(
+  "/group/proposal-list-kaprodi",
+  auth,
+  groupController.getProposalListKaprodi
+);
+
+//===================================================================
+// @description     Get proposal list dekan
+// @access          DEKAN
+router.get(
+  "/group/proposal-list-dekan",
+  auth,
+  groupController.getProposalListDekan
+);
+
+//===================================================================
+// @description     Get proposal list operator fakultas/filkom
+// @access          OPERATOR_FAKULTAS
+router.get(
+  "/group/proposal-list-sekretaris",
+  auth,
+  groupController.getProposalListSekretaris
+);
 
 // //       melihat kelompok mahasiswa
 // router.get("/group_student/:id", groupController.getGroupStudentById);

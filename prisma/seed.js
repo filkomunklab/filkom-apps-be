@@ -641,6 +641,37 @@ async function main() {
       }
     });
 
+  // CREATE DOSEN
+  await prisma.employee
+    .create({
+      data: {
+        id: "550e8400-e29b-41d4-a716-446655440000",
+        Address: "Airmadidi",
+        phoneNum: "081226789",
+        email: "dosen4@test.com",
+        firstName: "Lecturer4",
+        lastName: "Dosen4",
+        degree: "MT, PhD",
+        nik: "dosen4",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
   // CREATE SEKRETARIS
   await prisma.employee
     .create({
@@ -648,7 +679,7 @@ async function main() {
         id: "f6b7d2b0-b7f8-4393-9027-e4374e1eea52",
         Address: "Manado",
         phoneNum: "08128374982",
-        email: "dosen4@test.com",
+        email: "sekretaris@test.com",
         firstName: "Sekretaris",
         lastName: "FILKOM",
         nik: "sekretarisfilkom",

@@ -42,7 +42,7 @@ model Employee {
   createdAt                 DateTime              @default(now())
   updatedAt                 DateTime?
   classroom                 Classroom[]           @relation("DosenMK")
-  consultation              Consultaion[]         @relation("Consultation")
+  thesis_consultation       Thesis_Consultation[] @relation("ThesisConsultation")
   proposed_advisor          Submission[]          @relation("ProposedAdvisor")
   proposed_co_advisor1      Submission[]          @relation("ProposedCoAdvisor1")
   proposed_co_advisor2      Submission[]          @relation("ProposedCoAdvisor2")
@@ -270,23 +270,23 @@ model Group_Student {
 }
 
 model Group {
-  id            String           @id @default(uuid())
-  progress      Progress?
-  title         String?
-  keywords      String?
-  abstrak       String?
-  reference     String?
-  submission    Submission       @relation("Submission", fields: [submission_id], references: [id])
-  submission_id String           @unique
-  proposal      Proposal?        @relation("Proposal", fields: [proposal_id], references: [id])
-  proposal_id   String?          @unique
-  skripsi       Skripsi?         @relation("Skripsi", fields: [skripsi_id], references: [id])
-  skripsi_id    String?          @unique
-  created_at    DateTime         @default(now())
-  updated_at    DateTime?
-  group_student Group_Student[]  @relation("Group")
-  consultation  Consultaion[]    @relation("Consultation")
-  History       Thesis_History[] @relation("History")
+  id                  String                @id @default(uuid())
+  progress            Progress?
+  title               String?
+  keywords            String?
+  abstrak             String?
+  reference           String?
+  submission          Submission?           @relation("Submission", fields: [submission_id], references: [id])
+  submission_id       String?               @unique
+  proposal            Proposal?             @relation("Proposal", fields: [proposal_id], references: [id])
+  proposal_id         String?               @unique
+  skripsi             Skripsi?              @relation("Skripsi", fields: [skripsi_id], references: [id])
+  skripsi_id          String?               @unique
+  created_at          DateTime              @default(now())
+  updated_at          DateTime?
+  group_student       Group_Student[]       @relation("Group")
+  thesis_consultation Thesis_Consultation[] @relation("ThesisConsultation")
+  History             Thesis_History[]      @relation("History")
 }
 
 model Academic_Calendar {
@@ -315,6 +315,7 @@ model Submission {
   file_name               String
   upload_date             DateTime
   file_size               String
+  file_path               String
   is_consultation         Boolean
   proposed_advisor        Employee           @relation("ProposedAdvisor", fields: [proposed_advisor_id], references: [id])
   proposed_advisor_id     String
@@ -341,6 +342,9 @@ model Proposal {
   file_size_proposal                       String?
   file_size_payment                        String?
   file_size_plagiarismcheck                String?
+  file_path_proposal                       String?
+  file_path_payment                        String?
+  file_path_plagiarismcheck                String?
   advisor                                  Employee              @relation("ProposalAdvisor", fields: [advisor_id], references: [id])
   advisor_id                               String
   co_advisor1                              Employee?             @relation("ProposalCoAdvisor1", fields: [co_advisor1_id], references: [id])
@@ -376,6 +380,7 @@ model Proposal {
   file_name_revision                       String?
   upload_date_revision                     DateTime?
   file_size_revision                       String?
+  file_path_revision                       String?
   is_revision_approve_by_panelist_chairman Revision_Approve?
   is_revision_approve_by_panelist_member   Revision_Approve?
   is_revision_approve_by_advisor           Revision_Approve?
@@ -398,6 +403,9 @@ model Skripsi {
   file_size_skripsi                        String?
   file_size_payment                        String?
   file_size_plagiarismcheck                String?
+  file_path_skripsi                        String?
+  file_path_payment                        String?
+  file_path_plagiarismcheck                String?
   advisor                                  Employee             @relation("SkripsiAdvisor", fields: [advisor_id], references: [id])
   advisor_id                               String
   co_advisor1                              Employee?            @relation("SkripsiCoAdvisor1", fields: [co_advisor1_id], references: [id])
@@ -433,6 +441,7 @@ model Skripsi {
   file_name_revision                       String?
   upload_date_revision                     DateTime?
   file_size_revision                       String?
+  file_path_revision                       String?
   is_revision_approve_by_panelist_chairman Revision_Approve?
   is_revision_approve_by_panelist_member   Revision_Approve?
   is_revision_approve_by_advisor           Revision_Approve?
@@ -468,7 +477,7 @@ model Proposal_Assessment {
   student_id  String
   dosen       Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id    String
-  value       String
+  value       String?
 }
 
 model Skripsi_Assessment {
@@ -479,7 +488,7 @@ model Skripsi_Assessment {
   student_id String
   dosen      Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id   String
-  value      String
+  value      String?
 }
 
 model Proposal_Changes {
@@ -488,7 +497,7 @@ model Proposal_Changes {
   proposal_id String
   dosen       Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id    String
-  changes     String
+  changes     String?
 }
 
 model Skripsi_Changes {
@@ -497,16 +506,16 @@ model Skripsi_Changes {
   skripsi_id String
   dosen      Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id   String
-  changes    String
+  changes    String?
 }
 
-model Consultaion {
+model Thesis_Consultation {
   id          String   @id @default(uuid())
-  group       Group    @relation("Consultation", fields: [group_id], references: [id])
+  group       Group    @relation("ThesisConsultation", fields: [group_id], references: [id])
   group_id    String
   description String
   date        DateTime
-  dosen       Employee @relation("Consultation", fields: [dosen_id], references: [id])
+  dosen       Employee @relation("ThesisConsultation", fields: [dosen_id], references: [id])
   dosen_id    String
 }
 

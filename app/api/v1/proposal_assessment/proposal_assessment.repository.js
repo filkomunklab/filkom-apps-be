@@ -21,7 +21,7 @@ const insertProposalAssessment = async (userId, payload) => {
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get proposal_assessment by proposal_id, & student_id, & dosen_id
-// @used            createProposalAssessment
+// @used            createProposalAssessment, Proposal
 const findProposalAssessmentByProposalIdAndStudentIdAndDosenId = async (
   proposal_id,
   student_id,
@@ -49,8 +49,45 @@ const findAllProposalAssessmentByProposalId = async (proposal_id) => {
   return proposalAssessment;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Create empty assessment for all student by panelist team
+// @used            Proposal
+const insertEmptyProposalAssessment = async (
+  proposal_id,
+  student_id,
+  dosen_id
+) => {
+  const proposalAssessment = await prisma.proposal_Assessment.create({
+    data: {
+      proposal_id,
+      student_id,
+      dosen_id,
+    },
+  });
+
+  return proposalAssessment;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update proposal assessment by id
+// @used            Proposal
+const updateProposalAssessmentById = async (id, value) => {
+  const proposalAssessment = await prisma.proposal_Assessment.update({
+    where: {
+      id,
+    },
+    data: {
+      value,
+    },
+  });
+
+  return proposalAssessment;
+};
+
 module.exports = {
   insertProposalAssessment,
+  insertEmptyProposalAssessment,
   findProposalAssessmentByProposalIdAndStudentIdAndDosenId,
   findAllProposalAssessmentByProposalId,
+  updateProposalAssessmentById,
 };

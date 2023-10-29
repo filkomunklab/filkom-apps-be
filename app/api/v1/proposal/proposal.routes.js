@@ -144,12 +144,30 @@ router.put(
 );
 
 //===================================================================
+// @description     Update proposal assessment by id
+// @access          DOSEN
+router.put(
+  "/proposal/proposal-assessment/:id",
+  auth,
+  proposalController.updateProposalAssessmentById
+);
+
+//===================================================================
 // @description     Get all proposal assessment by id
 // @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
 router.get(
   "/proposal/proposal-assessment/:id",
   auth,
   proposalController.getAllProposalAssessmentById
+);
+
+//===================================================================
+// @description     Update proposal changes by id
+// @access          DOSEN
+router.put(
+  "/proposal/proposal-changes/:id",
+  auth,
+  proposalController.updateProposalChangesById
 );
 
 //===================================================================

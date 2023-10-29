@@ -64,6 +64,18 @@ const updateEmployee = async (id, payload) => {
   return employee;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get employee by nik
+// @used            Group
+const findEmployeeByNIK = async (nik) => {
+  const employee = await prisma.employee.findUnique({
+    where: {
+      nik,
+    },
+  });
+  return employee;
+};
+
 module.exports = {
   findEmployees,
   findEmployeeById,
@@ -71,4 +83,5 @@ module.exports = {
   insertEmployee,
   deleteEmployee,
   updateEmployee,
+  findEmployeeByNIK,
 };

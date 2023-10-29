@@ -1,5 +1,13 @@
 //Layer untuk handle business logic
 
+const {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  getStorage,
+  deleteObject,
+} = require("firebase/storage");
+const { storage } = require("../../../config/firebase");
 const submissionRepository = require("./submission.repository");
 const groupRepository = require("../group/group.repository");
 const groupStudentRepository = require("../group_student/group_student.repository");
@@ -140,11 +148,8 @@ const createSubmission = async (userId, payload) => {
     await getDosenById(proposed_co_advisor2_id);
   }
 
-  // create submission
-  const submission = await submissionRepository.insertSubmission(payload);
-
   // create group
-  const group = await groupRepository.insertGroup(payload, submission.id);
+  const group = await groupRepository.insertGroup(payload);
   const { id: group_id } = group;
 
   // mengelompokkan mahasiswa
@@ -167,12 +172,36 @@ const createSubmission = async (userId, payload) => {
       }),
   ]);
 
+  // file
+  const storageRef = ref(
+    storage,
+    `submission/${group.id}/${payload.submission_file.file_name}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.submission_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
+  // create submission
+  const submission = await submissionRepository.insertSubmission(payload, path);
+
+  // update group -> input submission_id
+  const updatedGroup = await groupRepository.updateGroupByIdAndSubmissionId(
+    group.id,
+    submission.id
+  );
+
   const Data = {
-    id: group.submission_id,
+    id: updatedGroup.submission_id,
     title: group.title,
     file_name: submission.file_name,
     upload_date: submission.upload_date,
     file_size: submission.file_size,
+    file_path: submission.file_path,
     is_consultation: submission.is_consultation,
     proposed_advisor_id: submission.proposed_advisor_id,
     proposed_co_advisor1_id: submission.proposed_co_advisor1_id,
@@ -221,10 +250,11 @@ const getSubmissionById = async (id) => {
       const student = await studentRepository.findStudentById(student_id);
       if (student) {
         // Menggabungkan firstName dan lastName menjadi fullName
-        const fullName = `${student.firstName} ${student.lastName || ""}`;
-        // console.log(
-        //   `Student ID: ${student_id}, FullName: ${fullName}, Nim: ${student.nim}, Major: ${student.major}`
-        // );
+        let fullName = student.firstName;
+
+        if (student.lastName) {
+          fullName += ` ${student.lastName}`;
+        }
         return {
           fullName: fullName,
           nim: student.nim,
@@ -245,6 +275,7 @@ const getSubmissionById = async (id) => {
     file_name: submission.file_name,
     upload_date: submission.upload_date,
     file_size: submission.file_size,
+    file_path: submission.file_path,
     is_consultation: submission.is_consultation,
     proposed_advisor_id: submission.proposed_advisor_id,
     proposed_co_advisor1_id: submission.proposed_co_advisor1_id,
@@ -278,6 +309,13 @@ const checkSubmissionById = async (id) => {
 const updateSubmissionById = async (id, userId, payload) => {
   // check existing submission
   const submission = await checkSubmissionById(id);
+
+  if (!submission) {
+    throw {
+      status: 400,
+      message: `Submission not found`,
+    };
+  }
 
   if (submission.is_approve === "Approve") {
     throw {
@@ -322,10 +360,41 @@ const updateSubmissionById = async (id, userId, payload) => {
     await getDosenById(proposed_co_advisor2_id);
   }
 
+  // get group id for file upload
+  const groupId = await groupRepository.findGroupBySubmissionId(submission.id);
+
+  // delete existing file
+  if (submission.file_name) {
+    // file
+    const storage = getStorage();
+    // Create a reference to the file to delete
+    const desertRef = ref(
+      storage,
+      `submission/${groupId.id}/${submission.file_name}`
+    );
+    // Delete the file
+    await deleteObject(desertRef);
+  }
+
+  // file
+  const storageRef = ref(
+    storage,
+    `submission/${groupId.id}/${payload.submission_file.file_name}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.submission_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
   // update submission
   const updatedSubmission = await submissionRepository.updateSubmission(
     id,
-    payload
+    payload,
+    path
   );
   // update title in group by submission_id
   const group = await groupRepository.updateGroupTitleBySubmissionId(
@@ -339,6 +408,7 @@ const updateSubmissionById = async (id, userId, payload) => {
     file_name: updatedSubmission.file_name,
     upload_date: updatedSubmission.upload_date,
     file_size: updatedSubmission.file_size,
+    file_path: updatedSubmission.file_path,
     is_consultation: updatedSubmission.is_consultation,
     proposed_advisor_id: updatedSubmission.proposed_advisor_id,
     proposed_co_advisor1_id: updatedSubmission.proposed_co_advisor1_id,

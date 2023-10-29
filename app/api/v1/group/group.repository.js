@@ -23,14 +23,39 @@ const findGroupByProposalId = async (proposal_id) => {
   return group;
 };
 
-// @description     Create group from submission by title & submission_id
+// @description     Get group by skripsi_id
+// @used            Skripsi
+const findGroupBySkripsiId = async (skripsi_id) => {
+  const group = await prisma.group.findUnique({
+    where: {
+      skripsi_id,
+    },
+  });
+  return group;
+};
+
+// @description     Create group from submission by title
 // @used            Submission
-const insertGroup = async (payload, submission_id) => {
+const insertGroup = async (payload) => {
   const { title } = payload;
   const group = await prisma.group.create({
     data: {
       title,
       progress: "Submission",
+    },
+  });
+
+  return group;
+};
+
+// @description     Update group from submission by id & submission_id
+// @used            Submission
+const updateGroupByIdAndSubmissionId = async (id, submission_id) => {
+  const group = await prisma.group.update({
+    where: {
+      id,
+    },
+    data: {
       submission_id,
     },
   });
@@ -89,8 +114,9 @@ const updateGroupSkripsiIdBySubmissionId = async (
   return group;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Update group progress by proposal_id
-// @used            Proposal
+// @used            Proposal,
 const updateGroupProgressByProposalId = async (proposal_id) => {
   const group = await prisma.group.update({
     where: {
@@ -98,6 +124,22 @@ const updateGroupProgressByProposalId = async (proposal_id) => {
     },
     data: {
       progress: "Skripsi",
+    },
+  });
+
+  return group;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update group progress by skripsi_id
+// @used            Skripsi,
+const updateGroupProgressBySkripsiId = async (skripsi_id) => {
+  const group = await prisma.group.update({
+    where: {
+      skripsi_id,
+    },
+    data: {
+      progress: "Finished",
     },
   });
 
@@ -134,6 +176,37 @@ const findManyGroupsByProposalIds = async (proposalIds) => {
       id: true,
       proposal_id: true,
       title: true,
+    },
+  });
+  return groups;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get group by skripsiIds
+// @used            Skripsi
+const findManyGroupsBySkripsiIds = async (skripsiIds) => {
+  const groups = await prisma.group.findMany({
+    where: {
+      skripsi_id: {
+        in: skripsiIds,
+      },
+    },
+    select: {
+      id: true,
+      skripsi_id: true,
+      title: true,
+    },
+  });
+  return groups;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get group by id
+// @used            Consultation, getSubmissionList
+const findGroupById = async (id) => {
+  const groups = await prisma.group.findUnique({
+    where: {
+      id,
     },
   });
   return groups;
@@ -287,13 +360,18 @@ const findTitleById = async (id) => {
 module.exports = {
   findGroupBySubmissionId,
   findGroupByProposalId,
+  findGroupBySkripsiId,
   insertGroup,
+  updateGroupByIdAndSubmissionId,
   updateGroupTitleBySubmissionId,
   updateGroupProposalIdBySubmissionId,
   updateGroupSkripsiIdBySubmissionId,
   updateGroupProgressByProposalId,
   updateGroupProgressBySubmissionId,
+  updateGroupProgressBySkripsiId,
   findManyGroupsByProposalIds,
+  findManyGroupsBySkripsiIds,
+  findGroupById,
 
   findSubmissionListById,
   findSubmissionDetailsById,

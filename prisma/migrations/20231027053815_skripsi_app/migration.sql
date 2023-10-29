@@ -10,19 +10,19 @@
 CREATE TYPE "Major" AS ENUM ('SI', 'IF');
 
 -- CreateEnum
-CREATE TYPE "Progress" AS ENUM ('Submission', 'Proposal', 'Skripsi', 'Finished');
-
--- CreateEnum
-CREATE TYPE "Semester" AS ENUM ('Ganjil', 'Genap', 'Padat');
-
--- CreateEnum
-CREATE TYPE "Classroom_Name" AS ENUM ('Proposal', 'Skripsi');
+CREATE TYPE "Thesis_Approve" AS ENUM ('Waiting', 'Approve', 'Rejected');
 
 -- CreateEnum
 CREATE TYPE "Submission_Approve" AS ENUM ('Waiting', 'Approve', 'Rejected');
 
 -- CreateEnum
-CREATE TYPE "Thesis_Approve" AS ENUM ('Waiting', 'Approve', 'Rejected');
+CREATE TYPE "Classroom_Name" AS ENUM ('Proposal', 'Skripsi');
+
+-- CreateEnum
+CREATE TYPE "Semester" AS ENUM ('Ganjil', 'Genap', 'Padat');
+
+-- CreateEnum
+CREATE TYPE "Progress" AS ENUM ('Submission', 'Proposal', 'Skripsi', 'Finished');
 
 -- CreateEnum
 CREATE TYPE "Exam_Conclution" AS ENUM ('Rejected', 'Approve');
@@ -97,7 +97,7 @@ CREATE TABLE "Group" (
     "keywords" TEXT,
     "abstrak" TEXT,
     "reference" TEXT,
-    "submission_id" TEXT NOT NULL,
+    "submission_id" TEXT,
     "proposal_id" TEXT,
     "skripsi_id" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -131,6 +131,7 @@ CREATE TABLE "Submission" (
     "file_name" TEXT NOT NULL,
     "upload_date" TIMESTAMP(3) NOT NULL,
     "file_size" TEXT NOT NULL,
+    "file_path" TEXT NOT NULL,
     "is_consultation" BOOLEAN NOT NULL,
     "proposed_advisor_id" TEXT NOT NULL,
     "proposed_co_advisor1_id" TEXT,
@@ -155,6 +156,9 @@ CREATE TABLE "Proposal" (
     "file_size_proposal" TEXT,
     "file_size_payment" TEXT,
     "file_size_plagiarismcheck" TEXT,
+    "file_path_proposal" TEXT,
+    "file_path_payment" TEXT,
+    "file_path_plagiarismcheck" TEXT,
     "advisor_id" TEXT NOT NULL,
     "co_advisor1_id" TEXT,
     "co_advisor2_id" TEXT,
@@ -184,6 +188,7 @@ CREATE TABLE "Proposal" (
     "file_name_revision" TEXT,
     "upload_date_revision" TIMESTAMP(3),
     "file_size_revision" TEXT,
+    "file_path_revision" TEXT,
     "is_revision_approve_by_panelist_chairman" "Revision_Approve",
     "is_revision_approve_by_panelist_member" "Revision_Approve",
     "is_revision_approve_by_advisor" "Revision_Approve",
@@ -206,6 +211,9 @@ CREATE TABLE "Skripsi" (
     "file_size_skripsi" TEXT,
     "file_size_payment" TEXT,
     "file_size_plagiarismcheck" TEXT,
+    "file_path_skripsi" TEXT,
+    "file_path_payment" TEXT,
+    "file_path_plagiarismcheck" TEXT,
     "advisor_id" TEXT NOT NULL,
     "co_advisor1_id" TEXT,
     "co_advisor2_id" TEXT,
@@ -235,6 +243,7 @@ CREATE TABLE "Skripsi" (
     "file_name_revision" TEXT,
     "upload_date_revision" TIMESTAMP(3),
     "file_size_revision" TEXT,
+    "file_path_revision" TEXT,
     "is_revision_approve_by_panelist_chairman" "Revision_Approve",
     "is_revision_approve_by_panelist_member" "Revision_Approve",
     "is_revision_approve_by_advisor" "Revision_Approve",
@@ -267,7 +276,7 @@ CREATE TABLE "Proposal_Assessment" (
     "proposal_id" TEXT NOT NULL,
     "student_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
-    "value" TEXT NOT NULL,
+    "value" TEXT,
 
     CONSTRAINT "Proposal_Assessment_pkey" PRIMARY KEY ("id")
 );
@@ -278,7 +287,7 @@ CREATE TABLE "Skripsi_Assessment" (
     "skripsi_id" TEXT NOT NULL,
     "student_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
-    "value" TEXT NOT NULL,
+    "value" TEXT,
 
     CONSTRAINT "Skripsi_Assessment_pkey" PRIMARY KEY ("id")
 );
@@ -288,7 +297,7 @@ CREATE TABLE "Proposal_Changes" (
     "id" TEXT NOT NULL,
     "proposal_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
-    "changes" TEXT NOT NULL,
+    "changes" TEXT,
 
     CONSTRAINT "Proposal_Changes_pkey" PRIMARY KEY ("id")
 );
@@ -298,20 +307,20 @@ CREATE TABLE "Skripsi_Changes" (
     "id" TEXT NOT NULL,
     "skripsi_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
-    "changes" TEXT NOT NULL,
+    "changes" TEXT,
 
     CONSTRAINT "Skripsi_Changes_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Consultaion" (
+CREATE TABLE "Thesis_Consultation" (
     "id" TEXT NOT NULL,
     "group_id" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "dosen_id" TEXT NOT NULL,
 
-    CONSTRAINT "Consultaion_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Thesis_Consultation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -362,7 +371,7 @@ ALTER TABLE "Group_Student" ADD CONSTRAINT "Group_Student_group_id_fkey" FOREIGN
 ALTER TABLE "Group_Student" ADD CONSTRAINT "Group_Student_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Group" ADD CONSTRAINT "Group_submission_id_fkey" FOREIGN KEY ("submission_id") REFERENCES "Submission"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Group" ADD CONSTRAINT "Group_submission_id_fkey" FOREIGN KEY ("submission_id") REFERENCES "Submission"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Group" ADD CONSTRAINT "Group_proposal_id_fkey" FOREIGN KEY ("proposal_id") REFERENCES "Proposal"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -455,10 +464,10 @@ ALTER TABLE "Skripsi_Changes" ADD CONSTRAINT "Skripsi_Changes_skripsi_id_fkey" F
 ALTER TABLE "Skripsi_Changes" ADD CONSTRAINT "Skripsi_Changes_dosen_id_fkey" FOREIGN KEY ("dosen_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Consultaion" ADD CONSTRAINT "Consultaion_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Thesis_Consultation" ADD CONSTRAINT "Thesis_Consultation_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Consultaion" ADD CONSTRAINT "Consultaion_dosen_id_fkey" FOREIGN KEY ("dosen_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Thesis_Consultation" ADD CONSTRAINT "Thesis_Consultation_dosen_id_fkey" FOREIGN KEY ("dosen_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Thesis_History" ADD CONSTRAINT "Thesis_History_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

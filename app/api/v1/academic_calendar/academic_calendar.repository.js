@@ -48,9 +48,40 @@ const findAcademicCalendarById = async (id) => {
 // @description     Get all academic calendar
 // @route           GET /academic-calendar
 // @access          DOSEN_MK
+// @used            getAcademicCalendarList
 const findAllAcademicCalendar = async () => {
   const academic = await prisma.academic_Calendar.findMany();
   return academic;
+};
+
+//===================================================================
+// @description     Update academic calendar list
+// @route           PUT /academic-calendar/:id
+// @access          DOSEN_MK
+const updateAcademicCalendaryId = async (id, payload) => {
+  const { semester, year } = payload;
+  const academic = await prisma.academic_Calendar.update({
+    where: {
+      id,
+    },
+    data: {
+      semester,
+      year,
+    },
+  });
+  return academic;
+};
+
+//===================================================================
+// @description     Delete academic calendar
+// @route           DELETE /academic-calendar/:id
+// @access          DOSEN_MK
+const deleteAcademicCalendaryId = async (id) => {
+  await prisma.academic_Calendar.delete({
+    where: {
+      id,
+    },
+  });
 };
 
 module.exports = {
@@ -58,4 +89,6 @@ module.exports = {
   insertAcademicCalendar,
   findAcademicCalendarById,
   findAllAcademicCalendar,
+  updateAcademicCalendaryId,
+  deleteAcademicCalendaryId,
 };

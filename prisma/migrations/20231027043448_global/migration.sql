@@ -5,11 +5,20 @@
   - You are about to drop the column `approvalReg` on the `FormSPT` table. All the data in the column will be lost.
 
 */
+-- AlterEnum
+ALTER TYPE "Role" ADD VALUE 'REGISTER';
+
+-- DropIndex
+DROP INDEX "FormSPT_nik_key";
+
 -- AlterTable
 ALTER TABLE "FormSPT" DROP COLUMN "approvalFak",
 DROP COLUMN "approvalReg",
 ADD COLUMN     "approval_fac" "status" NOT NULL DEFAULT 'WAITING',
 ADD COLUMN     "approval_reg" "status" NOT NULL DEFAULT 'WAITING';
+
+-- AlterTable
+ALTER TABLE "Student" ADD COLUMN     "graduate_year" TEXT;
 
 -- CreateTable
 CREATE TABLE "Tracer_Study" (
