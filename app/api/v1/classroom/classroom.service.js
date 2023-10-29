@@ -42,14 +42,18 @@ const createClassroom = async (userId, payload) => {
 // @route           GET /classroom/list
 // @access          DOSEN_MK
 const getListClassroom = async (userId) => {
-  const classroom = await classroomRepository.findListClassroom(userId);
-  if (!classroom) {
-    throw {
-      status: 400,
-      message: `Not found`,
+  const classrooms = await classroomRepository.findListClassroom(userId);
+  const classroomList = [];
+  for (const entry of classrooms) {
+    const classroom = `${entry.name} - Semester ${entry.academic.semester} ${entry.academic.year}`;
+    const classroomData = {
+      id: entry.id,
+      dosen_mk_id: entry.dosen_mk_id,
+      classroom,
     };
+    classroomList.push(classroomData);
   }
-  return classroom;
+  return classroomList;
 };
 
 //===================================================================
@@ -64,41 +68,60 @@ const getClassroomById = async (id) => {
       message: `Not found`,
     };
   }
-  // Modify the structure of the classroom object
-  classroom.semester = classroom.academic.semester;
-  classroom.year = classroom.academic.year;
-  delete classroom.academic;
+
+  const classroomData = {
+    id: classroom.id,
+    dosen_mk_id: classroom.dosen_mk_id,
+    classroom: `${classroom.name} - Semester ${classroom.academic.semester} ${classroom.academic.year}`,
+    students: [], // inisialisasi array untuk students
+  };
 
   if (classroom.name === "Proposal") {
     const dataProposalStudents =
       await proposalStudentRepository.findProposalStudentByClassroomId(id);
 
-    classroom.students = dataProposalStudents.map((proposalStudent) => ({
-      id: proposalStudent.id,
-      student_id: proposalStudent.student.id,
-      firstName: proposalStudent.student.firstName,
-      lastName: proposalStudent.student.lastName,
-      nim: proposalStudent.student.nim,
-      major: proposalStudent.student.major,
-    }));
+    // Map and modify student data
+    classroomData.students = dataProposalStudents.map((proposalStudent) => {
+      const student = proposalStudent.student;
+      let fullName = student.firstName;
+
+      if (student.lastName) {
+        fullName += ` ${student.lastName}`;
+      }
+
+      return {
+        id: proposalStudent.id,
+        student_id: student.id,
+        fullName,
+        nim: student.nim,
+        major: student.major,
+      };
+    });
   }
   if (classroom.name === "Skripsi") {
     const skripsiStudents =
       await skripsiStudentRepository.findSkripsiStudentByClassroomId(id);
 
-    classroom.students = skripsiStudents.map((skripsiStudent) => ({
-      id: skripsiStudent.id,
-      student_id: skripsiStudent.student.id,
-      firstName: skripsiStudent.student.firstName,
-      lastName: skripsiStudent.student.lastName,
-      nim: skripsiStudent.student.nim,
-      major: skripsiStudent.student.major,
-    }));
-  }
-  // Hapus properti academic_id
-  delete classroom.academic_id;
+    // Map and modify student data
+    classroomData.students = skripsiStudents.map((skripsiStudent) => {
+      const student = skripsiStudent.student;
+      let fullName = student.firstName;
 
-  return classroom;
+      if (student.lastName) {
+        fullName += ` ${student.lastName}`;
+      }
+
+      return {
+        id: skripsiStudent.id,
+        student_id: student.id,
+        fullName,
+        nim: student.nim,
+        major: student.major,
+      };
+    });
+  }
+
+  return classroomData;
 };
 
 //===================================================================
@@ -109,18 +132,19 @@ const getAllClassroom = async (userId) => {
   // find all dosen classroom
   const classrooms = await classroomRepository.findClassroomsByDosenMk(userId);
   if (!classrooms || classrooms.length === 0) {
-    throw {
-      status: 400,
-      message: `You don't have a class`,
-    };
+    return classrooms;
   }
+
+  const classroomsData = [];
 
   // Iterate through classrooms and fetch students for each classroom
   for (const classroom of classrooms) {
-    // Modify the structure of the classroom object
-    classroom.semester = classroom.academic.semester;
-    classroom.year = classroom.academic.year;
-    delete classroom.academic;
+    const classroomData = {
+      id: classroom.id, // id dari classroom
+      dosen_mk_id: classroom.dosen_mk_id, // dosen_mk_id dari classroom
+      classroom: `${classroom.name} - Semester ${classroom.academic.semester} ${classroom.academic.year}`,
+      students: [], // inisialisasi array untuk students
+    };
 
     if (classroom.name === "Proposal") {
       // Fetch proposal students for the classroom
@@ -129,14 +153,23 @@ const getAllClassroom = async (userId) => {
           classroom.id
         );
 
-      classroom.students = proposalStudents.map((proposalStudent) => ({
-        id: proposalStudent.id,
-        student_id: proposalStudent.student.id,
-        firstName: proposalStudent.student.firstName,
-        lastName: proposalStudent.student.lastName,
-        nim: proposalStudent.student.nim,
-        major: proposalStudent.student.major,
-      }));
+      // Map and modify student data
+      classroomData.students = proposalStudents.map((proposalStudent) => {
+        const student = proposalStudent.student;
+        let fullName = student.firstName;
+
+        if (student.lastName) {
+          fullName += ` ${student.lastName}`;
+        }
+
+        return {
+          id: proposalStudent.id,
+          student_id: student.id,
+          fullName,
+          nim: student.nim,
+          major: student.major,
+        };
+      });
     }
     if (classroom.name === "Skripsi") {
       // Fetch skripsi students for the classroom
@@ -145,34 +178,40 @@ const getAllClassroom = async (userId) => {
           classroom.id
         );
 
-      classroom.students = skripsiStudents.map((skripsiStudent) => ({
-        id: skripsiStudent.id,
-        student_id: skripsiStudent.student.id,
-        firstName: skripsiStudent.student.firstName,
-        lastName: skripsiStudent.student.lastName,
-        nim: skripsiStudent.student.nim,
-        major: skripsiStudent.student.major,
-      }));
+      // Map and modify student data
+      classroomData.students = skripsiStudents.map((skripsiStudent) => {
+        const student = skripsiStudent.student;
+        let fullName = student.firstName;
+
+        if (student.lastName) {
+          fullName += ` ${student.lastName}`;
+        }
+
+        return {
+          id: skripsiStudent.id,
+          student_id: student.id,
+          fullName,
+          nim: student.nim,
+          major: student.major,
+        };
+      });
     }
-    // Hapus properti academic_id
-    delete classroom.academic_id;
+
+    classroomsData.push(classroomData);
   }
 
-  // Sort classrooms based on Academic_Calendar and name
-  classrooms.sort((classroomA, classroomB) => {
-    if (classroomA.year !== classroomB.year) {
-      // Sort by year
-      return classroomA.year.localeCompare(classroomB.year);
-    } else if (classroomA.semester !== classroomB.semester) {
-      // Sort by semester
-      return classroomA.semester.localeCompare(classroomB.semester);
+  // Sort classrooms based on displayName and name
+  classroomsData.sort((classroomA, classroomB) => {
+    if (classroomA.displayName !== classroomB.displayName) {
+      // Sort by displayName
+      return classroomA.displayName.localeCompare(classroomB.displayName);
     } else {
       // Sort by name
       return classroomA.name.localeCompare(classroomB.name);
     }
   });
 
-  return classrooms;
+  return classroomsData;
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

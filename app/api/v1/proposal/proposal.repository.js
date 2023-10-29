@@ -37,22 +37,24 @@ const findProposalById = async (id) => {
 // @description     Upload dokumen proposal
 // @route           PUT /proposal/proposal-document/:id
 // @access          MAHASISWA
-const updateProposalDocumentById = async (id, payload) => {
-  const { file_name_proposal, file_size_proposal } = payload;
+const updateProposalDocumentById = async (id, payload, path) => {
+  const { proposal_file } = payload;
   const proposal = await prisma.proposal.update({
     where: {
       id,
     },
     data: {
-      file_name_proposal,
+      file_name_proposal: proposal_file.file_name_proposal,
       upload_date_proposal: new Date(),
-      file_size_proposal,
+      file_size_proposal: proposal_file.file_size_proposal,
+      file_path_proposal: path,
     },
     select: {
       id: true,
       file_name_proposal: true,
       upload_date_proposal: true,
       file_size_proposal: true,
+      file_path_proposal: true,
       is_proposal_approve_by_advisor: true,
       is_proposal_approve_by_co_advisor1: true,
       is_proposal_approve_by_co_advisor2: true,
@@ -129,6 +131,7 @@ const findProposalDocumentById = async (id) => {
       file_name_proposal: true,
       upload_date_proposal: true,
       file_size_proposal: true,
+      file_path_proposal: true,
       is_proposal_approve_by_advisor: true,
       is_proposal_approve_by_co_advisor1: true,
       is_proposal_approve_by_co_advisor2: true,
@@ -150,15 +153,7 @@ const deleteProposalDocumentById = async (id) => {
       file_name_proposal: null,
       upload_date_proposal: null,
       file_size_proposal: null,
-    },
-    select: {
-      id: true,
-      file_name_proposal: true,
-      upload_date_proposal: true,
-      file_size_proposal: true,
-      is_proposal_approve_by_advisor: true,
-      is_proposal_approve_by_co_advisor1: true,
-      is_proposal_approve_by_co_advisor2: true,
+      file_path_proposal: null,
     },
   });
   return proposal;
@@ -393,22 +388,24 @@ const rejectProposalDocumentByCoAdvisor2ById = async (id) => {
 // @description     Upload/Update bukti pembayaran
 // @route           PUT /proposal/proposal-payment/:id
 // @access          MAHASISWA
-const updateProposalPaymentById = async (id, payload) => {
-  const { file_name_payment, file_size_payment } = payload;
+const updateProposalPaymentById = async (id, payload, path) => {
+  const { payment_file } = payload;
   const proposal = await prisma.proposal.update({
     where: {
       id,
     },
     data: {
-      file_name_payment,
+      file_name_payment: payment_file.file_name_payment,
       upload_date_payment: new Date(),
-      file_size_payment,
+      file_size_payment: payment_file.file_size_payment,
+      file_path_payment: path,
     },
     select: {
       id: true,
       file_name_payment: true,
       upload_date_payment: true,
       file_size_payment: true,
+      file_path_payment: true,
     },
   });
   return proposal;
@@ -428,6 +425,7 @@ const findProposalPaymentById = async (id) => {
       file_name_payment: true,
       upload_date_payment: true,
       file_size_payment: true,
+      file_path_payment: true,
     },
   });
   return proposal;
@@ -446,6 +444,7 @@ const deleteProposalPaymentById = async (id) => {
       file_name_payment: null,
       upload_date_payment: null,
       file_size_payment: null,
+      file_path_payment: null,
     },
   });
 };
@@ -454,22 +453,24 @@ const deleteProposalPaymentById = async (id) => {
 // @description     Upload/Update bukti hasil cek plagiat
 // @route           PUT /proposal/proposal-plagiarism-check/:id
 // @access          MAHASISWA
-const updateProposalPlagiarismById = async (id, payload) => {
-  const { file_name_plagiarismcheck, file_size_plagiarismcheck } = payload;
+const updateProposalPlagiarismById = async (id, payload, path) => {
+  const { plagiarism_file } = payload;
   const proposal = await prisma.proposal.update({
     where: {
       id,
     },
     data: {
-      file_name_plagiarismcheck,
+      file_name_plagiarismcheck: plagiarism_file.file_name_plagiarismcheck,
       upload_date_plagiarismcheck: new Date(),
-      file_size_plagiarismcheck,
+      file_size_plagiarismcheck: plagiarism_file.file_size_plagiarismcheck,
+      file_path_plagiarismcheck: path,
     },
     select: {
       id: true,
       file_name_plagiarismcheck: true,
       upload_date_plagiarismcheck: true,
       file_size_plagiarismcheck: true,
+      file_path_plagiarismcheck: true,
     },
   });
   return proposal;
@@ -489,6 +490,7 @@ const findProposalPlagiarismById = async (id) => {
       file_name_plagiarismcheck: true,
       upload_date_plagiarismcheck: true,
       file_size_plagiarismcheck: true,
+      file_path_plagiarismcheck: true,
     },
   });
   return proposal;
@@ -507,6 +509,7 @@ const deleteProposalPlagiarismById = async (id) => {
       file_name_plagiarismcheck: null,
       upload_date_plagiarismcheck: null,
       file_size_plagiarismcheck: null,
+      file_path_plagiarismcheck: null,
     },
   });
 };
@@ -727,7 +730,7 @@ const signAdvisorProposalReportById = async (id) => {
   return proposal;
 };
 
-//==============================(34=====================================
+//==============================(4)=====================================
 // @description     Fill/Update report
 // @route           PUT /proposal/proposal-report/:id
 // @access          DOSEN, DEKAN
@@ -805,22 +808,24 @@ const findProposalConclusionById = async (id) => {
 // @description     Upload/Update dokumen revisi proposal
 // @route           PUT /proposal/proposal-revision-document/:id
 // @access          MAHASISWA
-const updateProposalRevisionDocumentById = async (id, payload) => {
-  const { file_name_revision, file_size_revision } = payload;
+const updateProposalRevisionDocumentById = async (id, payload, path) => {
+  const { revision_file } = payload;
   const proposal = await prisma.proposal.update({
     where: {
       id,
     },
     data: {
-      file_name_revision,
+      file_name_revision: revision_file.file_name_revision,
       upload_date_revision: new Date(),
-      file_size_revision,
+      file_size_revision: revision_file.file_size_revision,
+      file_path_revision: path,
     },
     select: {
       id: true,
       file_name_revision: true,
       upload_date_revision: true,
       file_size_revision: true,
+      file_path_revision: true,
       is_revision_approve_by_panelist_chairman: true,
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
@@ -897,6 +902,7 @@ const findProposalRevisionDocumentById = async (id) => {
       file_name_revision: true,
       upload_date_revision: true,
       file_size_revision: true,
+      file_path_revision: true,
       is_revision_approve_by_panelist_chairman: true,
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
@@ -918,12 +924,14 @@ const deleteProposalRevisionDocumentById = async (id) => {
       file_name_revision: null,
       upload_date_revision: null,
       file_size_revision: null,
+      file_path_revision: null,
     },
     select: {
       id: true,
       file_name_revision: true,
       upload_date_revision: true,
       file_size_revision: true,
+      file_path_revision: true,
       is_revision_approve_by_panelist_chairman: true,
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
@@ -1147,6 +1155,81 @@ const rejectProposalRevisionDocumentByAdvisorById = async (id) => {
   return proposal;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by advisor id
+// @used            Group,
+const findAllProposalByAdvisorId = async (userId) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      advisor_id: userId,
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by co-advisor id
+// @used            Group,
+const findAllProposalByCoAdvisorId = async (userId) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      OR: [
+        {
+          co_advisor1_id: userId,
+        },
+        {
+          co_advisor2_id: userId,
+        },
+      ],
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by chairman
+// @used            Group,
+const findAllProposalByChairman = async (userId) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      panelist_chairman_id: userId,
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by member
+// @used            Group,
+const findAllProposalByMember = async (userId) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      panelist_member_id: userId,
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by classroom_id
+// @used            Group,
+const findAllProposalByClassroomId = async (classroom_id) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      classroom_id,
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal
+// @used            Group,
+const findAllProposal = async () => {
+  const proposal = await prisma.proposal.findMany();
+  return proposal;
+};
+
 module.exports = {
   insertProposal,
   findProposalById,
@@ -1206,4 +1289,11 @@ module.exports = {
   rejectProposalRevisionDocumentByChairmanById,
   rejectProposalRevisionDocumentByMemberById,
   rejectProposalRevisionDocumentByAdvisorById,
+
+  findAllProposalByAdvisorId,
+  findAllProposalByCoAdvisorId,
+  findAllProposalByChairman,
+  findAllProposalByMember,
+  findAllProposalByClassroomId,
+  findAllProposal,
 };

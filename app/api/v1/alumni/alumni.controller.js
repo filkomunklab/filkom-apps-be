@@ -54,6 +54,69 @@ const sendBroadcastEmail = async (req, res) => {
   }
 };
 
+// ======================================================== JERICO
+const getAlumniHasTracerStudyByOperator = async (req, res) => {
+  try {
+    const search_query = req.query.search_query || "";
+    const page = parseInt(req.query.page) - 1 || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const filterBy = req.query.filterBy || "none";
+    const filterValue = req.query.filterValue;
+
+    const alumniList = await alumniService.getAlumniHasTracerStudyByOperator(
+      search_query,
+      page,
+      limit,
+      filterBy,
+      filterValue
+    );
+
+    res.send({
+      status: "OK",
+      data: alumniList.alumni,
+      page: alumniList.totalRows > 0 ? page + 1 : 0,
+      limit,
+      totalRows: alumniList.totalRows ? alumniList.totalRows : 0,
+      totalPage: alumniList.totalPage ? alumniList.totalPage : 0,
+    });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getAllAlumni = async (req, res) => {
+  try {
+    const search_query = req.query.search_query || "";
+    const page = parseInt(req.query.page) - 1 || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const filterBy = req.query.filterBy || "none";
+    const filterValue = req.query.filterValue;
+
+    const alumniList = await alumniService.getAllAlumni(
+      search_query,
+      page,
+      limit,
+      filterBy,
+      filterValue
+    );
+
+    res.send({
+      status: "OK",
+      data: alumniList.alumni,
+      page: alumniList.totalRows > 0 ? page + 1 : 0,
+      limit,
+      totalRows: alumniList.totalRows ? alumniList.totalRows : 0,
+      totalPage: alumniList.totalPage ? alumniList.totalPage : 0,
+    });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 //broadcast WhatsApp
 // const broadcastWAChat = async (req, res) => {
 //   try {
@@ -92,4 +155,6 @@ module.exports = {
   alumniStatusTS,
   sendBroadcastEmail,
   broadcastWAChat,
+  getAlumniHasTracerStudyByOperator,
+  getAllAlumni,
 };

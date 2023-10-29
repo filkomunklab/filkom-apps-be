@@ -5,21 +5,21 @@ const prisma = require("../../../database");
 // @description     Get submission
 // @route           POST /submission
 // @access          MAHASISWA
-const insertSubmission = async (payload) => {
+const insertSubmission = async (payload, path) => {
   const {
-    file_name,
-    file_size,
     is_consultation,
     proposed_advisor_id,
     proposed_co_advisor1_id,
     proposed_co_advisor2_id,
     classroom_id,
+    submission_file,
   } = payload;
   const submission = await prisma.submission.create({
     data: {
-      file_name,
+      file_name: submission_file.file_name,
       upload_date: new Date(),
-      file_size,
+      file_size: submission_file.file_size,
+      file_path: path,
       is_consultation,
       proposed_advisor_id,
       proposed_co_advisor1_id: proposed_co_advisor1_id || null,
@@ -48,22 +48,22 @@ const findSubmissionById = async (id) => {
 // @description     Update submission
 // @route           PUT /submission/:id
 // @access          MAHASISWA
-const updateSubmission = async (id, payload) => {
+const updateSubmission = async (id, payload, path) => {
   const {
-    file_name,
-    file_size,
     is_consultation,
     proposed_advisor_id,
     proposed_co_advisor1_id,
     proposed_co_advisor2_id,
+    submission_file,
   } = payload;
   const submission = await prisma.submission.update({
     where: {
       id,
     },
     data: {
-      file_name,
-      file_size,
+      file_name: submission_file.file_name,
+      file_size: submission_file.file_size,
+      file_path: path,
       upload_date: new Date(),
       is_consultation,
       proposed_advisor_id,
@@ -132,6 +132,54 @@ const rejectSubmission = async (id) => {
   return submission;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all submission by classroom_id
+// @used            Group,
+const findAllSubmissionByClassroomId = async (classroom_id) => {
+  const submission = await prisma.submission.findMany({
+    where: {
+      classroom_id,
+    },
+  });
+  return submission;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all submission by is_approve
+// @used            Group,
+const findAllSubmissionByIsApproveId = async (is_approve) => {
+  const submission = await prisma.submission.findMany({
+    where: {
+      is_approve,
+    },
+  });
+  return submission;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all submission by classroom_id & is_approve
+// @used            Group,
+const findAllSubmissionByClassroomIdAndIsApprove = async (
+  classroom_id,
+  is_approve
+) => {
+  const submission = await prisma.submission.findMany({
+    where: {
+      classroom_id,
+      is_approve,
+    },
+  });
+  return submission;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all submission
+// @used            Group,
+const findAllSubmission = async () => {
+  const submission = await prisma.submission.findMany();
+  return submission;
+};
+
 module.exports = {
   insertSubmission,
   findSubmissionById,
@@ -139,4 +187,9 @@ module.exports = {
   updateAdvisorAndCoAdvisor,
   approveSubmissionById,
   rejectSubmission,
+  findAllSubmissionByClassroomId,
+  findAllSubmissionByIsApproveId,
+  findAllSubmissionByClassroomIdAndIsApprove,
+  findAllSubmission,
+  // findAllSubmissionBy,
 };

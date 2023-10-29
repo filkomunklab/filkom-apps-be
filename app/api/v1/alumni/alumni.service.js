@@ -87,66 +87,12 @@ const sendEmail = async () => {
   }
 };
 
-//send whatsapp
-// const sendBroadcastWA = async () => {
-//   const phoneNumbers = await alumniRepository.getPhoneNo();
-
-//   try {
-//     client.sendMessage(phoneNumbers, message);
-//     console.log(`Message sent to ${phoneNumbers}`);
-//   } catch (error) {
-//     console.error(`Error sending message to ${phoneNumbers}: ${error}`);
-//   }
-
-//   client.on("qr", (qrCode) => {
-//     console.log("Scan the QR code: ");
-//     console.log(qrCode);
-//   });
-
-//   client.on("ready", async () => {
-//     console.log("Client is ready");
-
-//     for (const phoneNumber of phoneNumbers) {
-//       await sendBroadcastWA(phoneNumbers);
-//     }
-
-//     client.destroy();
-//   });
-//   client.initialize();
-// };
-
-// const sendBroadcastWA = async (phoneNo, pesan) => {
-//   try {
-//     if (phoneNo.startsWith("0")) {
-//       phoneNo = "62" + phoneNo.slice(1) + "@c.us";
-//     } else if (phoneNo.startsWith("62")) {
-//       phoneNo = phoneNo + "@c.us";
-//     } else {
-//       phoneNo = "62" + phoneNo + "@c.us";
-//     }
-
-//     const user = await client.isRegisteredUser(phoneNo);
-//     if (user) {
-//       await client.sendMessage(phoneNo, pesan);
-//       return { status: "success", pesan: "Pesan Terkirim!" };
-//     } else {
-//       return { status: "GAGAL", pesan: "nomor WA tidak terdaftar" };
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     throw error;
-//   }
-// };
-
 const sendBroadcastWA = async (pesan) => {
   try {
     const phoneNumbers = await alumniRepository.phoneNumbers();
 
     const results = await Promise.all(
       phoneNumbers.map(async (phoneNo) => {
-        // Proses pengiriman pesan ke setiap nomor telepon
-        // Anda dapat menggunakan kode yang sebelumnya telah Anda buat
-        // dalam loop ini.
         if (phoneNo.startsWith("0")) {
           phoneNo = "62" + phoneNo.slice(1) + "@c.us";
         } else if (phoneNo.startsWith("62")) {
@@ -174,6 +120,127 @@ const sendBroadcastWA = async (pesan) => {
     throw error;
   }
 };
+const getAlumniHasTracerStudyByOperator = async (
+  search_query,
+  page,
+  limit,
+  filterBy,
+  filterValue
+) => {
+  const offset = limit * page;
+
+  if (filterBy === "none") {
+    const totalRows =
+      await alumniRepository.countTotalRowsAlumniHasTracerStudyBySearch(
+        search_query
+      );
+    const totalPage = Math.ceil(totalRows / limit);
+
+    const alumni =
+      await alumniRepository.findAlumniHasTracerStudyListPagination(
+        search_query,
+        page,
+        limit,
+        offset
+      );
+
+    return { alumni, totalRows, totalPage };
+  } else if (filterBy === "graduate_year") {
+    const totalRows =
+      await alumniRepository.countTotalRowsAlumniHasTracerStudyBySearchWithFilterByGraduateYear(
+        search_query,
+        filterValue
+      );
+    const totalPage = Math.ceil(totalRows / limit);
+
+    const alumni =
+      await alumniRepository.findAlumniHasTracerStudyListPaginationFilterByGraduateYear(
+        search_query,
+        page,
+        limit,
+        offset,
+        filterValue
+      );
+    console.log("hai");
+
+    return { alumni, totalRows, totalPage };
+  } else if (filterBy === "major") {
+    const totalRows =
+      await alumniRepository.countTotalRowsAlumniHasTracerStudyBySearchWithFilterByMajor(
+        search_query,
+        filterValue
+      );
+    const totalPage = Math.ceil(totalRows / limit);
+
+    const alumni =
+      await alumniRepository.findAlumniHasTracerStudyListPaginationFilterByMajor(
+        search_query,
+        page,
+        limit,
+        offset,
+        filterValue
+      );
+    return { alumni, totalRows, totalPage };
+  }
+};
+
+const getAllAlumni = async (
+  search_query,
+  page,
+  limit,
+  filterBy,
+  filterValue
+) => {
+  const offset = limit * page;
+
+  if (filterBy === "none") {
+    const totalRows = await alumniRepository.countTotalRowsAlumniBySearch(
+      search_query
+    );
+    const totalPage = Math.ceil(totalRows / limit);
+    const alumni = await alumniRepository.findAlumniListPagination(
+      search_query,
+      page,
+      limit,
+      offset
+    );
+
+    return { alumni, totalRows, totalPage };
+  } else if (filterBy === "graduate_year") {
+    const totalRows =
+      await alumniRepository.countTotalRowsAlumniBySearchWithFilterByGraduateYear(
+        search_query,
+        filterValue
+      );
+    const totalPage = Math.ceil(totalRows / limit);
+    const alumni =
+      await alumniRepository.findAlumniListPaginationFilterByGraduateYear(
+        search_query,
+        page,
+        limit,
+        offset,
+        filterValue
+      );
+
+    return { alumni, totalRows, totalPage };
+  } else if (filterBy === "major") {
+    const totalRows =
+      await alumniRepository.countTotalRowsAlumniBySearchWithFilterByMajor(
+        search_query,
+        filterValue
+      );
+    const totalPage = Math.ceil(totalRows / limit);
+    const alumni = await alumniRepository.findAlumniListPaginationFilterByMajor(
+      search_query,
+      page,
+      limit,
+      offset,
+      filterValue
+    );
+
+    return { alumni, totalRows, totalPage };
+  }
+};
 
 module.exports = {
   getAlumniList,
@@ -181,4 +248,6 @@ module.exports = {
   alumniTS,
   sendEmail,
   sendBroadcastWA,
+  getAlumniHasTracerStudyByOperator,
+  getAllAlumni,
 };

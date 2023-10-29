@@ -7,80 +7,276 @@ const skripsiController = require("./skripsi.controller");
 const { auth } = require("../../../middleware/auth");
 
 //-------------------Skripsi App ------------------------
-//       membuat skripsi baru = null
-router.post("/skripsi", skripsiController.createskripsi);
 
-//       upload/update dokumen skripsi
-router.put("/skripsi/skripsi-document/:id", skripsiController.updateSkripsiDocumentById);
-//       melihat dokumen skripsi
-router.get("/skripsi/skripsi-document/:id", skripsiController.getSkripsiDocumentById);
-//       menyetujui dokumen skripsi
-router.put("/skripsi/skripsi-document/approve/:id", skripsiController.approveSkripsiDocumentById);
-//       menolak dokumen skripsi
-router.put("/skripsi/skripsi-document/reject/:id", skripsiController.rejectSkripsiDocumentById);
-//       upload/update bukti pembayaran
-router.put("/skripsi/payment/:id", skripsiController.updatePaymentById);
-//       melihat bukti pembayaran
-router.get("/skripsi/payment/:id", skripsiController.getPaymentById);
-//       upload/update hasil cek plagiat
-router.put("/skripsi/plagiarism-check/:id", skripsiController.updatePlagiarismCheckById);
-//       melihat hasil cek plagiat
-router.get("/skripsi/plagiarism-check/:id", skripsiController.getPlagiarismCheckById);
+//===================================================================
+// @description     Upload dokumen skripsi
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-document/:id",
+  auth,
+  skripsiController.updateSkripsiDocumentById
+);
 
-//       membuat/memperbarui jadwal
-router.put("/skripsi/schedule/:id", skripsiController.updateScheduleById);
-//       melihat jadwal
-router.get("/skripsi/schedule/:id", skripsiController.getScheduleById);
+//===================================================================
+// @description     Get dokumen skripsi
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-document/:id",
+  auth,
+  skripsiController.getSkripsiDocumentById
+);
 
-//       membuka akses berita acara
-router.put("/skripsi/skripsi-report/open-access/:id", skripsiController.openAccessSkripsiReportById);
-//       melihat penilaian
-router.get("/skripsi/skripsi-report/assessment/:id", skripsiController.getSkripsiAssessmentById);
-//       mengisi penilaian
-router.put("/skripsi/skripsi-report/assessment/:id", skripsiController.updateSkripsiAssessmentById);
-//       melihat perubahan
-router.get("/skripsi/skripsi-report/changes/:id", skripsiController.getSkripsiChangesById);
-//       mengisi perubahan
-router.put("/skripsi/skripsi-report/changes/:id", skripsiController.updateSkripsiChangesById);
-//       melihat kesimpulan sidang skripsi
-router.get("/skripsi/skripsi-report/conclusion/:id", skripsiController.getSkripsiConclusionById);
-//       mengisi kesimpulan sidang skripsi
-router.put("/skripsi/skripsi-report/conclusion/:id", skripsiController.updateSkripsiConclusionById);
-//       melihat berita acara
-router.get("/skripsi/skripsi-report/get/:id", skripsiController.getSkripsiReportById);
-//       mengisi berita acara
-router.put("/skripsi/skripsi-report/sign/:id", skripsiController.signSkripsiReportById);
+//===================================================================
+// @description     Delete/Update dokumen skripsi
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-document/delete/:id",
+  auth,
+  skripsiController.deleteSkripsiDocumentById
+);
 
-//       upload/update dokumen revisi skripsi
-router.put("/skripsi/skripsi-revision-document/:id", skripsiController.updateSkripsiRevisionDocumentById);
-//       melihat dokumen revisi skripsi
-router.get("/skripsi/skripsi-revision-document/:id", skripsiController.getSkripsiRevisionDocumentById);
-//       menyetujui dokumen revisi skripsi
-router.put("/skripsi/skripsi-revision-document/approve/:id", skripsiController.ApproveSkripsiRevisionDocumentById);
-//       menolak dokumen revisi skripsi
-router.put("/skripsi/skripsi-revision-document/reject/:id", skripsiController.RejectSkripsiRevisionDocumentById);
+//===================================================================
+// @description     Approve dokumen skripsi
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-document/approve/:id",
+  auth,
+  skripsiController.approveSkripsiDocumentById
+);
 
-//       upload/update hki
-router.put("/skripsi/hki/:id", skripsiController.updateHKIById);
-//       melihat hki
-router.get("/skripsi/hki/:id", skripsiController.getHKIById);
-//       upload/update jurnal
-router.put("/skripsi/journal/:id", skripsiController.updateJournalById);
-//       melihat jurnal
-router.get("/skripsi/journal/:id", skripsiController.getJournalById);
-//       upload/update source code
-router.put("/skripsi/source-code/:id", skripsiController.updateSourceCodeById);
-//       upload link source code
-router.put("/skripsi/link-source-code/:id", skripsiController.updateLinkSourceCodeById);
-//       melihat source code
-router.get("/skripsi/source-code/:id", skripsiController.getSourceCodeById);
-//       upload/update poster
-router.put("/skripsi/poster/:id", skripsiController.updatePosterById);
-//       melihat poster
-router.get("/skripsi/poster/:id", skripsiController.getPosterById);
-//       upload/update tutorial
-router.put("/skripsi/tutorial/:id", skripsiController.updateTutorialById);
-//       melihat tutorial
-router.get("/skripsi/tutorial/:id", skripsiController.getTutorialById);
+//===================================================================
+// @description     Reject dokumen skripsi
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-document/reject/:id",
+  auth,
+  skripsiController.rejectSkripsiDocumentById
+);
+
+//===================================================================
+// @description     Upload/Update bukti pembayaran
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-payment/:id",
+  auth,
+  skripsiController.updateSkripsiPaymentById
+);
+
+//===================================================================
+// @description     Get bukti pembayaran
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-payment/:id",
+  auth,
+  skripsiController.getSkripsiPaymentById
+);
+
+//===================================================================
+// @description     Delete/Update bukti pembayaran
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-payment/delete/:id",
+  auth,
+  skripsiController.deleteSkripsiPaymentById
+);
+
+//===================================================================
+// @description     Upload/Update bukti hasil cek plagiat
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-plagiarism-check/:id",
+  auth,
+  skripsiController.updateSkripsiPlagiarismById
+);
+
+//===================================================================
+// @description     Get bukti hasil cek plagiat
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-plagiarism-check/:id",
+  auth,
+  skripsiController.getSkripsiPlagiarismById
+);
+
+//===================================================================
+// @description     Delete/Update bukti hasil cek plagiat
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-plagiarism-check/delete/:id",
+  auth,
+  skripsiController.deleteSkripsiPlagiarismById
+);
+
+//===================================================================
+// @description     Get all skripsi schedule
+// @access          OPERATOR_FAKULTAS
+router.get("/skripsi/schedule", auth, skripsiController.getAllSkripsiSchedule);
+
+//===================================================================
+// @description     Create/Update skripsi schedule
+// @access          OPERATOR_FAKULTAS
+router.put(
+  "/skripsi/schedule/:id",
+  auth,
+  skripsiController.updateSkripsiScheduleById
+);
+
+//===================================================================
+// @description     Get skripsi schedule
+// @access          OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/schedule/:id",
+  auth,
+  skripsiController.getSkripsiScheduleById
+);
+
+//===================================================================
+// @description     Open report
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-report/open-access/:id",
+  auth,
+  skripsiController.openAccessSkripsiReportById
+);
+
+//===================================================================
+// @description     Update skripsi assessment by id
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-assessment/:id",
+  auth,
+  skripsiController.updateSkripsiAssessmentById
+);
+
+//===================================================================
+// @description     Get all skripsi assessment by id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-assessment/:id",
+  auth,
+  skripsiController.getAllSkripsiAssessmentById
+);
+
+//===================================================================
+// @description     Update skripsi changes by id
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-changes/:id",
+  auth,
+  skripsiController.updateSkripsiChangesById
+);
+
+//===================================================================
+// @description     Get all skripsi changes by id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-changes/:id",
+  auth,
+  skripsiController.getAllSkripsiChangesById
+);
+
+//===================================================================
+// @description     Get report
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-report/:id",
+  auth,
+  skripsiController.getSkripsiReportById
+);
+
+//===================================================================
+// @description     Fill/Update report
+// @access          DOSEN, DEKAN
+router.put(
+  "/skripsi/skripsi-report/:id",
+  auth,
+  skripsiController.signSkripsiReportById
+);
+
+//===================================================================
+// @description     Fill/Update report conclusion
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-report/conclusion/:id",
+  auth,
+  skripsiController.updateSkripsiConclusionById
+);
+
+//===================================================================
+// @description     Get report conclusion
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-report/conclusion/:id",
+  auth,
+  skripsiController.getSkripsiConclusionById
+);
+
+//===================================================================
+// @description     Upload/Update dokumen revisi skripsi
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-revision-document/:id",
+  auth,
+  skripsiController.updateSkripsiRevisionDocumentById
+);
+
+//===================================================================
+// @description     Get dokumen revisi skripsi
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-revision-document/:id",
+  auth,
+  skripsiController.getSkripsiRevisionDocumentById
+);
+
+//===================================================================
+// @description     Delete/Update dokumen revisi skripsi
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-revision-document/delete/:id",
+  auth,
+  skripsiController.deleteSkripsiRevisionDocumentById
+);
+
+//===================================================================
+// @description     Approve dokumen revisi skripsi
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-revision-document/approve/:id",
+  auth,
+  skripsiController.approveSkripsiRevisionDocumentById
+);
+
+//===================================================================
+// @description     Reject dokumen revisi skripsi
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-revision-document/reject/:id",
+  auth,
+  skripsiController.rejectSkripsiRevisionDocumentById
+);
+
+// //       upload/update hki
+// router.put("/skripsi/hki/:id", skripsiController.updateHKIById);
+// //       melihat hki
+// router.get("/skripsi/hki/:id", skripsiController.getHKIById);
+// //       upload/update jurnal
+// router.put("/skripsi/journal/:id", skripsiController.updateJournalById);
+// //       melihat jurnal
+// router.get("/skripsi/journal/:id", skripsiController.getJournalById);
+// //       upload/update source code
+// router.put("/skripsi/source-code/:id", skripsiController.updateSourceCodeById);
+// //       upload link source code
+// router.put("/skripsi/link-source-code/:id", skripsiController.updateLinkSourceCodeById);
+// //       melihat source code
+// router.get("/skripsi/source-code/:id", skripsiController.getSourceCodeById);
+// //       upload/update poster
+// router.put("/skripsi/poster/:id", skripsiController.updatePosterById);
+// //       melihat poster
+// router.get("/skripsi/poster/:id", skripsiController.getPosterById);
+// //       upload/update tutorial
+// router.put("/skripsi/tutorial/:id", skripsiController.updateTutorialById);
+// //       melihat tutorial
+// router.get("/skripsi/tutorial/:id", skripsiController.getTutorialById);
 
 module.exports = router;

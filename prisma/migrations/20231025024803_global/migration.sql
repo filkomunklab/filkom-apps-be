@@ -133,6 +133,8 @@ CREATE TABLE "Message" (
 -- CreateTable
 CREATE TABLE "Certificate" (
     "id" TEXT NOT NULL,
+    "filename" TEXT NOT NULL,
+    "path" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "category" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -245,10 +247,10 @@ ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_certificateId_fkey" FOREIG
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_activityId_fkey" FOREIGN KEY ("activityId") REFERENCES "Activity"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("nim") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "Employee"("nik") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "HistoryAcademic" ADD CONSTRAINT "HistoryAcademic_preRegistrationId_fkey" FOREIGN KEY ("preRegistrationId") REFERENCES "PreRegistration"("id") ON DELETE SET NULL ON UPDATE CASCADE;
