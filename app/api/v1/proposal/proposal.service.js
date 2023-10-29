@@ -15,6 +15,7 @@ const employeeRepository = require("../employee/employee.repository");
 const studentRepository = require("../student/student.repository");
 const proposalAssessmentRepository = require("../proposal_assessment/proposal_assessment.repository");
 const proposalChangesRepository = require("../proposal_changes/proposal_changes.repository");
+const skripsiRepository = require("../skripsi/skripsi.repository");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get proposal by id
@@ -641,14 +642,14 @@ const getAllProposalSchedule = async () => {
         proposal.advisor.degree
       );
       const panelistChairmanName = await getEmployeeNameAndDegree(
-        proposal.panelist_chairman.firstName,
-        proposal.panelist_chairman.lastName,
-        proposal.panelist_chairman.degree
+        proposal.panelist_chairman?.firstName,
+        proposal.panelist_chairman?.lastName,
+        proposal.panelist_chairman?.degree
       );
       const panelistMemberName = await getEmployeeNameAndDegree(
-        proposal.panelist_member.firstName,
-        proposal.panelist_member.lastName,
-        proposal.panelist_member.degree
+        proposal.panelist_member?.firstName,
+        proposal.panelist_member?.lastName,
+        proposal.panelist_member?.degree
       );
 
       if (group) {
@@ -657,8 +658,8 @@ const getAllProposalSchedule = async () => {
           proposal_id: proposal.id,
           title: group.title,
           advisor: advisorName,
-          panelist_chairman: panelistChairmanName,
-          panelist_member: panelistMemberName,
+          panelist_chairman: panelistChairmanName || null,
+          panelist_member: panelistMemberName || null,
           start_defence: proposal.start_defence,
           end_defence: proposal.end_defence,
           defence_room: proposal.defence_room,
@@ -674,7 +675,7 @@ const getAllProposalSchedule = async () => {
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get dosen by id
-// @used            createSubmission, updateSubmissionById,
+// @used            updateProposalScheduleById,
 const getDosenById = async (id) => {
   const dosen = await employeeRepository.findEmployeeById(id);
   if (!dosen) {
@@ -725,6 +726,15 @@ const updateProposalScheduleById = async (id, payload) => {
   // check proposal
   const proposal = await getProposalById(id);
   const { panelist_chairman_id, panelist_member_id } = payload;
+
+  // check if has defence
+  if (proposal.is_report_open === true) {
+    throw {
+      status: 400,
+      message: `Can't perform this action`,
+    };
+  }
+
   if (
     proposal.advisor_id !== panelist_chairman_id &&
     proposal.advisor_id !== panelist_member_id &&
@@ -853,6 +863,14 @@ const openAccessProposalReportById = async (id, userId) => {
     if (updatedProposal) {
       // get group
       const group = await groupRepository.findGroupByProposalId(proposal.id);
+
+      // input chairman and member into skripsi
+      await skripsiRepository.updateSkripsiChairmanAndMemberById(
+        group.skripsi_id,
+        proposal.panelist_chairman_id,
+        proposal.panelist_member_id
+      );
+
       // get group_student -> student_id
       const studentIds = await groupStudentRepository.findGroupStudentByGroupId(
         group.id

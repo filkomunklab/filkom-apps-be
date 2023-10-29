@@ -165,6 +165,25 @@ const findManyGroupsByProposalIds = async (proposalIds) => {
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get group by skripsiIds
+// @used            Skripsi
+const findManyGroupsBySkripsiIds = async (skripsiIds) => {
+  const groups = await prisma.group.findMany({
+    where: {
+      skripsi_id: {
+        in: skripsiIds,
+      },
+    },
+    select: {
+      id: true,
+      skripsi_id: true,
+      title: true,
+    },
+  });
+  return groups;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get group by id
 // @used            Consultation, getSubmissionList
 const findGroupById = async (id) => {
@@ -333,6 +352,7 @@ module.exports = {
   updateGroupProgressByProposalId,
   updateGroupProgressBySubmissionId,
   findManyGroupsByProposalIds,
+  findManyGroupsBySkripsiIds,
   findGroupById,
 
   findSubmissionListById,

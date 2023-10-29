@@ -58,6 +58,10 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_payment");
     // Sekertaris view proposal plagiarism
     can("read", "skripsi_plagiarism");
+    // Sekertaris view skripsi schedule
+    can("read", "skripsi_schedule");
+    // Sekertaris update skripsi schedule
+    can("update", "skripsi_schedule");
   }
 
   if (hasRole("DEKAN")) {

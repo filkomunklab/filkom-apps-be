@@ -1,6 +1,7 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Create empty skripsi
 // @used            Submission
 const insertSkripsi = async (submission) => {
@@ -14,6 +15,26 @@ const insertSkripsi = async (submission) => {
       advisor_id: proposed_advisor_id,
       co_advisor1_id: proposed_co_advisor1_id,
       co_advisor2_id: proposed_co_advisor2_id,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update skripsi chairman and member by id
+// @used            Submission
+const updateSkripsiChairmanAndMemberById = async (
+  id,
+  panelist_chairman_id,
+  panelist_member_id
+) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      panelist_chairman_id,
+      panelist_member_id,
     },
   });
   return skripsi;
@@ -512,8 +533,115 @@ const deleteSkripsiPlagiarismById = async (id) => {
   });
 };
 
+//===================================================================
+// @description     Get all skripsi schedule
+// @route           GET /skripsi/schedule
+// @access          OPERATOR_FAKULTAS
+// @used            checkTimeConflict
+const findAllSkripsiSchedule = async () => {
+  // Mencari skripsi yang tidak memiliki is_pass berisi "Pass" atau "Fail"
+  const skripsis = await prisma.skripsi.findMany({
+    where: {
+      OR: [
+        {
+          is_pass: null,
+        },
+        {
+          is_pass: "Repeat",
+        },
+      ],
+    },
+    select: {
+      id: true,
+      advisor: true,
+      panelist_chairman: true,
+      panelist_member: true,
+      start_defence: true,
+      end_defence: true,
+      defence_room: true,
+      defence_date: true,
+    },
+  });
+
+  return skripsis;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Check conflict between schedule
+// @used            checkScheduleConflict
+const findAllConflictingSkripsiSchedule = async (
+  id,
+  defence_date,
+  defence_room
+) => {
+  const conflictingSchedules = await prisma.skripsi.findMany({
+    where: {
+      defence_date,
+      defence_room,
+      NOT: {
+        id,
+      },
+    },
+  });
+
+  return conflictingSchedules;
+};
+
+//===================================================================
+// @description     Create/Update skripsi schedule
+// @route           PUT /skripsi/schedule/:id
+// @access          OPERATOR_FAKULTAS
+const updateSkripsiScheduleById = async (id, payload) => {
+  const { start_defence, end_defence, defence_room, defence_date } = payload;
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      start_defence,
+      end_defence,
+      defence_room,
+      defence_date,
+      report_date: defence_date,
+    },
+    select: {
+      id: true,
+      start_defence: true,
+      end_defence: true,
+      defence_room: true,
+      defence_date: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Get skripsi schedule
+// @route           GET /skripsi/schedule/:id
+// @access          OPERATOR_FAKULTAS
+const findSkripsiScheduleById = async (id) => {
+  const skripsi = await prisma.skripsi.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      panelist_chairman: true,
+      panelist_member: true,
+      advisor: true,
+      start_defence: true,
+      end_defence: true,
+      defence_room: true,
+      defence_date: true,
+    },
+  });
+  return skripsi;
+};
+
 module.exports = {
   insertSkripsi,
+  updateSkripsiChairmanAndMemberById,
+
   findSkripsiById,
   updateSkripsiDocumentById,
   updateSkripsiDocumentApproveByAdvisorById,
@@ -541,4 +669,9 @@ module.exports = {
   updateSkripsiPlagiarismById,
   findSkripsiPlagiarismById,
   deleteSkripsiPlagiarismById,
+
+  findAllSkripsiSchedule,
+  findAllConflictingSkripsiSchedule,
+  updateSkripsiScheduleById,
+  findSkripsiScheduleById,
 };

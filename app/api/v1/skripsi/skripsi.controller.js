@@ -313,6 +313,87 @@ const deleteSkripsiPlagiarismById = async (req, res) => {
   }
 };
 
+//===================================================================
+// @description     Get all skripsi schedule
+// @route           GET /skripsi/schedule
+// @access          OPERATOR_FAKULTAS
+const getAllSkripsiSchedule = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_schedule")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const skripsi = await skripsiService.getAllSkripsiSchedule();
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Create/Update skripsi schedule
+// @route           PUT /skripsi/schedule/:id
+// @access          OPERATOR_FAKULTAS
+const updateSkripsiScheduleById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "skripsi_schedule")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const payload = req.body;
+    if (
+      !(
+        payload.start_defence &&
+        payload.end_defence &&
+        payload.defence_room &&
+        payload.defence_date
+      )
+    ) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const skripsi = await skripsiService.updateSkripsiScheduleById(id, payload);
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get skripsi schedule
+// @route           GET /skripsi/schedule/:id
+// @access          OPERATOR_FAKULTAS
+const getSkripsiScheduleById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_schedule")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const skripsi = await skripsiService.getSkripsiScheduleById(id);
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   updateSkripsiDocumentById,
   getSkripsiDocumentById,
@@ -327,4 +408,8 @@ module.exports = {
   updateSkripsiPlagiarismById,
   getSkripsiPlagiarismById,
   deleteSkripsiPlagiarismById,
+
+  getAllSkripsiSchedule,
+  updateSkripsiScheduleById,
+  getSkripsiScheduleById,
 };

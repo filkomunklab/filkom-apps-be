@@ -107,6 +107,29 @@ router.put(
   skripsiController.deleteSkripsiPlagiarismById
 );
 
+//===================================================================
+// @description     Get all skripsi schedule
+// @access          OPERATOR_FAKULTAS
+router.get("/skripsi/schedule", auth, skripsiController.getAllSkripsiSchedule);
+
+//===================================================================
+// @description     Create/Update skripsi schedule
+// @access          OPERATOR_FAKULTAS
+router.put(
+  "/skripsi/schedule/:id",
+  auth,
+  skripsiController.updateSkripsiScheduleById
+);
+
+//===================================================================
+// @description     Get skripsi schedule
+// @access          OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/schedule/:id",
+  auth,
+  skripsiController.getSkripsiScheduleById
+);
+
 // //       upload/update hki
 // router.put("/skripsi/hki/:id", skripsiController.updateHKIById);
 // //       melihat hki

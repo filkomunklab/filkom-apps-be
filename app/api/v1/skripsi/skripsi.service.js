@@ -595,6 +595,227 @@ const deleteSkripsiPlagiarismById = async (id, userId) => {
   await skripsiRepository.deleteSkripsiPlagiarismById(id);
 };
 
+//===================================================================
+// @description     Get all skripsi schedule
+// @route           GET /skripsi/schedule
+// @access          OPERATOR_FAKULTAS
+const getAllSkripsiSchedule = async () => {
+  const skripsi = await skripsiRepository.findAllSkripsiSchedule();
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  // Dapatkan semua skripsi_id di sini
+  const skripsiIds = skripsi.map((skripsi) => skripsi.id);
+
+  // Dapatkan grup berdasarkan skripsiIds
+  const groups = await groupRepository.findManyGroupsBySkripsiIds(skripsiIds);
+
+  // Menggabungkan data skripsi dengan data grup
+  const result = await Promise.all(
+    skripsi.map(async (skripsi) => {
+      const group = groups.find((group) => group.skripsi_id === skripsi.id);
+      // Menggabungkan firstName dan lastName menjadi fullName
+      const getEmployeeNameAndDegree = async (firstName, lastName, degree) => {
+        let name = firstName;
+
+        if (lastName) {
+          name += ` ${lastName}`;
+        }
+
+        if (degree) {
+          name += `, ${degree}`;
+        }
+
+        return name;
+      };
+      const advisorName = await getEmployeeNameAndDegree(
+        skripsi.advisor.firstName,
+        skripsi.advisor.lastName,
+        skripsi.advisor.degree
+      );
+      const panelistChairmanName = await getEmployeeNameAndDegree(
+        skripsi.panelist_chairman?.firstName,
+        skripsi.panelist_chairman?.lastName,
+        skripsi.panelist_chairman?.degree
+      );
+      const panelistMemberName = await getEmployeeNameAndDegree(
+        skripsi.panelist_member?.firstName,
+        skripsi.panelist_member?.lastName,
+        skripsi.panelist_member?.degree
+      );
+
+      if (group) {
+        return {
+          group_id: group.id,
+          skripsi_id: skripsi.id,
+          title: group.title,
+          advisor: advisorName,
+          panelist_chairman: panelistChairmanName || null,
+          panelist_member: panelistMemberName || null,
+          start_defence: skripsi.start_defence,
+          end_defence: skripsi.end_defence,
+          defence_room: skripsi.defence_room,
+          defence_date: skripsi.defence_date,
+        };
+      }
+      return null;
+    })
+  );
+
+  return result;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get dosen by id
+// @used            updateSkripsiScheduleById
+const getDosenById = async (id) => {
+  const dosen = await employeeRepository.findEmployeeById(id);
+  if (!dosen) {
+    throw {
+      status: 400,
+      message: `Dosen not found`,
+    };
+  }
+  return dosen;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Check conflict between schedule
+// @used            updateSkripsiScheduleById
+const checkScheduleConflict = async (id, payload) => {
+  const { start_defence, end_defence, defence_room, defence_date } = payload;
+
+  // // Konversi tanggal payload ke format yang sesuai
+  // const formattedPayloadDate = formatDate(defence_date); // Anda perlu membuat fungsi formatDate
+
+  // Query database untuk jadwal yang relevan, kecuali jadwal yang akan diupdate
+  const conflictingSchedules =
+    await skripsiRepository.findAllConflictingSkripsiSchedule(
+      id,
+      defence_date,
+      defence_room
+    );
+
+  // Periksa tabrakan
+  const isConflict = conflictingSchedules.some((schedule) => {
+    const scheduleStart = schedule.start_defence;
+    const scheduleEnd = schedule.end_defence;
+
+    return (
+      (start_defence >= scheduleStart && start_defence <= scheduleEnd) ||
+      (end_defence >= scheduleStart && end_defence <= scheduleEnd)
+    );
+  });
+
+  return isConflict;
+};
+
+//===================================================================
+// @description     Create/Update skripsi schedule
+// @route           PUT /skripsi/schedule/:id
+// @access          OPERATOR_FAKULTAS
+const updateSkripsiScheduleById = async (id, payload) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+
+  // check if has defence
+  if (skripsi.is_pass) {
+    throw {
+      status: 400,
+      message: `Can't perform this action`,
+    };
+  }
+
+  // check conflict between schedule
+  const isConflict = await checkScheduleConflict(skripsi.id, payload);
+  console.log(isConflict);
+  if (isConflict) {
+    throw {
+      status: 400,
+      message: `Conflict`,
+    };
+  }
+
+  const updatedSkripsi = await skripsiRepository.updateSkripsiScheduleById(
+    id,
+    payload
+  );
+  return updatedSkripsi;
+};
+
+//===================================================================
+// @description     Get skripsi schedule
+// @route           GET /skripsi/schedule/:id
+// @access          OPERATOR_FAKULTAS
+const getSkripsiScheduleById = async (id) => {
+  const skripsi = await skripsiRepository.findSkripsiScheduleById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  const group = await groupRepository.findGroupBySkripsiId(id);
+  const groupStudent = await groupStudentRepository.findGroupStudentByGroupId(
+    group.id
+  );
+  const students = await Promise.all(
+    groupStudent.map(async (student_id) => {
+      // get student in table student by student_id
+      const student = await studentRepository.findStudentById(student_id);
+      if (student) {
+        // Menggabungkan firstName dan lastName menjadi fullName
+        let fullName = student.firstName;
+
+        if (student.lastName) {
+          fullName += ` ${student.lastName}`;
+        }
+        return {
+          fullName: fullName,
+          nim: student.nim,
+          major: student.major,
+        };
+      } else {
+        throw {
+          status: 400,
+          message: `Student Not found`,
+        };
+      }
+    })
+  );
+  const formatNameWithDegree = (employee) => {
+    const { firstName, lastName, degree } = employee;
+    let name = firstName;
+    if (lastName) {
+      name += ` ${lastName}`;
+    }
+    if (degree) {
+      name += `, ${degree}`;
+    }
+    return name;
+  };
+
+  const panelistChairman = formatNameWithDegree(skripsi.panelist_chairman);
+  const panelistMember = formatNameWithDegree(skripsi.panelist_member);
+  const advisor = formatNameWithDegree(skripsi.advisor);
+  const scheduleData = {
+    id: skripsi.id,
+    title: group.title,
+    students,
+    panelist_chairman: panelistChairman,
+    panelist_member: panelistMember,
+    advisor: advisor,
+    start_defence: skripsi.start_defence,
+    end_defence: skripsi.end_defence,
+    defence_room: skripsi.defence_room,
+    defence_date: skripsi.defence_date,
+  };
+  return scheduleData;
+};
+
 module.exports = {
   updateSkripsiDocumentById,
   getSkripsiDocumentById,
@@ -609,4 +830,8 @@ module.exports = {
   updateSkripsiPlagiarismById,
   getSkripsiPlagiarismById,
   deleteSkripsiPlagiarismById,
+
+  getAllSkripsiSchedule,
+  updateSkripsiScheduleById,
+  getSkripsiScheduleById,
 };
