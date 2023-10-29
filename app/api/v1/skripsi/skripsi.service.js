@@ -417,10 +417,196 @@ const rejectSkripsiDocumentById = async (userId, id) => {
   }
 };
 
+//===================================================================
+// @description     Upload/Update bukti pembayaran
+// @route           PUT /skripsi/skripsi-payment/:id
+// @access          MAHASISWA
+const updateSkripsiPaymentById = async (id, userId, payload) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // delete existing file
+  if (skripsi.file_path_payment) {
+    // file
+    const storage = getStorage();
+    // Create a reference to the file to delete
+    const desertRef = ref(
+      storage,
+      `skripsi/${group.id}/${skripsi.file_name_payment}`
+    );
+    // Delete the file
+    await deleteObject(desertRef);
+  }
+
+  // file
+  const storageRef = ref(
+    storage,
+    `skripsi/${group.id}/${payload.payment_file.file_name_payment}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.payment_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
+  // update skripsi document
+  const UpdatedSkripsi = await skripsiRepository.updateSkripsiPaymentById(
+    id,
+    payload,
+    path
+  );
+  return UpdatedSkripsi;
+};
+
+//===================================================================
+// @description     Get bukti pembayaran
+// @route           GET /skripsi/skripsi-payment/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getSkripsiPaymentById = async (id) => {
+  const skripsi = await skripsiRepository.findSkripsiPaymentById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update bukti pembayaran
+// @route           DELETE /skripsi/skripsi-payment/delete/:id
+// @access          MAHASISWA
+const deleteSkripsiPaymentById = async (id, userId) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // file
+  const storage = getStorage();
+  // Create a reference to the file to delete
+  const desertRef = ref(
+    storage,
+    `skripsi/${group.id}/${skripsi.file_name_payment}`
+  );
+  // Delete the file
+  await deleteObject(desertRef);
+
+  // delete/update skripsi document
+  await skripsiRepository.deleteSkripsiPaymentById(id);
+};
+
+//===================================================================
+// @description     Upload/Update bukti hasil cek plagiat
+// @route           PUT /skripsi/skripsi-plagiarism-check/:id
+// @access          MAHASISWA
+const updateSkripsiPlagiarismById = async (id, userId, payload) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // delete existing file
+  if (skripsi.file_name_plagiarismcheck) {
+    // file
+    const storage = getStorage();
+    // Create a reference to the file to delete
+    const desertRef = ref(
+      storage,
+      `skripsi/${group.id}/${skripsi.file_name_plagiarismcheck}`
+    );
+    // Delete the file
+    await deleteObject(desertRef);
+  }
+
+  // file
+  const storageRef = ref(
+    storage,
+    `skripsi/${group.id}/${payload.plagiarism_file.file_name_plagiarismcheck}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.plagiarism_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
+  // update skripsi plagiarism
+  const UpdatedSkripsi = await skripsiRepository.updateSkripsiPlagiarismById(
+    id,
+    payload,
+    path
+  );
+  return UpdatedSkripsi;
+};
+
+//===================================================================
+// @description     Get bukti hasil cek plagiat
+// @route           PUT /skripsi/skripsi-plagiarism-check/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getSkripsiPlagiarismById = async (id) => {
+  const skripsi = await skripsiRepository.findSkripsiPlagiarismById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update bukti hasil cek plagiat
+// @route           PUT /skripsi/skripsi-plagiarism-check/delete/:id
+// @access          MAHASISWA
+const deleteSkripsiPlagiarismById = async (id, userId) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // file
+  const storage = getStorage();
+  // Create a reference to the file to delete
+  const desertRef = ref(
+    storage,
+    `skripsi/${group.id}/${skripsi.file_name_plagiarismcheck}`
+  );
+  // Delete the file
+  await deleteObject(desertRef);
+
+  // delete/update skripsi plagiarism
+  await skripsiRepository.deleteSkripsiPlagiarismById(id);
+};
+
 module.exports = {
   updateSkripsiDocumentById,
   getSkripsiDocumentById,
   deleteSkripsiDocumentById,
   approveSkripsiDocumentById,
   rejectSkripsiDocumentById,
+
+  updateSkripsiPaymentById,
+  getSkripsiPaymentById,
+  deleteSkripsiPaymentById,
+
+  updateSkripsiPlagiarismById,
+  getSkripsiPlagiarismById,
+  deleteSkripsiPlagiarismById,
 };

@@ -382,6 +382,136 @@ const rejectSkripsiDocumentByCoAdvisor2ById = async (id) => {
   return skripsi;
 };
 
+//===================================================================
+// @description     Upload/Update bukti pembayaran
+// @route           PUT /skripsi/skripsi-payment/:id
+// @access          MAHASISWA
+const updateSkripsiPaymentById = async (id, payload, path) => {
+  const { payment_file } = payload;
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_payment: payment_file.file_name_payment,
+      upload_date_payment: new Date(),
+      file_size_payment: payment_file.file_size_payment,
+      file_path_payment: path,
+    },
+    select: {
+      id: true,
+      file_name_payment: true,
+      upload_date_payment: true,
+      file_size_payment: true,
+      file_path_payment: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Get bukti pembayaran
+// @route           GET /skripsi/skripsi-payment/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const findSkripsiPaymentById = async (id) => {
+  const skripsi = await prisma.skripsi.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      file_name_payment: true,
+      upload_date_payment: true,
+      file_size_payment: true,
+      file_path_payment: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update bukti pembayaran
+// @route           DELETE /skripsi/skripsi-payment/delete/:id
+// @access          MAHASISWA
+const deleteSkripsiPaymentById = async (id) => {
+  await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_payment: null,
+      upload_date_payment: null,
+      file_size_payment: null,
+      file_path_payment: null,
+    },
+  });
+};
+
+//===================================================================
+// @description     Upload/Update bukti hasil cek plagiat
+// @route           PUT /skripsi/skripsi-plagiarism-check/:id
+// @access          MAHASISWA
+const updateSkripsiPlagiarismById = async (id, payload, path) => {
+  const { plagiarism_file } = payload;
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_plagiarismcheck: plagiarism_file.file_name_plagiarismcheck,
+      upload_date_plagiarismcheck: new Date(),
+      file_size_plagiarismcheck: plagiarism_file.file_size_plagiarismcheck,
+      file_path_plagiarismcheck: path,
+    },
+    select: {
+      id: true,
+      file_name_plagiarismcheck: true,
+      upload_date_plagiarismcheck: true,
+      file_size_plagiarismcheck: true,
+      file_path_plagiarismcheck: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Get bukti hasil cek plagiat
+// @route           PUT /skripsi/skripsi-plagiarism-check/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const findSkripsiPlagiarismById = async (id) => {
+  const skripsi = await prisma.skripsi.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      file_name_plagiarismcheck: true,
+      upload_date_plagiarismcheck: true,
+      file_size_plagiarismcheck: true,
+      file_path_plagiarismcheck: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update bukti hasil cek plagiat
+// @route           PUT /skripsi/skripsi-plagiarism-check/delete/:id
+// @access          MAHASISWA
+const deleteSkripsiPlagiarismById = async (id) => {
+  await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_plagiarismcheck: null,
+      upload_date_plagiarismcheck: null,
+      file_size_plagiarismcheck: null,
+      file_path_plagiarismcheck: null,
+    },
+  });
+};
+
 module.exports = {
   insertSkripsi,
   findSkripsiById,
@@ -403,4 +533,12 @@ module.exports = {
   rejectSkripsiDocumentByAdvisorById,
   rejectSkripsiDocumentByCoAdvisor1ById,
   rejectSkripsiDocumentByCoAdvisor2ById,
+
+  updateSkripsiPaymentById,
+  findSkripsiPaymentById,
+  deleteSkripsiPaymentById,
+
+  updateSkripsiPlagiarismById,
+  findSkripsiPlagiarismById,
+  deleteSkripsiPlagiarismById,
 };

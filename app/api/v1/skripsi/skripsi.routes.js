@@ -53,6 +53,60 @@ router.put(
   skripsiController.rejectSkripsiDocumentById
 );
 
+//===================================================================
+// @description     Upload/Update bukti pembayaran
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-payment/:id",
+  auth,
+  skripsiController.updateSkripsiPaymentById
+);
+
+//===================================================================
+// @description     Get bukti pembayaran
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-payment/:id",
+  auth,
+  skripsiController.getSkripsiPaymentById
+);
+
+//===================================================================
+// @description     Delete/Update bukti pembayaran
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-payment/delete/:id",
+  auth,
+  skripsiController.deleteSkripsiPaymentById
+);
+
+//===================================================================
+// @description     Upload/Update bukti hasil cek plagiat
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-plagiarism-check/:id",
+  auth,
+  skripsiController.updateSkripsiPlagiarismById
+);
+
+//===================================================================
+// @description     Get bukti hasil cek plagiat
+// @access          MAHASISWA, DOSEN, DOSEN_MK,  KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-plagiarism-check/:id",
+  auth,
+  skripsiController.getSkripsiPlagiarismById
+);
+
+//===================================================================
+// @description     Delete/Update bukti hasil cek plagiat
+// @access          MAHASISWA
+router.put(
+  "/skripsi/skripsi-plagiarism-check/delete/:id",
+  auth,
+  skripsiController.deleteSkripsiPlagiarismById
+);
+
 // //       upload/update hki
 // router.put("/skripsi/hki/:id", skripsiController.updateHKIById);
 // //       melihat hki

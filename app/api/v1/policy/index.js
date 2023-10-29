@@ -52,9 +52,12 @@ const policyFor = ({ user }) => {
     // Sekertaris view proposal list sekretaris
     can("read", "proposal_list_sekretaris");
     // ---------------------------------Skripsi--------------------------------
-    // ---------------------------------Skripsi--------------------------------
     // Sekertaris view skripsi document
     can("read", "skripsi_document");
+    // Sekertaris view skripsi payment
+    can("read", "skripsi_payment");
+    // Sekertaris view proposal plagiarism
+    can("read", "skripsi_plagiarism");
   }
 
   if (hasRole("DEKAN")) {
@@ -97,6 +100,10 @@ const policyFor = ({ user }) => {
     // ---------------------------------Skripsi--------------------------------
     // Dekan view skripsi document
     can("read", "skripsi_document");
+    // Dekan view skripsi payment
+    can("read", "skripsi_payment");
+    // Dekan view proposal plagiarism
+    can("read", "skripsi_plagiarism");
   }
 
   if (hasRole("KAPRODI")) {
@@ -136,6 +143,10 @@ const policyFor = ({ user }) => {
     // ---------------------------------Skripsi--------------------------------
     // Kaprodi view skripsi document
     can("read", "skripsi_document");
+    // Kaprodi view skripsi payment
+    can("read", "skripsi_payment");
+    // Kaprodi view proposal plagiarism
+    can("read", "skripsi_plagiarism");
   }
 
   if (hasRole("DOSEN")) {
@@ -199,6 +210,10 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_document");
     // Advisor, Co-advisor approve document skripsi
     can("update", "is_skripsi_approve");
+    // Dosen view skripsi payment
+    can("read", "skripsi_payment");
+    // Dosen view proposal plagiarism
+    can("read", "skripsi_plagiarism");
   }
 
   if (hasRole("DOSEN_MK")) {
@@ -250,6 +265,10 @@ const policyFor = ({ user }) => {
     // ---------------------------------Skripsi--------------------------------
     // Dosen MK view skripsi document
     can("read", "skripsi_document");
+    // Dosen MK view skripsi payment
+    can("read", "skripsi_payment");
+    // Dosen MK view proposal plagiarism
+    can("read", "skripsi_plagiarism");
   }
 
   if (hasRole("MAHASISWA")) {
@@ -298,6 +317,14 @@ const policyFor = ({ user }) => {
     can("update", "skripsi_document");
     // Mahasiswa view skripsi document
     can("read", "skripsi_document");
+    // Mahasiswa view skripsi payment
+    can("read", "skripsi_payment");
+    // Mahasiswa upload/update skripsi payment
+    can("update", "skripsi_payment");
+    // Mahasiswa view proposal plagiarism
+    can("read", "skripsi_plagiarism");
+    // Mahasiswa upload/update proposal plagiarism
+    can("update", "skripsi_plagiarism");
   }
 
   if (hasRole("ALUMNI")) {
