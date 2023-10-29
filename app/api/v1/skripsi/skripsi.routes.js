@@ -256,27 +256,92 @@ router.put(
   skripsiController.rejectSkripsiRevisionDocumentById
 );
 
-// //       upload/update hki
-// router.put("/skripsi/hki/:id", skripsiController.updateHKIById);
-// //       melihat hki
-// router.get("/skripsi/hki/:id", skripsiController.getHKIById);
-// //       upload/update jurnal
-// router.put("/skripsi/journal/:id", skripsiController.updateJournalById);
-// //       melihat jurnal
-// router.get("/skripsi/journal/:id", skripsiController.getJournalById);
-// //       upload/update source code
-// router.put("/skripsi/source-code/:id", skripsiController.updateSourceCodeById);
-// //       upload link source code
-// router.put("/skripsi/link-source-code/:id", skripsiController.updateLinkSourceCodeById);
-// //       melihat source code
-// router.get("/skripsi/source-code/:id", skripsiController.getSourceCodeById);
-// //       upload/update poster
-// router.put("/skripsi/poster/:id", skripsiController.updatePosterById);
-// //       melihat poster
-// router.get("/skripsi/poster/:id", skripsiController.getPosterById);
-// //       upload/update tutorial
-// router.put("/skripsi/tutorial/:id", skripsiController.updateTutorialById);
-// //       melihat tutorial
-// router.get("/skripsi/tutorial/:id", skripsiController.getTutorialById);
+//===================================================================
+// @description     Upload/Update dokumen HKI
+// @access          MAHASISWA
+router.put("/skripsi/hki/:id", auth, skripsiController.updateHKIById);
+
+//===================================================================
+// @description     Get dokumen HKI
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get("/skripsi/hki/:id", auth, skripsiController.getHKIById);
+
+//===================================================================
+// @description     Delete/Update dokumen HKI
+// @access          MAHASISWA
+router.put("/skripsi/hki/delete/:id", auth, skripsiController.deleteHKIById);
+
+//===================================================================
+// @description     Upload/Update dokumen journal
+// @access          MAHASISWA
+router.put("/skripsi/journal/:id", auth, skripsiController.updateJournalById);
+
+//===================================================================
+// @description     Get dokumen journal
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get("/skripsi/journal/:id", auth, skripsiController.getJournalById);
+
+//===================================================================
+// @description     Delete/Update dokumen journal
+// @access          MAHASISWA
+router.put(
+  "/skripsi/journal/delete/:id",
+  auth,
+  skripsiController.deleteJournalById
+);
+
+//===================================================================
+// @description     Upload/Update source code
+// @access          MAHASISWA
+router.put(
+  "/skripsi/source-code/:id",
+  auth,
+  skripsiController.updateSourceCodeById
+);
+
+//===================================================================
+// @description     Get source code
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/source-code/:id",
+  auth,
+  skripsiController.getSourceCodeById
+);
+
+//===================================================================
+// @description     Delete/Update source code
+// @access          MAHASISWA
+router.put(
+  "/skripsi/source-code/delete/:id",
+  auth,
+  skripsiController.deleteSourceCodeById
+);
+
+//===================================================================
+// @description     Upload/Update link source code
+// @access          MAHASISWA
+router.put(
+  "/skripsi/link-source-code/:id",
+  auth,
+  skripsiController.updateLinkSourceCodeById
+);
+
+//===================================================================
+// @description     Get link source code
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/link-source-code/:id",
+  auth,
+  skripsiController.getLinkSourceCodeById
+);
+
+//===================================================================
+// @description     Delete/Update link source code
+// @access          MAHASISWA
+router.put(
+  "/skripsi/link-source-code/delete/:id",
+  auth,
+  skripsiController.deleteLinkSourceCodeById
+);
 
 module.exports = router;

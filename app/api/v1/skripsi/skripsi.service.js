@@ -1626,6 +1626,324 @@ const rejectSkripsiRevisionDocumentById = async (id, userId) => {
   }
 };
 
+//===================================================================
+// @description     Upload/Update dokumen HKI
+// @route           PUT /skripsi/hki/:id
+// @access          MAHASISWA
+const updateHKIById = async (id, userId, payload) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // delete existing file
+  if (skripsi.file_name_hki) {
+    // file
+    const storage = getStorage();
+    // Create a reference to the file to delete
+    const desertRef = ref(
+      storage,
+      `skripsi/${group.id}/${skripsi.file_name_hki}`
+    );
+    // Delete the file
+    await deleteObject(desertRef);
+  }
+
+  // file
+  const storageRef = ref(
+    storage,
+    `skripsi/${group.id}/${payload.hki_file.file_name_hki}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.hki_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
+  // update skripsi document
+  const UpdatedSkripsi = await skripsiRepository.updateHKIById(
+    id,
+    payload,
+    path
+  );
+  return UpdatedSkripsi;
+};
+
+//===================================================================
+// @description     Get dokumen HKI
+// @route           GET /skripsi/hki/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getHKIById = async (id) => {
+  const skripsi = await skripsiRepository.findHKIById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update dokumen HKI
+// @route           GET /skripsi/hki/delete/:id
+// @access          MAHASISWA
+const deleteHKIById = async (id, userId) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // file
+  const storage = getStorage();
+  // Create a reference to the file to delete
+  const desertRef = ref(
+    storage,
+    `skripsi/${group.id}/${skripsi.file_name_hki}`
+  );
+  // Delete the file
+  await deleteObject(desertRef);
+
+  // delete/update skripsi plagiarism
+  await skripsiRepository.deleteHKIById(id);
+};
+
+//===================================================================
+// @description     Upload/Update link source code
+// @route           PUT /skripsi/journal/:id
+// @access          MAHASISWA
+const updateJournalById = async (id, userId, payload) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // delete existing file
+  if (skripsi.file_name_journal) {
+    // file
+    const storage = getStorage();
+    // Create a reference to the file to delete
+    const desertRef = ref(
+      storage,
+      `skripsi/${group.id}/${skripsi.file_name_journal}`
+    );
+    // Delete the file
+    await deleteObject(desertRef);
+  }
+
+  // file
+  const storageRef = ref(
+    storage,
+    `skripsi/${group.id}/${payload.journal_file.file_name_journal}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.journal_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
+  // update skripsi document
+  const UpdatedSkripsi = await skripsiRepository.updateJournalById(
+    id,
+    payload,
+    path
+  );
+  return UpdatedSkripsi;
+};
+
+//===================================================================
+// @description     Get dokumen journal
+// @route           GET /skripsi/journal/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getJournalById = async (id) => {
+  const skripsi = await skripsiRepository.findJournalById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update dokumen journal
+// @route           GET /skripsi/journal/delete/:id
+// @access          MAHASISWA
+const deleteJournalById = async (id, userId) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // file
+  const storage = getStorage();
+  // Create a reference to the file to delete
+  const desertRef = ref(
+    storage,
+    `skripsi/${group.id}/${skripsi.file_name_journal}`
+  );
+  // Delete the file
+  await deleteObject(desertRef);
+
+  // delete/update skripsi plagiarism
+  await skripsiRepository.deleteJournalById(id);
+};
+
+//===================================================================
+// @description     Upload/Update source code
+// @route           PUT /skripsi/source-code/:id
+// @access          MAHASISWA
+const updateSourceCodeById = async (id, userId, payload) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // delete existing file
+  if (skripsi.file_name_sourcecode) {
+    // file
+    const storage = getStorage();
+    // Create a reference to the file to delete
+    const desertRef = ref(
+      storage,
+      `skripsi/${group.id}/${skripsi.file_name_sourcecode}`
+    );
+    // Delete the file
+    await deleteObject(desertRef);
+  }
+
+  // file
+  const storageRef = ref(
+    storage,
+    `skripsi/${group.id}/${payload.source_code_file.file_name_sourcecode}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  const binaryString = atob(payload.source_code_file.buffer);
+  const byteArray = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+  await uploadBytes(storageRef, byteArray, metadata);
+  const path = await getDownloadURL(storageRef);
+
+  // update skripsi document
+  const UpdatedSkripsi = await skripsiRepository.updateSourceCodeById(
+    id,
+    payload,
+    path
+  );
+  return UpdatedSkripsi;
+};
+
+//===================================================================
+// @description     Get source code
+// @route           GET /skripsi/source-code/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getSourceCodeById = async (id) => {
+  const skripsi = await skripsiRepository.findSourceCodeById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update source code
+// @route           GET /skripsi/source-code/delete/:id
+// @access          MAHASISWA
+const deleteSourceCodeById = async (id, userId) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // file
+  const storage = getStorage();
+  // Create a reference to the file to delete
+  const desertRef = ref(
+    storage,
+    `skripsi/${group.id}/${skripsi.file_name_sourcecode}`
+  );
+  // Delete the file
+  await deleteObject(desertRef);
+
+  // delete/update skripsi plagiarism
+  await skripsiRepository.deleteSourceCodeById(id);
+};
+
+//===================================================================
+// @description     Upload/Update link source code
+// @route           PUT /skripsi/link-source-code/:id
+// @access          MAHASISWA
+const updateLinkSourceCodeById = async (id, userId, payload) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // update skripsi document
+  const UpdatedSkripsi = await skripsiRepository.updateLinkSourceCodeById(
+    id,
+    payload
+  );
+  return UpdatedSkripsi;
+};
+
+//===================================================================
+// @description     Get link source code
+// @route           GET /skripsi/link-source-code/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getLinkSourceCodeById = async (id) => {
+  const skripsi = await skripsiRepository.findLinkSourceCodeById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update link source code
+// @route           GET /skripsi/link-source-code/delete/:id
+// @access          MAHASISWA
+const deleteLinkSourceCodeById = async (id, userId) => {
+  // check skripsi
+  const skripsi = await getSkripsiById(id);
+  // get group by skripsi_id
+  const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+  // check student in group_student
+  await getGroupStudentByStudentIdAndGroupId(userId, group.id);
+
+  // delete/update skripsi plagiarism
+  await skripsiRepository.deleteLinkSourceCodeById(id);
+};
+
 module.exports = {
   updateSkripsiDocumentById,
   getSkripsiDocumentById,
@@ -1660,4 +1978,17 @@ module.exports = {
   deleteSkripsiRevisionDocumentById,
   approveSkripsiRevisionDocumentById,
   rejectSkripsiRevisionDocumentById,
+
+  updateHKIById,
+  getHKIById,
+  deleteHKIById,
+  updateJournalById,
+  getJournalById,
+  deleteJournalById,
+  updateSourceCodeById,
+  getSourceCodeById,
+  deleteSourceCodeById,
+  updateLinkSourceCodeById,
+  getLinkSourceCodeById,
+  deleteLinkSourceCodeById,
 };
