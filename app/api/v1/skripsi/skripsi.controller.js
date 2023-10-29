@@ -537,6 +537,117 @@ const getAllSkripsiChangesById = async (req, res) => {
   }
 };
 
+//===================================================================
+// @description     Get report
+// @route           GET /skripsi/skripsi-report/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getSkripsiReportById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_report")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const skripsi = await skripsiService.getSkripsiReportById(id);
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Fill/Update report
+// @route           PUT /skripsi/skripsi-report/:id
+// @access          DOSEN, DEKAN
+const signSkripsiReportById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "skripsi_report_approve")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const skripsi = await skripsiService.signSkripsiReportById(id, userId);
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Fill/Update report conclusion
+// @route           PUT /skripsi/skripsi-report/conclusion/:id
+// @access          DOSEN
+const updateSkripsiConclusionById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "skripsi_report_conclusion")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const payload = req.body;
+    if (
+      !(
+        payload.exam_conclution &&
+        payload.changes_conclusion &&
+        payload.assessment_conclution &&
+        payload.is_pass
+      )
+    ) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const skripsi = await skripsiService.updateSkripsiConclusionById(
+      id,
+      userId,
+      payload
+    );
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get report conclusion
+// @route           GET /skripsi/skripsi-report/conclusion/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getSkripsiConclusionById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_report_conclusion")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const skripsi = await skripsiService.getSkripsiConclusionById(id);
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   updateSkripsiDocumentById,
   getSkripsiDocumentById,
@@ -561,4 +672,8 @@ module.exports = {
   getAllSkripsiAssessmentById,
   updateSkripsiChangesById,
   getAllSkripsiChangesById,
+  getSkripsiReportById,
+  signSkripsiReportById,
+  updateSkripsiConclusionById,
+  getSkripsiConclusionById,
 };

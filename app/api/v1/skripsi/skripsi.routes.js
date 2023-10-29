@@ -175,6 +175,42 @@ router.get(
   skripsiController.getAllSkripsiChangesById
 );
 
+//===================================================================
+// @description     Get report
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-report/:id",
+  auth,
+  skripsiController.getSkripsiReportById
+);
+
+//===================================================================
+// @description     Fill/Update report
+// @access          DOSEN, DEKAN
+router.put(
+  "/skripsi/skripsi-report/:id",
+  auth,
+  skripsiController.signSkripsiReportById
+);
+
+//===================================================================
+// @description     Fill/Update report conclusion
+// @access          DOSEN
+router.put(
+  "/skripsi/skripsi-report/conclusion/:id",
+  auth,
+  skripsiController.updateSkripsiConclusionById
+);
+
+//===================================================================
+// @description     Get report conclusion
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/skripsi/skripsi-report/conclusion/:id",
+  auth,
+  skripsiController.getSkripsiConclusionById
+);
+
 // //       upload/update hki
 // router.put("/skripsi/hki/:id", skripsiController.updateHKIById);
 // //       melihat hki

@@ -658,6 +658,160 @@ const openAccessSkripsiReportById = async (id) => {
   return skripsi;
 };
 
+//===================================================================
+// @description     Get report
+// @route           GET /skripsi/skripsi-report/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const findSkripsiReportById = async (id) => {
+  const skripsi = await prisma.skripsi.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      is_report_approve_by_dekan: true,
+      is_report_approve_by_panelist_chairman: true,
+      is_report_approve_by_panelist_member: true,
+      is_report_approve_by_advisor: true,
+    },
+  });
+  return skripsi;
+};
+
+//==============================(1)=====================================
+// @description     Fill/Update report
+// @route           PUT /skripsi/skripsi-report/:id
+// @access          DOSEN, DEKAN
+const signChairmanSkripsiReportById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_report_approve_by_panelist_chairman: true,
+    },
+    select: {
+      id: true,
+      is_report_approve_by_panelist_chairman: true,
+    },
+  });
+  return skripsi;
+};
+
+//==============================(2)=====================================
+// @description     Fill/Update report
+// @route           PUT /skripsi/skripsi-report/:id
+// @access          DOSEN, DEKAN
+const signMemberSkripsiReportById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_report_approve_by_panelist_member: true,
+    },
+    select: {
+      id: true,
+      is_report_approve_by_panelist_member: true,
+    },
+  });
+  return skripsi;
+};
+
+//==============================(3)=====================================
+// @description     Fill/Update report
+// @route           PUT /skripsi/skripsi-report/:id
+// @access          DOSEN, DEKAN
+const signAdvisorSkripsiReportById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_report_approve_by_advisor: true,
+    },
+    select: {
+      id: true,
+      is_report_approve_by_advisor: true,
+    },
+  });
+  return skripsi;
+};
+
+//==============================(4)=====================================
+// @description     Fill/Update report
+// @route           PUT /skripsi/skripsi-report/:id
+// @access          DOSEN, DEKAN
+const signDekanSkripsiReportById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_report_approve_by_dekan: true,
+    },
+    select: {
+      id: true,
+      is_report_approve_by_dekan: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Fill/Update report conclusion
+// @route           PUT /skripsi/skripsi-report/conclusion/:id
+// @access          DOSEN
+const updateSkripsiConclusionById = async (id, payload) => {
+  const {
+    exam_conclution,
+    changes_conclusion,
+    assessment_conclution,
+    is_pass,
+  } = payload;
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      exam_conclution,
+      changes_conclusion,
+      assessment_conclution,
+      is_pass,
+    },
+    select: {
+      id: true,
+      exam_conclution: true,
+      changes_conclusion: true,
+      assessment_conclution: true,
+      is_pass: true,
+      report_date: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Get report conclusion
+// @route           GET /skripsi/skripsi-report/conclusion/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const findSkripsiConclusionById = async (id) => {
+  const skripsi = await prisma.skripsi.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      exam_conclution: true,
+      changes_conclusion: true,
+      assessment_conclution: true,
+      is_pass: true,
+      report_date: true,
+    },
+  });
+  return skripsi;
+};
+
 module.exports = {
   insertSkripsi,
   updateSkripsiChairmanAndMemberById,
@@ -696,4 +850,11 @@ module.exports = {
   findSkripsiScheduleById,
 
   openAccessSkripsiReportById,
+  findSkripsiReportById,
+  signChairmanSkripsiReportById,
+  signMemberSkripsiReportById,
+  signAdvisorSkripsiReportById,
+  signDekanSkripsiReportById,
+  updateSkripsiConclusionById,
+  findSkripsiConclusionById,
 };
