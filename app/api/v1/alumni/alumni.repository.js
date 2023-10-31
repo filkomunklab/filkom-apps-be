@@ -42,6 +42,26 @@ const alumniTS = async () => {
     status: item.Tracer_Study.length < 1 ? "Belum Mengisi" : "Sudah Mengisi",
   }));
 
+  const data2 = alumniList.filter((item) => {
+    return item.Tracer_Study.length > 0;
+  });
+
+  const groupedData = data2.reduce((result, item) => {
+    const major = item.major || "Unknown";
+    if (!result[major]) {
+      result[major] = [];
+    }
+    result[major].push(item);
+    return result;
+  }, {});
+
+  const counts = Object.keys(groupedData).map((major) => ({
+    major,
+    count: groupedData[major].length,
+  }));
+
+  console.log(data2, groupedData, counts);
+
   return data;
 };
 

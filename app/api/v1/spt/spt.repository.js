@@ -81,6 +81,36 @@ const findSPTByNIM = async (nim) => {
   return spt[0];
 };
 
+const findSPTByNama = async (nim) => {
+  const spt = await prisma.formSPT.findMany({
+    where: {
+      studentId: nim,
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+    include: {
+      student: {
+        select: {
+          firstName: true,
+          lastName: true,
+          reg_num: true,
+          dateOfBirth: true,
+          gender: true,
+          nim: true,
+          faculty: true,
+          major: true,
+          phoneNo: true,
+          personalEmail: true,
+          status: true,
+        },
+      },
+    },
+    take: 1,
+  });
+  return spt[0];
+};
+
 const insertSPT = async (dataSPT) => {
   //mengambil tanggal saat ini
   const currentDate = moment().format("DD/MM/YYYY");
