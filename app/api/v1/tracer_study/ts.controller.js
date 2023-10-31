@@ -26,7 +26,20 @@ const submitTS = async (req, res) => {
   }
 };
 
+//export database
+const exportTStoExcel = async (req, res) => {
+  const filename = "tracerStudy.xlsx";
+
+  try {
+    await tsService.exportTStoExcel(filename);
+    res.download(filename);
+  } catch (error) {
+    res.status(500).json({ error: "Export failed" });
+  }
+};
+
 module.exports = {
   submitTS,
   getListTS,
+  exportTStoExcel,
 };

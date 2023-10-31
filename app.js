@@ -14,6 +14,7 @@ const employeeRoutes = require("./app/api/v1/employee/employee.routes");
 const sptRoutes = require("./app/api/v1/spt/spt.routes");
 const tsRoutes = require("./app/api/v1/tracer_study/ts.routes");
 const alumniRoutes = require("./app/api/v1/alumni/alumni.routes");
+const dashboardKB = require("./app/api/v1/dashboard_klabatBridge/dashboard_kb.routes");
 
 //------------------Ruter Skripsi App---------------------------
 const studentRoutes = require("./app/api/v1/student/student.routes");
@@ -38,6 +39,7 @@ const corsOptions = {
 
 //-------------------------BIMBINGAN AKADEMIK------------
 const certificateRoutes = require("./app/api/v1/certificate/certificate.routes");
+const { url } = require("inspector");
 
 //--------------------------------------------------------
 
@@ -58,6 +60,7 @@ app.use(`${URL}`, employeeRoutes);
 app.use(`${URL}`, sptRoutes);
 app.use(`${URL}`, tsRoutes);
 app.use(`${URL}`, alumniRoutes);
+app.use(`${URL}`, dashboardKB);
 
 //------------------Ruter Skripsi App---------------------------
 app.use(`${URL}`, studentRoutes);
