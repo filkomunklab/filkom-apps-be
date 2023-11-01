@@ -140,20 +140,19 @@ const getAllClassroom = async (userId) => {
   // Iterate through classrooms and fetch students for each classroom
   for (const classroom of classrooms) {
     const classroomData = {
-      id: classroom.id, // id dari classroom
-      dosen_mk_id: classroom.dosen_mk_id, // dosen_mk_id dari classroom
+      id: classroom.id,
+      dosen_mk_id: classroom.dosen_mk_id,
       classroom: `${classroom.name} - Semester ${classroom.academic.semester} ${classroom.academic.year}`,
-      students: [], // inisialisasi array untuk students
+      students: [],
+      academic: classroom.academic, // Tambahkan properti academic ke dalam classroomData
     };
 
     if (classroom.name === "Proposal") {
-      // Fetch proposal students for the classroom
       const proposalStudents =
         await proposalStudentRepository.findProposalStudentByClassroomId(
           classroom.id
         );
 
-      // Map and modify student data
       classroomData.students = proposalStudents.map((proposalStudent) => {
         const student = proposalStudent.student;
         let fullName = student.firstName;
@@ -172,13 +171,11 @@ const getAllClassroom = async (userId) => {
       });
     }
     if (classroom.name === "Skripsi") {
-      // Fetch skripsi students for the classroom
       const skripsiStudents =
         await skripsiStudentRepository.findSkripsiStudentByClassroomId(
           classroom.id
         );
 
-      // Map and modify student data
       classroomData.students = skripsiStudents.map((skripsiStudent) => {
         const student = skripsiStudent.student;
         let fullName = student.firstName;
@@ -200,14 +197,30 @@ const getAllClassroom = async (userId) => {
     classroomsData.push(classroomData);
   }
 
-  // Sort classrooms based on displayName and name
+  // Sort classroomsData based on the specified criteria
   classroomsData.sort((classroomA, classroomB) => {
-    if (classroomA.displayName !== classroomB.displayName) {
-      // Sort by displayName
-      return classroomA.displayName.localeCompare(classroomB.displayName);
+    // Sort by year (descending order)
+    const yearComparison = classroomB.academic.year.localeCompare(
+      classroomA.academic.year
+    );
+
+    // Sort by semester (ganjil, genap, padat)
+    const semesterOrder = { Ganjil: 1, Genap: 2, Padat: 3 };
+    const semesterComparison =
+      semesterOrder[classroomA.academic.semester] -
+      semesterOrder[classroomB.academic.semester];
+
+    // Sort by name (proposal, skripsi)
+    const nameOrder = { Proposal: 1, Skripsi: 2 };
+    const nameComparison =
+      nameOrder[classroomA.name] - nameOrder[classroomB.name];
+
+    if (yearComparison !== 0) {
+      return yearComparison;
+    } else if (semesterComparison !== 0) {
+      return semesterComparison;
     } else {
-      // Sort by name
-      return classroomA.name.localeCompare(classroomB.name);
+      return nameComparison;
     }
   });
 

@@ -337,6 +337,14 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_report_conclusion");
     // Dosen MK view skripsi revisi document
     can("read", "skripsi_revision_document");
+    // Dosen MK view hki
+    can("read", "hki");
+    // Dosen MK view journal
+    can("read", "journal");
+    // Dosen MK view source code
+    can("read", "source_code");
+    // Dosen MK view link source code
+    can("read", "link_source_code");
   }
 
   if (hasRole("MAHASISWA")) {
@@ -397,6 +405,22 @@ const policyFor = ({ user }) => {
     can("update", "skripsi_revision_document");
     // Mahasiswa view skripsi revisi document
     can("read", "skripsi_revision_document");
+    // Mahasiswa update hki
+    can("update", "hki");
+    // Mahasiswa view hki
+    can("read", "hki");
+    // Mahasiswa update journal
+    can("update", "journal");
+    // Mahasiswa view journal
+    can("read", "journal");
+    // Mahasiswa update source code
+    can("update", "source_code");
+    // Mahasiswa view source code
+    can("read", "source_code");
+    // Mahasiswa update link source code
+    can("update", "link_source_code");
+    // Mahasiswa view link source code
+    can("read", "link_source_code");
   }
 
   if (hasRole("ALUMNI")) {

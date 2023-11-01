@@ -253,19 +253,17 @@ CREATE TABLE "Skripsi" (
     "file_name_hki" TEXT,
     "file_name_journal" TEXT,
     "file_name_sourcecode" TEXT,
-    "file_name_poster" TEXT,
-    "file_name_tutorial" TEXT,
     "upload_date_hki" TIMESTAMP(3),
     "upload_date_journal" TIMESTAMP(3),
     "upload_date_sourcecode" TIMESTAMP(3),
-    "upload_date_poster" TIMESTAMP(3),
-    "upload_date_tutorial" TIMESTAMP(3),
     "file_size_hki" TEXT,
     "file_size_journal" TEXT,
     "file_size_sourcecode" TEXT,
     "link_soucecode" TEXT,
-    "file_size_poster" TEXT,
-    "file_size_tutorial" TEXT,
+    "upload_date_link_soucecode" TIMESTAMP(3),
+    "file_path_hki" TEXT,
+    "file_path_journal" TEXT,
+    "file_path_sourcecode" TEXT,
 
     CONSTRAINT "Skripsi_pkey" PRIMARY KEY ("id")
 );
