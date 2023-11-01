@@ -87,7 +87,6 @@ model Student {
   studentEmail   String?   @unique
   curriculum     String?
   highSchoolGrad String?
-
   currentAdresss      String?
   status              StudentStatus         @default(ACTIVE)
   personalEmail       String?               @unique
@@ -97,6 +96,14 @@ model Student {
   address             String?
   phoneNo             String?
   token               String?               @unique
+  guardianName       String? 
+  guardianEducation  String?
+  guardianReligion   String?
+  guardianStatus     String?
+  familyRelation     String?
+  guardianEmail      String?
+  guardianPhoneNo    String?
+  guardianAddress    String?
   createdBy           String?
   updatedBy           String?
   createdAt           DateTime              @default(now())
@@ -114,8 +121,6 @@ model Student {
   message           Message[]
   Employee          Employee?         @relation(fields: [employeeId], references: [id])
   employeeId        String?
-  StudentGuardian   StudentGuardian?  @relation(fields: [studentGuardianId], references: [id])
-  studentGuardianId String?
   Tracer_Study      Tracer_Study[]
 
   @@unique([firstName, lastName])
@@ -528,20 +533,6 @@ model Thesis_History {
 }
 
 //-------------------Bimbingan Akademik-------------------/
-
-model StudentGuardian {
-  id             String    @id @default(uuid())
-  firstName      String
-  lastName       String
-  edicationLevel String
-  religion       String
-  familyRelation String
-  email          String
-  phoneNo        String
-  address        String
-  student        Student[]
-}
-
 model Subject {
   id           String            @id @default(uuid())
   sub_code     String
