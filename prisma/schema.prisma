@@ -97,7 +97,7 @@ model Student {
   phoneNo             String?
   token               String?               @unique
 
-  guardianName       String?
+  guardianName       String? 
   guardianEducation  String?
   guardianReligion   String?
   guardianStatus     String?
