@@ -401,7 +401,7 @@ async function main() {
         id: "f6b7d2b0-b7f8-4393-9027-e4374e1eea52",
         Address: "Manado",
         phoneNum: "08128374982",
-        email: "sekretaris@test.com",
+        email: "sekretarisfilkom@test.com",
         firstName: "Sekretaris",
         lastName: "FILKOM",
         nik: "sekretarisfilkom",

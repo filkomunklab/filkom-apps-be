@@ -1163,6 +1163,258 @@ const rejectSkripsiRevisionDocumentByAdvisorById = async (id) => {
   return skripsi;
 };
 
+//===================================================================
+// @description     Upload/Update dokumen HKI
+// @route           PUT /skripsi/hki/:id
+// @access          MAHASISWA
+const updateHKIById = async (id, payload, path) => {
+  const { hki_file } = payload;
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_hki: hki_file.file_name_hki,
+      upload_date_hki: new Date(),
+      file_size_hki: hki_file.file_size_hki,
+      file_path_hki: path,
+    },
+    select: {
+      id: true,
+      file_name_hki: true,
+      upload_date_hki: true,
+      file_size_hki: true,
+      file_path_hki: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Get dokumen HKI
+// @route           GET /skripsi/hki/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const findHKIById = async (id) => {
+  const skripsi = await prisma.skripsi.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      file_name_hki: true,
+      upload_date_hki: true,
+      file_size_hki: true,
+      file_path_hki: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update dokumen HKI
+// @route           GET /skripsi/hki/delete/:id
+// @access          MAHASISWA
+const deleteHKIById = async (id) => {
+  await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_hki: null,
+      upload_date_hki: null,
+      file_size_hki: null,
+      file_path_hki: null,
+    },
+  });
+};
+
+//===================================================================
+// @description     Upload/Update link source code
+// @route           PUT /skripsi/journal/:id
+// @access          MAHASISWA
+const updateJournalById = async (id, payload, path) => {
+  const { journal_file } = payload;
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_journal: journal_file.file_name_journal,
+      upload_date_journal: new Date(),
+      file_size_journal: journal_file.file_size_journal,
+      file_path_journal: path,
+    },
+    select: {
+      id: true,
+      file_name_journal: true,
+      upload_date_journal: true,
+      file_size_journal: true,
+      file_path_journal: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Get dokumen journal
+// @route           GET /skripsi/journal/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const findJournalById = async (id) => {
+  const skripsi = await prisma.skripsi.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      file_name_journal: true,
+      upload_date_journal: true,
+      file_size_journal: true,
+      file_path_journal: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update dokumen journal
+// @route           GET /skripsi/journal/delete/:id
+// @access          MAHASISWA
+const deleteJournalById = async (id) => {
+  await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_journal: null,
+      upload_date_journal: null,
+      file_size_journal: null,
+      file_path_sourcecode: null,
+    },
+  });
+};
+
+//===================================================================
+// @description     Upload/Update source code
+// @route           PUT /skripsi/source-code/:id
+// @access          MAHASISWA
+const updateSourceCodeById = async (id, payload, path) => {
+  const { source_code_file } = payload;
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_sourcecode: source_code_file.file_name_sourcecode,
+      upload_date_sourcecode: new Date(),
+      file_size_sourcecode: source_code_file.file_size_sourcecode,
+      file_path_sourcecode: path,
+    },
+    select: {
+      id: true,
+      file_name_sourcecode: true,
+      upload_date_sourcecode: true,
+      file_size_sourcecode: true,
+      file_path_sourcecode: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Get source code
+// @route           GET /skripsi/source-code/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const findSourceCodeById = async (id) => {
+  const skripsi = await prisma.skripsi.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      file_name_sourcecode: true,
+      upload_date_sourcecode: true,
+      file_size_sourcecode: true,
+      file_path_sourcecode: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update source code
+// @route           GET /skripsi/source-code/delete/:id
+// @access          MAHASISWA
+const deleteSourceCodeById = async (id) => {
+  await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      file_name_sourcecode: null,
+      upload_date_sourcecode: null,
+      file_size_sourcecode: null,
+      file_path_sourcecode: null,
+    },
+  });
+};
+
+//===================================================================
+// @description     Upload/Update link source code
+// @route           PUT /skripsi/link-source-code/:id
+// @access          MAHASISWA
+const updateLinkSourceCodeById = async (id, payload) => {
+  const { link_soucecode } = payload;
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      link_soucecode: link_soucecode,
+      upload_date_link_soucecode: new Date(),
+    },
+    select: {
+      id: true,
+      link_soucecode: true,
+      upload_date_link_soucecode: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Get link source code
+// @route           GET /skripsi/link-source-code/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const findLinkSourceCodeById = async (id) => {
+  const skripsi = await prisma.skripsi.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      link_soucecode: true,
+      upload_date_link_soucecode: true,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Delete/Update link source code
+// @route           GET /skripsi/link-source-code/delete/:id
+// @access          MAHASISWA
+const deleteLinkSourceCodeById = async (id) => {
+  await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      link_soucecode: null,
+      upload_date_link_soucecode: null,
+    },
+  });
+};
+
 module.exports = {
   insertSkripsi,
   updateSkripsiChairmanAndMemberById,
@@ -1226,4 +1478,17 @@ module.exports = {
   rejectSkripsiRevisionDocumentByChairmanById,
   rejectSkripsiRevisionDocumentByMemberById,
   rejectSkripsiRevisionDocumentByAdvisorById,
+
+  updateHKIById,
+  findHKIById,
+  deleteHKIById,
+  updateJournalById,
+  findJournalById,
+  deleteJournalById,
+  updateSourceCodeById,
+  findSourceCodeById,
+  deleteSourceCodeById,
+  updateLinkSourceCodeById,
+  findLinkSourceCodeById,
+  deleteLinkSourceCodeById,
 };

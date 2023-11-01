@@ -452,19 +452,17 @@ model Skripsi {
   file_name_hki                            String?
   file_name_journal                        String?
   file_name_sourcecode                     String?
-  file_name_poster                         String?
-  file_name_tutorial                       String?
   upload_date_hki                          DateTime?
   upload_date_journal                      DateTime?
   upload_date_sourcecode                   DateTime?
-  upload_date_poster                       DateTime?
-  upload_date_tutorial                     DateTime?
   file_size_hki                            String?
   file_size_journal                        String?
   file_size_sourcecode                     String?
   link_soucecode                           String?
-  file_size_poster                         String?
-  file_size_tutorial                       String?
+  upload_date_link_soucecode               DateTime?
+  file_path_hki                            String?
+  file_path_journal                        String?
+  file_path_sourcecode                     String?
   group                                    Group?               @relation("Skripsi")
   assessment                               Skripsi_Assessment[] @relation("Assessment")
   changes                                  Skripsi_Changes[]    @relation("Changes")
