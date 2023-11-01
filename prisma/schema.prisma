@@ -96,7 +96,6 @@ model Student {
   email               String?               @unique
   phoneNo             String?
   token               String?               @unique
-
   guardianName       String? 
   guardianEducation  String?
   guardianReligion   String?
@@ -105,7 +104,6 @@ model Student {
   guardianEmail      String?
   guardianPhoneNo    String?
   guardianAddress    String?
-
   createdBy           String?
   updatedBy           String?
   createdAt           DateTime              @default(now())
@@ -123,8 +121,6 @@ model Student {
   message           Message[]
   Employee          Employee?         @relation(fields: [employeeId], references: [id])
   employeeId        String?
-  StudentGuardian   StudentGuardian?  @relation(fields: [studentGuardianId], references: [id])
-  studentGuardianId String?
   Tracer_Study      Tracer_Study[]
 
   @@unique([firstName, lastName])
