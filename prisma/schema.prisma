@@ -95,7 +95,6 @@ model Student {
   major               Major?
   graduate_year       String?
   address             String?
-  email               String?               @unique
   phoneNo             String?
   token               String?               @unique
   createdBy           String?
@@ -152,7 +151,7 @@ model FormSPT {
 }
 
 model Tracer_Study {
-  id          String  @id @default(uuid())
+  id          String   @id @default(uuid())
   kdptimsmh   String //Kode PT --> default value dari BE
   kdpstmsmh   String //Kode Prodi --> default value dari FE
   nimhsmsmh   String //NIM
@@ -241,8 +240,9 @@ model Tracer_Study {
   f1612       String //20
   f1613       String //20
   f1614       String //20 isian
+  created_at  DateTime @default(now())
   studentId   String
-  student     Student @relation(fields: [studentId], references: [nim])
+  student     Student  @relation(fields: [studentId], references: [nim])
 }
 
 //-------------------Skripsi App ------------------------
