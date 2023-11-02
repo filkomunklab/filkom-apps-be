@@ -17,5 +17,6 @@ router.post("/student", studentController.createStudent);
 // router.put("/student/:id", studentController.updateStudentById);
 // //       delete     - hapus student
 // router.delete("/student/:id", studentController.deleteStudentById);
+router.get("/student/:nim", studentController.getStudentByNim);
 
 module.exports = router;
