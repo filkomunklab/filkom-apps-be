@@ -51,6 +51,29 @@ const getSubmissionDetailsById = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get classroom proposal list
+// @route           GET /group/classroom_list
+// @access          MAHASISWA
+const getClassroomList = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "classroom_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getClassroomList(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
 // @description     Get student list in the same proposal classroom
 // @route           GET /group/classroom/students-list/:id
 // @access          MAHASISWA
@@ -449,6 +472,7 @@ const getProposalListSekretaris = async (req, res) => {
 module.exports = {
   getThesisList,
   getSubmissionDetailsById,
+  getClassroomList,
   getStudentListByClassroomId,
   getDosenList,
   getAdvisorTeamById,

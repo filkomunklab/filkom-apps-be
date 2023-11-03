@@ -355,6 +355,8 @@ const policyFor = ({ user }) => {
     can("read", "Consultation");
     // Mahasiswa view thesis list
     can("read", "thesis_list");
+    // Mahasiswa view classroom list
+    can("read", "classroom_list");
     // Mahasiswa view thesis student list
     can("read", "thesis_student_list");
     // Mahasiswa view dosen list

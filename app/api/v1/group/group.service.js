@@ -278,6 +278,43 @@ const getSubmissionDetailsById = async (id) => {
 };
 
 //===================================================================
+// @description     Get classroom proposal list
+// @route           GET /group/classroom_list
+// @access          MAHASISWA
+const getClassroomList = async (userId) => {
+  // get classroom of proposal_student
+  const proposalStudents =
+    await proposalStudentRepository.findAllProposalStudentByStudentId(userId);
+  if (!proposalStudents) {
+    return proposalStudents;
+  }
+
+  const result = [];
+  for (const entry of proposalStudents) {
+    // get classroom
+    const classroom = await classroomRepository.findClassroomById(
+      entry.classroom_id
+    );
+    // get dosen mk
+    const employee = await employeeRepository.findEmployeeById(
+      classroom.dosen_mk_id
+    );
+    let name = employee.firstName;
+
+    // Tambahkan lastName jika ada
+    if (employee.lastName) {
+      name += ` ${employee.lastName}`;
+    }
+
+    if (classroom.name === "Proposal") {
+      const classroomData = `${classroom.name} Semester ${classroom.academic.semester} ${classroom.academic.year} - ${name}`;
+      result.push(classroomData);
+    }
+  }
+  return result;
+};
+
+//===================================================================
 // @description     Get all student in the same proposal classroom
 // @route           GET /group/classroom/students/:id
 // @access          MAHASISWA
@@ -2125,6 +2162,7 @@ const getProposalListSekretaris = async () => {
 module.exports = {
   getThesisList,
   getSubmissionDetailsById,
+  getClassroomList,
   getStudentListByClassroomId,
   getDosenList,
   getAdvisorTeamById,

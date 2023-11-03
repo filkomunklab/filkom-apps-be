@@ -109,6 +109,18 @@ const findAllProposalStudent = async () => {
   return proposal_student;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal_student by student id
+// @used            Group,
+const findAllProposalStudentByStudentId = async (student_id) => {
+  const proposal_student = await prisma.proposal_Student.findMany({
+    where: {
+      student_id,
+    },
+  });
+  return proposal_student;
+};
+
 module.exports = {
   findProposalStudentByClassroomId,
   findProposalStudentByStudentId,
@@ -118,4 +130,5 @@ module.exports = {
   deleteProposalStudentById,
   findStudentProposalByStudentIdAndClassroomId,
   findAllProposalStudent,
+  findAllProposalStudentByStudentId,
 };
