@@ -25,8 +25,8 @@ const getAlumniList = async () => {
 };
 
 //opertor get alumni
-const alumniTS = async () => {
-  return alumniRepository.alumniTS();
+const alumniTS = async (search_query) => {
+  return alumniRepository.alumniTS(search_query);
 };
 
 //fillter by
@@ -120,6 +120,7 @@ const sendBroadcastWA = async (pesan) => {
     throw error;
   }
 };
+
 const getAlumniHasTracerStudyByOperator = async (
   search_query,
   page,

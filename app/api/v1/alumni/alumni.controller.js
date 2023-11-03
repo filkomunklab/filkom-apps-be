@@ -14,8 +14,9 @@ const getAlumniList = async (req, res) => {
 
 //daftar alumni --> operator get
 const alumniStatusTS = async (req, res) => {
+  const search_query = req.query.search_query || "";
   try {
-    const alumniOP = await alumniService.alumniTS();
+    const alumniOP = await alumniService.alumniTS(search_query);
     res.send({ status: "OK", data: alumniOP });
   } catch (error) {
     res
@@ -116,24 +117,6 @@ const getAllAlumni = async (req, res) => {
       .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
-
-//broadcast WhatsApp
-// const broadcastWAChat = async (req, res) => {
-//   try {
-//     let phoneNo = req.query.phoneNo;
-//     const pesan = req.query.pesan;
-//     const result = await alumniService.sendBroadcastWA(phoneNo, pesan);
-
-//     if (result.status === "success") {
-//       res.status(200).send(result);
-//     } else {
-//       res.status(400).send(result);
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ status: "error", pesan: "error server" });
-//   }
-// };
 
 const broadcastWAChat = async (req, res) => {
   try {

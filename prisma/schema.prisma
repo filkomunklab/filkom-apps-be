@@ -134,8 +134,21 @@ model UserRole {
 
 //-------------------Klabat Bridge ----------------------//
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
 model FormSPT {
   id                String    @id @default(uuid())
+  full_name         String
+  reg_num           String
+  date_of_birth     String
+  gender            Gender
+  nim               String
+  faculty           String
+  major             String
+  phone_num         String?
   nik               String
   birth_mother      String
   graduate_plan     String

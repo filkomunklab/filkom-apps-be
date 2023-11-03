@@ -22,10 +22,35 @@ const getAlumniList = async () => {
 };
 
 //get alumni + status isi SPT
-const alumniTS = async () => {
+const alumniTS = async (search_query) => {
+  console.log(search_query);
   const alumniList = await prisma.student.findMany({
     where: {
-      status: "GRADUATE",
+      AND: [
+        { status: "GRADUATE" },
+        {
+          OR: [
+            {
+              firstName: {
+                contains: search_query,
+                mode: "insensitive",
+              },
+            },
+            {
+              lastName: {
+                contains: search_query,
+                mode: "insensitive",
+              },
+            },
+            {
+              nim: {
+                contains: search_query,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+      ],
     },
     select: {
       firstName: true,
