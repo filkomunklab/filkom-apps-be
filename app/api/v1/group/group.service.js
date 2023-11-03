@@ -307,7 +307,10 @@ const getClassroomList = async (userId) => {
     }
 
     if (classroom.name === "Proposal") {
-      const classroomData = `${classroom.name} Semester ${classroom.academic.semester} ${classroom.academic.year} - ${name}`;
+      const classroomData = {
+        id: classroom.id,
+        classroom: `${classroom.name} Semester ${classroom.academic.semester} ${classroom.academic.year} - ${name}`,
+      };
       result.push(classroomData);
     }
   }
