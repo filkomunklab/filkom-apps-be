@@ -2453,20 +2453,36 @@ async function main() {
   await prisma.formSPT.createMany({
     data: [
       {
+        full_name: "Gracias Tumudo",
+        reg_num: "s22000123",
+        date_of_birth: "17 November 2000",
+        gender: "FEMALE",
+        nim: "123456",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "Informatika",
+        phone_num: "",
         birth_mother: "Ariana",
         graduate_plan: "Semester II 2023/2024",
         nik: "12343567",
         remaining_classes:
-          "[{subject: 'IGD', sks: '3'}, {subject: 'Entre', sks: '3'}, {subject: 'Web Design', sks: '3'}, {subject: 'Math', sks: '3'}, {subject: 'Family Living', sks: '3'}]",
+          "[{`subject`: `IGD`, `sks`: `3`}, {`subject`: `Entre`, `sks`: `3`}, {`subject`: `Web Design`, `sks`:`3`}, {`subject`: `Math`, `sks`: `3`}, {`subject`: `Family Living`, `sks`: `3`}]",
         remaining_credits: "3",
         studentId: "student",
       },
       {
+        full_name: "Reynaldo XXXX",
+        reg_num: "s229877888",
+        date_of_birth: "20 Desember 2000",
+        gender: "MALE",
+        nim: "098754321",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "Informatika",
+        phone_num: "",
         birth_mother: "Briana",
         graduate_plan: "Semester II 2023/2024",
         nik: "0987654321",
         remaining_classes:
-          "[{subject: 'IGD', sks: '3'}, {subject: 'Entre', sks: '3'}, {subject: 'Web Design', sks: '3'}, {subject: 'Math', sks: '3'}, {subject: 'Family Living', sks: '3'}]",
+          "[{`subject`: `IGD`, `sks`: `3`}, {`subject`: `Entre`, `sks`: `3`}, {`subject`: `Web Design`, `sks`:`3`}, {`subject`: `Math`, `sks`: `3`}, {`subject`: `Family Living`, `sks`: `3`}]",
         remaining_credits: "15",
         studentId: "student",
       },
