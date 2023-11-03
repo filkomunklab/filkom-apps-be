@@ -23,6 +23,11 @@ router.get(
 );
 
 //===================================================================
+// @description     Get classroom proposal list
+// @access          MAHASISWA
+router.get("/group/classroom_list", auth, groupController.getClassroomList);
+
+//===================================================================
 // @description     Get student list in the same proposal classroom
 // @access          MAHASISWA
 router.get(
