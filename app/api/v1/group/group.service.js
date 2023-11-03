@@ -318,7 +318,7 @@ const getClassroomList = async (userId) => {
 // @description     Get all student in the same proposal classroom
 // @route           GET /group/classroom/students/:id
 // @access          MAHASISWA
-const getStudentListByClassroomId = async (id) => {
+const getStudentListByClassroomId = async (id, userId) => {
   // check classroom
   const classroom = await classroomRepository.findClassroomById(id);
   if (!classroom) {
@@ -351,7 +351,9 @@ const getStudentListByClassroomId = async (id) => {
       (partner) => partner.student_id === entry.student_id
     );
 
-    if (isNotInOtherTeamPartners) {
+    const isNotUserId = entry.student_id !== userId;
+
+    if (isNotInOtherTeamPartners && isNotUserId) {
       // concatenate name
       const fullName = `${student.firstName} ${student.lastName || ""}`;
       const data = {
