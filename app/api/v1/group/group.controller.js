@@ -87,7 +87,8 @@ const getStudentListByClassroomId = async (req, res) => {
   }
   try {
     const id = req.params.id;
-    const group = await groupService.getStudentListByClassroomId(id);
+    const userId = req.user.user.id;
+    const group = await groupService.getStudentListByClassroomId(id, userId);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
