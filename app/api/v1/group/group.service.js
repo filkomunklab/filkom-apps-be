@@ -27,34 +27,37 @@ const getThesisList = async (userId) => {
   const result = [];
   for (const entry of groupStudent) {
     const group = await groupRepository.findGroupById(entry.group_id);
-    const submission = await submissionRepository.findSubmissionById(
-      group.submission_id
-    );
+    // cek if group have submission
+    if (group.submission_id) {
+      const submission = await submissionRepository.findSubmissionById(
+        group.submission_id
+      );
 
-    // Inisialisasi variabel untuk Proposal dan Skripsi
-    let proposal = null;
-    let skripsi = null;
+      // Inisialisasi variabel untuk Proposal dan Skripsi
+      let proposal = null;
+      let skripsi = null;
 
-    // Cek apakah group memiliki Proposal
-    if (group.proposal_id) {
-      proposal = await proposalRepository.findProposalById(group.proposal_id);
+      // Cek apakah group memiliki Proposal
+      if (group.proposal_id) {
+        proposal = await proposalRepository.findProposalById(group.proposal_id);
+      }
+
+      // Cek apakah group memiliki Skripsi
+      if (group.skripsi_id) {
+        skripsi = await skripsiRepository.findSkripsiById(group.skripsi_id);
+      }
+
+      // Kumpulkan data yang diperlukan dari setiap entitas
+      const data = {
+        group_id: group.id,
+        title: group.title,
+        is_approve: submission.is_approve,
+        is_pass_proposal: proposal ? proposal.is_pass : null,
+        is_pass_skripsi: skripsi ? skripsi.is_pass : null,
+      };
+
+      result.push(data);
     }
-
-    // Cek apakah group memiliki Skripsi
-    if (group.skripsi_id) {
-      skripsi = await skripsiRepository.findSkripsiById(group.skripsi_id);
-    }
-
-    // Kumpulkan data yang diperlukan dari setiap entitas
-    const data = {
-      group_id: group.id,
-      title: group.title,
-      is_approve: submission.is_approve,
-      is_pass_proposal: proposal ? proposal.is_pass : null,
-      is_pass_skripsi: skripsi ? skripsi.is_pass : null,
-    };
-
-    result.push(data);
   }
   return result;
 
