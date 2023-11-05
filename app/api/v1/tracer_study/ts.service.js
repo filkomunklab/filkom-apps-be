@@ -12,13 +12,14 @@ const createTS = async (dataSPT) => {
 
 const exportTStoExcel = async (filename) => {
   //tambah moment for return year
-  const currentYear = moment().format("YYYY");
+  // const currentYear = moment().format("YYYY");
 
   const tracerstudy = await tsRepository.tracerstudy();
 
-  const filteredTS = tracerstudy.filter(
-    (data) => data.created_at === currentYear
-  );
+  const filteredTS = tracerstudy;
+  // .filter(
+  //   (data) => data.created_at === currentYear
+  // );
 
   const workbook = new excel.Workbook();
   const worksheet = workbook.addWorksheet("Data Tracer Study");

@@ -87,7 +87,7 @@ const sendEmail = async () => {
   }
 };
 
-const sendBroadcastWA = async (pesan) => {
+const sendBroadcastWA = async (pesan, phoneNums) => {
   try {
     const phoneNumbers = await alumniRepository.phoneNumbers();
 
