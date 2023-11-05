@@ -1,40 +1,10 @@
 const { query } = require("express");
 const sptRepository = require("./spt.repository");
 
-const getListSPT = async (search_query, page, limit, filterBy, filterValue) => {
+const getListSPT = async (search_query) => {
   try {
-    console.log("ini filter by: ", filterValue);
-    console.log("ini filter value: ", filterValue);
-    const offset = limit * page;
-
-    // filter by none
-    if (filterBy === "none") {
-      const totalRows = await sptRepository.countTotalRowsCalonTamatanBySearch(search_query);
-      const totalPage = Math.ceil(totalRows / limit);
-      const calonTamatan = await sptRepository.findCalonTamatanListPagination(search_query, page, limit, offset);
-      return { calonTamatan, totalRows, totalPage };
-    }
-    // filter by status by faculty
-    else if (filterBy === "status-by-faculty") {
-      const totalRows = await sptRepository.countTotalRowsCalonTamatanBySearchFilterStatusByFaculty(search_query, filterBy, filterValue);
-      const totalPage = Math.ceil(totalRows / limit);
-      const calonTamatan = await sptRepository.findCalonTamatanListPaginationFilterStatusByFaculty(search_query, page, limit, offset, filterBy, filterValue);
-      return { calonTamatan, totalRows, totalPage };
-    }
-    // filter by status by registar
-    else if (filterBy === "status-by-registar") {
-      const totalRows = await sptRepository.countTotalRowsCalonTamatanBySearchFilterStatusByRegistar(search_query, filterBy, filterValue);
-      const totalPage = Math.ceil(totalRows / limit);
-      const calonTamatan = await sptRepository.findCalonTamatanListPaginationFilterStatusByRegistar(search_query, page, limit, offset, filterBy, filterValue);
-      return { calonTamatan, totalRows, totalPage };
-    }
-    // filter by rencana tamat
-    else if (filterBy === "rencana-tamat") {
-      const totalRows = await sptRepository.countTotalRowsCalonTamatanBySearchFilterGraduatePlan(search_query, filterBy, filterValue);
-      const totalPage = Math.ceil(totalRows / limit);
-      const calonTamatan = await sptRepository.findCalonTamatanListPaginationFilterGraduatePlan(search_query, page, limit, offset, filterBy, filterValue);
-      return { calonTamatan, totalRows, totalPage };
-    }
+    const calonTamatan = await sptRepository.findCalonTamatanList(search_query);
+    return calonTamatan;
   } catch (error) {
     console.log(error.message);
   }

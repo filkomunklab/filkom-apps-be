@@ -121,126 +121,90 @@ const sendBroadcastWA = async (pesan, phoneNums) => {
   }
 };
 
-const getAlumniHasTracerStudyByOperator = async (
-  search_query,
-  page,
-  limit,
-  filterBy,
-  filterValue
-) => {
+const getAlumniHasTracerStudyByOperator = async (search_query, page, limit, filterBy, filterValue) => {
   const offset = limit * page;
 
   if (filterBy === "none") {
-    const totalRows =
-      await alumniRepository.countTotalRowsAlumniHasTracerStudyBySearch(
-        search_query
-      );
+    const totalRows = await alumniRepository.countTotalRowsAlumniHasTracerStudyBySearch(search_query);
     const totalPage = Math.ceil(totalRows / limit);
 
-    const alumni =
-      await alumniRepository.findAlumniHasTracerStudyListPagination(
-        search_query,
-        page,
-        limit,
-        offset
-      );
+    const alumni = await alumniRepository.findAlumniHasTracerStudyListPagination(search_query, page, limit, offset);
 
     return { alumni, totalRows, totalPage };
   } else if (filterBy === "graduate_year") {
-    const totalRows =
-      await alumniRepository.countTotalRowsAlumniHasTracerStudyBySearchWithFilterByGraduateYear(
-        search_query,
-        filterValue
-      );
+    const totalRows = await alumniRepository.countTotalRowsAlumniHasTracerStudyBySearchWithFilterByGraduateYear(search_query, filterValue);
     const totalPage = Math.ceil(totalRows / limit);
 
-    const alumni =
-      await alumniRepository.findAlumniHasTracerStudyListPaginationFilterByGraduateYear(
-        search_query,
-        page,
-        limit,
-        offset,
-        filterValue
-      );
+    const alumni = await alumniRepository.findAlumniHasTracerStudyListPaginationFilterByGraduateYear(search_query, page, limit, offset, filterValue);
     console.log("hai");
 
     return { alumni, totalRows, totalPage };
   } else if (filterBy === "major") {
-    const totalRows =
-      await alumniRepository.countTotalRowsAlumniHasTracerStudyBySearchWithFilterByMajor(
-        search_query,
-        filterValue
-      );
+    const totalRows = await alumniRepository.countTotalRowsAlumniHasTracerStudyBySearchWithFilterByMajor(search_query, filterValue);
     const totalPage = Math.ceil(totalRows / limit);
 
-    const alumni =
-      await alumniRepository.findAlumniHasTracerStudyListPaginationFilterByMajor(
-        search_query,
-        page,
-        limit,
-        offset,
-        filterValue
-      );
+    const alumni = await alumniRepository.findAlumniHasTracerStudyListPaginationFilterByMajor(search_query, page, limit, offset, filterValue);
     return { alumni, totalRows, totalPage };
   }
 };
 
 const getAllAlumni = async (
-  search_query,
-  page,
-  limit,
-  filterBy,
-  filterValue
+  search_query
+  // page,
+  // limit,
+  // filterBy,
+  // filterValue
 ) => {
-  const offset = limit * page;
+  // const offset = limit * page;
 
-  if (filterBy === "none") {
-    const totalRows = await alumniRepository.countTotalRowsAlumniBySearch(
-      search_query
-    );
-    const totalPage = Math.ceil(totalRows / limit);
-    const alumni = await alumniRepository.findAlumniListPagination(
-      search_query,
-      page,
-      limit,
-      offset
-    );
+  // if (filterBy === "none") {
+  // const totalRows = await alumniRepository.countTotalRowsAlumniBySearch(
+  //   search_query
+  // );
+  // const totalPage = Math.ceil(totalRows / limit);
+  const alumni = await alumniRepository.findAlumniListPagination(
+    search_query
+    // page,
+    // limit,
+    // offset
+  );
 
-    return { alumni, totalRows, totalPage };
-  } else if (filterBy === "graduate_year") {
-    const totalRows =
-      await alumniRepository.countTotalRowsAlumniBySearchWithFilterByGraduateYear(
-        search_query,
-        filterValue
-      );
-    const totalPage = Math.ceil(totalRows / limit);
-    const alumni =
-      await alumniRepository.findAlumniListPaginationFilterByGraduateYear(
-        search_query,
-        page,
-        limit,
-        offset,
-        filterValue
-      );
+  // return { alumni, totalRows, totalPage };
+  return { alumni };
+  // } else if (filterBy === "graduate_year") {
+  //   const totalRows =
+  //     await alumniRepository.countTotalRowsAlumniBySearchWithFilterByGraduateYear(
+  //       search_query,
+  //       filterValue
+  //     );
+  //   const totalPage = Math.ceil(totalRows / limit);
+  //   const alumni =
+  //     await alumniRepository.findAlumniListPaginationFilterByGraduateYear(
+  //       search_query,
+  //       page,
+  //       limit,
+  //       offset,
+  //       filterValue
+  //     );
 
-    return { alumni, totalRows, totalPage };
-  } else if (filterBy === "major") {
-    const totalRows =
-      await alumniRepository.countTotalRowsAlumniBySearchWithFilterByMajor(
-        search_query,
-        filterValue
-      );
-    const totalPage = Math.ceil(totalRows / limit);
-    const alumni = await alumniRepository.findAlumniListPaginationFilterByMajor(
-      search_query,
-      page,
-      limit,
-      offset,
-      filterValue
-    );
+  //   return { alumni, totalRows, totalPage };
+  // } else if (filterBy === "major") {
+  //   const totalRows =
+  //     await alumniRepository.countTotalRowsAlumniBySearchWithFilterByMajor(
+  //       search_query,
+  //       filterValue
+  //     );
+  //   const totalPage = Math.ceil(totalRows / limit);
+  //   const alumni = await alumniRepository.findAlumniListPaginationFilterByMajor(
+  //     search_query,
+  //     page,
+  //     limit,
+  //     offset,
+  //     filterValue
+  //   );
 
-    return { alumni, totalRows, totalPage };
-  }
+  //   return { alumni, totalRows, totalPage };
+  // }
 };
 
 module.exports = {
