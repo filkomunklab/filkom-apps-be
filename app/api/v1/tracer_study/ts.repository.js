@@ -18,11 +18,13 @@ const tracerstudy = async () => {
 const createTS = async (dataTS) => {
   return await prisma.tracer_Study.create({
     data: {
+      nimhsmsmh: dataTS.nimhsmsmh,
       kdptimsmh: dataTS.kdptimsmh,
       kdpstmsmh: dataTS.kdpstmsmh,
       nmmhsmsmh: dataTS.nmmhsmsmh,
       telpomsmh: dataTS.telpomsmh,
       emailmsmh: dataTS.emailmsmh,
+      tahun_lulus: dataTS.tahun_lulus,
       nik: dataTS.nik,
       npwp: dataTS.npwp,
       f8: dataTS.f8,

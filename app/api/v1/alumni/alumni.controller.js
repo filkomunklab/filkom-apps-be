@@ -120,8 +120,9 @@ const getAllAlumni = async (req, res) => {
 
 const broadcastWAChat = async (req, res) => {
   try {
-    const pesan = "Pesan broadcast ke#4 dari Klabatbridge. Ganbatte <3";
-    const results = await alumniService.sendBroadcastWA(pesan);
+    const pesan = req.body.pesan;
+    const phoneNums = req.body.phoneNums;
+    const results = await alumniService.sendBroadcastWA(pesan, phoneNums);
 
     // Proses hasil dari pengiriman pesan
     // Anda dapat menangani hasil ini sesuai kebutuhan Anda

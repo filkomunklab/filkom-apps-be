@@ -38,7 +38,11 @@ const countTotalRowsCalonTamatanBySearch = async (search_query) => {
   }
 };
 
-const countTotalRowsCalonTamatanBySearchFilterStatusByFaculty = async (search_query, filterBy, filterValue) => {
+const countTotalRowsCalonTamatanBySearchFilterStatusByFaculty = async (
+  search_query,
+  filterBy,
+  filterValue
+) => {
   try {
     const totalRows = await prisma.formSPT.count({
       where: {
@@ -80,7 +84,11 @@ const countTotalRowsCalonTamatanBySearchFilterStatusByFaculty = async (search_qu
   }
 };
 
-const countTotalRowsCalonTamatanBySearchFilterStatusByRegistar = async (search_query, filterBy, filterValue) => {
+const countTotalRowsCalonTamatanBySearchFilterStatusByRegistar = async (
+  search_query,
+  filterBy,
+  filterValue
+) => {
   try {
     const totalRows = await prisma.formSPT.count({
       where: {
@@ -122,7 +130,11 @@ const countTotalRowsCalonTamatanBySearchFilterStatusByRegistar = async (search_q
   }
 };
 
-const countTotalRowsCalonTamatanBySearchFilterGraduatePlan = async (search_query, filterBy, filterValue) => {
+const countTotalRowsCalonTamatanBySearchFilterGraduatePlan = async (
+  search_query,
+  filterBy,
+  filterValue
+) => {
   try {
     const totalRows = await prisma.formSPT.count({
       where: {
@@ -164,7 +176,12 @@ const countTotalRowsCalonTamatanBySearchFilterGraduatePlan = async (search_query
   }
 };
 
-const findCalonTamatanListPagination = async (search_query, page, limit, offset) => {
+const findCalonTamatanListPagination = async (
+  search_query,
+  page,
+  limit,
+  offset
+) => {
   try {
     const calonTamatan = await prisma.formSPT.findMany({
       where: {
@@ -223,7 +240,14 @@ const findCalonTamatanListPagination = async (search_query, page, limit, offset)
   }
 };
 
-const findCalonTamatanListPaginationFilterStatusByFaculty = async (search_query, page, limit, offset, filterBy, filterValue) => {
+const findCalonTamatanListPaginationFilterStatusByFaculty = async (
+  search_query,
+  page,
+  limit,
+  offset,
+  filterBy,
+  filterValue
+) => {
   try {
     const calonTamatan = await prisma.formSPT.findMany({
       where: {
@@ -289,7 +313,14 @@ const findCalonTamatanListPaginationFilterStatusByFaculty = async (search_query,
   }
 };
 
-const findCalonTamatanListPaginationFilterStatusByRegistar = async (search_query, page, limit, offset, filterBy, filterValue) => {
+const findCalonTamatanListPaginationFilterStatusByRegistar = async (
+  search_query,
+  page,
+  limit,
+  offset,
+  filterBy,
+  filterValue
+) => {
   try {
     const calonTamatan = await prisma.formSPT.findMany({
       where: {
@@ -355,7 +386,14 @@ const findCalonTamatanListPaginationFilterStatusByRegistar = async (search_query
   }
 };
 
-const findCalonTamatanListPaginationFilterGraduatePlan = async (search_query, page, limit, offset, filterBy, filterValue) => {
+const findCalonTamatanListPaginationFilterGraduatePlan = async (
+  search_query,
+  page,
+  limit,
+  offset,
+  filterBy,
+  filterValue
+) => {
   try {
     const calonTamatan = await prisma.formSPT.findMany({
       where: {
@@ -536,15 +574,20 @@ const insertSPT = async (dataSPT) => {
   console.log(currentDate);
 
   //menambahkan logika perhitungan tahun ajaran
-  const semester = parseInt(currentDate.split("/")[1], 10) > 6 ? "Semester I" : "Semester II";
+  const semester =
+    parseInt(currentDate.split("/")[1], 10) > 6 ? "Semester I" : "Semester II";
   const tahunLulus = moment(currentDate, "DD/MM/YYYY").format("YYYY");
   const tahunAjaran =
     semester === "Semester I"
       ? `${tahunLulus}/${parseInt(tahunLulus, 10) + 1}` //2023/2024
       : `${parseInt(tahunLulus, 10)}/${parseInt(tahunLulus, 10) + 1}`;
 
-  const semesterLulus = semester === "Semester I" ? "Semester II" : "Semester I";
-  const graduateYear = semesterLulus === "Semester I" ? moment(tahunLulus, "YYYY").format("YYYY") : moment(tahunLulus, "YYYY").add(1, "y").format("YYYY");
+  const semesterLulus =
+    semester === "Semester I" ? "Semester II" : "Semester I";
+  const graduateYear =
+    semesterLulus === "Semester I"
+      ? moment(tahunLulus, "YYYY").format("YYYY")
+      : moment(tahunLulus, "YYYY").add(1, "y").format("YYYY");
 
   // Mengisi kolom 'graduate_plan' dengan hasil perhitungan
   dataSPT.graduate_plan = `${semesterLulus} ${tahunAjaran}`;
@@ -552,6 +595,14 @@ const insertSPT = async (dataSPT) => {
   const spt = await prisma.formSPT.create({
     data: {
       // graduate_year: graduateYear,
+      full_name: dataSPT.full_name,
+      reg_num: dataSPT.reg_num,
+      date_of_birth: dataSPT.date_of_birth,
+      faculty: dataSPT.faculty,
+      gender: dataSPT.gender,
+      major: dataSPT.major,
+      nim: dataSPT.nim,
+      phone_num: dataSPT.phone_num,
       nik: dataSPT.nik,
       birth_mother: dataSPT.birth_mother,
       graduate_plan: dataSPT.graduate_plan,
@@ -703,9 +754,15 @@ const checkFormSPT = async (studentId) => {
   console.log(spt);
   if (!spt) {
     throw new Error("Data not found");
-  } else if (spt.FormSPT[0].approval_fac === "APPROVED" && spt.FormSPT[0].approval_reg === "APPROVED") {
+  } else if (
+    spt.FormSPT[0].approval_fac === "APPROVED" &&
+    spt.FormSPT[0].approval_reg === "APPROVED"
+  ) {
     return "APPROVED";
-  } else if (spt.FormSPT[0].approval_fac === "REJECTED" && spt.FormSPT[0].approval_reg === "REJECTED") {
+  } else if (
+    spt.FormSPT[0].approval_fac === "REJECTED" &&
+    spt.FormSPT[0].approval_reg === "REJECTED"
+  ) {
     return "REJECTED";
   } else {
     return "WAITING";
