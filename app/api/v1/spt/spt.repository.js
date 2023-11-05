@@ -603,6 +603,7 @@ const insertSPT = async (dataSPT) => {
       major: dataSPT.major,
       nim: dataSPT.nim,
       phone_num: dataSPT.phone_num,
+      personal_email: dataSPT.personal_email,
       nik: dataSPT.nik,
       birth_mother: dataSPT.birth_mother,
       graduate_plan: dataSPT.graduate_plan,
