@@ -467,7 +467,7 @@ const getCommitteeList = async () => {
   const submissions = await submissionRepository.findAllSubmissionByIsApproveId(
     "Waiting"
   );
-  const committeeListData = [];
+  const submissionBySemester = {};
   // looping to get all submission
   for (const entry of submissions) {
     const group = await groupRepository.findGroupBySubmissionId(entry.id);
@@ -534,9 +534,23 @@ const getCommitteeList = async () => {
       is_consultation: entry.is_consultation,
       is_approve: entry.is_approve,
     };
-    committeeListData.push(submissionData);
+    const classroom = await classroomRepository.findClassroomById(
+      entry.classroom_id
+    );
+    // Create a semester key based on the Academic_Calendar data
+    const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+    if (!submissionBySemester[semesterKey]) {
+      submissionBySemester[semesterKey] = {
+        semester: semesterKey,
+        submissions: [],
+      };
+    }
+
+    submissionBySemester[semesterKey].submissions.push(submissionData);
   }
-  return committeeListData;
+  // Convert the submissionBySemester object into an array of semesters
+  const submissionList = Object.values(submissionBySemester);
+  return submissionList;
 };
 
 //===================================================================
