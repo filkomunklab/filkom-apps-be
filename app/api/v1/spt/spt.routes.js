@@ -6,7 +6,7 @@ const router = express.Router();
 const sptController = require("./spt.controller");
 
 //@description     Get (pagination and filter) calon tamatan
-//@route           GET /api/v1/spt?search_query= &page= &limit= &filterBy= & filterValue=
+//@route           GET /api/v1/spt?search_query=
 //@access          Public
 router.get("/spt", sptController.getListSPT);
 

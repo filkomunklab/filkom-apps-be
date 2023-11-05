@@ -6,19 +6,12 @@ const sptService = require("./spt.service");
 const getListSPT = async (req, res) => {
   try {
     const search_query = req.query.search_query || "";
-    const page = parseInt(req.query.page) - 1 || 0;
-    const limit = parseInt(req.query.limit) || 10;
-    const filterBy = req.query.filterBy || "none";
-    const filterValue = req.query.filterValue;
 
-    const listSPT = await sptService.getListSPT(search_query, page, limit, filterBy, filterValue);
+    const calonTamatan = await sptService.getListSPT(search_query);
+    console.log("ini calon tamatan: ", calonTamatan);
     res.send({
       status: "OK",
-      data: listSPT.calonTamatan,
-      page: listSPT.totalPage > 0 ? page + 1 : 0,
-      limit,
-      totalRows: listSPT.totalRows ? listSPT.totalRows : 0,
-      totalPage: listSPT.totalPage ? listSPT.totalPage : 0,
+      data: calonTamatan,
     });
   } catch (error) {
     res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });

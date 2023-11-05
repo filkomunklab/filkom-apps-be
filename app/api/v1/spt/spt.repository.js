@@ -3,449 +3,25 @@ const prisma = require("../../../database");
 const moment = require("moment");
 const { student } = require("../../../database");
 
-const countTotalRowsCalonTamatanBySearch = async (search_query) => {
-  try {
-    const totalRows = await prisma.formSPT.count({
-      where: {
-        student: {
-          OR: [
-            {
-              firstName: {
-                contains: search_query,
-                mode: "insensitive",
-              },
-            },
-            {
-              lastName: {
-                contains: search_query,
-                mode: "insensitive",
-              },
-            },
-            {
-              nim: {
-                contains: search_query,
-                mode: "insensitive",
-              },
-            },
-          ],
-        },
-      },
-    });
-
-    return totalRows;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const countTotalRowsCalonTamatanBySearchFilterStatusByFaculty = async (
-  search_query,
-  filterBy,
-  filterValue
-) => {
-  try {
-    const totalRows = await prisma.formSPT.count({
-      where: {
-        AND: [
-          {
-            approval_fac: filterValue,
-          },
-          {
-            student: {
-              OR: [
-                {
-                  firstName: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  lastName: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  nim: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    });
-
-    return totalRows;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const countTotalRowsCalonTamatanBySearchFilterStatusByRegistar = async (
-  search_query,
-  filterBy,
-  filterValue
-) => {
-  try {
-    const totalRows = await prisma.formSPT.count({
-      where: {
-        AND: [
-          {
-            approval_reg: filterValue,
-          },
-          {
-            student: {
-              OR: [
-                {
-                  firstName: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  lastName: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  nim: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    });
-
-    return totalRows;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const countTotalRowsCalonTamatanBySearchFilterGraduatePlan = async (
-  search_query,
-  filterBy,
-  filterValue
-) => {
-  try {
-    const totalRows = await prisma.formSPT.count({
-      where: {
-        AND: [
-          {
-            graduate_plan: filterValue,
-          },
-          {
-            student: {
-              OR: [
-                {
-                  firstName: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  lastName: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  nim: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    });
-
-    return totalRows;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const findCalonTamatanListPagination = async (
-  search_query,
-  page,
-  limit,
-  offset
-) => {
+const findCalonTamatanList = async (search_query) => {
   try {
     const calonTamatan = await prisma.formSPT.findMany({
       where: {
-        student: {
-          OR: [
-            {
-              firstName: {
-                contains: search_query,
-                mode: "insensitive",
-              },
-            },
-            {
-              lastName: {
-                contains: search_query,
-                mode: "insensitive",
-              },
-            },
-            {
-              nim: {
-                contains: search_query,
-                mode: "insensitive",
-              },
-            },
-          ],
-        },
-      },
-      include: {
-        student: {
-          select: {
-            firstName: true,
-            lastName: true,
-            reg_num: true,
-            dateOfBirth: true,
-            gender: true,
-            nim: true,
-            faculty: true,
-            major: true,
-            phoneNo: true,
-            personalEmail: true,
-            status: true,
-          },
-        },
-      },
-      skip: offset,
-      take: limit,
-      orderBy: [
-        {
-          created_at: "desc",
-        },
-      ],
-    });
-
-    return calonTamatan;
-  } catch (error) {
-    console.log(error.messsage);
-  }
-};
-
-const findCalonTamatanListPaginationFilterStatusByFaculty = async (
-  search_query,
-  page,
-  limit,
-  offset,
-  filterBy,
-  filterValue
-) => {
-  try {
-    const calonTamatan = await prisma.formSPT.findMany({
-      where: {
-        AND: [
+        OR: [
           {
-            approval_fac: filterValue,
+            full_name: {
+              contains: search_query,
+              mode: "insensitive",
+            },
           },
           {
-            student: {
-              OR: [
-                {
-                  firstName: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  lastName: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  nim: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-              ],
+            nim: {
+              contains: search_query,
+              mode: "insensitive",
             },
           },
         ],
       },
-      include: {
-        student: {
-          select: {
-            firstName: true,
-            lastName: true,
-            reg_num: true,
-            dateOfBirth: true,
-            gender: true,
-            nim: true,
-            faculty: true,
-            major: true,
-            phoneNo: true,
-            personalEmail: true,
-            status: true,
-          },
-        },
-      },
-      skip: offset,
-      take: limit,
-      orderBy: [
-        {
-          created_at: "desc",
-        },
-      ],
-    });
-
-    return calonTamatan;
-  } catch (error) {
-    console.log(error.messsage);
-  }
-};
-
-const findCalonTamatanListPaginationFilterStatusByRegistar = async (
-  search_query,
-  page,
-  limit,
-  offset,
-  filterBy,
-  filterValue
-) => {
-  try {
-    const calonTamatan = await prisma.formSPT.findMany({
-      where: {
-        AND: [
-          {
-            approval_reg: filterValue,
-          },
-          {
-            student: {
-              OR: [
-                {
-                  firstName: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  lastName: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  nim: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-      include: {
-        student: {
-          select: {
-            firstName: true,
-            lastName: true,
-            reg_num: true,
-            dateOfBirth: true,
-            gender: true,
-            nim: true,
-            faculty: true,
-            major: true,
-            phoneNo: true,
-            personalEmail: true,
-            status: true,
-          },
-        },
-      },
-      skip: offset,
-      take: limit,
-      orderBy: [
-        {
-          created_at: "desc",
-        },
-      ],
-    });
-
-    return calonTamatan;
-  } catch (error) {
-    console.log(error.messsage);
-  }
-};
-
-const findCalonTamatanListPaginationFilterGraduatePlan = async (
-  search_query,
-  page,
-  limit,
-  offset,
-  filterBy,
-  filterValue
-) => {
-  try {
-    const calonTamatan = await prisma.formSPT.findMany({
-      where: {
-        AND: [
-          {
-            graduate_plan: filterValue,
-          },
-          {
-            student: {
-              OR: [
-                {
-                  firstName: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  lastName: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  nim: {
-                    contains: search_query,
-                    mode: "insensitive",
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-      include: {
-        student: {
-          select: {
-            firstName: true,
-            lastName: true,
-            reg_num: true,
-            dateOfBirth: true,
-            gender: true,
-            nim: true,
-            faculty: true,
-            major: true,
-            phoneNo: true,
-            personalEmail: true,
-            status: true,
-          },
-        },
-      },
-      skip: offset,
-      take: limit,
       orderBy: [
         {
           created_at: "desc",
@@ -488,23 +64,6 @@ const listSPT = async () => {
 const findSPTById = async (id) => {
   return await prisma.formSPT.findUnique({
     where: { id },
-    include: {
-      student: {
-        select: {
-          firstName: true,
-          lastName: true,
-          reg_num: true,
-          dateOfBirth: true,
-          gender: true,
-          nim: true,
-          faculty: true,
-          major: true,
-          phoneNo: true,
-          personalEmail: true,
-          status: true,
-        },
-      },
-    },
   });
 };
 
@@ -574,20 +133,15 @@ const insertSPT = async (dataSPT) => {
   console.log(currentDate);
 
   //menambahkan logika perhitungan tahun ajaran
-  const semester =
-    parseInt(currentDate.split("/")[1], 10) > 6 ? "Semester I" : "Semester II";
+  const semester = parseInt(currentDate.split("/")[1], 10) > 6 ? "Semester I" : "Semester II";
   const tahunLulus = moment(currentDate, "DD/MM/YYYY").format("YYYY");
   const tahunAjaran =
     semester === "Semester I"
       ? `${tahunLulus}/${parseInt(tahunLulus, 10) + 1}` //2023/2024
       : `${parseInt(tahunLulus, 10)}/${parseInt(tahunLulus, 10) + 1}`;
 
-  const semesterLulus =
-    semester === "Semester I" ? "Semester II" : "Semester I";
-  const graduateYear =
-    semesterLulus === "Semester I"
-      ? moment(tahunLulus, "YYYY").format("YYYY")
-      : moment(tahunLulus, "YYYY").add(1, "y").format("YYYY");
+  const semesterLulus = semester === "Semester I" ? "Semester II" : "Semester I";
+  const graduateYear = semesterLulus === "Semester I" ? moment(tahunLulus, "YYYY").format("YYYY") : moment(tahunLulus, "YYYY").add(1, "y").format("YYYY");
 
   // Mengisi kolom 'graduate_plan' dengan hasil perhitungan
   dataSPT.graduate_plan = `${semesterLulus} ${tahunAjaran}`;
@@ -624,9 +178,6 @@ const patchapprovalByFak = async (id, status) => {
       where: { id },
       data: {
         approval_fac: status,
-      },
-      include: {
-        student: true,
       },
     });
   } catch (error) {
@@ -665,9 +216,6 @@ const patchapprovalByReg = async (id, status) => {
       where: { id },
       data: {
         approval_reg: status,
-      },
-      include: {
-        student: true,
       },
     });
   } catch (error) {
@@ -755,15 +303,9 @@ const checkFormSPT = async (studentId) => {
   console.log(spt);
   if (!spt) {
     throw new Error("Data not found");
-  } else if (
-    spt.FormSPT[0].approval_fac === "APPROVED" &&
-    spt.FormSPT[0].approval_reg === "APPROVED"
-  ) {
+  } else if (spt.FormSPT[0].approval_fac === "APPROVED" && spt.FormSPT[0].approval_reg === "APPROVED") {
     return "APPROVED";
-  } else if (
-    spt.FormSPT[0].approval_fac === "REJECTED" &&
-    spt.FormSPT[0].approval_reg === "REJECTED"
-  ) {
+  } else if (spt.FormSPT[0].approval_fac === "REJECTED" && spt.FormSPT[0].approval_reg === "REJECTED") {
     return "REJECTED";
   } else {
     return "WAITING";
@@ -781,12 +323,5 @@ module.exports = {
   listApprovalSPTbyReg,
   filterSPT,
   checkFormSPT,
-  countTotalRowsCalonTamatanBySearch,
-  countTotalRowsCalonTamatanBySearchFilterStatusByFaculty,
-  countTotalRowsCalonTamatanBySearchFilterStatusByRegistar,
-  countTotalRowsCalonTamatanBySearchFilterGraduatePlan,
-  findCalonTamatanListPagination,
-  findCalonTamatanListPaginationFilterStatusByFaculty,
-  findCalonTamatanListPaginationFilterStatusByRegistar,
-  findCalonTamatanListPaginationFilterGraduatePlan,
+  findCalonTamatanList,
 };
