@@ -35,9 +35,9 @@ const filterAlumni = async (filter) => {
 };
 
 //send email
-const sendEmail = async () => {
-  const alumniList = await alumniRepository.getAlumniList();
-
+const sendEmail = async (recipientEmails) => {
+  // const alumniList = await alumniRepository.getAlumniList();
+  const personalEmails = recipientEmails;
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -48,7 +48,7 @@ const sendEmail = async () => {
 
   const mailOptions = {
     from: "<no-reply>", // sender address
-    bcc: alumniList.map((student) => student.personalEmail).join(", "),
+    to: personalEmails.join(", "),
     subject: "Undangan Seminar Teknologi Terbaru #3", // Subject line
     html: `Kepada Jerico Katong,
     
