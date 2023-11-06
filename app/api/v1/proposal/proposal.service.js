@@ -625,6 +625,24 @@ const getAllProposalSchedule = async () => {
   await Promise.all(
     proposal.map(async (proposal) => {
       const group = groups.find((group) => group.proposal_id === proposal.id);
+      const studentIds = await groupStudentRepository.findGroupStudentByGroupId(
+        group.id
+      );
+
+      const students = [];
+      for (const entry of studentIds) {
+        const student = await studentRepository.findStudentById(entry);
+        let name = student.firstName;
+        if (student.lastName) {
+          name += ` ${student.lastName}`;
+        }
+        const studentData = {
+          id: student.id,
+          fullName: name,
+          nim: student.nim,
+        };
+        students.push(studentData);
+      }
       // Menggabungkan firstName dan lastName menjadi fullName
       const getEmployeeNameAndDegree = async (firstName, lastName, degree) => {
         let name = firstName;
@@ -665,6 +683,7 @@ const getAllProposalSchedule = async () => {
           group_id: group.id,
           proposal_id: proposal.id,
           title: group.title,
+          students,
           advisor: advisorName,
           panelist_chairman: panelistChairmanName || null,
           panelist_member: panelistMemberName || null,

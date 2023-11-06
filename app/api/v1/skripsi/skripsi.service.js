@@ -620,6 +620,25 @@ const getAllSkripsiSchedule = async () => {
   await Promise.all(
     skripsi.map(async (skripsi) => {
       const group = groups.find((group) => group.skripsi_id === skripsi.id);
+      const studentIds = await groupStudentRepository.findGroupStudentByGroupId(
+        group.id
+      );
+
+      const students = [];
+      for (const entry of studentIds) {
+        const student = await studentRepository.findStudentById(entry);
+        let name = student.firstName;
+        if (student.lastName) {
+          name += ` ${student.lastName}`;
+        }
+        const studentData = {
+          id: student.id,
+          fullName: name,
+          nim: student.nim,
+        };
+        students.push(studentData);
+      }
+
       // Menggabungkan firstName dan lastName menjadi fullName
       const getEmployeeNameAndDegree = async (firstName, lastName, degree) => {
         let name = firstName;
@@ -660,6 +679,7 @@ const getAllSkripsiSchedule = async () => {
           group_id: group.id,
           skripsi_id: skripsi.id,
           title: group.title,
+          students,
           advisor: advisorName,
           panelist_chairman: panelistChairmanName || null,
           panelist_member: panelistMemberName || null,
