@@ -541,6 +541,7 @@ const findAllProposalSchedule = async () => {
       end_defence: true,
       defence_room: true,
       defence_date: true,
+      classroom_id: true,
     },
   });
 
