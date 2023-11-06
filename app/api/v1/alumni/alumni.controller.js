@@ -46,7 +46,8 @@ const filterAlumniBy = async (req, res) => {
 //send email
 const sendBroadcastEmail = async (req, res) => {
   try {
-    const broadcastEmail = await alumniService.sendEmail();
+    const recipientEmails = req.body.recipientEmails;
+    await alumniService.sendEmail(recipientEmails);
     res.send({ status: "OK", message: "broadcast email sent successfully" });
   } catch (error) {
     res
