@@ -4,20 +4,20 @@ const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrCode = require("qrcode-terminal");
 const fs = require("fs");
 
-//broadcast WA
-const client = new Client({
-  authStrategy: new LocalAuth(),
-});
+// //broadcast WA
+// const client = new Client({
+//   authStrategy: new LocalAuth(),
+// });
 
-client.on("qr", (qr) => {
-  qrCode.generate(qr, { small: true });
-});
+// client.on("qr", (qr) => {
+//   qrCode.generate(qr, { small: true });
+// });
 
-client.on("ready", () => {
-  console.log("WhatsApp Client Is Ready");
-});
+// client.on("ready", () => {
+//   console.log("WhatsApp Client Is Ready");
+// });
 
-client.initialize();
+// client.initialize();
 
 //daftar alumni
 const getAlumniList = async () => {
@@ -97,33 +97,33 @@ const sendBroadcastWA = async (pesan, phoneNums) => {
     // const phoneNums
 
     // const phoneNoTest = ["+6289612288774"];
-    const results = await Promise.all(
-      phoneNums.map(async (phoneNo) => {
-        if (phoneNo.startsWith("+62")) {
-          phoneNo = "62" + phoneNo.slice(3) + "@c.us";
-        } else if (phoneNo.startsWith("0")) {
-          phoneNo = "62" + phoneNo.slice(1) + "@c.us";
-        } else if (phoneNo.startsWith("62")) {
-          phoneNo = phoneNo + "@c.us";
-        } else {
-          phoneNo = "62" + phoneNo + "@c.us";
-        }
+    // const results = await Promise.all(
+    //   phoneNums.map(async (phoneNo) => {
+    //     if (phoneNo.startsWith("+62")) {
+    //       phoneNo = "62" + phoneNo.slice(3) + "@c.us";
+    //     } else if (phoneNo.startsWith("0")) {
+    //       phoneNo = "62" + phoneNo.slice(1) + "@c.us";
+    //     } else if (phoneNo.startsWith("62")) {
+    //       phoneNo = phoneNo + "@c.us";
+    //     } else {
+    //       phoneNo = "62" + phoneNo + "@c.us";
+    //     }
 
-        const user = await client.isRegisteredUser(phoneNo);
-        if (user) {
-          await client.sendMessage(phoneNo, pesan);
-          return {
-            status: "success",
-            pesan: `Pesan Terkirim ke ${phoneNo} !`,
-          };
-        } else {
-          return {
-            status: "GAGAL",
-            pesan: `nomor ${phoneNo} tidak terdaftar di WhatsApp`,
-          };
-        }
-      })
-    );
+    //     const user = await client.isRegisteredUser(phoneNo);
+    //     if (user) {
+    //       await client.sendMessage(phoneNo, pesan);
+    //       return {
+    //         status: "success",
+    //         pesan: `Pesan Terkirim ke ${phoneNo} !`,
+    //       };
+    //     } else {
+    //       return {
+    //         status: "GAGAL",
+    //         pesan: `nomor ${phoneNo} tidak terdaftar di WhatsApp`,
+    //       };
+    //     }
+    //   })
+    // );
 
     return results;
   } catch (error) {
