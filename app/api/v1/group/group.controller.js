@@ -257,6 +257,29 @@ const getProposalListAdvisor = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get skripsi list advisor
+// @route           GET /group/skripsi-list-advisor
+// @access          DOSEN
+const getSkripsiListAdvisor = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_list_advisor")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getSkripsiListAdvisor(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
 // @description     Get proposal list co-advisor
 // @route           GET /group/proposal-list-co-advisor
 // @access          DOSEN
@@ -271,6 +294,29 @@ const getProposalListCoAdvisor = async (req, res) => {
   try {
     const userId = req.user.user.id;
     const group = await groupService.getProposalListCoAdvisor(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get skripsi list co-advisor
+// @route           GET /group/skripsi-list-co-advisor
+// @access          DOSEN
+const getSkripsiListCoAdvisor = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_list_co_advisor")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getSkripsiListCoAdvisor(userId);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -303,6 +349,29 @@ const getProposalListChairman = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get skripsi list chairman
+// @route           GET /group/skripsi-list-chairman
+// @access          DOSEN
+const getSkripsiListChairman = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_list_chairman")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getSkripsiListChairman(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
 // @description     Get proposal list member
 // @route           GET /group/proposal-list-member
 // @access          DOSEN
@@ -326,6 +395,29 @@ const getProposalListMember = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get skripsi list member
+// @route           GET /group/skripsi-list-member
+// @access          DOSEN
+const getSkripsiListMember = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_list_member")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getSkripsiListMember(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
 // @description     Get proposal list mk
 // @route           GET /group/proposal-list-mk
 // @access          DOSEN_MK
@@ -340,6 +432,29 @@ const getProposalListMK = async (req, res) => {
   try {
     const userId = req.user.user.id;
     const group = await groupService.getProposalListMK(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get skripsi list mk
+// @route           GET /group/skripsi-list-mk
+// @access          DOSEN_MK
+const getSkripsiListMK = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_list_mk")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getSkripsiListMK(userId);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -373,6 +488,30 @@ const getProposalListKaprodi = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get skripsi list kaprodi IF/SI
+// @route           GET /group/skripsi-list-kaprodi
+// @access          KAPRODI
+const getSkripsiListKaprodi = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_list_kaprodi")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const userRole = req.user.user.role;
+    const group = await groupService.getSkripsiListKaprodi(userId, userRole);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
 // @description     Get proposal list dekan
 // @route           GET /group/proposal-list-dekan
 // @access          DEKAN
@@ -397,6 +536,30 @@ const getProposalListDekan = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get skripsi list dekan
+// @route           GET /group/skripsi-list-dekan
+// @access          DEKAN
+const getSkripsiListDekan = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_list_dekan")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const userRole = req.user.user.role;
+    const group = await groupService.getSkripsiListDekan(userId, userRole);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
 // @description     Get proposal list operator fakultas/filkom
 // @route           GET /group/proposal-list-sekretaris
 // @access          OPERATOR_FAKULTAS
@@ -410,6 +573,28 @@ const getProposalListSekretaris = async (req, res) => {
   }
   try {
     const group = await groupService.getProposalListSekretaris();
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get skripsi list operator fakultas/filkom
+// @route           GET /group/skripsi-list-sekretaris
+// @access          OPERATOR_FAKULTAS
+const getSkripsiListSekretaris = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_list_sekretaris")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const group = await groupService.getSkripsiListSekretaris();
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -492,4 +677,12 @@ module.exports = {
   // getGroupStudentById,
   // updateMetadataById,
   // getMetadataById,
+  getSkripsiListCoAdvisor,
+  getSkripsiListAdvisor,
+  getSkripsiListChairman,
+  getSkripsiListMember,
+  getSkripsiListMK,
+  getSkripsiListKaprodi,
+  getSkripsiListDekan,
+  getSkripsiListSekretaris,
 };
