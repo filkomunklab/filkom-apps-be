@@ -121,12 +121,13 @@ const getAllAlumni = async (req, res) => {
 
 const broadcastWAChat = async (req, res) => {
   try {
-    const pesan = req.body.pesan;
-    const phoneNums = req.body.phoneNums;
-    const results = await alumniService.sendBroadcastWA(pesan, phoneNums);
+    const { pesan, phoneNums } = req.body;
 
-    // Proses hasil dari pengiriman pesan
-    // Anda dapat menangani hasil ini sesuai kebutuhan Anda
+    if (!pesan || !phoneNums) {
+      return res.status(400).json({ status: "error", pesan: "Bad request" });
+    }
+
+    const results = await alumniService.sendBroadcastWA(pesan, phoneNums);
     res.status(200).send(results);
   } catch (error) {
     console.error(error);

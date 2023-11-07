@@ -60,6 +60,9 @@ const alumniTS = async (search_query) => {
       faculty: true,
       graduate_year: true,
       Tracer_Study: true,
+      FormSPT: {
+        select: {},
+      },
     },
   });
   const data = alumniList.map((item) => ({
@@ -114,16 +117,16 @@ const filterAlumni = async (filter) => {
   });
 };
 
-const phoneNumbers = async () => {
-  const phoneNo = await prisma.student.findMany({
-    select: {
-      firstName: true,
-      lastName: true,
-      phoneNo: true,
-    },
-  });
-  return phoneNo.map((student) => student.phoneNo);
-};
+// const phoneNumbers = async () => {
+//   const phoneNo = await prisma.student.findMany({
+//     select: {
+//       firstName: true,
+//       lastName: true,
+//       phoneNo: true,
+//     },
+//   });
+//   return phoneNo.map((student) => student.phoneNo);
+// };
 
 // ================================================================================== JERICO
 const countTotalRowsAlumniHasTracerStudyBySearch = async (search_query) => {
@@ -793,7 +796,7 @@ module.exports = {
   getAlumniList,
   filterAlumni,
   alumniTS,
-  phoneNumbers,
+  // phoneNumbers,
 
   countTotalRowsAlumniHasTracerStudyBySearch,
   countTotalRowsAlumniHasTracerStudyBySearchWithFilterByGraduateYear,
