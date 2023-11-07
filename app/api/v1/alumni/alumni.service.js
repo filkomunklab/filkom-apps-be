@@ -4,7 +4,7 @@ const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrCode = require("qrcode-terminal");
 const fs = require("fs");
 
-//broadcast WA UNCOMMENT THIS LINE BELLOW TO USE WA BRODCAST SERVICE
+// //broadcast WA
 // const client = new Client({
 //   authStrategy: new LocalAuth(),
 // });
@@ -38,6 +38,10 @@ const filterAlumni = async (filter) => {
 const sendEmail = async (recipientEmails) => {
   // const alumniList = await alumniRepository.getAlumniList();
   const personalEmails = recipientEmails;
+  // const personalEmails = [
+  //   "deilpremium883@gmail.com",
+  //   "s2200049@student.unklab.ac.id",
+  // ];
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -89,13 +93,15 @@ const sendEmail = async (recipientEmails) => {
 
 const sendBroadcastWA = async (pesan, phoneNums) => {
   try {
-    const phoneNumbers = await alumniRepository.phoneNumbers();
+    // const phoneNumbers = await alumniRepository.phoneNumbers();
+    // const phoneNums
 
-    // UNCOMMENT THIS LINE BELLOW TO USE WA BROADCAST SERVICE
-
+    // const phoneNoTest = ["+6289612288774"];
     // const results = await Promise.all(
-    //   phoneNumbers.map(async (phoneNo) => {
-    //     if (phoneNo.startsWith("0")) {
+    //   phoneNums.map(async (phoneNo) => {
+    //     if (phoneNo.startsWith("+62")) {
+    //       phoneNo = "62" + phoneNo.slice(3) + "@c.us";
+    //     } else if (phoneNo.startsWith("0")) {
     //       phoneNo = "62" + phoneNo.slice(1) + "@c.us";
     //     } else if (phoneNo.startsWith("62")) {
     //       phoneNo = phoneNo + "@c.us";
@@ -106,7 +112,10 @@ const sendBroadcastWA = async (pesan, phoneNums) => {
     //     const user = await client.isRegisteredUser(phoneNo);
     //     if (user) {
     //       await client.sendMessage(phoneNo, pesan);
-    //       return { status: "success", pesan: `Pesan Terkirim ke ${phoneNo} !` };
+    //       return {
+    //         status: "success",
+    //         pesan: `Pesan Terkirim ke ${phoneNo} !`,
+    //       };
     //     } else {
     //       return {
     //         status: "GAGAL",

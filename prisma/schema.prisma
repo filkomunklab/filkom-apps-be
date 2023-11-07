@@ -150,15 +150,15 @@ model FormSPT {
   reg_num           String
   date_of_birth     String
   gender            Gender
+  nik               String
   nim               String
   faculty           String
   major             String
+  minor             String?
+  birth_mother      String
   phone_num         String
   personal_email    String
-  nik               String
-  birth_mother      String
   graduate_plan     String
-  minor             String?
   remaining_credits String
   remaining_classes String
   approval_fac      status    @default(WAITING) // approved dan reject, default waiting
