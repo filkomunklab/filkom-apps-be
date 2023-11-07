@@ -176,6 +176,7 @@ const findManyGroupsByProposalIds = async (proposalIds) => {
       id: true,
       proposal_id: true,
       title: true,
+      progress: true,
     },
   });
   return groups;
