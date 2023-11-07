@@ -560,6 +560,7 @@ const findAllSkripsiSchedule = async () => {
       end_defence: true,
       defence_room: true,
       defence_date: true,
+      classroom_id: true,
     },
   });
 
@@ -1415,6 +1416,88 @@ const deleteLinkSourceCodeById = async (id) => {
   });
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all skripsi by advisor id
+// @used            Group,
+const findAllSkripsiByAdvisorId = async (userId) => {
+  const skripsi = await prisma.skripsi.findMany({
+    where: {
+      OR: [
+        {
+          co_advisor1_id: userId,
+        },
+        {
+          co_advisor2_id: userId,
+        },
+      ],
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all skripsi by co-advisor id
+// @used            Group,
+const findAllSkripsiByCoAdvisorId = async (userId) => {
+  const skripsi = await prisma.skripsi.findMany({
+    where: {
+      OR: [
+        {
+          co_advisor1_id: userId,
+        },
+        {
+          co_advisor2_id: userId,
+        },
+      ],
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all skripsi by chairman
+// @used            Group,
+const findAllSkripsiByChairman = async (userId) => {
+  const skripsi = await prisma.skripsi.findMany({
+    where: {
+      panelist_chairman_id: userId,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all skripsi by member
+// @used            Group,
+const findAllSkripsiByMember = async (userId) => {
+  const skripsi = await prisma.skripsi.findMany({
+    where: {
+      panelist_member_id: userId,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all skripsi by classroom_id
+// @used            Group,
+const findAllSkripsiByClassroomId = async (classroom_id) => {
+  const skripsi = await prisma.skripsi.findMany({
+    where: {
+      classroom_id,
+    },
+  });
+  return skripsi;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all skripsi
+// @used            Group,
+const findAllSkripsi = async () => {
+  const skripsi = await prisma.skripsi.findMany();
+  return skripsi;
+};
+
 module.exports = {
   insertSkripsi,
   updateSkripsiChairmanAndMemberById,
@@ -1491,4 +1574,10 @@ module.exports = {
   updateLinkSourceCodeById,
   findLinkSourceCodeById,
   deleteLinkSourceCodeById,
+  findAllSkripsiByAdvisorId,
+  findAllSkripsiByCoAdvisorId,
+  findAllSkripsiByChairman,
+  findAllSkripsiByMember,
+  findAllSkripsiByClassroomId,
+  findAllSkripsi,
 };

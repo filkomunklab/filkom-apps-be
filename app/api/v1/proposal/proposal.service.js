@@ -16,6 +16,7 @@ const studentRepository = require("../student/student.repository");
 const proposalAssessmentRepository = require("../proposal_assessment/proposal_assessment.repository");
 const proposalChangesRepository = require("../proposal_changes/proposal_changes.repository");
 const skripsiRepository = require("../skripsi/skripsi.repository");
+const classroomRepository = require("../classroom/classroom.repository");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get proposal by id
@@ -618,10 +619,30 @@ const getAllProposalSchedule = async () => {
   // Dapatkan grup berdasarkan proposalIds
   const groups = await groupRepository.findManyGroupsByProposalIds(proposalIds);
 
+  const scheduleBySemester = {};
+
   // Menggabungkan data proposal dengan data grup
-  const result = await Promise.all(
+  await Promise.all(
     proposal.map(async (proposal) => {
       const group = groups.find((group) => group.proposal_id === proposal.id);
+      const studentIds = await groupStudentRepository.findGroupStudentByGroupId(
+        group.id
+      );
+
+      const students = [];
+      for (const entry of studentIds) {
+        const student = await studentRepository.findStudentById(entry);
+        let name = student.firstName;
+        if (student.lastName) {
+          name += ` ${student.lastName}`;
+        }
+        const studentData = {
+          id: student.id,
+          fullName: name,
+          nim: student.nim,
+        };
+        students.push(studentData);
+      }
       // Menggabungkan firstName dan lastName menjadi fullName
       const getEmployeeNameAndDegree = async (firstName, lastName, degree) => {
         let name = firstName;
@@ -652,11 +673,17 @@ const getAllProposalSchedule = async () => {
         proposal.panelist_member?.degree
       );
 
+      // get classroom
+      const classroom = await classroomRepository.findClassroomById(
+        proposal.classroom_id
+      );
+
       if (group) {
-        return {
+        const data = {
           group_id: group.id,
           proposal_id: proposal.id,
           title: group.title,
+          students,
           advisor: advisorName,
           panelist_chairman: panelistChairmanName || null,
           panelist_member: panelistMemberName || null,
@@ -665,12 +692,24 @@ const getAllProposalSchedule = async () => {
           defence_room: proposal.defence_room,
           defence_date: proposal.defence_date,
         };
+        // Create a semester key based on the Academic_Calendar data
+        const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+        if (!scheduleBySemester[semesterKey]) {
+          scheduleBySemester[semesterKey] = {
+            semester: semesterKey,
+            schedules: [],
+          };
+        }
+
+        scheduleBySemester[semesterKey].schedules.push(data);
       }
-      return null;
     })
   );
+  // Convert the scheduleBySemester object into an array of semesters
+  const scheduleList = Object.values(scheduleBySemester);
 
-  return result;
+  return scheduleList;
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

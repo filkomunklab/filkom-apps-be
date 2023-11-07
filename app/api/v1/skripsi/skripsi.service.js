@@ -15,6 +15,7 @@ const employeeRepository = require("../employee/employee.repository");
 const studentRepository = require("../student/student.repository");
 const skripsiAssessmentRepository = require("../skripsi_assessment/skripsi_assessment.repository");
 const skripsiChangesRepository = require("../skripsi_changes/skripsi_changes.repository");
+const classroomRepository = require("../classroom/classroom.repository");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get skripsi by id
@@ -89,7 +90,9 @@ const updateSkripsiDocumentById = async (userId, id, payload) => {
     storage,
     `skripsi/${group.id}/${payload.skripsi_file.file_name_skripsi}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/pdf",
+  };
   const binaryString = atob(payload.skripsi_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
@@ -447,7 +450,9 @@ const updateSkripsiPaymentById = async (id, userId, payload) => {
     storage,
     `skripsi/${group.id}/${payload.payment_file.file_name_payment}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/pdf",
+  };
   const binaryString = atob(payload.payment_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
@@ -536,7 +541,9 @@ const updateSkripsiPlagiarismById = async (id, userId, payload) => {
     storage,
     `skripsi/${group.id}/${payload.plagiarism_file.file_name_plagiarismcheck}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/pdf",
+  };
   const binaryString = atob(payload.plagiarism_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
@@ -613,10 +620,31 @@ const getAllSkripsiSchedule = async () => {
   // Dapatkan grup berdasarkan skripsiIds
   const groups = await groupRepository.findManyGroupsBySkripsiIds(skripsiIds);
 
+  const scheduleBySemester = {};
+
   // Menggabungkan data skripsi dengan data grup
-  const result = await Promise.all(
+  await Promise.all(
     skripsi.map(async (skripsi) => {
       const group = groups.find((group) => group.skripsi_id === skripsi.id);
+      const studentIds = await groupStudentRepository.findGroupStudentByGroupId(
+        group.id
+      );
+
+      const students = [];
+      for (const entry of studentIds) {
+        const student = await studentRepository.findStudentById(entry);
+        let name = student.firstName;
+        if (student.lastName) {
+          name += ` ${student.lastName}`;
+        }
+        const studentData = {
+          id: student.id,
+          fullName: name,
+          nim: student.nim,
+        };
+        students.push(studentData);
+      }
+
       // Menggabungkan firstName dan lastName menjadi fullName
       const getEmployeeNameAndDegree = async (firstName, lastName, degree) => {
         let name = firstName;
@@ -647,11 +675,17 @@ const getAllSkripsiSchedule = async () => {
         skripsi.panelist_member?.degree
       );
 
-      if (group) {
-        return {
+      // get classroom
+      if (group && skripsi.classroom_id) {
+        const classroom = await classroomRepository.findClassroomById(
+          skripsi.classroom_id
+        );
+
+        const data = {
           group_id: group.id,
           skripsi_id: skripsi.id,
           title: group.title,
+          students,
           advisor: advisorName,
           panelist_chairman: panelistChairmanName || null,
           panelist_member: panelistMemberName || null,
@@ -660,12 +694,24 @@ const getAllSkripsiSchedule = async () => {
           defence_room: skripsi.defence_room,
           defence_date: skripsi.defence_date,
         };
+        // Create a semester key based on the Academic_Calendar data
+        const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+        if (!scheduleBySemester[semesterKey]) {
+          scheduleBySemester[semesterKey] = {
+            semester: semesterKey,
+            schedules: [],
+          };
+        }
+
+        scheduleBySemester[semesterKey].schedules.push(data);
       }
-      return null;
     })
   );
+  // Convert the scheduleBySemester object into an array of semesters
+  const scheduleList = Object.values(scheduleBySemester);
 
-  return result;
+  return scheduleList;
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1257,7 +1303,9 @@ const updateSkripsiRevisionDocumentById = async (id, userId, payload) => {
     storage,
     `skripsi/${group.id}/${payload.revision_file.file_name_revision}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/pdf",
+  };
   const binaryString = atob(payload.revision_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
@@ -1656,7 +1704,9 @@ const updateHKIById = async (id, userId, payload) => {
     storage,
     `skripsi/${group.id}/${payload.hki_file.file_name_hki}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/pdf",
+  };
   const binaryString = atob(payload.hki_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
@@ -1745,7 +1795,9 @@ const updateJournalById = async (id, userId, payload) => {
     storage,
     `skripsi/${group.id}/${payload.journal_file.file_name_journal}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/pdf",
+  };
   const binaryString = atob(payload.journal_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
@@ -1834,7 +1886,9 @@ const updateSourceCodeById = async (id, userId, payload) => {
     storage,
     `skripsi/${group.id}/${payload.source_code_file.file_name_sourcecode}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/zip",
+  };
   const binaryString = atob(payload.source_code_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
