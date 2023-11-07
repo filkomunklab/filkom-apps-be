@@ -196,6 +196,7 @@ const findManyGroupsBySkripsiIds = async (skripsiIds) => {
       id: true,
       skripsi_id: true,
       title: true,
+      progress: true,
     },
   });
   return groups;

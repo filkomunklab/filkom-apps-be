@@ -621,7 +621,7 @@ const getAllProposalSchedule = async () => {
   // Menggabungkan data proposal dengan data grup
   await Promise.all(
     proposals.map(async (proposal) => {
-      // memproses pengambilan jadwal proposal yang belum mulai sidang dan masih progres proposal
+      // memproses pengambilan jadwal proposal yang belum mulai sidang
       if (proposal.is_report_open !== true) {
         for (const group of groups) {
           // memproses jika menemukan group yang progress di "Proposal"
