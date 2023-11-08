@@ -33,7 +33,23 @@ const getSPTByNIM = async (nim) => {
 };
 
 const createSPT = async (dataSPT) => {
-  return await sptRepository.insertSPT(dataSPT);
+  const storageRef = ref(
+    storage,
+    `certificate/${dataSPT.nim}/${dataSPT.certificateFile.filename}`
+  );
+  const metadata = { contentType: "application/pdf" };
+  try {
+    const binaryString = atob(dataSPT.certificateFile.buffer);
+    const byteArray = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      byteArray[i] = binaryString.charCodeAt(i);
+    }
+    await uploadBytes(storageRef, byteArray, metadata);
+    const path = await getDownloadURL(storageRef);
+    await sptRepository.insertSPT(dataSPT, path);
+  } catch (error) {
+    throw error;
+  }
 };
 
 const approvalByFak = async (id, status) => {

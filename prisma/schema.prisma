@@ -161,6 +161,7 @@ model FormSPT {
   graduate_plan     String
   remaining_credits String
   remaining_classes String
+  certificateURL    String?
   approval_fac      status    @default(WAITING) // approved dan reject, default waiting
   approval_reg      status    @default(WAITING)
   created_at        DateTime  @default(now())
