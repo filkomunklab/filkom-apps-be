@@ -206,7 +206,7 @@ const rejectSubmissionById = async (req, res) => {
 // @access          MAHASISWA
 const updateSubmissionTitleById = async (req, res) => {
   const policy = policyFor(req.user);
-  if (!policy.can("update", "title")) {
+  if (!policy.can("update", "Submission")) {
     return res.status(401).send({
       status: "FAILED",
       data: { error: "You don't have permission to perform this action" },
