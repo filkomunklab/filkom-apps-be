@@ -61,8 +61,8 @@ model Employee {
   proposal_changes          Proposal_Changes[]    @relation("Dosen")
   skripsi_changes           Skripsi_Changes[]     @relation("Dosen")
 
-  supervisior Consultation[]    @relation("supervisior")
-  reciever    Consultation[]    @relation("consultationRecivier")
+  supervisior Academic_Consultation[]    @relation("supervisior")
+  reciever    Academic_Consultation[]    @relation("consultationRecivier")
   preRegis    PreRegistration[]
   transaction Transaction[]
   message     Message[]
@@ -115,13 +115,13 @@ model Student {
   skripsi_assessment  Skripsi_Assessment[]  @relation("Student")
   FormSPT             FormSPT[]
 
-  consultation Consultation[]
-  preRegis     PreRegistration[]
-  transaction  Transaction[]
-  message      Message[]
-  Employee     Employee?         @relation(fields: [employeeId], references: [id])
-  employeeId   String?
-  Tracer_Study Tracer_Study[]
+  academic_Consultation      Academic_Consultation[]
+  preRegis          PreRegistration[]
+  transaction       Transaction[]
+  message           Message[]
+  Employee          Employee?         @relation(fields: [employeeId], references: [id])
+  employeeId        String?
+  Tracer_Study      Tracer_Study[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
@@ -574,11 +574,11 @@ model PreRegistration {
   studentId   String?
 }
 
-model Consultation {
+model Academic_Consultation {
   id         String            @id @default(uuid())
   topic      String
-  submitDate DateTime
-  status     String
+  submitDate DateTime @default(now)
+  status     String @default(WAITING)
   message    Message[]
   history    HistoryAcademic[]
   Dosen      Employee?         @relation("supervisior", fields: [DosenId], references: [id])
@@ -591,8 +591,8 @@ model Consultation {
 
 model Message {
   id             String        @id @default(uuid())
-  Consultation   Consultation? @relation(fields: [consultationId], references: [id])
-  consultationId String?
+  academic_Consultation   Academic_Consultation? @relation(fields: [academicConsultationId], references: [id])
+  academicConsultationId String?
   sendTime       DateTime      @default(now())
   Student        Student?      @relation(fields: [studentId], references: [id])
   studentId      String?
@@ -639,8 +639,8 @@ model HistoryAcademic {
   id                String           @id @default(uuid())
   PreRegistration   PreRegistration? @relation(fields: [preRegistrationId], references: [id])
   preRegistrationId String?
-  Consultation      Consultation?    @relation(fields: [consultationId], references: [id])
-  consultationId    String?
+  Consultation      Academic_Consultation?   @relation(fields: [academicConsultationId], references: [id])
+  academicConsultationId    String?
   Certificate       Certificate?     @relation(fields: [certificateId], references: [id])
   certificateId     String?
   Activity          Activity?        @relation(fields: [activityId], references: [id])

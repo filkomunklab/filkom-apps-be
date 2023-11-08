@@ -25,8 +25,23 @@ const findStudentByNim = async (nim) => {
 
 // create submission
 const insertStudent = async (payload) => {
-  const { nim, password, firstName, lastName, faculty, major, gender } =
-    payload;
+  const {
+    nim,
+    password,
+    firstName,
+    lastName,
+    faculty,
+    major,
+    gender,
+    guardianName,
+    guardianEducation,
+    guardianReligion,
+    guardianStatus,
+    familyRelation,
+    guardianEmail,
+    guardianPhoneNo,
+    guardianAddress,
+  } = payload;
   const student = await prisma.student.create({
     data: {
       nim,
@@ -36,6 +51,14 @@ const insertStudent = async (payload) => {
       faculty,
       major,
       gender,
+      guardianName,
+      guardianEducation,
+      guardianReligion,
+      guardianStatus,
+      familyRelation,
+      guardianEmail,
+      guardianPhoneNo,
+      guardianAddress,
     },
   });
 
@@ -68,11 +91,32 @@ const findStudentByToken = async (token) => {
   return student;
 };
 
+const findBiodataStudent = async () => {
+  const student = await prisma.student.findUnique({
+    include: {
+      transaction: {
+        include: {
+          Employee: {
+            select: {
+              firstName,
+              lastName,
+              phoneNum,
+              email,
+              Address,
+            },
+          },
+        },
+      },
+    },
+  });
+  return student;
+};
+
 module.exports = {
   findStudentById,
   findStudentByNim,
-
   insertStudent,
   updateStudent,
   findStudentByToken,
+  findBiodataStudent,
 };
