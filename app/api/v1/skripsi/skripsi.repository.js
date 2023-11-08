@@ -561,6 +561,7 @@ const findAllSkripsiSchedule = async () => {
       defence_room: true,
       defence_date: true,
       classroom_id: true,
+      is_report_open: true,
     },
   });
 
@@ -1416,6 +1417,21 @@ const deleteLinkSourceCodeById = async (id) => {
   });
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update skripsi classroom by id
+// @used            Classroom
+const updateSkripsiClassroomById = async (id, classroom_id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      classroom_id,
+    },
+  });
+  return skripsi;
+};
+
 module.exports = {
   insertSkripsi,
   updateSkripsiChairmanAndMemberById,
@@ -1492,4 +1508,6 @@ module.exports = {
   updateLinkSourceCodeById,
   findLinkSourceCodeById,
   deleteLinkSourceCodeById,
+
+  updateSkripsiClassroomById,
 };
