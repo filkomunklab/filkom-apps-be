@@ -2932,72 +2932,79 @@ const getProposalListSekretaris = async () => {
   const proposalBySemester = {};
 
   const proposal = await proposalRepository.findAllProposal();
+  if (!proposal) {
+    return proposalBySemester;
+  }
 
   for (const entry of proposal) {
-    // get classroom
-    const classroom = await classroomRepository.findClassroomById(
-      entry.classroom_id
-    );
     const group = await groupRepository.findGroupByProposalId(entry.id);
-    const groupStudents =
-      await groupStudentRepository.findGroupStudentByGroupId(group.id);
+    // get proposal if progress = "Proposal"
+    if (group.progress === "Proposal") {
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByGroupId(group.id);
 
-    const students = await Promise.all(
-      groupStudents.map(async (student_id) => {
-        const student = await studentRepository.findStudentById(student_id);
-        let fullName = student.firstName;
+      const students = await Promise.all(
+        groupStudents.map(async (student_id) => {
+          const student = await studentRepository.findStudentById(student_id);
+          let fullName = student.firstName;
 
-        if (student.lastName) {
-          fullName += ` ${student.lastName}`;
-        }
+          if (student.lastName) {
+            fullName += ` ${student.lastName}`;
+          }
 
-        return {
-          id: student.id,
-          fullName: fullName,
-        };
-      })
-    );
+          return {
+            id: student.id,
+            fullName: fullName,
+          };
+        })
+      );
 
-    let documentProposal = false;
-    let payment = false;
-    let plagiarism = false;
-    if (entry.file_name_proposal) {
-      documentProposal = true;
-    }
-    if (entry.file_name_payment) {
-      payment = true;
-    }
-    if (entry.file_name_plagiarismcheck) {
-      plagiarism = true;
-    }
+      let documentProposal = false;
+      let payment = false;
+      let plagiarism = false;
+      if (entry.file_name_proposal) {
+        documentProposal = true;
+      }
+      if (entry.file_name_payment) {
+        payment = true;
+      }
+      if (entry.file_name_plagiarismcheck) {
+        plagiarism = true;
+      }
 
-    // variable to know if group have schedule
-    let schedule = false;
-    if (entry.defence_date) {
-      schedule = true;
-    }
-    const proposalData = {
-      group_id: group.id,
-      proposal_id: entry.id,
-      students,
-      schedule,
-      title: group.title,
-      proposal_status: documentProposal,
-      paymant_status: payment,
-      plagiarism: plagiarism,
-    };
-
-    // Create a semester key based on the Academic_Calendar data
-    const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
-
-    if (!proposalBySemester[semesterKey]) {
-      proposalBySemester[semesterKey] = {
-        semester: semesterKey,
-        proposals: [],
+      // variable to know if group have schedule
+      let schedule = false;
+      if (entry.defence_date) {
+        schedule = true;
+      }
+      const proposalData = {
+        group_id: group.id,
+        proposal_id: entry.id,
+        students,
+        schedule,
+        title: group.title,
+        proposal_status: documentProposal,
+        paymant_status: payment,
+        plagiarism: plagiarism,
       };
-    }
 
-    proposalBySemester[semesterKey].proposals.push(proposalData);
+      // get classroom
+      const classroom = await classroomRepository.findClassroomById(
+        entry.classroom_id
+      );
+
+      // Create a semester key based on the Academic_Calendar data
+      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+      if (!proposalBySemester[semesterKey]) {
+        proposalBySemester[semesterKey] = {
+          semester: semesterKey,
+          proposals: [],
+        };
+      }
+
+      proposalBySemester[semesterKey].proposals.push(proposalData);
+    }
   }
 
   // Convert the submissionBySemester object into an array of semesters
