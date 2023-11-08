@@ -6,7 +6,9 @@ const getAlumniList = async (req, res) => {
     const alumniList = await alumniService.getAlumniList();
     res.send({ status: "OK", data: alumniList });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -17,7 +19,10 @@ const alumniStatusTS = async (req, res) => {
     const alumniOP = await alumniService.alumniTS(search_query);
     res.send({ status: "OK", data: alumniOP });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    console.log(error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -33,7 +38,9 @@ const filterAlumniBy = async (req, res) => {
     const filterAlumni = await alumniService.filterAlumni(filter);
     res.send({ status: "OK", data: filterAlumni });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -44,7 +51,9 @@ const sendBroadcastEmail = async (req, res) => {
     await alumniService.sendEmail(recipientEmails);
     res.send({ status: "OK", message: "broadcast email sent successfully" });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -57,7 +66,13 @@ const getAlumniHasTracerStudyByOperator = async (req, res) => {
     const filterBy = req.query.filterBy || "none";
     const filterValue = req.query.filterValue;
 
-    const alumniList = await alumniService.getAlumniHasTracerStudyByOperator(search_query, page, limit, filterBy, filterValue);
+    const alumniList = await alumniService.getAlumniHasTracerStudyByOperator(
+      search_query,
+      page,
+      limit,
+      filterBy,
+      filterValue
+    );
 
     res.send({
       status: "OK",
@@ -68,7 +83,9 @@ const getAlumniHasTracerStudyByOperator = async (req, res) => {
       totalPage: alumniList.totalPage ? alumniList.totalPage : 0,
     });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -91,7 +108,9 @@ const getAllAlumni = async (req, res) => {
       // totalPage: alumniList.totalPage ? alumniList.totalPage : 0,
     });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
