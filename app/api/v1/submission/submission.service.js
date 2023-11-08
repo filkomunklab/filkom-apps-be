@@ -19,6 +19,9 @@ const skripsiRepository = require("../skripsi/skripsi.repository");
 const skripsiStudentRepository = require("../skripsi_student/skripsi_student.repository");
 const classroomRepository = require("../classroom/classroom.repository");
 
+// thesis history
+const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
+
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get dosen by id
 // @used            createSubmission, updateSubmissionById,
@@ -208,6 +211,14 @@ const createSubmission = async (userId, payload) => {
     proposed_co_advisor2_id: submission.proposed_co_advisor2_id,
     classroom_id: submission.classroom_id,
   };
+
+  // History CREATE SUBMISSION
+  await thesisHistoryRepository.createThesisHistory(
+    userId,
+    "CREATE SUBMISSION",
+    group.id
+  );
+
   return Data;
 };
 
@@ -414,6 +425,14 @@ const updateSubmissionById = async (id, userId, payload) => {
     proposed_co_advisor1_id: updatedSubmission.proposed_co_advisor1_id,
     proposed_co_advisor2_id: updatedSubmission.proposed_co_advisor2_id,
   };
+
+  // History UPDATE SUBMISSION BY ID
+  await thesisHistoryRepository.createThesisHistory(
+    userId,
+    "UPDATE SUBMISSION BY ID",
+    group.id
+  );
+
   return Data;
 };
 
@@ -468,6 +487,15 @@ const updateAdvisorAndCoAdvisorById = async (id, userId, payload) => {
     proposed_co_advisor1_id: updatedSubmission.proposed_co_advisor1_id,
     proposed_co_advisor2_id: updatedSubmission.proposed_co_advisor2_id,
   };
+
+  const group = await groupRepository.findGroupBySubmissionId(id);
+
+  // History CHANGE ADVISOR/CO BY ID
+  await thesisHistoryRepository.createThesisHistory(
+    userId,
+    "CHANGE ADVISOR/CO BY ID",
+    group.id
+  );
   return Data;
 };
 
@@ -524,6 +552,16 @@ const approveSubmissionById = async (id, userId) => {
     id: updatedSubmission.id,
     is_approve: updatedSubmission.is_approve,
   };
+
+  const group = await groupRepository.findGroupBySubmissionId(id);
+
+  // History APPROVE SUBMISSION BY ID
+  await thesisHistoryRepository.createThesisHistory(
+    userId,
+    "APPROVE SUBMISSION BY ID",
+    group.id
+  );
+
   return Data;
 };
 
@@ -562,6 +600,15 @@ const rejectSubmissionById = async (id, userId) => {
     id: updatedSubmission.id,
     is_approve: updatedSubmission.is_approve,
   };
+
+  const group = await groupRepository.findGroupBySubmissionId(id);
+
+  // History REJECT SUBMISSION BY ID
+  await thesisHistoryRepository.createThesisHistory(
+    userId,
+    "REJECT SUBMISSION BY ID",
+    group.id
+  );
   return Data;
 };
 
@@ -600,6 +647,13 @@ const updateSubmissionTitleById = async (id, userId, payload) => {
     id: submission.id,
     title: updatedGroup.title,
   };
+
+  // History UPDATE TITLE SUBMISSION by ID
+  await thesisHistoryRepository.createThesisHistory(
+    userId,
+    "UPDATE TITLE SUBMISSION by ID",
+    updatedGroup.id
+  );
   return Data;
 };
 
