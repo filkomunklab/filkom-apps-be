@@ -90,7 +90,9 @@ const updateSkripsiDocumentById = async (userId, id, payload) => {
     storage,
     `skripsi/${group.id}/${payload.skripsi_file.file_name_skripsi}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/pdf",
+  };
   const binaryString = atob(payload.skripsi_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
@@ -448,7 +450,9 @@ const updateSkripsiPaymentById = async (id, userId, payload) => {
     storage,
     `skripsi/${group.id}/${payload.payment_file.file_name_payment}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/pdf",
+  };
   const binaryString = atob(payload.payment_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
@@ -537,7 +541,9 @@ const updateSkripsiPlagiarismById = async (id, userId, payload) => {
     storage,
     `skripsi/${group.id}/${payload.plagiarism_file.file_name_plagiarismcheck}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/pdf",
+  };
   const binaryString = atob(payload.plagiarism_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
@@ -1307,7 +1313,9 @@ const updateSkripsiRevisionDocumentById = async (id, userId, payload) => {
     storage,
     `skripsi/${group.id}/${payload.revision_file.file_name_revision}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/pdf",
+  };
   const binaryString = atob(payload.revision_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
@@ -1706,7 +1714,9 @@ const updateHKIById = async (id, userId, payload) => {
     storage,
     `skripsi/${group.id}/${payload.hki_file.file_name_hki}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/pdf",
+  };
   const binaryString = atob(payload.hki_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
@@ -1795,7 +1805,9 @@ const updateJournalById = async (id, userId, payload) => {
     storage,
     `skripsi/${group.id}/${payload.journal_file.file_name_journal}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/pdf",
+  };
   const binaryString = atob(payload.journal_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
@@ -1884,7 +1896,9 @@ const updateSourceCodeById = async (id, userId, payload) => {
     storage,
     `skripsi/${group.id}/${payload.source_code_file.file_name_sourcecode}`
   );
-  const metadata = { contentType: "application/pdf" };
+  const metadata = {
+    contentType: "application/zip",
+  };
   const binaryString = atob(payload.source_code_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {

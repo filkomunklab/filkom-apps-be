@@ -101,6 +101,14 @@ const findStudentSkripsiByStudentIdAndClassroomId = async (
   return skripsi_student;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all skripsi student
+// @used            Classroom,
+const findAllSkripsiStudent = async () => {
+  const skripsi_student = await prisma.skripsi_Student.findMany();
+  return skripsi_student;
+};
+
 module.exports = {
   findSkripsiStudentByClassroomId,
   findSkripsiStudentByStudentId,
@@ -109,4 +117,5 @@ module.exports = {
   findSkripsiStudentById,
   deleteSkripsiStudentById,
   findStudentSkripsiByStudentIdAndClassroomId,
+  findAllSkripsiStudent,
 };
