@@ -31,7 +31,7 @@ const findCalonTamatanList = async (search_query) => {
 
     return calonTamatan;
   } catch (error) {
-    console.log(error.messsage);
+    error.messsage;
   }
 };
 
@@ -130,18 +130,23 @@ const findSPTByNama = async (nim) => {
 const insertSPT = async (dataSPT) => {
   //mengambil tanggal saat ini
   const currentDate = moment().format("DD/MM/YYYY");
-  console.log(currentDate);
+  // console.log(currentDate);
 
   //menambahkan logika perhitungan tahun ajaran
-  const semester = parseInt(currentDate.split("/")[1], 10) > 6 ? "Semester I" : "Semester II";
+  const semester =
+    parseInt(currentDate.split("/")[1], 10) > 6 ? "Semester I" : "Semester II";
   const tahunLulus = moment(currentDate, "DD/MM/YYYY").format("YYYY");
   const tahunAjaran =
     semester === "Semester I"
       ? `${tahunLulus}/${parseInt(tahunLulus, 10) + 1}` //2023/2024
       : `${parseInt(tahunLulus, 10)}/${parseInt(tahunLulus, 10) + 1}`;
 
-  const semesterLulus = semester === "Semester I" ? "Semester II" : "Semester I";
-  const graduateYear = semesterLulus === "Semester I" ? moment(tahunLulus, "YYYY").format("YYYY") : moment(tahunLulus, "YYYY").add(1, "y").format("YYYY");
+  const semesterLulus =
+    semester === "Semester I" ? "Semester II" : "Semester I";
+  const graduateYear =
+    semesterLulus === "Semester I"
+      ? moment(tahunLulus, "YYYY").format("YYYY")
+      : moment(tahunLulus, "YYYY").add(1, "y").format("YYYY");
 
   // Mengisi kolom 'graduate_plan' dengan hasil perhitungan
   dataSPT.graduate_plan = `${semesterLulus} ${tahunAjaran}`;
@@ -300,12 +305,18 @@ const checkFormSPT = async (studentId) => {
   });
 
   //yang jadi cuma waiting, approved dg rejected belum jadi
-  console.log(spt);
+  // console.log(spt);
   if (!spt) {
     throw new Error("Data not found");
-  } else if (spt.FormSPT[0].approval_fac === "APPROVED" && spt.FormSPT[0].approval_reg === "APPROVED") {
+  } else if (
+    spt.FormSPT[0].approval_fac === "APPROVED" &&
+    spt.FormSPT[0].approval_reg === "APPROVED"
+  ) {
     return "APPROVED";
-  } else if (spt.FormSPT[0].approval_fac === "REJECTED" && spt.FormSPT[0].approval_reg === "REJECTED") {
+  } else if (
+    spt.FormSPT[0].approval_fac === "REJECTED" &&
+    spt.FormSPT[0].approval_reg === "REJECTED"
+  ) {
     return "REJECTED";
   } else {
     return "WAITING";

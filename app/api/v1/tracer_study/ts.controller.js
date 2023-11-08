@@ -31,8 +31,17 @@ const exportTStoExcel = async (req, res) => {
   const filename = "tracerStudy.xlsx";
 
   try {
-    await tsService.exportTStoExcel(filename);
-    res.download(filename);
+    const buffer = await tsService.exportTStoExcel();
+
+    // Set header untuk mengirim file Excel
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+
+    // Kirim buffer sebagai respons
+    res.send(buffer);
   } catch (error) {
     res.status(500).json({ error: "Export failed" });
   }
