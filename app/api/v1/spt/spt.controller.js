@@ -5,12 +5,16 @@ const sptService = require("./spt.service");
 
 const getListSPT = async (req, res) => {
   try {
-    const listSPT = await sptService.getListSPT();
-    res.send({ status: "OK", data: listSPT });
+    const search_query = req.query.search_query || "";
+
+    const calonTamatan = await sptService.getListSPT(search_query);
+    console.log("ini calon tamatan: ", calonTamatan);
+    res.send({
+      status: "OK",
+      data: calonTamatan,
+    });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -20,9 +24,7 @@ const getSPTById = async (req, res) => {
     const spt = await sptService.getSPTById(id);
     res.send({ status: "OK", data: spt });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -33,9 +35,7 @@ const getSPTByNIM = async (req, res) => {
     const spts = await sptService.getSPTByNIM(nim);
     res.send({ status: "OK", data: spts });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -45,9 +45,7 @@ const submitSPT = async (req, res) => {
     const spt = await sptService.createSPT(dataSPT);
     res.status(201).send({ status: "Form SPT has been submitted", data: spt });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -59,9 +57,7 @@ const patchStatusByFak = async (req, res) => {
 
     res.send({ status: "OK", data: updatedSPT });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -70,9 +66,7 @@ const listApprovedSPTbyFak = async (req, res) => {
     const approvedSPT = await sptService.sptApprovedbyFak();
     res.send({ status: "OK", data: approvedSPT });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -84,9 +78,7 @@ const patchStatusByReg = async (req, res) => {
 
     res.send({ status: "OK", data: updatedSPT });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -95,9 +87,7 @@ const listApprovedSPTbyReg = async (req, res) => {
     const approvedSPT = await sptService.sptApprovedbyReg();
     res.send({ status: "OK", data: approvedSPT });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -112,9 +102,7 @@ const filterSPTBy = async (req, res) => {
     const filteredSPT = await sptService.filterSPT(filter);
     res.send({ status: "OK", data: filteredSPT });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 

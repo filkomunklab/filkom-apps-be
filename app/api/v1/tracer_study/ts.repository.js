@@ -5,7 +5,12 @@ const prisma = require("../../../database");
 const tracerstudy = async () => {
   return await prisma.tracer_Study.findMany({
     include: {
-      student: true,
+      student: {
+        select: {
+          nim: true,
+          graduate_year: true,
+        },
+      },
     },
   });
 };
@@ -13,9 +18,9 @@ const tracerstudy = async () => {
 const createTS = async (dataTS) => {
   return await prisma.tracer_Study.create({
     data: {
+      nimhsmsmh: dataTS.nimhsmsmh,
       kdptimsmh: dataTS.kdptimsmh,
       kdpstmsmh: dataTS.kdpstmsmh,
-      nimhsmsmh: dataTS.nimhsmsmh,
       nmmhsmsmh: dataTS.nmmhsmsmh,
       telpomsmh: dataTS.telpomsmh,
       emailmsmh: dataTS.emailmsmh,
@@ -105,6 +110,8 @@ const createTS = async (dataTS) => {
     },
   });
 };
+
+//export data to excel
 
 module.exports = {
   createTS,

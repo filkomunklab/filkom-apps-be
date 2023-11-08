@@ -1,8 +1,13 @@
 const { query } = require("express");
 const sptRepository = require("./spt.repository");
 
-const getListSPT = async () => {
-  return await sptRepository.listSPT();
+const getListSPT = async (search_query) => {
+  try {
+    const calonTamatan = await sptRepository.findCalonTamatanList(search_query);
+    return calonTamatan;
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 const getSPTById = async (id) => {

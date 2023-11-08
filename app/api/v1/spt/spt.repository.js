@@ -1,6 +1,39 @@
 const { status } = require("@prisma/client");
 const prisma = require("../../../database");
 const moment = require("moment");
+const { student } = require("../../../database");
+
+const findCalonTamatanList = async (search_query) => {
+  try {
+    const calonTamatan = await prisma.formSPT.findMany({
+      where: {
+        OR: [
+          {
+            full_name: {
+              contains: search_query,
+              mode: "insensitive",
+            },
+          },
+          {
+            nim: {
+              contains: search_query,
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+      orderBy: [
+        {
+          created_at: "desc",
+        },
+      ],
+    });
+
+    return calonTamatan;
+  } catch (error) {
+    console.log(error.messsage);
+  }
+};
 
 //menampilkan list SPT, diurutkan dari created_at paling akhir
 const listSPT = async () => {
@@ -21,6 +54,7 @@ const listSPT = async () => {
           major: true,
           phoneNo: true,
           personalEmail: true,
+          status: true,
         },
       },
     },
@@ -30,21 +64,6 @@ const listSPT = async () => {
 const findSPTById = async (id) => {
   return await prisma.formSPT.findUnique({
     where: { id },
-    include: {
-      student: {
-        select: {
-          firstName: true,
-          lastName: true,
-          reg_num: true,
-          dateOfBirth: true,
-          gender: true,
-          nim: true,
-          faculty: true,
-          major: true,
-          phoneNo: true,
-        },
-      },
-    },
   });
 };
 
@@ -68,6 +87,38 @@ const findSPTByNIM = async (nim) => {
           faculty: true,
           major: true,
           phoneNo: true,
+          personalEmail: true,
+          status: true,
+        },
+      },
+    },
+    take: 1,
+  });
+  return spt[0];
+};
+
+const findSPTByNama = async (nim) => {
+  const spt = await prisma.formSPT.findMany({
+    where: {
+      studentId: nim,
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+    include: {
+      student: {
+        select: {
+          firstName: true,
+          lastName: true,
+          reg_num: true,
+          dateOfBirth: true,
+          gender: true,
+          nim: true,
+          faculty: true,
+          major: true,
+          phoneNo: true,
+          personalEmail: true,
+          status: true,
         },
       },
     },
@@ -82,20 +133,15 @@ const insertSPT = async (dataSPT) => {
   console.log(currentDate);
 
   //menambahkan logika perhitungan tahun ajaran
-  const semester =
-    parseInt(currentDate.split("/")[1], 10) > 6 ? "Semester I" : "Semester II";
+  const semester = parseInt(currentDate.split("/")[1], 10) > 6 ? "Semester I" : "Semester II";
   const tahunLulus = moment(currentDate, "DD/MM/YYYY").format("YYYY");
   const tahunAjaran =
     semester === "Semester I"
       ? `${tahunLulus}/${parseInt(tahunLulus, 10) + 1}` //2023/2024
       : `${parseInt(tahunLulus, 10)}/${parseInt(tahunLulus, 10) + 1}`;
 
-  const semesterLulus =
-    semester === "Semester I" ? "Semester II" : "Semester I";
-  const graduateYear =
-    semesterLulus === "Semester I"
-      ? moment(tahunLulus, "YYYY").format("YYYY")
-      : moment(tahunLulus, "YYYY").add(1, "y").format("YYYY");
+  const semesterLulus = semester === "Semester I" ? "Semester II" : "Semester I";
+  const graduateYear = semesterLulus === "Semester I" ? moment(tahunLulus, "YYYY").format("YYYY") : moment(tahunLulus, "YYYY").add(1, "y").format("YYYY");
 
   // Mengisi kolom 'graduate_plan' dengan hasil perhitungan
   dataSPT.graduate_plan = `${semesterLulus} ${tahunAjaran}`;
@@ -103,6 +149,15 @@ const insertSPT = async (dataSPT) => {
   const spt = await prisma.formSPT.create({
     data: {
       // graduate_year: graduateYear,
+      full_name: dataSPT.full_name,
+      reg_num: dataSPT.reg_num,
+      date_of_birth: dataSPT.date_of_birth,
+      faculty: dataSPT.faculty,
+      gender: dataSPT.gender,
+      major: dataSPT.major,
+      nim: dataSPT.nim,
+      phone_num: dataSPT.phone_num,
+      personal_email: dataSPT.personal_email,
       nik: dataSPT.nik,
       birth_mother: dataSPT.birth_mother,
       graduate_plan: dataSPT.graduate_plan,
@@ -123,9 +178,6 @@ const patchapprovalByFak = async (id, status) => {
       where: { id },
       data: {
         approval_fac: status,
-      },
-      include: {
-        student: true,
       },
     });
   } catch (error) {
@@ -150,6 +202,8 @@ const listApprovalSPTbyFak = async () => {
           faculty: true,
           major: true,
           phoneNo: true,
+          personalEmail: true,
+          status: true,
         },
       },
     },
@@ -162,9 +216,6 @@ const patchapprovalByReg = async (id, status) => {
       where: { id },
       data: {
         approval_reg: status,
-      },
-      include: {
-        student: true,
       },
     });
   } catch (error) {
@@ -189,6 +240,8 @@ const listApprovalSPTbyReg = async () => {
           faculty: true,
           major: true,
           phoneNo: true,
+          personalEmail: true,
+          status: true,
         },
       },
     },
@@ -222,6 +275,8 @@ const filterSPT = async (filter) => {
           faculty: true,
           major: true,
           phoneNo: true,
+          personalEmail: true,
+          status: true,
         },
       },
     },
@@ -248,15 +303,9 @@ const checkFormSPT = async (studentId) => {
   console.log(spt);
   if (!spt) {
     throw new Error("Data not found");
-  } else if (
-    spt.FormSPT[0].approval_fac === "APPROVED" &&
-    spt.FormSPT[0].approval_reg === "APPROVED"
-  ) {
+  } else if (spt.FormSPT[0].approval_fac === "APPROVED" && spt.FormSPT[0].approval_reg === "APPROVED") {
     return "APPROVED";
-  } else if (
-    spt.FormSPT[0].approval_fac === "REJECTED" &&
-    spt.FormSPT[0].approval_reg === "REJECTED"
-  ) {
+  } else if (spt.FormSPT[0].approval_fac === "REJECTED" && spt.FormSPT[0].approval_reg === "REJECTED") {
     return "REJECTED";
   } else {
     return "WAITING";
@@ -274,4 +323,5 @@ module.exports = {
   listApprovalSPTbyReg,
   filterSPT,
   checkFormSPT,
+  findCalonTamatanList,
 };

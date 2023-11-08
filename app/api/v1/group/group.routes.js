@@ -92,12 +92,30 @@ router.get(
 );
 
 //===================================================================
+// @description     Get skripsi list advisor
+// @access          DOSEN
+router.get(
+  "/group/skripsi-list-advisor",
+  auth,
+  groupController.getSkripsiListAdvisor
+);
+
+//===================================================================
 // @description     Get proposal list co-advisor
 // @access          DOSEN
 router.get(
   "/group/proposal-list-co-advisor",
   auth,
   groupController.getProposalListCoAdvisor
+);
+
+//===================================================================
+// @description     Get skripsi list co-advisor
+// @access          DOSEN
+router.get(
+  "/group/skripsi-list-co-advisor",
+  auth,
+  groupController.getSkripsiListCoAdvisor
 );
 
 //===================================================================
@@ -110,6 +128,15 @@ router.get(
 );
 
 //===================================================================
+// @description     Get skripsi list chairman
+// @access          DOSEN
+router.get(
+  "/group/skripsi-list-chairman",
+  auth,
+  groupController.getSkripsiListChairman
+);
+
+//===================================================================
 // @description     Get proposal list member
 // @access          DOSEN
 router.get(
@@ -119,9 +146,23 @@ router.get(
 );
 
 //===================================================================
+// @description     Get skripsi list member
+// @access          DOSEN
+router.get(
+  "/group/skripsi-list-member",
+  auth,
+  groupController.getSkripsiListMember
+);
+
+//===================================================================
 // @description     Get proposal list mk
 // @access          DOSEN_MK
 router.get("/group/proposal-list-mk", auth, groupController.getProposalListMK);
+
+//===================================================================
+// @description     Get skripsi list mk
+// @access          DOSEN_MK
+router.get("/group/skripsi-list-mk", auth, groupController.getSkripsiListMK);
 
 //===================================================================
 // @description     Get proposal list kaprodi IF/SI
@@ -130,6 +171,15 @@ router.get(
   "/group/proposal-list-kaprodi",
   auth,
   groupController.getProposalListKaprodi
+);
+
+//===================================================================
+// @description     Get skripsi list kaprodi IF/SI
+// @access          KAPRODI
+router.get(
+  "/group/skripsi-list-kaprodi",
+  auth,
+  groupController.getSkripsiListKaprodi
 );
 
 //===================================================================
@@ -142,12 +192,30 @@ router.get(
 );
 
 //===================================================================
+// @description     Get skripsi list dekan
+// @access          DEKAN
+router.get(
+  "/group/skripsi-list-dekan",
+  auth,
+  groupController.getSkripsiListDekan
+);
+
+//===================================================================
 // @description     Get proposal list operator fakultas/filkom
 // @access          OPERATOR_FAKULTAS
 router.get(
   "/group/proposal-list-sekretaris",
   auth,
   groupController.getProposalListSekretaris
+);
+
+//===================================================================
+// @description     Get skripsi list operator fakultas/filkom
+// @access          OPERATOR_FAKULTAS
+router.get(
+  "/group/skripsi-list-sekretaris",
+  auth,
+  groupController.getSkripsiListSekretaris
 );
 
 // //       melihat kelompok mahasiswa

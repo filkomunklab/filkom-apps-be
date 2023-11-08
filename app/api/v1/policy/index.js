@@ -72,6 +72,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_report_conclusion");
     // Sekertaris view skripsi revisi document
     can("read", "skripsi_revision_document");
+    // Sekertaris view skripsi list sekretaris
+    can("read", "skripsi_list_sekretaris");
   }
 
   if (hasRole("DEKAN")) {
@@ -130,6 +132,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_report_conclusion");
     // Dekan view skripsi revisi document
     can("read", "skripsi_revision_document");
+    // Dekan view proposal list dekan
+    can("read", "skripsi_list_dekan");
   }
 
   if (hasRole("KAPRODI")) {
@@ -183,6 +187,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_report_conclusion");
     // Kaprodi view skripsi revisi document
     can("read", "skripsi_revision_document");
+    // Kaprodi view skripsi list kaprodi
+    can("read", "skripsi_list_kaprodi");
   }
 
   if (hasRole("DOSEN")) {
@@ -235,12 +241,20 @@ const policyFor = ({ user }) => {
     can("update", "is_proposal_revision_approve");
     // Dosen view proposal list advisor
     can("read", "proposal_list_advisor");
+    // Dosen view skripsi list advisor
+    can("read", "skripsi_list_advisor");
     // Dosen view proposal list co-advisor
     can("read", "proposal_list_co_advisor");
+    // Dosen view skripsi list co-advisor
+    can("read", "skripsi_list_co_advisor");
     // Dosen view proposal list chairman
     can("read", "proposal_list_chairman");
+    // Dosen view skripsi list chairman
+    can("read", "skripsi_list_chairman");
     // Dosen view proposal list member
     can("read", "proposal_list_member");
+    // Dosen view proposal list member
+    can("read", "skripsi_list_member");
     // ---------------------------------Skripsi--------------------------------
     // Dosen view skripsi document
     can("read", "skripsi_document");
@@ -345,6 +359,8 @@ const policyFor = ({ user }) => {
     can("read", "source_code");
     // Dosen MK view link source code
     can("read", "link_source_code");
+    // Dosen MK view skripsi list dosen mk
+    can("read", "skripsi_list_mk");
   }
 
   if (hasRole("MAHASISWA")) {

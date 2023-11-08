@@ -5,7 +5,11 @@ const express = require("express");
 const router = express.Router();
 const sptController = require("./spt.controller");
 
+//@description     Get (pagination and filter) calon tamatan
+//@route           GET /api/v1/spt?search_query=
+//@access          Public
 router.get("/spt", sptController.getListSPT);
+
 router.get("/spt/registar/filter-by", sptController.filterSPTBy);
 router.get("/spt/faculty/filter-by", sptController.filterSPTBy);
 router.get("/spt/detail/id/:id", sptController.getSPTById);
