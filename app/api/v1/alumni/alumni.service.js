@@ -94,8 +94,8 @@ const sendEmail = async (recipientEmails) => {
 const sendBroadcastWA = async (pesan, phoneNums) => {
   try {
     // const phoneNumbers = await alumniRepository.phoneNumbers();
-    // const phoneNums
 
+    // // UNCOMENT THIS TO USE WA BROADCAST
     // const phoneNoTest = ["+6289612288774"];
     // const results = await Promise.all(
     //   phoneNums.map(async (phoneNo) => {
