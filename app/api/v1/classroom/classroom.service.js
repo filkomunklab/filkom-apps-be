@@ -6,6 +6,10 @@ const thesisStudentRepository = require("../thesis_student/thesis_student.reposi
 const academicCalendarRepository = require("../academic_calendar/academic_calendar.repository");
 const proposalStudentRepository = require("../proposal_student/proposal_student.repository");
 const skripsiStudentRepository = require("../skripsi_student/skripsi_student.repository");
+const skripsiRepository = require("../skripsi/skripsi.repository");
+const groupStudentRepository = require("../group_student/group_student.repository");
+const groupRepository = require("../group/group.repository");
+const proposalRepository = require("../proposal/proposal.repository");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get existing classroom
@@ -296,15 +300,46 @@ const inputStudents = async (payload) => {
             message: `Student are already in classroom`,
           };
         } else {
-          const proposalStudent =
-            await skripsiStudentRepository.insertSkripsiStudentByStudentIdAndClassroomId(
-              existStudent.id,
-              classroom.id
+          // get group_student by student id (many)
+          const groupStudents =
+            await groupStudentRepository.findGroupStudentByStudentId(
+              existStudent.id
             );
-          insertedStudents.students.push({
-            id: proposalStudent.id,
-            student_id: proposalStudent.student_id,
-          });
+          // looping to get proposal active/finish
+          for (const entry of groupStudents) {
+            // get group by id
+            const group = await groupRepository.findGroupById(entry.group_id);
+            // check if proposal is not fail an
+            if (group.progress === "Skripsi") {
+              const skripsi = await skripsiRepository.findSkripsiById(
+                group.skripsi_id
+              );
+              if (skripsi.is_pass !== "Fail") {
+                // insert student skripsi
+                const skripsiStudent =
+                  await skripsiStudentRepository.insertSkripsiStudentByStudentIdAndClassroomId(
+                    existStudent.id,
+                    classroom.id
+                  );
+                insertedStudents.students.push({
+                  id: skripsiStudent.id,
+                  student_id: skripsiStudent.student_id,
+                });
+
+                if (skripsiStudent) {
+                  // get skripsi
+                  await skripsiRepository.updateSkripsiClassroomById(
+                    group.skripsi_id,
+                    classroom.id
+                  );
+                }
+              }
+            }
+          }
+          throw {
+            status: 400,
+            message: `Student haven't completed proposal`,
+          };
         }
       }
     } else {

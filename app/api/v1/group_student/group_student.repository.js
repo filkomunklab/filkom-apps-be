@@ -41,7 +41,7 @@ const insertGroupStudent = async (data) => {
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get all group_student by student_id
-// @used            Group
+// @used            Group, Classroom
 const findGroupStudentByStudentId = async (student_id) => {
   const groupStudent = await prisma.group_Student.findMany({
     where: {

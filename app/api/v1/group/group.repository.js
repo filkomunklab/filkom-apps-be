@@ -176,6 +176,7 @@ const findManyGroupsByProposalIds = async (proposalIds) => {
       id: true,
       proposal_id: true,
       title: true,
+      progress: true,
     },
   });
   return groups;
@@ -195,6 +196,7 @@ const findManyGroupsBySkripsiIds = async (skripsiIds) => {
       id: true,
       skripsi_id: true,
       title: true,
+      progress: true,
     },
   });
   return groups;

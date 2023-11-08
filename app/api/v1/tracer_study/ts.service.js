@@ -118,7 +118,8 @@ const exportTStoExcel = async (filename) => {
     worksheet.addRow(tracerstudy);
   });
 
-  await workbook.xlsx.writeFile(filename);
+  const buffer = await workbook.xlsx.writeBuffer();
+  return buffer;
 };
 
 module.exports = {

@@ -161,6 +161,7 @@ model FormSPT {
   graduate_plan     String
   remaining_credits String
   remaining_classes String
+  certificateURL    String?
   approval_fac      status    @default(WAITING) // approved dan reject, default waiting
   approval_reg      status    @default(WAITING)
   created_at        DateTime  @default(now())
@@ -392,6 +393,10 @@ model Proposal {
   is_report_approve_by_panelist_chairman   Boolean?
   is_report_approve_by_panelist_member     Boolean?
   is_report_approve_by_advisor             Boolean?
+  dekan_report_approve_date                DateTime?
+  panelist_chairman_report_approve_date    DateTime?
+  panelist_member_report_approve_date      DateTime?
+  advisor_report_approve_date              DateTime?
   exam_conclution                          Exam_Conclution?
   changes_conclusion                       Changes_Conclusion?
   assessment_conclution                    String?
@@ -453,6 +458,10 @@ model Skripsi {
   is_report_approve_by_panelist_chairman   Boolean?
   is_report_approve_by_panelist_member     Boolean?
   is_report_approve_by_advisor             Boolean?
+  dekan_report_approve_date                DateTime?
+  panelist_chairman_report_approve_date    DateTime?
+  panelist_member_report_approve_date      DateTime?
+  advisor_report_approve_date              DateTime?
   exam_conclution                          Exam_Conclution?
   changes_conclusion                       Changes_Conclusion?
   assessment_conclution                    String?
