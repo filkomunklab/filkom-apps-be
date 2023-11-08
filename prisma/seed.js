@@ -4459,6 +4459,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201006",
       },
       {
@@ -4482,6 +4484,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201007",
       },
       {
@@ -4505,6 +4509,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201013",
       },
       {
@@ -4528,6 +4534,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201002",
       },
       {
@@ -4551,6 +4559,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201020",
       },
       {
@@ -4574,6 +4584,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201004",
       },
       {
@@ -4597,6 +4609,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201014",
       },
       {
@@ -4620,6 +4634,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201018",
       },
       {
@@ -4643,6 +4659,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201008",
       },
       {
@@ -4666,6 +4684,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201017",
       },
       {
@@ -4689,6 +4709,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201001",
       },
       {
@@ -4712,6 +4734,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201005",
       },
       {
@@ -4735,6 +4759,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201010",
       },
       {
@@ -4758,6 +4784,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201015",
       },
       {
@@ -4781,6 +4809,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201016",
       },
       {
@@ -4804,6 +4834,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201019",
       },
       {
@@ -4827,6 +4859,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201011",
       },
       {
@@ -4850,6 +4884,8 @@ async function main() {
           { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
           { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
         ]),
+        certificateURL:
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
         studentId: "20502201003",
       },
     ],

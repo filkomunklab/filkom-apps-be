@@ -97,37 +97,7 @@ const findSPTByNIM = async (nim) => {
   return spt[0];
 };
 
-const findSPTByNama = async (nim) => {
-  const spt = await prisma.formSPT.findMany({
-    where: {
-      studentId: nim,
-    },
-    orderBy: {
-      created_at: "desc",
-    },
-    include: {
-      student: {
-        select: {
-          firstName: true,
-          lastName: true,
-          reg_num: true,
-          dateOfBirth: true,
-          gender: true,
-          nim: true,
-          faculty: true,
-          major: true,
-          phoneNo: true,
-          personalEmail: true,
-          status: true,
-        },
-      },
-    },
-    take: 1,
-  });
-  return spt[0];
-};
-
-const insertSPT = async (dataSPT) => {
+const insertSPT = async (dataSPT, path) => {
   //mengambil tanggal saat ini
   const currentDate = moment().format("DD/MM/YYYY");
   // console.log(currentDate);
@@ -169,6 +139,7 @@ const insertSPT = async (dataSPT) => {
       minor: dataSPT.minor,
       remaining_credits: dataSPT.remaining_credits,
       remaining_classes: dataSPT.remaining_classes,
+      certificateURL: path,
       approval_fac: dataSPT.approval_fac,
       approval_reg: dataSPT.approval_reg,
       student: { connect: { nim: dataSPT.studentId } }, // Menghubungkan SPT ke mahasiswa berdasarkan nim
