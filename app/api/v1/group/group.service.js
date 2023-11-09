@@ -11,7 +11,7 @@ const classroomRepository = require("../classroom/classroom.repository");
 const proposalStudentRepository = require("../proposal_student/proposal_student.repository");
 const skripsiStudentRepository = require("../skripsi_student/skripsi_student.repository");
 const userManagementRepository = require("../user_management/user_namagement.repository");
-const { skripsi } = require("../../../database");
+const { skripsi, submission } = require("../../../database");
 
 //===================================================================
 // @description     Get thesis list
@@ -100,17 +100,17 @@ const getSubmissionDetailsById = async (id) => {
 
   // Cek apakah group memiliki Skripsi
   if (group.skripsi_id) {
-    skripsi = await proposalRepository.findSkripsiById(group.skripsi_id);
+    skripsi = await skripsiRepository.findSkripsiById(group.skripsi_id);
   }
 
   //check status siap sidang proposal
-  const proposalDocumentStatus = false;
-  const proposalPaymentStatus = false;
-  const proposalPlagiarismStatus = false;
+  let proposalDocumentStatus = false;
+  let proposalPaymentStatus = false;
+  let proposalPlagiarismStatus = false;
 
-  const panelistChairman = false;
-  const panelistMember = false;
-  const advisor = false;
+  let panelistChairman = false;
+  let panelistMember = false;
+  let advisor = false;
   if (proposal) {
     if (proposal.file_name_proposal) {
       proposalDocumentStatus = true;
@@ -135,9 +135,9 @@ const getSubmissionDetailsById = async (id) => {
   }
 
   //check status siap sidang skripsi
-  const skripsiDocumentStatus = false;
-  const skripsiPaymentStatus = false;
-  const skripsiPlagiarismStatus = false;
+  let skripsiDocumentStatus = false;
+  let skripsiPaymentStatus = false;
+  let skripsiPlagiarismStatus = false;
   if (skripsi) {
     if (skripsi.file_name_skripsi) {
       skripsiDocumentStatus = true;
@@ -540,7 +540,7 @@ const getCommitteeList = async () => {
       entry.classroom_id
     );
     // Create a semester key based on the Academic_Calendar data
-    const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+    const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
     if (!submissionBySemester[semesterKey]) {
       submissionBySemester[semesterKey] = {
         semester: semesterKey,
@@ -644,7 +644,7 @@ const getSubmissionListMK = async (userId) => {
         };
 
         // Create a semester key based on the Academic_Calendar data
-        const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+        const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
         if (!submissionBySemester[semesterKey]) {
           submissionBySemester[semesterKey] = {
@@ -713,266 +713,227 @@ const getSubmissionListKaprodi = async (userId) => {
     "KAPRODI"
   );
   const submissionBySemester = {};
-  if (userKaprodi && kaprodi.major === "IF") {
-    // get all proposal_student
-    const proposalStudents =
-      await proposalStudentRepository.findAllProposalStudent();
-    if (proposalStudents) {
-      const groupsIF = [];
-      for (const entry of proposalStudents) {
-        // check all group of student
-        const groupStudents =
-          await groupStudentRepository.findGroupStudentByStudentId(
-            entry.student_id
-          );
-        for (const entry of groupStudents) {
-          // get student
-          const student = await studentRepository.findStudentById(
-            entry.student_id
-          );
-          if (student.major === "IF") {
-            // get group_student
-            const groupStudentsIF =
-              await groupStudentRepository.findGroupStudentByStudentId(
-                student.id
-              );
-            for (const entry of groupStudentsIF) {
-              // get group
-              const group = await groupRepository.findGroupById(entry.group_id);
-              groupsIF.push(group);
-            }
-          }
-        }
-      }
-      for (const entry of groupsIF) {
-        // get all submission
-        const submission = await submissionRepository.findSubmissionById(
-          entry.submission_id
-        );
-        if (submission) {
-          // get classroom
-          const classroom = await classroomRepository.findClassroomById(
-            submission.classroom_id
-          );
 
+  if (userKaprodi && kaprodi.major === "IF") {
+    // get all submission
+    const submissions = await submissionRepository.findAllSubmission();
+    if (submissions) {
+      for (const submission of submissions) {
+        if (submission.classroom_id) {
           // get group
           const group = await groupRepository.findGroupBySubmissionId(
             submission.id
           );
-          // get all group_student
+          // get all student in group
           const groupStudents =
             await groupStudentRepository.findGroupStudentByGroupId(group.id);
+          // variable to check if thesis is in Informatika
+          let isInformatika = null;
 
-          async function getEmployeeNameAndDegree(employeeId) {
-            const employee = await employeeRepository.findEmployeeById(
-              employeeId
-            );
-            let name = employee.firstName;
-
-            if (employee.lastName) {
-              name += ` ${employee.lastName}`;
+          // looping to check if thesis is in Informatika
+          for (const studentId of groupStudents) {
+            // get student data
+            const student = await studentRepository.findStudentById(studentId);
+            if (student.major === "IF") {
+              isInformatika = true;
+              break; // Menghentikan loop jika ditemukan student dengan major === "IF"
             }
-
-            if (employee.degree) {
-              name += `, ${employee.degree}`;
-            }
-
-            return name;
           }
 
-          let advisorName = null;
-          let coAdvisor1Name = null;
-          let coAdvisor2Name = null;
-          if (submission.proposed_advisor_id) {
-            advisorName = await getEmployeeNameAndDegree(
-              submission.proposed_advisor_id
-            );
-          }
-          if (submission.proposed_co_advisor1_id) {
-            coAdvisor1Name = await getEmployeeNameAndDegree(
-              submission.proposed_co_advisor1_id
-            );
-          }
-          if (submission.proposed_co_advisor2_id) {
-            coAdvisor2Name = await getEmployeeNameAndDegree(
-              submission.proposed_co_advisor2_id
-            );
-          }
-
-          // get student all student data
-          const students = await Promise.all(
-            groupStudents.map(async (student_id) => {
-              // get student in table student by student_id
-              const student = await studentRepository.findStudentById(
-                student_id
+          if (isInformatika) {
+            async function getEmployeeNameAndDegree(employeeId) {
+              const employee = await employeeRepository.findEmployeeById(
+                employeeId
               );
+              let name = employee.firstName;
 
-              // Menggabungkan firstName dan lastName menjadi fullName
-              let fullName = student.firstName;
-              if (student.lastName) {
-                fullName += ` ${student.lastName}`;
+              if (employee.lastName) {
+                name += ` ${employee.lastName}`;
               }
-              return {
-                id: student.id,
-                fullName: fullName,
-              };
-            })
-          );
-          const submissionData = {
-            group_id: group.id,
-            submission_id: submission.id,
-            students,
-            title: group.title,
-            proposed_advisor: advisorName,
-            proposed_co_advisor1: coAdvisor1Name,
-            proposed_co_advisor2: coAdvisor2Name,
-            is_consultation: submission.is_consultation,
-            is_approve: submission.is_approve,
-          };
-          // Create a semester key based on the Academic_Calendar data
-          const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
 
-          if (!submissionBySemester[semesterKey]) {
-            submissionBySemester[semesterKey] = {
-              semester: semesterKey,
-              submissions: [],
+              if (employee.degree) {
+                name += `, ${employee.degree}`;
+              }
+
+              return name;
+            }
+
+            let advisorName = null;
+            let coAdvisor1Name = null;
+            let coAdvisor2Name = null;
+            if (submission.proposed_advisor_id) {
+              advisorName = await getEmployeeNameAndDegree(
+                submission.proposed_advisor_id
+              );
+            }
+            if (submission.proposed_co_advisor1_id) {
+              coAdvisor1Name = await getEmployeeNameAndDegree(
+                submission.proposed_co_advisor1_id
+              );
+            }
+            if (submission.proposed_co_advisor2_id) {
+              coAdvisor2Name = await getEmployeeNameAndDegree(
+                submission.proposed_co_advisor2_id
+              );
+            }
+
+            const students = await Promise.all(
+              groupStudents.map(async (student_id) => {
+                const student = await studentRepository.findStudentById(
+                  student_id
+                );
+                let fullName = student.firstName;
+
+                if (student.lastName) {
+                  fullName += ` ${student.lastName}`;
+                }
+
+                return {
+                  id: student.id,
+                  fullName: fullName,
+                };
+              })
+            );
+
+            const submissionData = {
+              group_id: group.id,
+              submission_id: submission.id,
+              students,
+              title: group.title,
+              proposed_advisor: advisorName,
+              proposed_co_advisor1: coAdvisor1Name,
+              proposed_co_advisor2: coAdvisor2Name,
+              is_consultation: submission.is_consultation,
+              is_approve: submission.is_approve,
             };
-          }
+            // get classroom
+            const classroom = await classroomRepository.findClassroomById(
+              submission.classroom_id
+            );
+            // Create a semester key based on the Academic_Calendar data
+            const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
-          submissionBySemester[semesterKey].submissions.push(submissionData);
+            if (!submissionBySemester[semesterKey]) {
+              submissionBySemester[semesterKey] = {
+                semester: semesterKey,
+                submissions: [],
+              };
+            }
+
+            submissionBySemester[semesterKey].submissions.push(submissionData);
+          }
         }
       }
     }
   }
   if (userKaprodi && kaprodi.major === "SI") {
-    // get all proposal_student
-    const proposalStudents =
-      await proposalStudentRepository.findAllProposalStudent();
-    if (proposalStudents) {
-      const groupsSI = [];
-      for (const entry of proposalStudents) {
-        // check all group of student
-        const groupStudents =
-          await groupStudentRepository.findGroupStudentByStudentId(
-            entry.student_id
-          );
-        for (const entry of groupStudents) {
-          // get student
-          const student = await studentRepository.findStudentById(
-            entry.student_id
-          );
-          if (student.major === "SI") {
-            // get group_student
-            const groupStudentsSI =
-              await groupStudentRepository.findGroupStudentByStudentId(
-                student.id
-              );
-            for (const entry of groupStudentsSI) {
-              // get group
-              const group = await groupRepository.findGroupById(entry.group_id);
-              groupsSI.push(group);
-            }
-          }
-        }
-      }
-      for (const entry of groupsSI) {
-        // get all submission
-        const submission = await submissionRepository.findSubmissionById(
-          entry.submission_id
-        );
-        if (submission) {
-          // get classroom
-          const classroom = await classroomRepository.findClassroomById(
-            submission.classroom_id
-          );
-
+    // get all submission
+    const submissions = await submissionRepository.findAllSubmission();
+    if (submissions) {
+      for (const submission of submissions) {
+        if (submission.classroom_id) {
           // get group
           const group = await groupRepository.findGroupBySubmissionId(
             submission.id
           );
-          // get all group_student
+          // get all student in group
           const groupStudents =
-            await groupStudentRepository.findGroupStudentByGroupId(
-              submission.id
-            );
+            await groupStudentRepository.findGroupStudentByGroupId(group.id);
+          // variable to check if thesis is in Informatika
+          let isSistemInformasi = null;
 
-          async function getEmployeeNameAndDegree(employeeId) {
-            const employee = await employeeRepository.findEmployeeById(
-              employeeId
-            );
-            let name = employee.firstName;
-
-            if (employee.lastName) {
-              name += ` ${employee.lastName}`;
+          // looping to check if thesis is in Informatika
+          for (const studentId of groupStudents) {
+            // get student data
+            const student = await studentRepository.findStudentById(studentId);
+            if (student.major === "SI") {
+              isSistemInformasi = true;
+              break; // Menghentikan loop jika ditemukan student dengan major === "IF"
             }
-
-            if (employee.degree) {
-              name += `, ${employee.degree}`;
-            }
-
-            return name;
           }
 
-          let advisorName = null;
-          let coAdvisor1Name = null;
-          let coAdvisor2Name = null;
-          if (submission.proposed_advisor_id) {
-            advisorName = await getEmployeeNameAndDegree(
-              submission.proposed_advisor_id
-            );
-          }
-          if (submission.proposed_co_advisor1_id) {
-            coAdvisor1Name = await getEmployeeNameAndDegree(
-              submission.proposed_co_advisor1_id
-            );
-          }
-          if (submission.proposed_co_advisor2_id) {
-            coAdvisor2Name = await getEmployeeNameAndDegree(
-              submission.proposed_co_advisor2_id
-            );
-          }
-
-          // get student all student data
-          const students = await Promise.all(
-            groupStudents.map(async (student_id) => {
-              // get student in table student by student_id
-              const student = await studentRepository.findStudentById(
-                student_id
+          if (isSistemInformasi) {
+            async function getEmployeeNameAndDegree(employeeId) {
+              const employee = await employeeRepository.findEmployeeById(
+                employeeId
               );
+              let name = employee.firstName;
 
-              // Menggabungkan firstName dan lastName menjadi fullName
-              let fullName = student.firstName;
-              if (student.lastName) {
-                fullName += ` ${student.lastName}`;
+              if (employee.lastName) {
+                name += ` ${employee.lastName}`;
               }
-              return {
-                id: student.id,
-                fullName: fullName,
-              };
-            })
-          );
-          const submissionData = {
-            group_id: group.id,
-            submission_id: entry.id,
-            students,
-            title: group.title,
-            proposed_advisor: advisorName,
-            proposed_co_advisor1: coAdvisor1Name,
-            proposed_co_advisor2: coAdvisor2Name,
-            is_consultation: entry.is_consultation,
-            is_approve: entry.is_approve,
-          };
-          // Create a semester key based on the Academic_Calendar data
-          const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
 
-          if (!submissionBySemester[semesterKey]) {
-            submissionBySemester[semesterKey] = {
-              semester: semesterKey,
-              submissions: [],
+              if (employee.degree) {
+                name += `, ${employee.degree}`;
+              }
+
+              return name;
+            }
+
+            let advisorName = null;
+            let coAdvisor1Name = null;
+            let coAdvisor2Name = null;
+            if (submission.proposed_advisor_id) {
+              advisorName = await getEmployeeNameAndDegree(
+                submission.proposed_advisor_id
+              );
+            }
+            if (submission.proposed_co_advisor1_id) {
+              coAdvisor1Name = await getEmployeeNameAndDegree(
+                submission.proposed_co_advisor1_id
+              );
+            }
+            if (submission.proposed_co_advisor2_id) {
+              coAdvisor2Name = await getEmployeeNameAndDegree(
+                submission.proposed_co_advisor2_id
+              );
+            }
+
+            const students = await Promise.all(
+              groupStudents.map(async (student_id) => {
+                const student = await studentRepository.findStudentById(
+                  student_id
+                );
+                let fullName = student.firstName;
+
+                if (student.lastName) {
+                  fullName += ` ${student.lastName}`;
+                }
+
+                return {
+                  id: student.id,
+                  fullName: fullName,
+                };
+              })
+            );
+
+            const submissionData = {
+              group_id: group.id,
+              submission_id: submission.id,
+              students,
+              title: group.title,
+              proposed_advisor: advisorName,
+              proposed_co_advisor1: coAdvisor1Name,
+              proposed_co_advisor2: coAdvisor2Name,
+              is_consultation: submission.is_consultation,
+              is_approve: submission.is_approve,
             };
-          }
+            // get classroom
+            const classroom = await classroomRepository.findClassroomById(
+              submission.classroom_id
+            );
+            // Create a semester key based on the Academic_Calendar data
+            const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
 
-          submissionBySemester[semesterKey].submissions.push(submissionData);
+            if (!submissionBySemester[semesterKey]) {
+              submissionBySemester[semesterKey] = {
+                semester: semesterKey,
+                submissions: [],
+              };
+            }
+
+            submissionBySemester[semesterKey].submissions.push(submissionData);
+          }
         }
       }
     }
@@ -1111,7 +1072,7 @@ const getSubmissionListDekan = async (userId) => {
         is_approve: entry.is_approve,
       };
       // Create a semester key based on the Academic_Calendar data
-      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
       if (!submissionBySemester[semesterKey]) {
         submissionBySemester[semesterKey] = {
@@ -1224,7 +1185,7 @@ const getProposalListAdvisor = async (userId) => {
       };
 
       // Create a semester key based on the Academic_Calendar data
-      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
       if (!proposalBySemester[semesterKey]) {
         proposalBySemester[semesterKey] = {
@@ -1344,7 +1305,7 @@ const getSkripsiListAdvisor = async (userId) => {
       };
 
       // Create a semester key based on the Academic_Calendar data
-      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
       if (!skripsiBySemester[semesterKey]) {
         skripsiBySemester[semesterKey] = {
@@ -1457,7 +1418,7 @@ const getHistoryListAdvisor = async (userId) => {
           entry.classroom_id
         );
         // Create a semester key based on the Academic_Calendar data
-        const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+        const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
         if (!historyData[semesterKey]) {
           historyData[semesterKey] = {
@@ -1530,7 +1491,7 @@ const getProposalListCoAdvisor = async (userId) => {
       };
 
       // Create a semester key based on the Academic_Calendar data
-      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
       if (!proposalBySemester[semesterKey]) {
         proposalBySemester[semesterKey] = {
@@ -1650,7 +1611,7 @@ const getSkripsiListCoAdvisor = async (userId) => {
       };
 
       // Create a semester key based on the Academic_Calendar data
-      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
       if (!skripsiBySemester[semesterKey]) {
         skripsiBySemester[semesterKey] = {
@@ -1763,7 +1724,7 @@ const getHistoryListCoAdvisor = async (userId) => {
           entry.classroom_id
         );
         // Create a semester key based on the Academic_Calendar data
-        const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+        const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
         if (!historyData[semesterKey]) {
           historyData[semesterKey] = {
@@ -1833,7 +1794,7 @@ const getProposalListChairman = async (userId) => {
       };
 
       // Create a semester key based on the Academic_Calendar data
-      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
       if (!proposalBySemester[semesterKey]) {
         proposalBySemester[semesterKey] = {
@@ -1946,7 +1907,7 @@ const getSkripsiListChairman = async (userId) => {
       };
 
       // Create a semester key based on the Academic_Calendar data
-      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
       if (!skripsiBySemester[semesterKey]) {
         skripsiBySemester[semesterKey] = {
@@ -2059,7 +2020,7 @@ const getHistoryListChairman = async (userId) => {
           entry.classroom_id
         );
         // Create a semester key based on the Academic_Calendar data
-        const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+        const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
         if (!historyData[semesterKey]) {
           historyData[semesterKey] = {
@@ -2128,7 +2089,7 @@ const getProposalListMember = async (userId) => {
       };
 
       // Create a semester key based on the Academic_Calendar data
-      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
       if (!proposalBySemester[semesterKey]) {
         proposalBySemester[semesterKey] = {
@@ -2244,7 +2205,7 @@ const getSkripsiListMember = async (userId) => {
       };
 
       // Create a semester key based on the Academic_Calendar data
-      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
       if (!skripsiBySemester[semesterKey]) {
         skripsiBySemester[semesterKey] = {
@@ -2357,7 +2318,7 @@ const getHistoryListMember = async (userId) => {
           entry.classroom_id
         );
         // Create a semester key based on the Academic_Calendar data
-        const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+        const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
         if (!historyData[semesterKey]) {
           historyData[semesterKey] = {
@@ -2432,7 +2393,7 @@ const getProposalListMK = async (userId) => {
           approve_by_co_advisor2: entry.is_proposal_approve_by_co_advisor2,
         };
         // Create a semester key based on the Academic_Calendar data
-        const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+        const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
         if (!proposalBySemester[semesterKey]) {
           proposalBySemester[semesterKey] = {
@@ -2556,7 +2517,7 @@ const getSkripsiListMK = async (userId) => {
           approve_by_co_advisor2: entry.is_skripsi_approve_by_co_advisor2,
         };
         // Create a semester key based on the Academic_Calendar data
-        const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+        const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
         if (!skripsiBySemester[semesterKey]) {
           skripsiBySemester[semesterKey] = {
@@ -2632,181 +2593,219 @@ const getProposalListKaprodi = async (userId, userRole) => {
   const proposalBySemester = {};
 
   if (userRole.includes("KAPRODI") && kaprodi.major === "IF") {
-    // get all proposal_student
-    const proposalStudents =
-      await proposalStudentRepository.findAllProposalStudent();
-    if (proposalStudents) {
-      const groupsIF = [];
-      for (const entry of proposalStudents) {
-        // check all group of student
-        const groupStudents =
-          await groupStudentRepository.findGroupStudentByStudentId(
-            entry.student_id
-          );
-        for (const entry of groupStudents) {
-          // get student
-          const student = await studentRepository.findStudentById(
-            entry.student_id
-          );
-          if (student.major === "IF") {
-            // get group_student
-            const groupStudentsIF =
-              await groupStudentRepository.findGroupStudentByStudentId(
-                student.id
-              );
-            for (const entry of groupStudentsIF) {
-              // get group
-              const group = await groupRepository.findGroupById(entry.group_id);
-              groupsIF.push(group);
-            }
-          }
-        }
-      }
-    }
-    for (const entry of groupsIF) {
-      if (entry.proposal_id) {
-        // get all proposal
-        const proposal = await proposalRepository.findProposalById(
-          entry.proposal_id
-        );
-
-        // get classroom
-        const classroom = await classroomRepository.findClassroomById(
-          proposal.classroom_id
-        );
-
-        // get group
-        const group = await groupRepository.findGroupByProposalId(proposal.id);
-        // get all group_student
-        const groupStudents =
-          await groupStudentRepository.findGroupStudentByGroupId(group.id);
-
-        // get student all student data
-        const students = await Promise.all(
-          groupStudents.map(async (student_id) => {
-            // get student in table student by student_id
-            const student = await studentRepository.findStudentById(student_id);
-
-            // Menggabungkan firstName dan lastName menjadi fullName
-            let fullName = student.firstName;
-            if (student.lastName) {
-              fullName += ` ${student.lastName}`;
-            }
-            return {
-              id: student.id,
-              fullName: fullName,
-            };
-          })
-        );
-        const proposalData = {
-          group_id: group.id,
-          proposal_id: proposal.id,
-          students,
-          title: group.title,
-          is_pass: proposal.is_pass,
-        };
-        // Create a semester key based on the Academic_Calendar data
-        const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
-
-        if (!proposalBySemester[semesterKey]) {
-          proposalBySemester[semesterKey] = {
-            semester: semesterKey,
-            proposals: [],
-          };
-        }
-
-        proposalBySemester[semesterKey].proposals.push(proposalData);
-      }
-    }
-  }
-  if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
-    // get all proposal_student
-    const proposalStudents =
-      await proposalStudentRepository.findAllProposalStudent();
-    if (proposalStudents) {
-      const groupsSI = [];
-      for (const entry of proposalStudents) {
-        // check all group of student
-        const groupStudents =
-          await groupStudentRepository.findGroupStudentByStudentId(
-            entry.student_id
-          );
-        for (const entry of groupStudents) {
-          // get student
-          const student = await studentRepository.findStudentById(
-            entry.student_id
-          );
-          if (student.major === "SI") {
-            // get group_student
-            const groupStudentsSI =
-              await groupStudentRepository.findGroupStudentByStudentId(
-                student.id
-              );
-            for (const entry of groupStudentsSI) {
-              // get group
-              const group = await groupRepository.findGroupById(entry.group_id);
-              groupsSI.push(group);
-            }
-          }
-        }
-      }
-      for (const entry of groupsSI) {
-        if (entry.proposal_id) {
-          // get all proposal
-          const proposal = await proposalRepository.findProposalById(
-            entry.proposal_id
-          );
-
-          // get classroom
-          const classroom = await classroomRepository.findClassroomById(
-            proposal.classroom_id
-          );
-
+    // get all proposal
+    const proposals = await proposalRepository.findAllProposal();
+    if (proposals) {
+      for (const proposal of proposals) {
+        if (proposal.classroom_id) {
           // get group
           const group = await groupRepository.findGroupByProposalId(
             proposal.id
           );
-          // get all group_student
+          // get all student in group
           const groupStudents =
             await groupStudentRepository.findGroupStudentByGroupId(group.id);
+          // variable to check if thesis is in Informatika
+          let isInformatika = null;
 
-          // get student all student data
-          const students = await Promise.all(
-            groupStudents.map(async (student_id) => {
-              // get student in table student by student_id
-              const student = await studentRepository.findStudentById(
-                student_id
-              );
-
-              // Menggabungkan firstName dan lastName menjadi fullName
-              let fullName = student.firstName;
-              if (student.lastName) {
-                fullName += ` ${student.lastName}`;
-              }
-              return {
-                id: student.id,
-                fullName: fullName,
-              };
-            })
-          );
-          const proposalData = {
-            group_id: group.id,
-            proposal_id: proposal.id,
-            students,
-            title: group.title,
-            is_pass: proposal.is_pass,
-          };
-          // Create a semester key based on the Academic_Calendar data
-          const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
-
-          if (!proposalBySemester[semesterKey]) {
-            proposalBySemester[semesterKey] = {
-              semester: semesterKey,
-              proposals: [],
-            };
+          // looping to check if thesis is in Informatika
+          for (const studentId of groupStudents) {
+            // get student data
+            const student = await studentRepository.findStudentById(studentId);
+            if (student.major === "IF") {
+              isInformatika = true;
+              break; // Menghentikan loop jika ditemukan student dengan major === "IF"
+            }
           }
 
-          proposalBySemester[semesterKey].proposals.push(proposalData);
+          if (isInformatika) {
+            async function getEmployeeNameAndDegree(employeeId) {
+              const employee = await employeeRepository.findEmployeeById(
+                employeeId
+              );
+              let name = employee.firstName;
+
+              if (employee.lastName) {
+                name += ` ${employee.lastName}`;
+              }
+
+              if (employee.degree) {
+                name += `, ${employee.degree}`;
+              }
+
+              return name;
+            }
+
+            let advisorName = null;
+            let coAdvisor1Name = null;
+            let coAdvisor2Name = null;
+            if (proposal.proposed_advisor_id) {
+              advisorName = await getEmployeeNameAndDegree(
+                proposal.proposed_advisor_id
+              );
+            }
+            if (proposal.proposed_co_advisor1_id) {
+              coAdvisor1Name = await getEmployeeNameAndDegree(
+                proposal.proposed_co_advisor1_id
+              );
+            }
+            if (proposal.proposed_co_advisor2_id) {
+              coAdvisor2Name = await getEmployeeNameAndDegree(
+                proposal.proposed_co_advisor2_id
+              );
+            }
+
+            const students = await Promise.all(
+              groupStudents.map(async (student_id) => {
+                const student = await studentRepository.findStudentById(
+                  student_id
+                );
+                let fullName = student.firstName;
+
+                if (student.lastName) {
+                  fullName += ` ${student.lastName}`;
+                }
+
+                return {
+                  id: student.id,
+                  fullName: fullName,
+                };
+              })
+            );
+
+            const proposalData = {
+              group_id: group.id,
+              proposal_id: proposal.id,
+              students,
+              title: group.title,
+              is_pass: proposal.is_pass,
+            };
+
+            // get classroom
+            const classroom = await classroomRepository.findClassroomById(
+              proposal.classroom_id
+            );
+            // Create a semester key based on the Academic_Calendar data
+            const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
+
+            if (!proposalBySemester[semesterKey]) {
+              proposalBySemester[semesterKey] = {
+                semester: semesterKey,
+                proposals: [],
+              };
+            }
+
+            proposalBySemester[semesterKey].proposals.push(proposalData);
+          }
+        }
+      }
+    }
+  }
+  if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
+    // get all proposal
+    const proposals = await proposalRepository.findAllProposal();
+    if (proposals) {
+      for (const proposal of proposals) {
+        if (proposal.classroom_id) {
+          // get group
+          const group = await groupRepository.findGroupByProposalId(
+            proposal.id
+          );
+          // get all student in group
+          const groupStudents =
+            await groupStudentRepository.findGroupStudentByGroupId(group.id);
+          // variable to check if thesis is in Informatika
+          let isSistemInformasi = null;
+
+          // looping to check if thesis is in Informatika
+          for (const studentId of groupStudents) {
+            // get student data
+            const student = await studentRepository.findStudentById(studentId);
+            if (student.major === "SI") {
+              isSistemInformasi = true;
+              break; // Menghentikan loop jika ditemukan student dengan major === "IF"
+            }
+          }
+
+          if (isSistemInformasi) {
+            async function getEmployeeNameAndDegree(employeeId) {
+              const employee = await employeeRepository.findEmployeeById(
+                employeeId
+              );
+              let name = employee.firstName;
+
+              if (employee.lastName) {
+                name += ` ${employee.lastName}`;
+              }
+
+              if (employee.degree) {
+                name += `, ${employee.degree}`;
+              }
+
+              return name;
+            }
+
+            let advisorName = null;
+            let coAdvisor1Name = null;
+            let coAdvisor2Name = null;
+            if (proposal.proposed_advisor_id) {
+              advisorName = await getEmployeeNameAndDegree(
+                proposal.proposed_advisor_id
+              );
+            }
+            if (proposal.proposed_co_advisor1_id) {
+              coAdvisor1Name = await getEmployeeNameAndDegree(
+                proposal.proposed_co_advisor1_id
+              );
+            }
+            if (proposal.proposed_co_advisor2_id) {
+              coAdvisor2Name = await getEmployeeNameAndDegree(
+                proposal.proposed_co_advisor2_id
+              );
+            }
+
+            const students = await Promise.all(
+              groupStudents.map(async (student_id) => {
+                const student = await studentRepository.findStudentById(
+                  student_id
+                );
+                let fullName = student.firstName;
+
+                if (student.lastName) {
+                  fullName += ` ${student.lastName}`;
+                }
+
+                return {
+                  id: student.id,
+                  fullName: fullName,
+                };
+              })
+            );
+
+            const proposalData = {
+              group_id: group.id,
+              proposal_id: proposal.id,
+              students,
+              title: group.title,
+              is_pass: proposal.is_pass,
+            };
+
+            // get classroom
+            const classroom = await classroomRepository.findClassroomById(
+              proposal.classroom_id
+            );
+            // Create a semester key based on the Academic_Calendar data
+            const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
+
+            if (!proposalBySemester[semesterKey]) {
+              proposalBySemester[semesterKey] = {
+                semester: semesterKey,
+                proposals: [],
+              };
+            }
+
+            proposalBySemester[semesterKey].proposals.push(proposalData);
+          }
         }
       }
     }
@@ -2870,191 +2869,211 @@ const getSkripsiListKaprodi = async (userId, userRole) => {
   const skripsiBySemester = {};
 
   if (userRole.includes("KAPRODI") && kaprodi.major === "IF") {
-    // get all skripsi_student
-    const skripsiStudents =
-      await skripsiStudentRepository.findAllSkripsiStudent();
-
-    if (!skripsiStudents) {
-      return skripsiBySemester;
-    }
-
-    const groupsIF = [];
-    for (const entry of skripsiStudents) {
-      // check all group of student
-      const groupStudents =
-        await groupStudentRepository.findGroupStudentByStudentId(
-          entry.student_id
-        );
-      for (const entry of groupStudents) {
-        // get student
-        const student = await studentRepository.findStudentById(
-          entry.student_id
-        );
-        if (student.major === "IF") {
-          // get group_student
-          const groupStudentsIF =
-            await groupStudentRepository.findGroupStudentByStudentId(
-              student.id
-            );
-          for (const entry of groupStudentsIF) {
-            // get group
-            const group = await groupRepository.findGroupById(entry.group_id);
-            groupsIF.push(group);
-          }
-        }
-      }
-    }
-    for (const entry of groupsIF) {
-      if (entry.skripsi_id) {
-        // get skripsi
-        const skripsi = await skripsiRepository.findSkripsiById(
-          entry.skripsi_id
-        );
-
+    // get all proposal
+    const skripsis = await proposalRepository.findAllProposal();
+    if (skripsis) {
+      for (const skripsi of skripsis) {
         if (skripsi.classroom_id) {
-          // get classroom
-          const classroom = await classroomRepository.findClassroomById(
-            skripsi.classroom_id
-          );
-
           // get group
-          const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
-          // get all group_student
+          const group = await groupRepository.findGroupByProposalId(skripsi.id);
+          // get all student in group
           const groupStudents =
             await groupStudentRepository.findGroupStudentByGroupId(group.id);
+          // variable to check if thesis is in Informatika
+          let isInformatika = null;
 
-          // get student all student data
-          const students = await Promise.all(
-            groupStudents.map(async (student_id) => {
-              // get student in table student by student_id
-              const student = await studentRepository.findStudentById(
-                student_id
-              );
-
-              // Menggabungkan firstName dan lastName menjadi fullName
-              let fullName = student.firstName;
-              if (student.lastName) {
-                fullName += ` ${student.lastName}`;
-              }
-              return {
-                id: student.id,
-                fullName: fullName,
-              };
-            })
-          );
-          const skripsiData = {
-            group_id: group.id,
-            skripsi_id: skripsi.id,
-            students,
-            title: group.title,
-            is_pass: skripsi.is_pass,
-          };
-          // Create a semester key based on the Academic_Calendar data
-          const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
-
-          if (!skripsiBySemester[semesterKey]) {
-            skripsiBySemester[semesterKey] = {
-              semester: semesterKey,
-              skripsis: [],
-            };
+          // looping to check if thesis is in Informatika
+          for (const studentId of groupStudents) {
+            // get student data
+            const student = await studentRepository.findStudentById(studentId);
+            if (student.major === "IF") {
+              isInformatika = true;
+              break; // Menghentikan loop jika ditemukan student dengan major === "IF"
+            }
           }
 
-          skripsiBySemester[semesterKey].skripsis.push(skripsiData);
+          if (isInformatika) {
+            async function getEmployeeNameAndDegree(employeeId) {
+              const employee = await employeeRepository.findEmployeeById(
+                employeeId
+              );
+              let name = employee.firstName;
+
+              if (employee.lastName) {
+                name += ` ${employee.lastName}`;
+              }
+
+              if (employee.degree) {
+                name += `, ${employee.degree}`;
+              }
+
+              return name;
+            }
+
+            let advisorName = null;
+            let coAdvisor1Name = null;
+            let coAdvisor2Name = null;
+            if (skripsi.proposed_advisor_id) {
+              advisorName = await getEmployeeNameAndDegree(
+                skripsi.proposed_advisor_id
+              );
+            }
+            if (skripsi.proposed_co_advisor1_id) {
+              coAdvisor1Name = await getEmployeeNameAndDegree(
+                skripsi.proposed_co_advisor1_id
+              );
+            }
+            if (skripsi.proposed_co_advisor2_id) {
+              coAdvisor2Name = await getEmployeeNameAndDegree(
+                skripsi.proposed_co_advisor2_id
+              );
+            }
+
+            const students = await Promise.all(
+              groupStudents.map(async (student_id) => {
+                const student = await studentRepository.findStudentById(
+                  student_id
+                );
+                let fullName = student.firstName;
+
+                if (student.lastName) {
+                  fullName += ` ${student.lastName}`;
+                }
+
+                return {
+                  id: student.id,
+                  fullName: fullName,
+                };
+              })
+            );
+            // get classroom
+            const classroom = await classroomRepository.findClassroomById(
+              skripsi.classroom_id
+            );
+            const skripsiData = {
+              group_id: group.id,
+              skripsi_id: skripsi.id,
+              students,
+              title: group.title,
+              is_pass: skripsi.is_pass,
+            };
+            // Create a semester key based on the Academic_Calendar data
+            const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
+
+            if (!skripsiBySemester[semesterKey]) {
+              skripsiBySemester[semesterKey] = {
+                semester: semesterKey,
+                skripsis: [],
+              };
+            }
+
+            skripsiBySemester[semesterKey].skripsis.push(skripsiData);
+          }
         }
       }
     }
   }
   if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
-    // get all skripsi_student
-    const skripsiStudents =
-      await skripsiStudentRepository.findAllSkripsiStudent();
-
-    if (!skripsiStudents) {
-      return skripsiBySemester;
-    }
-
-    const groupsSI = [];
-    for (const entry of skripsiStudents) {
-      // check all group of student
-      const groupStudents =
-        await groupStudentRepository.findGroupStudentByStudentId(
-          entry.student_id
-        );
-      for (const entry of groupStudents) {
-        // get student
-        const student = await studentRepository.findStudentById(
-          entry.student_id
-        );
-        if (student.major === "SI") {
-          // get group_student
-          const groupStudentsSI =
-            await groupStudentRepository.findGroupStudentByStudentId(
-              student.id
-            );
-          for (const entry of groupStudentsSI) {
-            // get group
-            const group = await groupRepository.findGroupById(entry.group_id);
-            groupsSI.push(group);
-          }
-        }
-      }
-    }
-    for (const entry of groupsSI) {
-      if (entry.skripsi_id) {
-        // get all skripsi
-        const skripsi = await skripsiRepository.findSkripsiById(
-          entry.skripsi_id
-        );
-
+    // get all proposal
+    const skripsis = await proposalRepository.findAllProposal();
+    if (skripsis) {
+      for (const skripsi of skripsis) {
         if (skripsi.classroom_id) {
-          // get classroom
-          const classroom = await classroomRepository.findClassroomById(
-            skripsi.classroom_id
-          );
-
           // get group
-          const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
-          // get all group_student
+          const group = await groupRepository.findGroupByProposalId(skripsi.id);
+          // get all student in group
           const groupStudents =
             await groupStudentRepository.findGroupStudentByGroupId(group.id);
+          // variable to check if thesis is in Informatika
+          let isSistemInformasi = null;
 
-          // get student all student data
-          const students = await Promise.all(
-            groupStudents.map(async (student_id) => {
-              // get student in table student by student_id
-              const student = await studentRepository.findStudentById(
-                student_id
-              );
-
-              // Menggabungkan firstName dan lastName menjadi fullName
-              let fullName = student.firstName;
-              if (student.lastName) {
-                fullName += ` ${student.lastName}`;
-              }
-              return {
-                id: student.id,
-                fullName: fullName,
-              };
-            })
-          );
-          const skripsiData = {
-            group_id: group.id,
-            skripsi_id: skripsi.id,
-            students,
-            title: group.title,
-            is_pass: skripsi.is_pass,
-          };
-          // Create a semester key based on the Academic_Calendar data
-          const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
-
-          if (!skripsiBySemester[semesterKey]) {
-            skripsiBySemester[semesterKey] = {
-              semester: semesterKey,
-              skripsis: [],
-            };
+          // looping to check if thesis is in Informatika
+          for (const studentId of groupStudents) {
+            // get student data
+            const student = await studentRepository.findStudentById(studentId);
+            if (student.major === "SI") {
+              isSistemInformasi = true;
+              break; // Menghentikan loop jika ditemukan student dengan major === "IF"
+            }
           }
 
-          skripsiBySemester[semesterKey].skripsis.push(skripsiData);
+          if (isSistemInformasi) {
+            async function getEmployeeNameAndDegree(employeeId) {
+              const employee = await employeeRepository.findEmployeeById(
+                employeeId
+              );
+              let name = employee.firstName;
+
+              if (employee.lastName) {
+                name += ` ${employee.lastName}`;
+              }
+
+              if (employee.degree) {
+                name += `, ${employee.degree}`;
+              }
+
+              return name;
+            }
+
+            let advisorName = null;
+            let coAdvisor1Name = null;
+            let coAdvisor2Name = null;
+            if (skripsi.proposed_advisor_id) {
+              advisorName = await getEmployeeNameAndDegree(
+                skripsi.proposed_advisor_id
+              );
+            }
+            if (skripsi.proposed_co_advisor1_id) {
+              coAdvisor1Name = await getEmployeeNameAndDegree(
+                skripsi.proposed_co_advisor1_id
+              );
+            }
+            if (skripsi.proposed_co_advisor2_id) {
+              coAdvisor2Name = await getEmployeeNameAndDegree(
+                skripsi.proposed_co_advisor2_id
+              );
+            }
+
+            const students = await Promise.all(
+              groupStudents.map(async (student_id) => {
+                const student = await studentRepository.findStudentById(
+                  student_id
+                );
+                let fullName = student.firstName;
+
+                if (student.lastName) {
+                  fullName += ` ${student.lastName}`;
+                }
+
+                return {
+                  id: student.id,
+                  fullName: fullName,
+                };
+              })
+            );
+            // get classroom
+            const classroom = await classroomRepository.findClassroomById(
+              skripsi.classroom_id
+            );
+            const skripsiData = {
+              group_id: group.id,
+              skripsi_id: skripsi.id,
+              students,
+              title: group.title,
+              is_pass: skripsi.is_pass,
+            };
+            // Create a semester key based on the Academic_Calendar data
+            const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
+
+            if (!skripsiBySemester[semesterKey]) {
+              skripsiBySemester[semesterKey] = {
+                semester: semesterKey,
+                skripsis: [],
+              };
+            }
+
+            skripsiBySemester[semesterKey].skripsis.push(skripsiData);
+          }
         }
       }
     }
@@ -3111,216 +3130,6 @@ const getSkripsiListKaprodi = async (userId, userRole) => {
 // @description     Get history list kaprodi IF/SI
 // @route           GET /group/history-list-kaprodi
 // @access          DOSEN
-// const getHistoryListKaprodi = async (userId, userRole) => {
-//   const historyData = {};
-
-//   // check user if kaprodi
-//   const kaprodi = await employeeRepository.findEmployeeById(userId);
-
-//   if (userRole.includes("KAPRODI") && kaprodi.major === "IF") {
-//     // get all skripsi_student
-//     const skripsiStudents =
-//       await skripsiStudentRepository.findAllSkripsiStudent();
-
-//     if (!skripsiStudents) {
-//       return skripsiBySemester;
-//     }
-
-//     const groupsIF = new Set();
-//     for (const entrySkripsi of skripsiStudents) {
-//       // check all group of student
-//       const groupStudents =
-//         await groupStudentRepository.findGroupStudentByStudentId(
-//           entrySkripsi.student_id
-//         );
-//       for (const entryGroupStudent of groupStudents) {
-//         // get student
-//         const student = await studentRepository.findStudentById(
-//           entryGroupStudent.student_id
-//         );
-//         if (student.major === "IF") {
-//           // get group_student
-//           const groupStudentsIF =
-//             await groupStudentRepository.findGroupStudentByStudentId(
-//               student.id
-//             );
-//           for (const entryGroupStudentIF of groupStudentsIF) {
-//             // get group
-//             const group = await groupRepository.findGroupById(
-//               entryGroupStudentIF.group_id
-//             );
-//             if (!groupsIF.has(group)) {
-//               groupsIF.add(group);
-//             }
-//           }
-//         }
-//       }
-//     }
-//     for (const entryGroupIF of groupsIF) {
-//       // get skripsi
-//       const skripsi = await skripsiRepository.findSkripsiById(
-//         entryGroupIF.skripsi_id
-//       );
-
-//       // check if found proposal
-//       if (skripsi) {
-//         // get group
-//         const group = await groupRepository.findGroupBySkripsiId(
-//           entryGroupIF.skripsi_id
-//         );
-
-//         // check if progress is FINISH
-//         if (group.progress === "Finished") {
-//           // get student data
-//           const groupStudents =
-//             await groupStudentRepository.findGroupStudentByGroupId(group.id);
-//           const students = await Promise.all(
-//             groupStudents.map(async (student_id) => {
-//               const student = await studentRepository.findStudentById(
-//                 student_id
-//               );
-//               let fullName = student.firstName;
-
-//               if (student.lastName) {
-//                 fullName += ` ${student.lastName}`;
-//               }
-
-//               return {
-//                 id: student.id,
-//                 fullName: fullName,
-//               };
-//             })
-//           );
-
-//           const data = {
-//             group_id: group.id,
-//             students,
-//             title: group.title,
-//             approve_date: entryGroupIF.approve_date,
-//           };
-//           // get classroom
-//           const classroom = await classroomRepository.findClassroomById(
-//             skripsi.classroom_id
-//           );
-//           // Create a semester key based on the Academic_Calendar data
-//           const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
-
-//           if (!historyData[semesterKey]) {
-//             historyData[semesterKey] = {
-//               semester: semesterKey,
-//               skripsis: [],
-//             };
-//           }
-//           historyData[semesterKey].skripsis.push(data);
-//           // console.log("Data riwayat: ", historyData);
-//         }
-//       }
-//     }
-//   }
-//   if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
-//     // get all skripsi_student
-//     const skripsiStudents =
-//       await skripsiStudentRepository.findAllSkripsiStudent();
-
-//     if (!skripsiStudents) {
-//       return skripsiBySemester;
-//     }
-
-//     const groupsSI = new Set();
-//     for (const entrySkripsi of skripsiStudents) {
-//       // check all group of student
-//       const groupStudents =
-//         await groupStudentRepository.findGroupStudentByStudentId(
-//           entrySkripsi.student_id
-//         );
-//       for (const entryGroupStudent of groupStudents) {
-//         // get student
-//         const student = await studentRepository.findStudentById(
-//           entryGroupStudent.student_id
-//         );
-//         if (student.major === "SI") {
-//           // get group_student
-//           const groupStudentsSI =
-//             await groupStudentRepository.findGroupStudentByStudentId(
-//               student.id
-//             );
-//           for (const entryGroupStudentSI of groupStudentsSI) {
-//             // get group
-//             const group = await groupRepository.findGroupById(
-//               entryGroupStudentSI.group_id
-//             );
-//             if (!groupsSI.has(group)) {
-//               groupsSI.add(group);
-//             }
-//           }
-//         }
-//       }
-//     }
-//     for (const entryGroupSI of groupsSI) {
-//       // get skripsi
-//       const skripsi = await skripsiRepository.findSkripsiById(
-//         entryGroupSI.skripsi_id
-//       );
-
-//       // check if found proposal
-//       if (skripsi) {
-//         // get group
-//         const group = await groupRepository.findGroupBySkripsiId(
-//           entryGroupSI.skripsi_id
-//         );
-
-//         // check if progress is FINISH
-//         if (group.progress === "Finished") {
-//           // get student data
-//           const groupStudents =
-//             await groupStudentRepository.findGroupStudentByGroupId(group.id);
-//           const students = await Promise.all(
-//             groupStudents.map(async (student_id) => {
-//               const student = await studentRepository.findStudentById(
-//                 student_id
-//               );
-//               let fullName = student.firstName;
-
-//               if (student.lastName) {
-//                 fullName += ` ${student.lastName}`;
-//               }
-
-//               return {
-//                 id: student.id,
-//                 fullName: fullName,
-//               };
-//             })
-//           );
-
-//           const data = {
-//             group_id: group.id,
-//             students,
-//             title: group.title,
-//             approve_date: entryGroupSI.approve_date,
-//           };
-//           // get classroom
-//           const classroom = await classroomRepository.findClassroomById(
-//             skripsi.classroom_id
-//           );
-//           // Create a semester key based on the Academic_Calendar data
-//           const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
-
-//           if (!historyData[semesterKey]) {
-//             historyData[semesterKey] = {
-//               semester: semesterKey,
-//               skripsis: [],
-//             };
-//           }
-//           historyData[semesterKey].skripsis.push(data);
-//           // console.log("Data riwayat: ", historyData);
-//         }
-//       }
-//     }
-//   }
-//   // Convert the submissionBySemester object into an array of semesters
-//   const historyList = Object.values(historyData);
-//   return historyList;
-// };
 const getHistoryListKaprodi = async (userId, userRole) => {
   const historyData = {};
 
@@ -3381,7 +3190,7 @@ const getHistoryListKaprodi = async (userId, userRole) => {
               skripsi.classroom_id
             );
             // Create a semester key based on the Academic_Calendar data
-            const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+            const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
             if (!historyData[semesterKey]) {
               historyData[semesterKey] = {
@@ -3519,7 +3328,7 @@ const getProposalListDekan = async (userId, userRole) => {
       );
 
       // Create a semester key based on the Academic_Calendar data
-      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
       if (!proposalBySemester[semesterKey]) {
         proposalBySemester[semesterKey] = {
@@ -3631,7 +3440,7 @@ const getSkripsiListDekan = async (userId, userRole) => {
         );
 
         // Create a semester key based on the Academic_Calendar data
-        const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+        const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
         if (!skripsiBySemester[semesterKey]) {
           skripsiBySemester[semesterKey] = {
@@ -3743,7 +3552,7 @@ const getHistoryListDekan = async (userId, userRole) => {
             entry.classroom_id
           );
           // Create a semester key based on the Academic_Calendar data
-          const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+          const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
           if (!historyData[semesterKey]) {
             historyData[semesterKey] = {
@@ -3830,7 +3639,7 @@ const getProposalListSekretaris = async () => {
     );
 
     // Create a semester key based on the Academic_Calendar data
-    const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+    const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
     if (!proposalBySemester[semesterKey]) {
       proposalBySemester[semesterKey] = {
@@ -3961,7 +3770,7 @@ const getSkripsiListSekretaris = async () => {
       );
 
       // Create a semester key based on the Academic_Calendar data
-      const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
 
       if (!skripsiBySemester[semesterKey]) {
         skripsiBySemester[semesterKey] = {
