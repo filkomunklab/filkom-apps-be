@@ -355,6 +355,7 @@ const updateProposalScheduleById = async (req, res) => {
   }
   try {
     const id = req.params.id;
+    const userId = req.user.user.id;
     const payload = req.body;
     if (
       !(
@@ -372,6 +373,7 @@ const updateProposalScheduleById = async (req, res) => {
     }
     const proposal = await proposalService.updateProposalScheduleById(
       id,
+      userId,
       payload
     );
     res.send({ status: "OK", data: proposal });
