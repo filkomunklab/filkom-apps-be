@@ -17,6 +17,7 @@ const proposalAssessmentRepository = require("../proposal_assessment/proposal_as
 const proposalChangesRepository = require("../proposal_changes/proposal_changes.repository");
 const skripsiRepository = require("../skripsi/skripsi.repository");
 const classroomRepository = require("../classroom/classroom.repository");
+const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get proposal by id
@@ -136,6 +137,13 @@ const updateProposalDocumentById = async (userId, id, payload) => {
     is_proposal_approve_by_co_advisor2:
       lastUpdatedProposal.is_proposal_approve_by_co_advisor2,
   };
+
+  // history UPLOAD DOKUMEN PROPOSAL by ID
+  await thesisHistoryRepository.createThesisHistory(
+    userId,
+    "UPLOAD DOKUMEN PROPOSAL by ID",
+    group.id
+  );
   return Data;
 };
 
@@ -214,6 +222,13 @@ const deleteProposalDocumentById = async (userId, id) => {
   ) {
     await proposalRepository.deleteProposalDocumentApproveByCoAdvisor2ById(id);
   }
+
+  // history DELETE DOKUMEN PROPOSAL by ID
+  await thesisHistoryRepository.createThesisHistory(
+    userId,
+    "DELETE DOKUMEN PROPOSAL by ID",
+    group.id
+  );
 };
 
 //===================================================================
@@ -252,6 +267,9 @@ const approveProposalDocumentById = async (userId, id) => {
       userId
     );
 
+  const group = await groupRepository.findGroupByProposalId(id);
+  console.log("ini group: ", group);
+
   if (advisor) {
     if (advisor.is_proposal_approve_by_advisor === "Approve") {
       throw {
@@ -267,6 +285,13 @@ const approveProposalDocumentById = async (userId, id) => {
         advisor_proposal_approved_date:
           UpdatedProposal.advisor_proposal_approved_date,
       };
+
+      // history APPROVE DOKUMEN PROPOSAL by ID
+      await thesisHistoryRepository.createThesisHistory(
+        userId,
+        "APPROVE DOKUMEN PROPOSAL by ID",
+        group.id
+      );
       return Data;
     }
   }
@@ -285,6 +310,12 @@ const approveProposalDocumentById = async (userId, id) => {
         co_advisor1_proposal_approved_date:
           UpdatedProposal.co_advisor1_proposal_approved_date,
       };
+      // history APPROVE DOKUMEN PROPOSAL by ID
+      await thesisHistoryRepository.createThesisHistory(
+        userId,
+        "APPROVE DOKUMEN PROPOSAL by ID",
+        group.id
+      );
       return Data;
     }
   }
@@ -303,6 +334,13 @@ const approveProposalDocumentById = async (userId, id) => {
         co_advisor2_proposal_approved_date:
           UpdatedProposal.co_advisor2_proposal_approved_date,
       };
+
+      // history APPROVE DOKUMEN PROPOSAL by ID
+      await thesisHistoryRepository.createThesisHistory(
+        userId,
+        "APPROVE DOKUMEN PROPOSAL by ID",
+        group.id
+      );
       return Data;
     }
   }
@@ -351,6 +389,8 @@ const rejectProposalDocumentById = async (userId, id) => {
       userId
     );
 
+  const group = await groupRepository.findGroupByProposalId(id);
+
   if (advisor) {
     if (
       advisor.is_proposal_approve_by_advisor === "Rejected" ||
@@ -369,6 +409,13 @@ const rejectProposalDocumentById = async (userId, id) => {
         advisor_proposal_approved_date:
           UpdatedProposal.advisor_proposal_approved_date,
       };
+
+      // history REJECT DOKUMEN PROPOSAL by ID
+      await thesisHistoryRepository.createThesisHistory(
+        userId,
+        "REJECT DOKUMEN PROPOSAL by ID",
+        group.id
+      );
       return Data;
     }
   }
@@ -390,6 +437,12 @@ const rejectProposalDocumentById = async (userId, id) => {
         co_advisor1_proposal_approved_date:
           UpdatedProposal.co_advisor1_proposal_approved_date,
       };
+      // history REJECT DOKUMEN PROPOSAL by ID
+      await thesisHistoryRepository.createThesisHistory(
+        userId,
+        "REJECT DOKUMEN PROPOSAL by ID",
+        group.id
+      );
       return Data;
     }
   }
@@ -411,6 +464,12 @@ const rejectProposalDocumentById = async (userId, id) => {
         co_advisor2_proposal_approved_date:
           UpdatedProposal.co_advisor2_proposal_approved_date,
       };
+      // history REJECT DOKUMEN PROPOSAL by ID
+      await thesisHistoryRepository.createThesisHistory(
+        userId,
+        "REJECT DOKUMEN PROPOSAL by ID",
+        group.id
+      );
       return Data;
     }
   }
@@ -468,6 +527,13 @@ const updateProposalPaymentById = async (id, userId, payload) => {
     payload,
     path
   );
+
+  // history UPLOAD PEMBAYARAN PROPOSAL by ID
+  await thesisHistoryRepository.createThesisHistory(
+    userId,
+    "UPLOAD PEMBAYARAN PROPOSAL by ID",
+    group.id
+  );
   return UpdatedProposal;
 };
 
@@ -510,6 +576,13 @@ const deleteProposalPaymentById = async (id, userId) => {
 
   // delete/update proposal document
   await proposalRepository.deleteProposalPaymentById(id);
+
+  // history DELETE PEMBAYARAN PROPOSAL by ID
+  await thesisHistoryRepository.createThesisHistory(
+    userId,
+    "DELETE PEMBAYARAN PROPOSAL by ID",
+    group.id
+  );
 };
 
 //===================================================================
@@ -557,6 +630,13 @@ const updateProposalPlagiarismById = async (id, userId, payload) => {
     payload,
     path
   );
+
+  // history UPLOAD PLAGIARISM PROPOSAL by ID
+  await thesisHistoryRepository.createThesisHistory(
+    userId,
+    "UPLOAD PLAGIARISM PROPOSAL by ID",
+    group.id
+  );
   return UpdatedProposal;
 };
 
@@ -599,6 +679,13 @@ const deleteProposalPlagiarismById = async (id, userId) => {
 
   // delete/update proposal plagiarism
   await proposalRepository.deleteProposalPlagiarismById(id);
+
+  // history DELETE PLAGIARISM PROPOSAL by ID
+  await thesisHistoryRepository.createThesisHistory(
+    userId,
+    "DELETE PLAGIARISM PROPOSAL by ID",
+    group.id
+  );
 };
 
 //===================================================================
