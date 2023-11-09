@@ -1423,14 +1423,7 @@ const deleteLinkSourceCodeById = async (id) => {
 const findAllSkripsiByAdvisorId = async (userId) => {
   const skripsi = await prisma.skripsi.findMany({
     where: {
-      OR: [
-        {
-          co_advisor1_id: userId,
-        },
-        {
-          co_advisor2_id: userId,
-        },
-      ],
+      advisor_id: userId,
     },
   });
   return skripsi;

@@ -101,6 +101,15 @@ router.get(
 );
 
 //===================================================================
+// @description     Get history list advisor
+// @access          DOSEN
+router.get(
+  "/group/history-list-advisor",
+  auth,
+  groupController.getHistoryListAdvisor
+);
+
+//===================================================================
 // @description     Get proposal list co-advisor
 // @access          DOSEN
 router.get(
@@ -116,6 +125,15 @@ router.get(
   "/group/skripsi-list-co-advisor",
   auth,
   groupController.getSkripsiListCoAdvisor
+);
+
+//===================================================================
+// @description     Get history list coadvisor
+// @access          DOSEN
+router.get(
+  "/group/history-list-co-advisor",
+  auth,
+  groupController.getHistoryListCoAdvisor
 );
 
 //===================================================================
@@ -137,6 +155,15 @@ router.get(
 );
 
 //===================================================================
+// @description     Get history list chairman
+// @access          DOSEN
+router.get(
+  "/group/history-list-chairman",
+  auth,
+  groupController.getHistoryListChairman
+);
+
+//===================================================================
 // @description     Get proposal list member
 // @access          DOSEN
 router.get(
@@ -152,6 +179,15 @@ router.get(
   "/group/skripsi-list-member",
   auth,
   groupController.getSkripsiListMember
+);
+
+//===================================================================
+// @description     Get history list member
+// @access          DOSEN
+router.get(
+  "/group/history-list-member",
+  auth,
+  groupController.getHistoryListMember
 );
 
 //===================================================================
@@ -183,6 +219,15 @@ router.get(
 );
 
 //===================================================================
+// @description     Get history list kaprodi
+// @access          DOSEN
+router.get(
+  "/group/history-list-kaprodi",
+  auth,
+  groupController.getHistoryListKaprodi
+);
+
+//===================================================================
 // @description     Get proposal list dekan
 // @access          DEKAN
 router.get(
@@ -198,6 +243,15 @@ router.get(
   "/group/skripsi-list-dekan",
   auth,
   groupController.getSkripsiListDekan
+);
+
+//===================================================================
+// @description     Get history list dekan
+// @access          DOSEN
+router.get(
+  "/group/history-list-dekan",
+  auth,
+  groupController.getHistoryListDekan
 );
 
 //===================================================================
