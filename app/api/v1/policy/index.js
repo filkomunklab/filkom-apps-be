@@ -134,6 +134,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_revision_document");
     // Dekan view proposal list dekan
     can("read", "skripsi_list_dekan");
+    // Dekan view history list dekan
+    can("read", "history_list_dekan");
   }
 
   if (hasRole("KAPRODI")) {
@@ -189,6 +191,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_revision_document");
     // Kaprodi view skripsi list kaprodi
     can("read", "skripsi_list_kaprodi");
+    // Kaprodi view history list kaprodi
+    can("read", "history_list_kaprodi");
   }
 
   if (hasRole("DOSEN")) {
@@ -286,6 +290,14 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_revision_document");
     // (Dosen: Ketua, Anggota, Advisor) approve document revisi skripsi
     can("update", "is_skripsi_revision_approve");
+    // (Dosen: Advisor) view history list advisor
+    can("update", "history_list_advisor");
+    // (Dosen: Co-Advisor) view history list coadvisor
+    can("update", "history_list_co_advisor");
+    // (Dosen: Chairman) view history list chairman
+    can("update", "history_list_chairman");
+    // (Dosen: Member) view history list member
+    can("update", "history_list_member");
   }
 
   if (hasRole("DOSEN_MK")) {

@@ -412,6 +412,7 @@ model Proposal {
   panelist_chairman_revision_approve_date  DateTime?
   panelist_member_revision_approve_date    DateTime?
   advisor_revision_approve_date            DateTime?
+  approve_date                             DateTime?
   group                                    Group?                @relation("Proposal")
   assessment                               Proposal_Assessment[] @relation("Assessment")
   changes                                  Proposal_Changes[]    @relation("Changes")
@@ -477,6 +478,7 @@ model Skripsi {
   panelist_chairman_revision_approve_date  DateTime?
   panelist_member_revision_approve_date    DateTime?
   advisor_revision_approve_date            DateTime?
+  approve_date                             DateTime?
   file_name_hki                            String?
   file_name_journal                        String?
   file_name_sourcecode                     String?
