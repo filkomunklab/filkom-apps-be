@@ -17,6 +17,7 @@ const skripsiAssessmentRepository = require("../skripsi_assessment/skripsi_asses
 const skripsiChangesRepository = require("../skripsi_changes/skripsi_changes.repository");
 const classroomRepository = require("../classroom/classroom.repository");
 const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
+const userManagementRepository = require("../user_management/user_namagement.repository");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get skripsi by id
@@ -139,12 +140,15 @@ const updateSkripsiDocumentById = async (userId, id, payload) => {
       lastUpdatedSkripsi.is_skripsi_approve_by_co_advisor2,
   };
 
-  // history UPLOAD DOKUMEN SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "UPLOAD DOKUMEN SKRIPSI by ID",
-    group.id
-  );
+  if (UpdatedSkripsi) {
+    // history UPLOAD DOKUMEN SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengunggah Dokumen Skripsi",
+      group.id
+    );
+  }
+
   return Data;
 };
 
@@ -221,12 +225,15 @@ const deleteSkripsiDocumentById = async (userId, id) => {
   ) {
     await skripsiRepository.deleteSkripsiDocumentApproveByCoAdvisor2ById(id);
   }
-  // history DELETE DOKUMEN SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "DELETE DOKUMEN SKRIPSI by ID",
-    group.id
-  );
+
+  if (UpdatedSkripsi) {
+    // history DELETE DOKUMEN SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menghapus Dokumen Skripsi",
+      group.id
+    );
+  }
 };
 
 //===================================================================
@@ -284,12 +291,15 @@ const approveSkripsiDocumentById = async (userId, id) => {
           UpdatedSkripsi.advisor_skripsi_approved_date,
       };
 
-      // history APPROVE DOKUMEN SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "APPROVE DOKUMEN SKRIPSI by ID",
-        group.id
-      );
+      if (UpdatedSkripsi) {
+        // history APPROVE DOKUMEN SKRIPSI by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Advisor Menyetujui Dokumen Skripsi",
+          group.id
+        );
+      }
+
       return Data;
     }
   }
@@ -309,12 +319,14 @@ const approveSkripsiDocumentById = async (userId, id) => {
           UpdatedSkripsi.co_advisor1_skripsi_approved_date,
       };
 
-      // history APPROVE DOKUMEN SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "APPROVE DOKUMEN SKRIPSI by ID",
-        group.id
-      );
+      if (UpdatedSkripsi) {
+        // history APPROVE DOKUMEN SKRIPSI by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Co-Advisor 1 Menyetujui Dokumen Skripsi",
+          group.id
+        );
+      }
       return Data;
     }
   }
@@ -334,12 +346,14 @@ const approveSkripsiDocumentById = async (userId, id) => {
           UpdatedSkripsi.co_advisor2_skripsi_approved_date,
       };
 
-      // history APPROVE DOKUMEN SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "APPROVE DOKUMEN SKRIPSI by ID",
-        group.id
-      );
+      if (UpdatedSkripsi) {
+        // history APPROVE DOKUMEN SKRIPSI by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Co-Advisor 2 Menyetujui Dokumen Skripsi",
+          group.id
+        );
+      }
       return Data;
     }
   }
@@ -410,12 +424,15 @@ const rejectSkripsiDocumentById = async (userId, id) => {
           UpdatedSkripsi.advisor_skripsi_approved_date,
       };
 
-      // history REJECT DOKUMEN SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "REJECT DOKUMEN SKRIPSI by ID",
-        group.id
-      );
+      if (UpdatedSkripsi) {
+        // history REJECT DOKUMEN SKRIPSI by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Advisor Menolak Dokumen Skripsi",
+          group.id
+        );
+      }
+
       return Data;
     }
   }
@@ -438,12 +455,14 @@ const rejectSkripsiDocumentById = async (userId, id) => {
           UpdatedSkripsi.co_advisor1_skripsi_approved_date,
       };
 
-      // history REJECT DOKUMEN SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "REJECT DOKUMEN SKRIPSI by ID",
-        group.id
-      );
+      if (UpdatedSkripsi) {
+        // history REJECT DOKUMEN SKRIPSI by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Co-Advisor 1 Menolak Dokumen Skripsi",
+          group.id
+        );
+      }
       return Data;
     }
   }
@@ -466,12 +485,14 @@ const rejectSkripsiDocumentById = async (userId, id) => {
           UpdatedSkripsi.co_advisor2_skripsi_approved_date,
       };
 
-      // history REJECT DOKUMEN SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "REJECT DOKUMEN SKRIPSI by ID",
-        group.id
-      );
+      if (UpdatedSkripsi) {
+        // history REJECT DOKUMEN SKRIPSI by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Co-Advisor 2 Menolak Dokumen Skripsi",
+          group.id
+        );
+      }
       return Data;
     }
   }
@@ -532,12 +553,15 @@ const updateSkripsiPaymentById = async (id, userId, payload) => {
     path
   );
 
-  // history UPLOAD PEMBAYARAN SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "UPLOAD PEMBAYARAN SKRIPSI by ID",
-    group.id
-  );
+  if (UpdatedSkripsi) {
+    // history UPLOAD PEMBAYARAN SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengunggah Bukti Pembayaran Skripsi",
+      group.id
+    );
+  }
+
   return UpdatedSkripsi;
 };
 
@@ -579,14 +603,16 @@ const deleteSkripsiPaymentById = async (id, userId) => {
   await deleteObject(desertRef);
 
   // delete/update skripsi document
-  await skripsiRepository.deleteSkripsiPaymentById(id);
+  const updatedSkripsi = await skripsiRepository.deleteSkripsiPaymentById(id);
 
-  // history DELETE PEMBAYARAN SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "DELETE PEMBAYARAN SKRIPSI by ID",
-    group.id
-  );
+  if (updatedSkripsi) {
+    // history DELETE PEMBAYARAN SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menghapus Bukti Pembayaran Skripsi",
+      group.id
+    );
+  }
 };
 
 //===================================================================
@@ -637,12 +663,15 @@ const updateSkripsiPlagiarismById = async (id, userId, payload) => {
     path
   );
 
-  // history UPLOAD PLAGIARISM SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "UPLOAD PLAGIARISM SKRIPSI by ID",
-    group.id
-  );
+  if (UpdatedSkripsi) {
+    // history UPLOAD PLAGIARISM SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengunggah Hasil Cek Plagiat Skripsi",
+      group.id
+    );
+  }
+
   return UpdatedSkripsi;
 };
 
@@ -684,14 +713,18 @@ const deleteSkripsiPlagiarismById = async (id, userId) => {
   await deleteObject(desertRef);
 
   // delete/update skripsi plagiarism
-  await skripsiRepository.deleteSkripsiPlagiarismById(id);
-
-  // history DELETE PLAGIARISM SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "DELETE PLAGIARISM SKRIPSI by ID",
-    group.id
+  const updatedSkripsi = await skripsiRepository.deleteSkripsiPlagiarismById(
+    id
   );
+
+  if (updatedSkripsi) {
+    // history DELETE PLAGIARISM SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menghapus Hasil Cek Plagiat Skripsi",
+      group.id
+    );
+  }
 };
 
 //===================================================================
@@ -881,12 +914,15 @@ const updateSkripsiScheduleById = async (id, userId, payload) => {
     payload
   );
 
-  // history UPDATE SCHEDULE SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "UPDATE SCHEDULE SKRIPSI by ID",
-    group.id
-  );
+  if (updatedSkripsi) {
+    // history UPDATE SCHEDULE SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menyusun Jadwal Sidang Skripsi",
+      group.id
+    );
+  }
+
   return updatedSkripsi;
 };
 
@@ -1042,13 +1078,14 @@ const openAccessSkripsiReportById = async (id, userId) => {
           skripsi.co_advisor2_id
         );
       }
+
+      // history OPEN REPORT SKRIPSI by ID
+      await thesisHistoryRepository.createThesisHistory(
+        userId,
+        "Sidang Skripsi di Mulai",
+        group.id
+      );
     }
-    // history OPEN REPORT SKRIPSI by ID
-    await thesisHistoryRepository.createThesisHistory(
-      userId,
-      "OPEN REPORT SKRIPSI by ID",
-      group.id
-    );
 
     return updatedSkripsi;
   } else {
@@ -1087,12 +1124,12 @@ const updateSkripsiAssessmentById = async (id, userId, payload) => {
   // ambil informasi group untuk thesis history
   const group = await groupRepository.findGroupBySkripsiId(id);
 
-  // history INPUT/UPDATE ASSESSMENT SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "INPUT/UPDATE ASSESSMENT SKRIPSI by ID",
-    group.id
-  );
+  // // history INPUT/UPDATE ASSESSMENT SKRIPSI by ID
+  // await thesisHistoryRepository.createThesisHistory(
+  //   userId,
+  //   "INPUT/UPDATE ASSESSMENT SKRIPSI by ID",
+  //   group.id
+  // );
   return updateAssessment;
 };
 
@@ -1189,12 +1226,12 @@ const updateSkripsiChangesById = async (id, userId, payload) => {
   // ambil informasi group untuk thesis history
   const group = await groupRepository.findGroupBySkripsiId(id);
 
-  // history INPUT/UPDATE CHANGE SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "INPUT/UPDATE CHANGE SKRIPSI by ID",
-    group.id
-  );
+  // // history INPUT/UPDATE CHANGE SKRIPSI by ID
+  // await thesisHistoryRepository.createThesisHistory(
+  //   userId,
+  //   "INPUT/UPDATE CHANGE SKRIPSI by ID",
+  //   group.id
+  // );
   return updateChange;
 };
 
@@ -1275,50 +1312,72 @@ const signSkripsiReportById = async (id, userId) => {
   const skripsi = await getSkripsiById(id);
 
   // ambil informasi group untuk thesis history
-  const group = await groupRepository.findGroupBySkripsiId(id);
+  // const group = await groupRepository.findGroupBySkripsiId(id);
+
+  const dosen = await employeeRepository.findEmployeeById(userId);
+  const dekan = await userManagementRepository.findUserByNIKAndRole(
+    dosen.nik,
+    "DEKAN"
+  );
 
   if (skripsi.is_report_open) {
     if (skripsi.panelist_chairman_id === userId) {
       const updatedSkripsi =
         await skripsiRepository.signChairmanSkripsiReportById(id);
 
-      // history SIGN REPORT SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "SIGN REPORT SKRIPSI by ID",
-        group.id
-      );
+      if (dekan) {
+        const updatedProposal2 =
+          await skripsiRepository.signDekanSkripsiReportById(id);
+        return updatedProposal2;
+      }
+
+      // // history SIGN REPORT SKRIPSI by ID
+      // await thesisHistoryRepository.createThesisHistory(
+      //   userId,
+      //   "SIGN REPORT SKRIPSI by ID",
+      //   group.id
+      // );
       return updatedSkripsi;
     } else if (skripsi.panelist_member_id === userId) {
       const updatedSkripsi =
         await skripsiRepository.signMemberSkripsiReportById(id);
 
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "SIGN REPORT SKRIPSI by ID",
-        group.id
-      );
+      if (dekan) {
+        const updatedProposal2 =
+          await skripsiRepository.signDekanSkripsiReportById(id);
+        return updatedProposal2;
+      }
+      // await thesisHistoryRepository.createThesisHistory(
+      //   userId,
+      //   "SIGN REPORT SKRIPSI by ID",
+      //   group.id
+      // );
       return updatedSkripsi;
     } else if (skripsi.advisor_id === userId) {
       const updatedSkripsi =
         await skripsiRepository.signAdvisorSkripsiReportById(id);
 
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "SIGN REPORT SKRIPSI by ID",
-        group.id
-      );
+      if (dekan) {
+        const updatedProposal2 =
+          await skripsiRepository.signDekanSkripsiReportById(id);
+        return updatedProposal2;
+      }
+      // await thesisHistoryRepository.createThesisHistory(
+      //   userId,
+      //   "SIGN REPORT SKRIPSI by ID",
+      //   group.id
+      // );
       return updatedSkripsi;
-    } else {
+    } else if (dekan) {
       const updatedSkripsi = await skripsiRepository.signDekanSkripsiReportById(
         id
       );
 
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "SIGN REPORT SKRIPSI by ID",
-        group.id
-      );
+      // await thesisHistoryRepository.createThesisHistory(
+      //   userId,
+      //   "SIGN REPORT SKRIPSI by ID",
+      //   group.id
+      // );
       return updatedSkripsi;
     }
   } else {
@@ -1410,12 +1469,15 @@ const updateSkripsiConclusionById = async (id, userId, payload) => {
         const updatedSkripsi =
           await skripsiRepository.updateSkripsiConclusionById(id, payload);
 
-        // history FILL REPORT CONCLUSION SKRIPSI by ID
-        await thesisHistoryRepository.createThesisHistory(
-          userId,
-          "FILL REPORT CONCLUSION SKRIPSI by ID",
-          group.id
-        );
+        if (updatedSkripsi) {
+          // history FILL REPORT CONCLUSION SKRIPSI by ID
+          await thesisHistoryRepository.createThesisHistory(
+            userId,
+            "Sidang Skripsi Berakhir",
+            group.id
+          );
+        }
+
         return updatedSkripsi;
       } else {
         throw {
@@ -1537,12 +1599,15 @@ const updateSkripsiRevisionDocumentById = async (id, userId, payload) => {
       lastUpdatedSkripsi.is_revision_approve_by_advisor,
   };
 
-  // history UPLOAD DOKUMEN REVISI SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "UPLOAD DOKUMEN REVISI SKRIPSI by ID",
-    group.id
-  );
+  if (updatedSkripsi) {
+    // history UPLOAD DOKUMEN REVISI SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menggungah Dokumen Revisi Skripsi",
+      group.id
+    );
+  }
+
   return Data;
 };
 
@@ -1627,12 +1692,14 @@ const deleteSkripsiRevisionDocumentById = async (id, userId) => {
     );
   }
 
-  // history DELETE DOKUMEN REVISI SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "DELETE DOKUMEN REVISI SKRIPSI by ID",
-    group.id
-  );
+  if (updatedSkripsi) {
+    // history DELETE DOKUMEN REVISI SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menghapus Dokumen Revisi Skripsi",
+      group.id
+    );
+  }
 };
 
 //===================================================================
@@ -1702,12 +1769,15 @@ const approveSkripsiRevisionDocumentById = async (id, userId) => {
           UpdatedSkripsi.panelist_chairman_revision_approve_date,
       };
 
-      // history APPROVE DOKUMEN SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "APPROVE DOKUMEN SKRIPSI by ID",
-        group.id
-      );
+      if (UpdatedSkripsi) {
+        // history APPROVE DOKUMEN SKRIPSI by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Ketua Panelis Menyetujui Dokumen Revisi Skripsi",
+          group.id
+        );
+      }
+
       return Data;
     }
   }
@@ -1738,12 +1808,14 @@ const approveSkripsiRevisionDocumentById = async (id, userId) => {
           UpdatedSkripsi.panelist_member_revision_approve_date,
       };
 
-      // history APPROVE DOKUMEN SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "APPROVE DOKUMEN SKRIPSI by ID",
-        group.id
-      );
+      if (UpdatedSkripsi) {
+        // history APPROVE DOKUMEN SKRIPSI by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Anggota Panelis Menyetujui Dokumen Revisi Skripsi",
+          group.id
+        );
+      }
       return Data;
     }
   }
@@ -1774,12 +1846,14 @@ const approveSkripsiRevisionDocumentById = async (id, userId) => {
           UpdatedSkripsi.advisor_revision_approve_date,
       };
 
-      // history APPROVE DOKUMEN SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "APPROVE DOKUMEN SKRIPSI by ID",
-        group.id
-      );
+      if (UpdatedSkripsi) {
+        // history APPROVE DOKUMEN SKRIPSI by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Advisor Menyetujui Dokumen Revisi Skripsi",
+          group.id
+        );
+      }
       return Data;
     }
   }
@@ -1844,12 +1918,15 @@ const rejectSkripsiRevisionDocumentById = async (id, userId) => {
           UpdatedSkripsi.panelist_chairman_revision_approve_date,
       };
 
-      // history REJECT DOKUMEN SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "REJECT DOKUMEN SKRIPSI by ID",
-        group.id
-      );
+      if (UpdatedSkripsi) {
+        // history REJECT DOKUMEN SKRIPSI by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Ketua Panelis Menolak Dokumen Revisi Skripsi",
+          group.id
+        );
+      }
+
       return Data;
     }
   }
@@ -1874,16 +1951,18 @@ const rejectSkripsiRevisionDocumentById = async (id, userId) => {
           UpdatedSkripsi.panelist_member_revision_approve_date,
       };
 
-      // history REJECT DOKUMEN SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "REJECT DOKUMEN SKRIPSI by ID",
-        group.id
-      );
+      if (UpdatedSkripsi) {
+        // history REJECT DOKUMEN SKRIPSI by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Anggota Panelis Menolak Dokumen Revisi Skripsi",
+          group.id
+        );
+      }
       return Data;
     }
   }
-  // if user is member
+  // if user is advisor
   if (advisor) {
     if (
       advisor.is_revision_approve_by_advisor === "Rejected" ||
@@ -1904,12 +1983,14 @@ const rejectSkripsiRevisionDocumentById = async (id, userId) => {
           UpdatedSkripsi.advisor_revision_approve_date,
       };
 
-      // history REJECT DOKUMEN SKRIPSI by ID
-      await thesisHistoryRepository.createThesisHistory(
-        userId,
-        "REJECT DOKUMEN SKRIPSI by ID",
-        group.id
-      );
+      if (UpdatedSkripsi) {
+        // history REJECT DOKUMEN SKRIPSI by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Advisor Menolak Dokumen Revisi Skripsi",
+          group.id
+        );
+      }
       return Data;
     }
   }
@@ -1963,12 +2044,15 @@ const updateHKIById = async (id, userId, payload) => {
     path
   );
 
-  // history UPLOAD HKI SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "UPLOAD HKI SKRIPSI by ID",
-    group.id
-  );
+  if (UpdatedSkripsi) {
+    // history UPLOAD HKI SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengunggah HKI",
+      group.id
+    );
+  }
+
   return UpdatedSkripsi;
 };
 
@@ -2010,14 +2094,16 @@ const deleteHKIById = async (id, userId) => {
   await deleteObject(desertRef);
 
   // delete/update skripsi plagiarism
-  await skripsiRepository.deleteHKIById(id);
+  const updatedSkripsi = await skripsiRepository.deleteHKIById(id);
 
-  // history DELETE HKI SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "DELETE HKI SKRIPSI by ID",
-    group.id
-  );
+  if (updatedSkripsi) {
+    // history DELETE HKI SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menghapus HKI",
+      group.id
+    );
+  }
 };
 
 //===================================================================
@@ -2068,12 +2154,15 @@ const updateJournalById = async (id, userId, payload) => {
     path
   );
 
-  // history UPLOAD JOURNAL SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "UPLOAD JOURNAL SKRIPSI by ID",
-    group.id
-  );
+  if (UpdatedSkripsi) {
+    // history UPLOAD JOURNAL SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengunggah Jurnal",
+      group.id
+    );
+  }
+
   return UpdatedSkripsi;
 };
 
@@ -2115,14 +2204,16 @@ const deleteJournalById = async (id, userId) => {
   await deleteObject(desertRef);
 
   // delete/update skripsi plagiarism
-  await skripsiRepository.deleteJournalById(id);
+  const updatedSkripsi = await skripsiRepository.deleteJournalById(id);
 
-  // history DELETE JOURNAL SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "DELETE JOURNAL SKRIPSI by ID",
-    group.id
-  );
+  if (updatedSkripsi) {
+    // history DELETE JOURNAL SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menghapus Jurnal",
+      group.id
+    );
+  }
 };
 
 //===================================================================
@@ -2173,12 +2264,15 @@ const updateSourceCodeById = async (id, userId, payload) => {
     path
   );
 
-  // history UPLOAD SOURCE CODE FORMAT ZIP SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "UPLOAD SOURCE CODE FORMAT ZIP SKRIPSI by ID",
-    group.id
-  );
+  if (UpdatedSkripsi) {
+    // history UPLOAD SOURCE CODE FORMAT ZIP SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengunggah Source Code",
+      group.id
+    );
+  }
+
   return UpdatedSkripsi;
 };
 
@@ -2220,14 +2314,16 @@ const deleteSourceCodeById = async (id, userId) => {
   await deleteObject(desertRef);
 
   // delete/update skripsi plagiarism
-  await skripsiRepository.deleteSourceCodeById(id);
+  const updatedSkripsi = await skripsiRepository.deleteSourceCodeById(id);
 
-  // history DELETE SOURCE CODE FORMAT ZIP SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "DELETE SOURCE CODE FORMAT ZIP SKRIPSI by ID",
-    group.id
-  );
+  if (updatedSkripsi) {
+    // history DELETE SOURCE CODE FORMAT ZIP SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menghapus Source Code",
+      group.id
+    );
+  }
 };
 
 //===================================================================
@@ -2248,12 +2344,15 @@ const updateLinkSourceCodeById = async (id, userId, payload) => {
     payload
   );
 
-  // history UPLOAD LINK SOURCE CODE SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "UPLOAD LINK SOURCE CODE SKRIPSI by ID",
-    group.id
-  );
+  if (UpdatedSkripsi) {
+    // history UPLOAD LINK SOURCE CODE SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengunggah Link Source Code",
+      group.id
+    );
+  }
+
   return UpdatedSkripsi;
 };
 
@@ -2285,14 +2384,16 @@ const deleteLinkSourceCodeById = async (id, userId) => {
   await getGroupStudentByStudentIdAndGroupId(userId, group.id);
 
   // delete/update skripsi plagiarism
-  await skripsiRepository.deleteLinkSourceCodeById(id);
+  const updatedSkripsi = await skripsiRepository.deleteLinkSourceCodeById(id);
 
-  // history DELETE LINK SOURCE CODE SKRIPSI by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "DELETE LINK SOURCE CODE SKRIPSI by ID",
-    group.id
-  );
+  if (updatedSkripsi) {
+    // history DELETE LINK SOURCE CODE SKRIPSI by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menghapus Link Source Code",
+      group.id
+    );
+  }
 };
 
 module.exports = {

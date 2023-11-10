@@ -51,6 +51,15 @@ router.get(
 );
 
 //===================================================================
+// @description     Get thesis history by id
+// @access          All
+router.get(
+  "/group/thesis_history/:id",
+  auth,
+  groupController.getAllThesisHistoryById
+);
+
+//===================================================================
 // @description     Get committee list
 // @access          DOSEN
 router.get("/group/committee-list", auth, groupController.getCommitteeList);

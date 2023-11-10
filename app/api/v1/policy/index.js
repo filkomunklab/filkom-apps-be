@@ -28,6 +28,8 @@ const policyFor = ({ user }) => {
     can("read", "Consultation");
     // Sekertaris view advisor team
     can("read", "advisor_team");
+    // Sekertaris view thesis history
+    can("read", "thesis_history");
     // ---------------------------------Proposal--------------------------------
     // Sekertaris view proposal document
     can("read", "proposal_document");
@@ -85,6 +87,8 @@ const policyFor = ({ user }) => {
     can("read", "advisor_team");
     // Dekan view Consultation
     can("read", "Consultation");
+    // Dekan view thesis history
+    can("read", "thesis_history");
     // ---------------------------------Submission--------------------------------
     // Dekan view submission
     can("read", "Submission");
@@ -146,6 +150,8 @@ const policyFor = ({ user }) => {
     can("read", "Consultation");
     // Kaprodi view advisor team
     can("read", "advisor_team");
+    // Kaprodi view thesis history
+    can("read", "thesis_history");
     // ---------------------------------Submission--------------------------------
     // Kaprodi view submission
     can("read", "Submission");
@@ -205,6 +211,8 @@ const policyFor = ({ user }) => {
     can("create", "Consultation");
     // Advisor, Co-advisor view Consultation
     can("read", "Consultation");
+    // (Dosen: All) view thesis history
+    can("read", "thesis_history");
     // ---------------------------------Submission--------------------------------
     // Dosen view committee list
     can("read", "committee_list");
@@ -314,6 +322,8 @@ const policyFor = ({ user }) => {
     can("read", "Consultation");
     // Dosen MK view advisor team
     can("read", "advisor_team");
+    // Dosen MK view thesis history
+    can("read", "thesis_history");
     // ---------------------------------Submission--------------------------------
     // Dosen MK view submission
     can("read", "Submission");
@@ -391,6 +401,8 @@ const policyFor = ({ user }) => {
     can("read", "dosen_list");
     // Mahasiswa view advisor team
     can("read", "advisor_team");
+    // Mahasiswa view thesis history
+    can("read", "thesis_history");
     // ---------------------------------Submission--------------------------------
     can("create", "Submission");
     // Mahasiswa view submission

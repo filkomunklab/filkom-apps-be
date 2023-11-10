@@ -11,7 +11,7 @@ const classroomRepository = require("../classroom/classroom.repository");
 const proposalStudentRepository = require("../proposal_student/proposal_student.repository");
 const skripsiStudentRepository = require("../skripsi_student/skripsi_student.repository");
 const userManagementRepository = require("../user_management/user_namagement.repository");
-const { skripsi, submission } = require("../../../database");
+const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
 
 //===================================================================
 // @description     Get thesis list
@@ -475,6 +475,16 @@ const getAdvisorTeamById = async (id) => {
   };
 
   return advisorTeamData;
+};
+
+//===================================================================
+// @description     Get thesis history by id
+// @route           GET /group/thesis_history/:id
+// @access          All
+const getAllThesisHistoryById = async (id) => {
+  const thesisHistory =
+    await thesisHistoryRepository.findAllhesisHistoryByGroupId(id);
+  return thesisHistory;
 };
 
 //===================================================================
@@ -3881,6 +3891,7 @@ module.exports = {
   getStudentListByClassroomId,
   getDosenList,
   getAdvisorTeamById,
+  getAllThesisHistoryById,
   getCommitteeList,
   getSubmissionListMK,
   getSubmissionListKaprodi,
