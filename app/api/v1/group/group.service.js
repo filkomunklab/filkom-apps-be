@@ -482,9 +482,42 @@ const getAdvisorTeamById = async (id) => {
 // @route           GET /group/thesis_history/:id
 // @access          All
 const getAllThesisHistoryById = async (id) => {
+  let groupHistory = [];
   const thesisHistory =
     await thesisHistoryRepository.findAllhesisHistoryByGroupId(id);
-  return thesisHistory;
+
+  if (thesisHistory);
+
+  for (const history of thesisHistory) {
+    const dosen = employeeRepository.findEmployeeById(history.user_id);
+    const student = studentRepository.findStudentById(history.user_id);
+    if (dosen) {
+      let name = dosen.firstName;
+      if (dosen.lastName) {
+        name += ` ${dosen.lastName}`;
+      }
+      const data = {
+        id: history.id,
+        description: history.description,
+        user: name,
+        date: history.date,
+      };
+      groupHistory.push(data);
+    } else {
+      let name = student.firstName;
+      if (student.lastName) {
+        name += ` ${student.lastName}`;
+      }
+      const data = {
+        id: history.id,
+        description: history.description,
+        user: name,
+        date: history.date,
+      };
+      groupHistory.push(data);
+    }
+  }
+  return groupHistory;
 };
 
 //===================================================================
