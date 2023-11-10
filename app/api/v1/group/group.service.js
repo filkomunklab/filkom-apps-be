@@ -221,12 +221,12 @@ const getSubmissionDetailsById = async (id) => {
     title: group.title,
     students: [],
     skripsi_status: {
-      advisor_status: skripsi ? skripsi.is_proposal_approve_by_advisor : null,
+      advisor_status: skripsi ? skripsi.is_skripsi_approve_by_advisor : null,
       co_advisor1_status: skripsi
-        ? skripsi.is_proposal_approve_by_co_advisor1
+        ? skripsi.is_skripsi_approve_by_co_advisor1
         : null,
       co_advisor2_status: skripsi
-        ? skripsi.is_proposal_approve_by_co_advisor2
+        ? skripsi.is_skripsi_approve_by_co_advisor2
         : null,
     },
     ready_status: {
@@ -265,12 +265,28 @@ const getSubmissionDetailsById = async (id) => {
     console.log("student:", studentId);
     const student = await studentRepository.findStudentById(studentId);
 
-    // Add student data to the groupData
-    submissionData.students.push({
-      fullName: `${student.firstName} ${student.lastName || ""}`,
-      nim: student.nim,
-      major: student.major,
-    });
+    // Add student data
+    if (submission) {
+      submissionData.students.push({
+        fullName: `${student.firstName} ${student.lastName || ""}`,
+        nim: student.nim,
+        major: student.major,
+      });
+    }
+    if (proposal) {
+      proposalData.students.push({
+        fullName: `${student.firstName} ${student.lastName || ""}`,
+        nim: student.nim,
+        major: student.major,
+      });
+    }
+    if (skripsi) {
+      skripsiData.students.push({
+        fullName: `${student.firstName} ${student.lastName || ""}`,
+        nim: student.nim,
+        major: student.major,
+      });
+    }
   }
 
   if (group.progress === "Submission") {
