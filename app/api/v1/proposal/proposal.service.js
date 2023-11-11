@@ -2039,7 +2039,7 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
         // history REJECT DOKUMEN REVISI PROPOSAL by ID
         await thesisHistoryRepository.createThesisHistory(
           userId,
-          "Advisor Panelis Menolak Dokumen Revisi Proposal",
+          "Advisor Menolak Dokumen Revisi Proposal",
           group.id
         );
       }

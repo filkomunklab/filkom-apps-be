@@ -533,8 +533,8 @@ async function main() {
   const francesId = "1efcdc53-f12c-4683-b9ff-db6e53fe5c83";
   const geovalgaId = "9036e2e9-3601-4f00-b74a-bf4e731c9eb8";
   const angelId = "9036e2e9-3601-4f00-b74a-bf4e731c9eb1";
-  const cindyID = "bc75d933-8f6b-4619-a41c-8727360a8c1e";
-  const robbyID = "f3c97a48-66eb-4ac7-82a5-5dd89c83607d";
+  const cindyId = "bc75d933-8f6b-4619-a41c-8727360a8c1e";
+  const robbyId = "f3c97a48-66eb-4ac7-82a5-5dd89c83607d";
   const sitiID = "768a30f7-e02b-41ac-810d-78d8a94da49b";
   const wahyuID = "f5cfb85f-d65c-4cc5-b03f-d0c2dd29ec27";
   const nadiaID = "1c65096d-d768-48c0-9a41-4b06e28a27a3";
@@ -800,7 +800,7 @@ async function main() {
   await prisma.student
     .create({
       data: {
-        id: cindyID,
+        id: cindyId,
         gender: "FEMALE",
         firstName: "Cindy",
         lastName: "Lestari",
@@ -824,7 +824,7 @@ async function main() {
   await prisma.student
     .create({
       data: {
-        id: robbyID,
+        id: robbyId,
         gender: "MALE",
         firstName: "Robby",
         lastName: "Hidayat",
@@ -1132,1578 +1132,2555 @@ async function main() {
   // CREATE SKRIPSI APP DATA
   async function createSkripsiAppData() {
     try {
+      // dosen1Id =
+      //          advisor_1
+      //          advisor_5
+      //          coAdvisor1_2
+      //          co_advisor2_3
+      //          chairman_4
+      //          member_5
+      // dosen2Id =
+      //          advisor_2
+      //          co_advisor1_3
+      //          co_advisor2_4
+      //          dosen2Id
+      //          chairman_1
+      //          member_5
+      // dosen3Id =
+      //          advisor_3
+      //          co_advisor1_4
+      //          member_1
+      //          chairman_2
+      // dekanId =
+      //          advisor_4
+      //          member_2
+      //          chairman_3
+      // kaprodiSIId =
+      //          member_3
+      //          member_4
+      // kaprodiTIId =
+      //          chairman_5
+
+      // Informatika
+      // -finish
+      const student1_1 = angelId;
+      const title_1 = "Pengambangan Aplikasi Dinning";
+      const submissionFileName_1 = "Pengambangan Aplikasi Dinning.pdf";
+      const submissionFilePath_1 = "link_pengembangan_aplikasi_dinning";
+      const proposalFileName_1 = "Skripsi 1_Pengambangan Aplikasi Dinning.pdf";
+      const proposalPaymentFileName_1 = "Bukti Pembayaran Skripsi 1.pdf";
+      const proposalPlagiatFileName_1 =
+        "SKUHP-Uji 1_Angel_FILKOM_Skripsi 1_Pengambangan Aplikasi Dinning.pdf";
+      const proposalFilePath_1 = "link_Skripsi_1_Pengambangan_Aplikasi_Dinning";
+      const proposalPaymentPath_1 = "link_Bukti_Pembayaran_Skripsi_1";
+      const proposalPlagiatPath_1 =
+        "link_SKUHP_Uji_1_Angel_FILKOM_Skripsi_1_Pengambangan_Aplikasi_Dinning";
+      const proposalRevisiFileName_1 =
+        "Revisi Skripsi 1_Pengambangan Aplikasi Dinning.pdf";
+      const proposalRevisiFilePath_1 =
+        "link_Revisi_Skripsi_1_Pengambangan_Aplikasi_Dinning";
+      const proposalStart_1 = "08:30";
+      const proposalEnd_1 = "10:00";
+      const proposalRoom_1 = "GK3-TL - Teacher Lounge";
+      const proposalDate_1 = "24/11/2022";
+      const skripsiFileName_1 = "Skripsi 2_Pengambangan Aplikasi Dinning.Pdf";
+      const skripsiPaymentFileName_1 = "Bukti Pembayaran Skripsi 2.pdf";
+      const skripsiPlagiatFileName_1 =
+        "SKUHP-Uji 2_Angel_FILKOM_Skripsi 2_Pengambangan Aplikasi Dinning.pdf";
+      const skripsiFilePath_1 = "link_Skripsi_2_Pengambangan_Aplikasi_Dinning";
+      const skripsiPaymentPath_1 = "link_Bukti_Pembayaran_Skripsi_2";
+      const skripsiPlagiatPath_1 =
+        "link_SKUHP_Uji_2_Angel_FILKOM_Skripsi_2_Pengambangan_Aplikasi_Dinning";
+      const skripsiRevisiFileName_1 =
+        "Revisi Skripsi 2_Pengambangan Aplikasi Dinning.pdf";
+      const skripsiRevisiFilePath_1 =
+        "link_Revisi_Skripsi_2_Pengambangan_Aplikasi_Dinning";
+      const skripsiStart_1 = "08:30";
+      const skripsiEnd_1 = "10:00";
+      const skripsiRoom_1 = "GK3-TL - Teacher Lounge";
+      const skripsiDate_1 = "03/04/2023";
+      const advisor_1 = dosen1Id;
+      const chairman_1 = dosen2Id;
+      const member_1 = dosen3Id;
+      // -skripsi-empty
+      const student1_2 = cindyId;
+      const student2_2 = robbyId;
+      const title_2 = "Pengembangan Aplikasi Reservasi Hotel";
+      const submissionFileName_2 = "Pengembangan Aplikasi Reservasi Hotel.pdf";
+      const submissionFilePath_2 = "link_pengembangan_aplikasi_reservasi_hotel";
+      const proposalFileName_2 =
+        "Skripsi 1_Pengembangan Aplikasi Reservasi Hotel.pdf";
+      const proposalPaymentFileName_2 = "Bukti Pembayaran Skripsi 1.pdf";
+      const proposalPlagiatFileName_2 =
+        "SKUHP-Uji 1_Angel_FILKOM_Skripsi 1_Pengembangan Aplikasi Reservasi Hotel.pdf";
+      const proposalFilePath_2 =
+        "link_Skripsi_1_Pengembangan_Aplikasi_Reservasi_Hotel";
+      const proposalPaymentPath_2 = "link_Bukti_Pembayaran_Skripsi_1";
+      const proposalPlagiatPath_2 =
+        "link_SKUHP_Uji_1_Angel_FILKOM_Skripsi_1_Pengembangan_Aplikasi_Reservasi_Hotel";
+      const proposalRevisiFileName_2 =
+        "Revisi Skripsi 1_Pengembangan Aplikasi Reservasi Hotel.pdf";
+      const proposalRevisiFilePath_2 =
+        "link_Revisi_Skripsi_1_Pengembangan_Aplikasi_Reservasi_Hotel";
+      const proposalStart_2 = "09:00";
+      const proposalEnd_2 = "11:30";
+      const proposalRoom_2 = "GK4-TL - Teacher Lounge";
+      const proposalDate_2 = "24/11/2022";
+      const advisor_2 = dosen2Id;
+      const co_advisor1_2 = dosen1Id;
+      const chairman_2 = dosen3Id;
+      const member_2 = dekanId;
+      // Sistem Informasi
+      // -finish
+      const student1_3 = marcelId;
+      const title_3 = "Pengembangan Aplikasi E-commerce";
+      const submissionFileName_3 = "Pengembangan Aplikasi E-commerce.pdf";
+      const submissionFilePath_3 = "link_pengembangan_aplikasi_ecommerce";
+      const proposalFileName_3 =
+        "Skripsi 1_Pengembangan Aplikasi E-commerce.pdf";
+      const proposalPaymentFileName_3 = "Bukti Pembayaran Skripsi 1.pdf";
+      const proposalPlagiatFileName_3 =
+        "SKUHP-Uji 1_Angel_FILKOM_Skripsi 1_Pengembangan Aplikasi E-commerce.pdf";
+      const proposalFilePath_3 =
+        "link_Skripsi_1_Pengembangan_Aplikasi_Ecommerce";
+      const proposalPaymentPath_3 = "link_Bukti_Pembayaran_Skripsi_1";
+      const proposalPlagiatPath_3 =
+        "link_SKUHP_Uji_1_Angel_FILKOM_Skripsi_1_Pengembangan_Aplikasi_Ecommerce";
+      const proposalRevisiFileName_3 =
+        "Revisi Skripsi 1_Pengembangan Aplikasi E-commerce.pdf";
+      const proposalRevisiFilePath_3 =
+        "link_Revisi_Skripsi_1_Pengembangan_Aplikasi_Ecommerce";
+      const proposalStart_3 = "08:30";
+      const proposalEnd_3 = "10:00";
+      const proposalRoom_3 = "GK1-207";
+      const proposalDate_3 = "24/11/2022";
+      const skripsiFileName_3 =
+        "Skripsi 2_Pengembangan Aplikasi E-commerce.pdf";
+      const skripsiPaymentFileName_3 = "Bukti Pembayaran Skripsi 2.pdf";
+      const skripsiPlagiatFileName_3 =
+        "SKUHP-Uji 2_Angel_FILKOM_Skripsi 2_Pengembangan Aplikasi E-commerce.pdf";
+      const skripsiFilePath_3 =
+        "link_Skripsi_2_Pengembangan_Aplikasi_Ecommerce";
+      const skripsiPaymentPath_3 = "link_Bukti_Pembayaran_Skripsi_2";
+      const skripsiPlagiatPath_3 =
+        "link_SKUHP_Uji_2_Angel_FILKOM_Skripsi_2_Pengembangan_Aplikasi_Ecommerce";
+      const skripsiRevisiFileName_3 =
+        "Revisi Skripsi 2_Pengembangan Aplikasi E-commerce.pdf";
+      const skripsiRevisiFilePath_3 =
+        "link_Revisi_Skripsi_2_Pengembangan_Aplikasi_Ecommerce";
+      const skripsiStart_3 = "08:30";
+      const skripsiEnd_3 = "10:00";
+      const skripsiRoom_3 = "GK1-207";
+      const skripsiDate_3 = "03/04/2023";
+      const advisor_3 = dosen3Id;
+      const co_advisor1_3 = dosen2Id;
+      const co_advisor2_3 = dosen1Id;
+      const chairman_3 = dekanId;
+      const member_3 = kaprodiSIId;
+      // -skripsi-empty
+      const student1_4 = leaId;
+      const student2_4 = rizkyID;
+      const title_4 = "Pengembangan Aplikasi Sistem Informasi Keuangan";
+      const submissionFileName_4 =
+        "Pengembangan Aplikasi Sistem Informasi Keuangan.pdf";
+      const submissionFilePath_4 =
+        "link_pengembangan_aplikasi_sistem_informasi_keuangan";
+      const proposalFileName_4 =
+        "Skripsi 1_Pengembangan Aplikasi Sistem Informasi Keuangan.pdf";
+      const proposalPaymentFileName_4 = "Bukti Pembayaran Skripsi 1.pdf";
+      const proposalPlagiatFileName_4 =
+        "SKUHP-Uji 1_Angel_FILKOM_Skripsi 1_Pengembangan Aplikasi Sistem Informasi Keuangan.pdf";
+      const proposalFilePath_4 =
+        "link_Skripsi_1_Pengembangan_Aplikasi_Sistem_Informasi_Keuangan";
+      const proposalPaymentPath_4 = "link_Bukti_Pembayaran_Skripsi_1";
+      const proposalPlagiatPath_4 =
+        "link_SKUHP_Uji_1_Angel_FILKOM_Skripsi_1_Pengembangan_Aplikasi_Sistem_Informasi_Keuangan";
+      const proposalRevisiFileName_4 =
+        "Revisi Skripsi 1_Pengembangan Aplikasi Sistem Informasi Keuangan.pdf";
+      const proposalRevisiFilePath_4 =
+        "link_Revisi_Skripsi_1_Pengembangan_Aplikasi_Sistem_Informasi_Keuangan";
+      const proposalStart_4 = "11:00";
+      const proposalEnd_4 = "12:30";
+      const proposalRoom_4 = "GK6-TL - Teacher Lounge";
+      const proposalDate_4 = "24/11/2022";
+      const advisor_4 = dekanId;
+      const co_advisor1_4 = dosen3Id;
+      const co_advisor2_4 = dosen2Id;
+      const chairman_4 = dosen1Id;
+      const member_4 = kaprodiSIId;
+
+      // informatika
+      // - Proposal-empty
+      const student1_5 = sitiID;
+      const student2_5 = wahyuID;
+      const student3_5 = nadiaID;
+      const title_5 = "Pengembangan Aplikasi Manajemen Proyek";
+      const submissionFileName_5 = "Pengembangan Aplikasi Manajemen Proyek.pdf";
+      const submissionFilePath_5 =
+        "link_pengembangan_aplikasi_manajemen_proyek";
+      const advisor_5 = dosen1Id;
+      const chairman_5 = kaprodiTIId;
+      const member_5 = dosen2Id;
+
       // akademik 1
-      const academicCalendar1 = await prisma.academic_Calendar.create({
+      const academicCalendarGanjil = await prisma.academic_Calendar.create({
         data: {
           semester: "Ganjil",
           year: "2021/2022",
         },
       });
 
-      if (academicCalendar1) {
-        // proposal classroom 1
-        const classroomProposal1 = await prisma.classroom.create({
-          data: {
-            dosen_mk_id: kaprodiTIId,
-            academic_id: academicCalendar1.id,
-            name: "Proposal",
-          },
-        });
-
-        // skripsi classroom 1
-        const classroomSkripsi1 = await prisma.classroom.create({
-          data: {
-            dosen_mk_id: kaprodiTIId,
-            academic_id: academicCalendar1.id,
-            name: "Skripsi",
-          },
-        });
-
-        if (classroomProposal1 && classroomSkripsi1) {
-          // proposal_student 1 - 1
-          const proposalStudent1 = await prisma.proposal_Student.create({
-            data: {
-              student_id: angelId,
-              classroom_id: classroomProposal1.id,
-            },
-          });
-
-          // skripsi_student 1 - 1
-          const skripsiStudent1 = await prisma.skripsi_Student.create({
-            data: {
-              student_id: angelId,
-              classroom_id: classroomSkripsi1.id,
-            },
-          });
-
-          if (proposalStudent1 && skripsiStudent1) {
-            // group 1 - 1
-            const group = await prisma.group.create({
-              data: {
-                title: "Pengambangan Aplikasi Dinning",
-                progress: "Finished",
-              },
-            });
-
-            if (group) {
-              // group_student 1 - 1
-              await prisma.group_Student.create({
-                data: {
-                  group_id: group.id,
-                  student_id: proposalStudent1.student_id,
-                },
-              });
-
-              // submission 1 - 1
-              const submission = await prisma.submission.create({
-                data: {
-                  file_name: "pengembangan_aplikasi_dinning.pdf",
-                  upload_date: new Date(),
-                  file_size: "2.5 MB",
-                  file_path: "link_pengembangan_aplikasi_dinning",
-                  is_consultation: true,
-                  proposed_advisor_id: dekanId,
-                  proposed_co_advisor1_id: dosen1Id,
-                  is_approve: "Approve",
-                  classroom_id: classroomProposal1.id,
-                },
-              });
-
-              if (submission) {
-                // proposal 1 - 1
-                const proposal = await prisma.proposal.create({
-                  data: {
-                    file_name_proposal: "pengembangan_aplikasi_dinning.pdf",
-                    file_name_payment: "pembayaran.pdf",
-                    file_name_plagiarismcheck: "plagiat.pdf",
-                    upload_date_proposal: new Date(),
-                    upload_date_payment: new Date(),
-                    upload_date_plagiarismcheck: new Date(),
-                    file_size_proposal: "2.5 MB",
-                    file_size_payment: "2.5 MB",
-                    file_size_plagiarismcheck: "2.5 MB",
-                    file_path_proposal: "link_pengembangan_aplikasi_dinning",
-                    file_path_payment: "link_pembayaran",
-                    file_path_plagiarismcheck: "link_plagiat",
-                    advisor_id: dekanId,
-                    co_advisor1_id: dosen1Id,
-                    classroom_id: classroomProposal1.id,
-                    is_proposal_approve_by_advisor: "Approve",
-                    is_proposal_approve_by_co_advisor1: "Approve",
-                    is_proposal_approve_by_co_advisor2: "Approve",
-                    advisor_proposal_approved_date: new Date(),
-                    co_advisor1_proposal_approved_date: new Date(),
-                    co_advisor2_proposal_approved_date: new Date(),
-                    panelist_chairman_id: dosen2Id,
-                    panelist_member_id: dosen3Id,
-                    start_defence: "08.00",
-                    end_defence: "10.00",
-                    defence_room: "GK1-206",
-                    defence_date: "10/09/2022",
-                    is_report_open: true,
-                    is_report_approve_by_dekan: true,
-                    is_report_approve_by_panelist_chairman: true,
-                    is_report_approve_by_panelist_member: true,
-                    is_report_approve_by_advisor: true,
-                    dekan_report_approve_date: new Date(),
-                    panelist_chairman_report_approve_date: new Date(),
-                    panelist_member_report_approve_date: new Date(),
-                    advisor_report_approve_date: new Date(),
-                    exam_conclution: "Approve",
-                    changes_conclusion: "Minor",
-                    assessment_conclution: "A-",
-                    is_pass: "Pass",
-                    report_date: "10/09/2022",
-                    file_name_revision:
-                      "revisi_pengembangan_aplikasi_dinning.pdf",
-                    upload_date_revision: new Date(),
-                    file_size_revision: "2.5 MB",
-                    file_path_revision: "link_revisi",
-                    is_revision_approve_by_panelist_chairman: "Approve",
-                    is_revision_approve_by_panelist_member: "Approve",
-                    is_revision_approve_by_advisor: "Approve",
-                    panelist_chairman_revision_approve_date: new Date(),
-                    panelist_member_revision_approve_date: new Date(),
-                    advisor_revision_approve_date: new Date(),
-                  },
-                });
-
-                if (proposal) {
-                  // konsultasi 1 - advisor (1)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 1",
-                      date: new Date(),
-                      dosen_id: dekanId,
-                    },
-                  });
-                  // konsultasi 1 - advisor (2)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 2",
-                      date: new Date(),
-                      dosen_id: dekanId,
-                    },
-                  });
-                  // konsultasi 1 - advisor (3)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 3",
-                      date: new Date(),
-                      dosen_id: dekanId,
-                    },
-                  });
-                  // konsultasi 1 - co-advisor1 (1)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi sistem",
-                      date: new Date(),
-                      dosen_id: dosen1Id,
-                    },
-                  });
-                  // konsultasi 1 - co-advisor1 (2)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi database",
-                      date: new Date(),
-                      dosen_id: dosen1Id,
-                    },
-                  });
-                  // konsultasi 1 - co-advisor1 (3)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi metode",
-                      date: new Date(),
-                      dosen_id: dosen1Id,
-                    },
-                  });
-
-                  // assessment 1 - student1 - ketua
-                  await prisma.proposal_Assessment.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      student_id: proposalStudent1.student_id,
-                      dosen_id: dosen2Id,
-                      value: "9",
-                    },
-                  });
-                  // assessment 1 - student1 - anggota
-                  await prisma.proposal_Assessment.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      student_id: proposalStudent1.student_id,
-                      dosen_id: dosen3Id,
-                      value: "9",
-                    },
-                  });
-                  // assessment 1 - student1 - advisor
-                  await prisma.proposal_Assessment.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      student_id: proposalStudent1.student_id,
-                      dosen_id: dekanId,
-                      value: "9",
-                    },
-                  });
-
-                  // changes 1 - ketua
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dosen2Id,
-                      changes: "Ubah Bab 1",
-                    },
-                  });
-                  // changes 1 - anggota
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dosen3Id,
-                      changes: "Ubah Bab 2",
-                    },
-                  });
-                  // changes 1 - advisor
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dekanId,
-                      changes: "Ubah Bab 3",
-                    },
-                  });
-                  // changes 1 - co-advisor1
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dosen1Id,
-                      changes: "Ubah Gambar",
-                    },
-                  });
-                }
-
-                // skripsi 1 - 1
-                const skripsi = await prisma.skripsi.create({
-                  data: {
-                    file_name_skripsi: "pengembangan_aplikasi_dinning.pdf",
-                    file_name_payment: "pembayaran.pdf",
-                    file_name_plagiarismcheck: "plagiat.pdf",
-                    upload_date_skripsi: new Date(),
-                    upload_date_payment: new Date(),
-                    upload_date_plagiarismcheck: new Date(),
-                    file_size_skripsi: "2.5 MB",
-                    file_size_payment: "2.5 MB",
-                    file_size_plagiarismcheck: "2.5 MB",
-                    file_path_skripsi: "link_pengembangan_aplikasi_dinning",
-                    file_path_payment: "link_pembayaran",
-                    file_path_plagiarismcheck: "link_plagiat",
-                    advisor_id: dekanId,
-                    co_advisor1_id: dosen1Id,
-                    classroom_id: classroomProposal1.id,
-                    is_skripsi_approve_by_advisor: "Approve",
-                    is_skripsi_approve_by_co_advisor1: "Approve",
-                    is_skripsi_approve_by_co_advisor2: "Approve",
-                    advisor_skripsi_approved_date: new Date(),
-                    co_advisor1_skripsi_approved_date: new Date(),
-                    co_advisor2_skripsi_approved_date: new Date(),
-                    panelist_chairman_id: dosen2Id,
-                    panelist_member_id: dosen3Id,
-                    start_defence: "10.00",
-                    end_defence: "12.00",
-                    defence_room: "GK1-206",
-                    defence_date: "01/03/2023",
-                    is_report_open: true,
-                    is_report_approve_by_dekan: true,
-                    is_report_approve_by_panelist_chairman: true,
-                    is_report_approve_by_panelist_member: true,
-                    is_report_approve_by_advisor: true,
-                    dekan_report_approve_date: new Date(),
-                    panelist_chairman_report_approve_date: new Date(),
-                    panelist_member_report_approve_date: new Date(),
-                    advisor_report_approve_date: new Date(),
-                    exam_conclution: "Approve",
-                    changes_conclusion: "Minor",
-                    assessment_conclution: "A-",
-                    is_pass: "Pass",
-                    report_date: "01/03/2023",
-                    file_name_revision:
-                      "revisi_pengembangan_aplikasi_dinning.pdf",
-                    upload_date_revision: new Date(),
-                    file_size_revision: "2.5 MB",
-                    file_path_revision: "link_revisi",
-                    is_revision_approve_by_panelist_chairman: "Approve",
-                    is_revision_approve_by_panelist_member: "Approve",
-                    is_revision_approve_by_advisor: "Approve",
-                    panelist_chairman_revision_approve_date: new Date(),
-                    panelist_member_revision_approve_date: new Date(),
-                    advisor_revision_approve_date: new Date(),
-                    file_name_hki: "HKI.pdf",
-                    file_name_journal: "Journal",
-                    file_name_sourcecode: "Source_Code.zip",
-                    upload_date_hki: new Date(),
-                    upload_date_journal: new Date(),
-                    upload_date_sourcecode: new Date(),
-                    file_size_hki: "2.5 MB",
-                    file_size_journal: "2.5 MB",
-                    file_size_sourcecode: "2.5 MB",
-                    link_soucecode: "link_source_code",
-                    upload_date_link_soucecode: new Date(),
-                    file_path_hki: "link_hki",
-                    file_path_journal: "link_journal",
-                    file_path_sourcecode: "link_source_code",
-                  },
-                });
-
-                if (skripsi) {
-                  // konsultasi 1 - advisor (1)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 4",
-                      date: new Date(),
-                      dosen_id: dekanId,
-                    },
-                  });
-                  // konsultasi 1 - advisor (2)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 5",
-                      date: new Date(),
-                      dosen_id: dekanId,
-                    },
-                  });
-                  // konsultasi 1 - advisor (3)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi penulisan",
-                      date: new Date(),
-                      dosen_id: dekanId,
-                    },
-                  });
-                  // konsultasi 1 - co-advisor1 (1)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi server",
-                      date: new Date(),
-                      dosen_id: dosen1Id,
-                    },
-                  });
-                  // konsultasi 1 - co-advisor1 (2)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi role",
-                      date: new Date(),
-                      dosen_id: dosen1Id,
-                    },
-                  });
-                  // konsultasi 1 - co-advisor1 (3)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi model",
-                      date: new Date(),
-                      dosen_id: dosen1Id,
-                    },
-                  });
-
-                  // assessment 1 - student1 - ketua
-                  await prisma.skripsi_Assessment.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      student_id: skripsiStudent1.student_id,
-                      dosen_id: dosen2Id,
-                      value: "9",
-                    },
-                  });
-                  // assessment 1 - student1 - anggota
-                  await prisma.skripsi_Assessment.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      student_id: skripsiStudent1.student_id,
-                      dosen_id: dosen3Id,
-                      value: "9",
-                    },
-                  });
-                  // assessment 1 - student1 - advisor
-                  await prisma.skripsi_Assessment.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      student_id: skripsiStudent1.student_id,
-                      dosen_id: dekanId,
-                      value: "9",
-                    },
-                  });
-
-                  // changes 1 - ketua
-                  await prisma.skripsi_Changes.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      dosen_id: dosen2Id,
-                      changes: "Ubah Bab 4",
-                    },
-                  });
-
-                  // changes 1 - anggota
-                  await prisma.skripsi_Changes.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      dosen_id: dosen3Id,
-                      changes: "Ubah Bab 5",
-                    },
-                  });
-
-                  // changes 1 - advisor
-                  await prisma.skripsi_Changes.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      dosen_id: dekanId,
-                      changes: "Ubah Bab use case",
-                    },
-                  });
-
-                  // changes 1 - co-advisor1
-                  await prisma.skripsi_Changes.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      dosen_id: dosen1Id,
-                      changes: "Ubah table",
-                    },
-                  });
-
-                  await prisma.group.update({
-                    where: {
-                      id: group.id,
-                    },
-                    data: {
-                      submission_id: submission.id,
-                      proposal_id: proposal.id,
-                      skripsi_id: skripsi.id,
-                    },
-                  });
-                }
-              }
-            }
-          }
-
-          // proposal_student 1 - 2
-          const proposalStudent2 = await prisma.proposal_Student.create({
-            data: {
-              student_id: cindyID,
-              classroom_id: classroomProposal1.id,
-            },
-          });
-
-          if (proposalStudent2) {
-            // group 1 - 2
-            const group = await prisma.group.create({
-              data: {
-                title: "Pengambangan Sistem Absensi",
-                progress: "Skripsi",
-              },
-            });
-
-            if (group) {
-              // group_student 1 - 2
-              await prisma.group_Student.create({
-                data: {
-                  group_id: group.id,
-                  student_id: proposalStudent2.student_id,
-                },
-              });
-
-              // submission 1 - 2
-              const submission = await prisma.submission.create({
-                data: {
-                  file_name: "Pengambangan Sistem Absensi.pdf",
-                  upload_date: new Date(),
-                  file_size: "2.5 MB",
-                  file_path: "link_Pengambangan Sistem Absensi",
-                  is_consultation: true,
-                  proposed_advisor_id: dosen1Id,
-                  proposed_co_advisor1_id: dosen2Id,
-                  is_approve: "Approve",
-                  classroom_id: classroomProposal1.id,
-                },
-              });
-
-              if (submission) {
-                // proposal 1 - 2
-                const proposal = await prisma.proposal.create({
-                  data: {
-                    file_name_proposal: "Pengambangan Sistem Absensi.pdf",
-                    file_name_payment: "pembayaran.pdf",
-                    file_name_plagiarismcheck: "plagiat.pdf",
-                    upload_date_proposal: new Date(),
-                    upload_date_payment: new Date(),
-                    upload_date_plagiarismcheck: new Date(),
-                    file_size_proposal: "2.5 MB",
-                    file_size_payment: "2.5 MB",
-                    file_size_plagiarismcheck: "2.5 MB",
-                    file_path_proposal: "link_Pengambangan Sistem Absensi",
-                    file_path_payment: "link_pembayaran",
-                    file_path_plagiarismcheck: "link_plagiat",
-                    advisor_id: dosen1Id,
-                    co_advisor1_id: dosen2Id,
-                    classroom_id: classroomProposal1.id,
-                    is_proposal_approve_by_advisor: "Approve",
-                    is_proposal_approve_by_co_advisor1: "Approve",
-                    is_proposal_approve_by_co_advisor2: "Approve",
-                    advisor_proposal_approved_date: new Date(),
-                    co_advisor1_proposal_approved_date: new Date(),
-                    co_advisor2_proposal_approved_date: new Date(),
-                    panelist_chairman_id: dosen3Id,
-                    panelist_member_id: dekanId,
-                    start_defence: "11.00",
-                    end_defence: "13.00",
-                    defence_room: "GK1-206",
-                    defence_date: "10/09/2022",
-                    is_report_open: true,
-                    is_report_approve_by_dekan: true,
-                    is_report_approve_by_panelist_chairman: true,
-                    is_report_approve_by_panelist_member: true,
-                    is_report_approve_by_advisor: true,
-                    dekan_report_approve_date: new Date(),
-                    panelist_chairman_report_approve_date: new Date(),
-                    panelist_member_report_approve_date: new Date(),
-                    advisor_report_approve_date: new Date(),
-                    exam_conclution: "Approve",
-                    changes_conclusion: "Minor",
-                    assessment_conclution: "A-",
-                    is_pass: "Pass",
-                    report_date: "10/09/2022",
-                    file_name_revision:
-                      "revisi Pengambangan Sistem Absensi.pdf",
-                    upload_date_revision: new Date(),
-                    file_size_revision: "2.5 MB",
-                    file_path_revision: "link_revisi",
-                    is_revision_approve_by_panelist_chairman: "Approve",
-                    is_revision_approve_by_panelist_member: "Approve",
-                    is_revision_approve_by_advisor: "Approve",
-                    panelist_chairman_revision_approve_date: new Date(),
-                    panelist_member_revision_approve_date: new Date(),
-                    advisor_revision_approve_date: new Date(),
-                  },
-                });
-
-                if (proposal) {
-                  // konsultasi 2 - advisor (1)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 1",
-                      date: new Date(),
-                      dosen_id: dosen1Id,
-                    },
-                  });
-                  // konsultasi 2 - advisor (2)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 2",
-                      date: new Date(),
-                      dosen_id: dosen1Id,
-                    },
-                  });
-                  // konsultasi 2 - advisor (3)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 3",
-                      date: new Date(),
-                      dosen_id: dosen1Id,
-                    },
-                  });
-                  // konsultasi 2 - co-advisor1 (1)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi sistem",
-                      date: new Date(),
-                      dosen_id: dosen2Id,
-                    },
-                  });
-                  // konsultasi 2 - co-advisor1 (2)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi database",
-                      date: new Date(),
-                      dosen_id: dosen2Id,
-                    },
-                  });
-                  // konsultasi 2 - co-advisor1 (3)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi metode",
-                      date: new Date(),
-                      dosen_id: dosen2Id,
-                    },
-                  });
-
-                  // assessment 2 - student1 - ketua
-                  await prisma.proposal_Assessment.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      student_id: proposalStudent2.student_id,
-                      dosen_id: dosen3Id,
-                      value: "9",
-                    },
-                  });
-                  // assessment 2 - student1 - anggota
-                  await prisma.proposal_Assessment.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      student_id: proposalStudent2.student_id,
-                      dosen_id: dekanId,
-                      value: "9",
-                    },
-                  });
-                  // assessment 2 - student1 - advisor
-                  await prisma.proposal_Assessment.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      student_id: proposalStudent1.student_id,
-                      dosen_id: dosen1Id,
-                      value: "9",
-                    },
-                  });
-
-                  // changes 2 - ketua
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dosen3Id,
-                      changes: "Ubah Bab 1",
-                    },
-                  });
-                  // changes 2 - anggota
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dekanId,
-                      changes: "Ubah Bab 2",
-                    },
-                  });
-                  // changes 2 - advisor
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dosen1Id,
-                      changes: "Ubah Bab 3",
-                    },
-                  });
-                  // changes 2 - co-advisor1
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dosen2Id,
-                      changes: "Ubah Gambar",
-                    },
-                  });
-                }
-
-                // skripsi 1 - 2
-                const skripsi = await prisma.skripsi.create({
-                  data: {
-                    advisor_id: dosen1Id,
-                    co_advisor1_id: dosen2Id,
-                  },
-                });
-
-                if (skripsi) {
-                  await prisma.group.update({
-                    where: {
-                      id: group.id,
-                    },
-                    data: {
-                      submission_id: submission.id,
-                      proposal_id: proposal.id,
-                      skripsi_id: skripsi.id,
-                    },
-                  });
-                }
-              }
-            }
-          }
-        }
-
-        // proposal classroom 2
-        const classroomProposal2 = await prisma.classroom.create({
-          data: {
-            dosen_mk_id: kaprodiTIId,
-            academic_id: academicCalendar1.id,
-            name: "Proposal",
-          },
-        });
-
-        // skripsi classroom 2
-        const classroomSkripsi2 = await prisma.classroom.create({
-          data: {
-            dosen_mk_id: kaprodiTIId,
-            academic_id: academicCalendar1.id,
-            name: "Skripsi",
-          },
-        });
-
-        if (classroomProposal2 && classroomSkripsi2) {
-          // proposal_student (1) - student1
-          const proposalStudent1 = await prisma.proposal_Student.create({
-            data: {
-              student_id: cindyID,
-              classroom_id: classroomProposal2.id,
-            },
-          });
-
-          // skripsi_student (1) - student1
-          const skripsiStudent1 = await prisma.skripsi_Student.create({
-            data: {
-              student_id: cindyID,
-              classroom_id: classroomSkripsi2.id,
-            },
-          });
-
-          if (proposalStudent1 && skripsiStudent1) {
-            // group (1) - student1
-            const group = await prisma.group.create({
-              data: {
-                title:
-                  "Analisis Algoritma Machine Learning dalam Prediksi Cuaca",
-                progress: "Finished",
-              },
-            });
-
-            if (group) {
-              // group_student (1) - student1
-              await prisma.group_Student.create({
-                data: {
-                  group_id: group.id,
-                  student_id: proposalStudent1.student_id,
-                },
-              });
-
-              // submission (1) - student1
-              const submission = await prisma.submission.create({
-                data: {
-                  file_name: "skripsi_cuaca.pdf",
-                  upload_date: new Date(),
-                  file_size: "2.5 MB",
-                  file_path: "link_skripsi_cuaca",
-                  is_consultation: true,
-                  proposed_advisor_id: kaprodiTIId,
-                  proposed_co_advisor1_id: kaprodiSIId,
-                  is_approve: "Approve",
-                  classroom_id: classroomProposal2.id,
-                },
-              });
-
-              if (submission) {
-                // proposal (1) - student1
-                const proposal = await prisma.proposal.create({
-                  data: {
-                    file_name_proposal: "skripsi_cuaca.pdf",
-                    file_name_payment: "bukti_pembayaran_cuaca.pdf",
-                    file_name_plagiarismcheck: "cek_plagiat_cuaca.pdf",
-                    upload_date_proposal: new Date(),
-                    upload_date_payment: new Date(),
-                    upload_date_plagiarismcheck: new Date(),
-                    file_size_proposal: "2.5 MB",
-                    file_size_payment: "2.5 MB",
-                    file_size_plagiarismcheck: "2.5 MB",
-                    file_path_proposal: "link_skripsi_cuaca",
-                    file_path_payment: "link_bukti_pembayaran_cuaca",
-                    file_path_plagiarismcheck: "link_cek_plagiat_cuaca",
-                    advisor_id: kaprodiTIId,
-                    co_advisor1_id: kaprodiSIId,
-                    classroom_id: classroomProposal2.id,
-                    is_proposal_approve_by_advisor: "Approve",
-                    is_proposal_approve_by_co_advisor1: "Approve",
-                    is_proposal_approve_by_co_advisor2: "Approve",
-                    advisor_proposal_approved_date: new Date(),
-                    co_advisor1_proposal_approved_date: new Date(),
-                    co_advisor2_proposal_approved_date: new Date(),
-                    panelist_chairman_id: dosen1Id,
-                    panelist_member_id: dosen2Id,
-                    start_defence: "08.00",
-                    end_defence: "10.00",
-                    defence_room: "GK1-206",
-                    defence_date: "11/09/2022",
-                    is_report_open: true,
-                    is_report_approve_by_dekan: true,
-                    is_report_approve_by_panelist_chairman: true,
-                    is_report_approve_by_panelist_member: true,
-                    is_report_approve_by_advisor: true,
-                    dekan_report_approve_date: new Date(),
-                    panelist_chairman_report_approve_date: new Date(),
-                    panelist_member_report_approve_date: new Date(),
-                    advisor_report_approve_date: new Date(),
-                    exam_conclution: "Approve",
-                    changes_conclusion: "Minor",
-                    assessment_conclution: "A-",
-                    is_pass: "Pass",
-                    report_date: "11/09/2022",
-                    file_name_revision: "revisi_cuaca.pdf",
-                    upload_date_revision: new Date(),
-                    file_size_revision: "2.5 MB",
-                    file_path_revision: "link_revisi_cuaca",
-                    is_revision_approve_by_panelist_chairman: "Approve",
-                    is_revision_approve_by_panelist_member: "Approve",
-                    is_revision_approve_by_advisor: "Approve",
-                    panelist_chairman_revision_approve_date: new Date(),
-                    panelist_member_revision_approve_date: new Date(),
-                    advisor_revision_approve_date: new Date(),
-                  },
-                });
-
-                if (proposal) {
-                  // konsultasi (1) - advisor (1)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 1",
-                      date: new Date(),
-                      dosen_id: kaprodiTIId,
-                    },
-                  });
-                  // konsultasi (1) - advisor (2)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 2",
-                      date: new Date(),
-                      dosen_id: kaprodiTIId,
-                    },
-                  });
-                  // konsultasi (1) - advisor (3)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 3",
-                      date: new Date(),
-                      dosen_id: kaprodiTIId,
-                    },
-                  });
-                  // konsultasi (1) - co-advisor1 (1)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi sistem",
-                      date: new Date(),
-                      dosen_id: kaprodiSIId,
-                    },
-                  });
-                  // konsultasi (1) - co-advisor1 (2)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi database",
-                      date: new Date(),
-                      dosen_id: kaprodiSIId,
-                    },
-                  });
-                  // konsultasi (1) - co-advisor1 (3)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi metode",
-                      date: new Date(),
-                      dosen_id: kaprodiSIId,
-                    },
-                  });
-
-                  // assessment (1) - student1 - ketua
-                  await prisma.proposal_Assessment.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      student_id: proposalStudent1.student_id,
-                      dosen_id: dosen1Id,
-                      value: "9",
-                    },
-                  });
-                  // assessment (1) - student1 - anggota
-                  await prisma.proposal_Assessment.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      student_id: proposalStudent1.student_id,
-                      dosen_id: dosen2Id,
-                      value: "9",
-                    },
-                  });
-                  // assessment (1) - student1 - advisor
-                  await prisma.proposal_Assessment.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      student_id: proposalStudent1.student_id,
-                      dosen_id: kaprodiTIId,
-                      value: "9",
-                    },
-                  });
-
-                  // changes (1) - ketua
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dosen1Id,
-                      changes: "Ubah Bab 1",
-                    },
-                  });
-                  // changes (1) - anggota
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dosen2Id,
-                      changes: "Ubah Bab 2",
-                    },
-                  });
-                  // changes (1) - advisor
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: kaprodiTIId,
-                      changes: "Ubah Bab 3",
-                    },
-                  });
-                  // changes (1) - co-advisor1
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: kaprodiSIId,
-                      changes: "Ubah Gambar",
-                    },
-                  });
-                }
-
-                // skripsi (1) - student1
-                const skripsi = await prisma.skripsi.create({
-                  data: {
-                    file_name_skripsi: "skripsi_cuaca.pdf",
-                    file_name_payment: "bukti_pembayaran_cuaca.pdf",
-                    file_name_plagiarismcheck: "cek_plagiat_cuaca.pdf",
-                    upload_date_skripsi: new Date(),
-                    upload_date_payment: new Date(),
-                    upload_date_plagiarismcheck: new Date(),
-                    file_size_skripsi: "2.5 MB",
-                    file_size_payment: "2.5 MB",
-                    file_size_plagiarismcheck: "2.5 MB",
-                    file_path_skripsi: "link_skripsi_cuaca",
-                    file_path_payment: "link_bukti_pembayaran_cuaca",
-                    file_path_plagiarismcheck: "link_cek_plagiat_cuaca",
-                    advisor_id: kaprodiTIId,
-                    co_advisor1_id: kaprodiSIId,
-                    classroom_id: classroomProposal2.id,
-                    is_skripsi_approve_by_advisor: "Approve",
-                    is_skripsi_approve_by_co_advisor1: "Approve",
-                    is_skripsi_approve_by_co_advisor2: "Approve",
-                    advisor_skripsi_approved_date: new Date(),
-                    co_advisor1_skripsi_approved_date: new Date(),
-                    co_advisor2_skripsi_approved_date: new Date(),
-                    panelist_chairman_id: dosen1Id,
-                    panelist_member_id: dosen2Id,
-                    start_defence: "10.00",
-                    end_defence: "12.00",
-                    defence_room: "GK1-206",
-                    defence_date: "02/03/2023",
-                    is_report_open: true,
-                    is_report_approve_by_dekan: true,
-                    is_report_approve_by_panelist_chairman: true,
-                    is_report_approve_by_panelist_member: true,
-                    is_report_approve_by_advisor: true,
-                    dekan_report_approve_date: new Date(),
-                    panelist_chairman_report_approve_date: new Date(),
-                    panelist_member_report_approve_date: new Date(),
-                    advisor_report_approve_date: new Date(),
-                    exam_conclution: "Approve",
-                    changes_conclusion: "Minor",
-                    assessment_conclution: "A-",
-                    is_pass: "Pass",
-                    report_date: "02/03/2023",
-                    file_name_revision: "revisi_cuaca.pdf",
-                    upload_date_revision: new Date(),
-                    file_size_revision: "2.5 MB",
-                    file_path_revision: "link_revisi_cuaca",
-                    is_revision_approve_by_panelist_chairman: "Approve",
-                    is_revision_approve_by_panelist_member: "Approve",
-                    is_revision_approve_by_advisor: "Approve",
-                    panelist_chairman_revision_approve_date: new Date(),
-                    panelist_member_revision_approve_date: new Date(),
-                    advisor_revision_approve_date: new Date(),
-                    file_name_hki: "HKI.pdf",
-                    file_name_journal: "Journal",
-                    file_name_sourcecode: "Source_Code.zip",
-                    upload_date_hki: new Date(),
-                    upload_date_journal: new Date(),
-                    upload_date_sourcecode: new Date(),
-                    file_size_hki: "2.5 MB",
-                    file_size_journal: "2.5 MB",
-                    file_size_sourcecode: "2.5 MB",
-                    link_soucecode: "link_source_code",
-                    upload_date_link_soucecode: new Date(),
-                    file_path_hki: "link_hki",
-                    file_path_journal: "link_journal",
-                    file_path_sourcecode: "link_source_code",
-                  },
-                });
-
-                if (skripsi) {
-                  // konsultasi (1) - advisor (1)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 4",
-                      date: new Date(),
-                      dosen_id: kaprodiTIId,
-                    },
-                  });
-                  // konsultasi (1) - advisor (2)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 5",
-                      date: new Date(),
-                      dosen_id: kaprodiTIId,
-                    },
-                  });
-                  // konsultasi (1) - advisor (3)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi penulisan",
-                      date: new Date(),
-                      dosen_id: kaprodiTIId,
-                    },
-                  });
-                  // konsultasi (1) - co-advisor1 (1)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi server",
-                      date: new Date(),
-                      dosen_id: kaprodiSIId,
-                    },
-                  });
-                  // konsultasi (1) - co-advisor1 (2)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi role",
-                      date: new Date(),
-                      dosen_id: kaprodiSIId,
-                    },
-                  });
-                  // konsultasi (1) - co-advisor1 (3)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi model",
-                      date: new Date(),
-                      dosen_id: kaprodiSIId,
-                    },
-                  });
-
-                  // assessment (1) - student1 - ketua
-                  await prisma.skripsi_Assessment.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      student_id: skripsiStudent1.student_id,
-                      dosen_id: dosen1Id,
-                      value: "9",
-                    },
-                  });
-                  // assessment (1) - student1 - anggota
-                  await prisma.skripsi_Assessment.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      student_id: skripsiStudent1.student_id,
-                      dosen_id: dosen2Id,
-                      value: "9",
-                    },
-                  });
-                  // assessment (1) - student1 - advisor
-                  await prisma.skripsi_Assessment.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      student_id: skripsiStudent1.student_id,
-                      dosen_id: kaprodiTIId,
-                      value: "9",
-                    },
-                  });
-
-                  // changes (1) - ketua
-                  await prisma.skripsi_Changes.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      dosen_id: dosen1Id,
-                      changes: "Ubah Bab 4",
-                    },
-                  });
-
-                  // changes (1) - anggota
-                  await prisma.skripsi_Changes.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      dosen_id: dosen2Id,
-                      changes: "Ubah Bab 5",
-                    },
-                  });
-
-                  // changes (1) - advisor
-                  await prisma.skripsi_Changes.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      dosen_id: kaprodiTIId,
-                      changes: "Ubah Bab use case",
-                    },
-                  });
-
-                  // changes (1) - co-advisor1
-                  await prisma.skripsi_Changes.create({
-                    data: {
-                      skripsi_id: skripsi.id,
-                      dosen_id: kaprodiSIId,
-                      changes: "Ubah table",
-                    },
-                  });
-
-                  await prisma.group.update({
-                    where: {
-                      id: group.id,
-                    },
-                    data: {
-                      submission_id: submission.id,
-                      proposal_id: proposal.id,
-                      skripsi_id: skripsi.id,
-                    },
-                  });
-                }
-              }
-            }
-          }
-
-          // proposal_student (2) - student2
-          const proposalStudent2 = await prisma.proposal_Student.create({
-            data: {
-              student_id: cindyID,
-              classroom_id: classroomProposal2.id,
-            },
-          });
-
-          if (proposalStudent2) {
-            // group (2) - student2
-            const group = await prisma.group.create({
-              data: {
-                title:
-                  "Pengembangan Aplikasi Mobile Berbasis Android untuk Pemantauan Kesehatan",
-                progress: "Skripsi",
-              },
-            });
-
-            if (group) {
-              // group_student (2) - student2
-              await prisma.group_Student.create({
-                data: {
-                  group_id: group.id,
-                  student_id: proposalStudent2.student_id,
-                },
-              });
-
-              // submission (2) - student2
-              const submission = await prisma.submission.create({
-                data: {
-                  file_name: "aplikasi_kesehatan.pdf",
-                  upload_date: new Date(),
-                  file_size: "2.5 MB",
-                  file_path: "link_aplikasi_kesehatan",
-                  is_consultation: true,
-                  proposed_advisor_id: kaprodiSIId,
-                  proposed_co_advisor1_id: dosen3Id,
-                  is_approve: "Approve",
-                  classroom_id: classroomProposal2.id,
-                },
-              });
-
-              if (submission) {
-                // proposal (2) - student2
-                const proposal = await prisma.proposal.create({
-                  data: {
-                    file_name_proposal: "skripsi_aplikasi_kesehatan.pdf",
-                    file_name_payment: "bukti_pembayaran_kesehatan.pdf",
-                    file_name_plagiarismcheck: "cek_plagiat_kesehatan.pdf",
-                    upload_date_proposal: new Date(),
-                    upload_date_payment: new Date(),
-                    upload_date_plagiarismcheck: new Date(),
-                    file_size_proposal: "2.5 MB",
-                    file_size_payment: "2.5 MB",
-                    file_size_plagiarismcheck: "2.5 MB",
-                    file_path_proposal: "link_skripsi_aplikasi_kesehatan",
-                    file_path_payment: "link_bukti_pembayaran_kesehatan",
-                    file_path_plagiarismcheck: "link_cek_plagiat_kesehatan",
-                    advisor_id: kaprodiSIId,
-                    co_advisor1_id: dosen3Id,
-                    classroom_id: classroomProposal2.id,
-                    is_proposal_approve_by_advisor: "Approve",
-                    is_proposal_approve_by_co_advisor1: "Approve",
-                    is_proposal_approve_by_co_advisor2: "Approve",
-                    advisor_proposal_approved_date: new Date(),
-                    co_advisor1_proposal_approved_date: new Date(),
-                    co_advisor2_proposal_approved_date: new Date(),
-                    panelist_chairman_id: dosen2Id,
-                    panelist_member_id: dosen1Id,
-                    start_defence: "11.00",
-                    end_defence: "13.00",
-                    defence_room: "GK1-206",
-                    defence_date: "11/09/2022",
-                    is_report_open: true,
-                    is_report_approve_by_dekan: true,
-                    is_report_approve_by_panelist_chairman: true,
-                    is_report_approve_by_panelist_member: true,
-                    is_report_approve_by_advisor: true,
-                    dekan_report_approve_date: new Date(),
-                    panelist_chairman_report_approve_date: new Date(),
-                    panelist_member_report_approve_date: new Date(),
-                    advisor_report_approve_date: new Date(),
-                    exam_conclution: "Approve",
-                    changes_conclusion: "Minor",
-                    assessment_conclution: "A-",
-                    is_pass: "Pass",
-                    report_date: "10/09/2022",
-                    file_name_revision: "revisi_kesehatan.pdf",
-                    upload_date_revision: new Date(),
-                    file_size_revision: "2.5 MB",
-                    file_path_revision: "link_revisi_kesehatan",
-                    is_revision_approve_by_panelist_chairman: "Approve",
-                    is_revision_approve_by_panelist_member: "Approve",
-                    is_revision_approve_by_advisor: "Approve",
-                    panelist_chairman_revision_approve_date: new Date(),
-                    panelist_member_revision_approve_date: new Date(),
-                    advisor_revision_approve_date: new Date(),
-                  },
-                });
-
-                if (proposal) {
-                  // konsultasi (2) - advisor (1)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 1",
-                      date: new Date(),
-                      dosen_id: kaprodiSIId,
-                    },
-                  });
-                  // konsultasi (2) - advisor (2)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 2",
-                      date: new Date(),
-                      dosen_id: kaprodiSIId,
-                    },
-                  });
-                  // konsultasi (2) - advisor (3)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi bab 3",
-                      date: new Date(),
-                      dosen_id: kaprodiSIId,
-                    },
-                  });
-                  // konsultasi (2) - co-advisor1 (1)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi sistem",
-                      date: new Date(),
-                      dosen_id: dosen3Id,
-                    },
-                  });
-                  // konsultasi (2) - co-advisor1 (2)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi database",
-                      date: new Date(),
-                      dosen_id: dosen3Id,
-                    },
-                  });
-                  // konsultasi (2) - co-advisor1 (3)
-                  await prisma.thesis_Consultation.create({
-                    data: {
-                      group_id: group.id,
-                      description: "Konsultasi metode",
-                      date: new Date(),
-                      dosen_id: dosen3Id,
-                    },
-                  });
-
-                  // assessment (2) - student1 - ketua
-                  await prisma.proposal_Assessment.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      student_id: proposalStudent2.student_id,
-                      dosen_id: dosen1Id,
-                      value: "9",
-                    },
-                  });
-                  // assessment (2) - student1 - anggota
-                  await prisma.proposal_Assessment.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      student_id: proposalStudent2.student_id,
-                      dosen_id: dosen2Id,
-                      value: "9",
-                    },
-                  });
-                  // assessment (2) - student1 - advisor
-                  await prisma.proposal_Assessment.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      student_id: proposalStudent2.student_id,
-                      dosen_id: kaprodiSIId,
-                      value: "9",
-                    },
-                  });
-
-                  // changes (2) - ketua
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dosen1Id,
-                      changes: "Ubah Bab 1",
-                    },
-                  });
-                  // changes (2) - anggota
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dosen2Id,
-                      changes: "Ubah Bab 2",
-                    },
-                  });
-                  // changes (2) - advisor
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: kaprodiSIId,
-                      changes: "Ubah Bab 3",
-                    },
-                  });
-                  // changes (2) - co-advisor1
-                  await prisma.proposal_Changes.create({
-                    data: {
-                      proposal_id: proposal.id,
-                      dosen_id: dosen3Id,
-                      changes: "Ubah Gambar",
-                    },
-                  });
-                }
-
-                // skripsi (2) - student2
-                const skripsi = await prisma.skripsi.create({
-                  data: {
-                    advisor_id: kaprodiSIId,
-                    co_advisor1_id: dosen3Id,
-                  },
-                });
-
-                if (skripsi) {
-                  await prisma.group.update({
-                    where: {
-                      id: group.id,
-                    },
-                    data: {
-                      submission_id: submission.id,
-                      proposal_id: proposal.id,
-                      skripsi_id: skripsi.id,
-                    },
-                  });
-                }
-              }
-            }
-          }
-        }
-      }
-
-      // akademik 1
-      const academicCalendar2 = await prisma.academic_Calendar.create({
+      const classroomProposalGanjil = await prisma.classroom.create({
         data: {
-          semester: "Genap",
-          year: "2021/2022",
+          dosen_mk_id: kaprodiTIId,
+          academic_id: academicCalendarGanjil.id,
+          name: "Proposal",
         },
       });
 
-      if (academicCalendar2) {
-        // proposal classroom 1
-        const classroomProposal1 = await prisma.classroom.create({
+      // Skripsi
+      const classroomSkripsiGanjilIF = await prisma.classroom.create({
+        data: {
+          dosen_mk_id: kaprodiTIId,
+          academic_id: academicCalendarGanjil.id,
+          name: "Skripsi",
+        },
+      });
+      const classroomSkripsiGanjilSI = await prisma.classroom.create({
+        data: {
+          dosen_mk_id: kaprodiSIId,
+          academic_id: academicCalendarGanjil.id,
+          name: "Skripsi",
+        },
+      });
+      // Proposal
+      if (classroomProposalGanjil) {
+        // student1_1
+        const proposalStudent1_1 = await prisma.proposal_Student.create({
           data: {
-            dosen_mk_id: kaprodiTIId,
-            academic_id: academicCalendar2.id,
-            name: "Proposal",
+            student_id: student1_1,
+            classroom_id: classroomProposalGanjil.id,
           },
         });
-
-        // skripsi classroom 1
-        const classroomSkripsi1 = await prisma.classroom.create({
+        await prisma.skripsi_Student.create({
           data: {
-            dosen_mk_id: kaprodiTIId,
-            academic_id: academicCalendar2.id,
-            name: "Skripsi",
+            student_id: student1_1,
+            classroom_id: classroomSkripsiGanjilIF.id,
           },
         });
-
-        if (classroomProposal1 && classroomSkripsi1) {
-          // proposal_student 1 - 1
-          const proposalStudent1 = await prisma.proposal_Student.create({
+        // Group student1_1
+        const group_1 = await prisma.group.create({
+          data: {
+            title: title_1,
+            progress: "Finished",
+          },
+        });
+        await prisma.group_Student.create({
+          data: {
+            group_id: group_1.id,
+            student_id: proposalStudent1_1.student_id,
+          },
+        });
+        if (proposalStudent1_1) {
+          // Submission student1_1
+          const submission = await prisma.submission.create({
             data: {
-              student_id: sitiID,
-              classroom_id: classroomProposal1.id,
+              file_name: submissionFileName_1,
+              upload_date: new Date(),
+              file_size: "2.5 MB",
+              file_path: submissionFilePath_1,
+              is_consultation: true,
+              proposed_advisor_id: advisor_1,
+              is_approve: "Approve",
+              classroom_id: classroomProposalGanjil.id,
             },
           });
-
-          if (proposalStudent1) {
-            // group 1 - 1
-            const group = await prisma.group.create({
+          // Proposal student1_1
+          const proposal = await prisma.proposal.create({
+            data: {
+              file_name_proposal: proposalFileName_1,
+              file_name_payment: proposalPaymentFileName_1,
+              file_name_plagiarismcheck: proposalPlagiatFileName_1,
+              upload_date_proposal: new Date(),
+              upload_date_payment: new Date(),
+              upload_date_plagiarismcheck: new Date(),
+              file_size_proposal: "2.5 MB",
+              file_size_payment: "2.5 MB",
+              file_size_plagiarismcheck: "2.5 MB",
+              file_path_proposal: proposalFilePath_1,
+              file_path_payment: proposalPaymentPath_1,
+              file_path_plagiarismcheck: proposalPlagiatPath_1,
+              advisor_id: advisor_1,
+              classroom_id: classroomProposalGanjil.id,
+              is_proposal_approve_by_advisor: "Approve",
+              advisor_proposal_approved_date: new Date(),
+              panelist_chairman_id: chairman_1,
+              panelist_member_id: member_1,
+              start_defence: proposalStart_1,
+              end_defence: proposalEnd_1,
+              defence_room: proposalRoom_1,
+              defence_date: proposalDate_1,
+              is_report_open: true,
+              is_report_approve_by_dekan: true,
+              is_report_approve_by_panelist_chairman: true,
+              is_report_approve_by_panelist_member: true,
+              is_report_approve_by_advisor: true,
+              dekan_report_approve_date: new Date(),
+              panelist_chairman_report_approve_date: new Date(),
+              panelist_member_report_approve_date: new Date(),
+              advisor_report_approve_date: new Date(),
+              exam_conclution: "Approve",
+              changes_conclusion: "Minor",
+              assessment_conclution: "A-",
+              is_pass: "Pass",
+              report_date: proposalDate_1,
+              file_name_revision: proposalRevisiFileName_1,
+              upload_date_revision: new Date(),
+              file_size_revision: "2.5 MB",
+              file_path_revision: proposalRevisiFilePath_1,
+              is_revision_approve_by_panelist_chairman: "Approve",
+              is_revision_approve_by_panelist_member: "Approve",
+              is_revision_approve_by_advisor: "Approve",
+              panelist_chairman_revision_approve_date: new Date(),
+              panelist_member_revision_approve_date: new Date(),
+              advisor_revision_approve_date: new Date(),
+            },
+          });
+          if (proposal) {
+            // konsultasi student1_1 - advisor (1)
+            await prisma.thesis_Consultation.create({
               data: {
-                title: "Analisis Keamanan Jaringan Komputer",
-                progress: "Submission",
+                group_id: group_1.id,
+                description: "Konsultasi bab 1",
+                date: new Date(),
+                dosen_id: advisor_1,
+              },
+            });
+            // konsultasi student1_1 - advisor (2)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_1.id,
+                description: "Konsultasi bab 2",
+                date: new Date(),
+                dosen_id: advisor_1,
+              },
+            });
+            // konsultasi student1_1 - advisor (3)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_1.id,
+                description: "Konsultasi bab 3",
+                date: new Date(),
+                dosen_id: advisor_1,
               },
             });
 
-            if (group) {
-              // group_student 1 - 1
-              await prisma.group_Student.create({
-                data: {
-                  group_id: group.id,
-                  student_id: proposalStudent1.student_id,
-                },
-              });
+            // assessment student1_1 - student1 - ketua
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent1_1.student_id,
+                dosen_id: chairman_1,
+                value: "9",
+              },
+            });
+            // assessment student1_1 - student1 - anggota
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent1_1.student_id,
+                dosen_id: member_1,
+                value: "9",
+              },
+            });
+            // assessment student1_1 - student1 - advisor
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent1_1.student_id,
+                dosen_id: advisor_1,
+                value: "9",
+              },
+            });
 
-              // submission 1 - 1
-              const submission = await prisma.submission.create({
-                data: {
-                  file_name: "keamanan_jaringan.pdf",
-                  upload_date: new Date(),
-                  file_size: "2.5 MB",
-                  file_path: "link_keamanan_jaringan",
-                  is_consultation: true,
-                  proposed_advisor_id: dekanId,
-                  proposed_co_advisor1_id: dosen1Id,
-                  is_approve: "Waiting",
-                  classroom_id: classroomProposal1.id,
-                },
-              });
-              await prisma.group.update({
-                where: {
-                  id: group.id,
-                },
-                data: {
-                  submission_id: submission.id,
-                },
-              });
-            }
+            // changes student1_1 - ketua
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: chairman_1,
+                changes: "Ubah Bab 1",
+              },
+            });
+            // changes student1_1 - anggota
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: member_1,
+                changes: "Ubah Bab 2",
+              },
+            });
+            // changes student1_1 - advisor
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: advisor_1,
+                changes: "Ubah Bab 3",
+              },
+            });
           }
-
-          // proposal_student 1 - 2
-          const proposalStudent2 = await prisma.proposal_Student.create({
+          // Skripsi student1_1
+          const skripsi = await prisma.skripsi.create({
             data: {
-              student_id: wahyuID,
-              classroom_id: classroomProposal1.id,
+              file_name_skripsi: skripsiFileName_1,
+              file_name_payment: skripsiPaymentFileName_1,
+              file_name_plagiarismcheck: skripsiPlagiatFileName_1,
+              upload_date_skripsi: new Date(),
+              upload_date_payment: new Date(),
+              upload_date_plagiarismcheck: new Date(),
+              file_size_skripsi: "2.5 MB",
+              file_size_payment: "2.5 MB",
+              file_size_plagiarismcheck: "2.5 MB",
+              file_path_skripsi: skripsiFilePath_1,
+              file_path_payment: skripsiPaymentPath_1,
+              file_path_plagiarismcheck: skripsiPlagiatPath_1,
+              advisor_id: advisor_1,
+              classroom_id: classroomSkripsiGanjilIF.id,
+              is_skripsi_approve_by_advisor: "Approve",
+              is_skripsi_approve_by_co_advisor1: "Approve",
+              is_skripsi_approve_by_co_advisor2: "Approve",
+              advisor_skripsi_approved_date: new Date(),
+              co_advisor1_skripsi_approved_date: new Date(),
+              co_advisor2_skripsi_approved_date: new Date(),
+              panelist_chairman_id: chairman_1,
+              panelist_member_id: member_1,
+              start_defence: skripsiStart_1,
+              end_defence: skripsiEnd_1,
+              defence_room: skripsiRoom_1,
+              defence_date: skripsiDate_1,
+              is_report_open: true,
+              is_report_approve_by_dekan: true,
+              is_report_approve_by_panelist_chairman: true,
+              is_report_approve_by_panelist_member: true,
+              is_report_approve_by_advisor: true,
+              dekan_report_approve_date: new Date(),
+              panelist_chairman_report_approve_date: new Date(),
+              panelist_member_report_approve_date: new Date(),
+              advisor_report_approve_date: new Date(),
+              exam_conclution: "Approve",
+              changes_conclusion: "Minor",
+              assessment_conclution: "A-",
+              is_pass: "Pass",
+              report_date: skripsiDate_1,
+              file_name_revision: skripsiRevisiFileName_1,
+              upload_date_revision: new Date(),
+              file_size_revision: "2.5 MB",
+              file_path_revision: skripsiRevisiFilePath_1,
+              is_revision_approve_by_panelist_chairman: "Approve",
+              is_revision_approve_by_panelist_member: "Approve",
+              is_revision_approve_by_advisor: "Approve",
+              panelist_chairman_revision_approve_date: new Date(),
+              panelist_member_revision_approve_date: new Date(),
+              advisor_revision_approve_date: new Date(),
+              file_name_hki: "HKI.pdf",
+              file_name_journal: "Journal",
+              file_name_sourcecode: "Source_Code.zip",
+              upload_date_hki: new Date(),
+              upload_date_journal: new Date(),
+              upload_date_sourcecode: new Date(),
+              file_size_hki: "2.5 MB",
+              file_size_journal: "2.5 MB",
+              file_size_sourcecode: "2.5 MB",
+              link_soucecode: "link_source_code",
+              upload_date_link_soucecode: new Date(),
+              file_path_hki: "link_hki",
+              file_path_journal: "link_journal",
+              file_path_sourcecode: "link_source_code",
             },
           });
-
-          if (proposalStudent2) {
-            // group 1 - 2
-            const group = await prisma.group.create({
+          if (skripsi) {
+            // konsultasi student1_1 - advisor (1)
+            await prisma.thesis_Consultation.create({
               data: {
-                title:
-                  "Pengaruh Teknologi Internet of Things (IoT) dalam Industri Manufaktur",
-                progress: "Proposal",
+                group_id: group_1.id,
+                description: "Konsultasi bab 4",
+                date: new Date(),
+                dosen_id: advisor_1,
+              },
+            });
+            // konsultasi student1_1 - advisor (2)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_1.id,
+                description: "Konsultasi bab 5",
+                date: new Date(),
+                dosen_id: advisor_1,
+              },
+            });
+            // konsultasi student1_1 - advisor (3)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_1.id,
+                description: "Konsultasi penulisan",
+                date: new Date(),
+                dosen_id: advisor_1,
               },
             });
 
-            if (group) {
-              // group_student 1 - 2
-              await prisma.group_Student.create({
-                data: {
-                  group_id: group.id,
-                  student_id: proposalStudent2.student_id,
-                },
-              });
+            // assessment student1_1 - student1 - ketua
+            await prisma.skripsi_Assessment.create({
+              data: {
+                skripsi_id: skripsi.id,
+                student_id: proposalStudent1_1.student_id,
+                dosen_id: chairman_1,
+                value: "9",
+              },
+            });
+            // assessment student1_1 - student1 - anggota
+            await prisma.skripsi_Assessment.create({
+              data: {
+                skripsi_id: skripsi.id,
+                student_id: proposalStudent1_1.student_id,
+                dosen_id: member_1,
+                value: "9",
+              },
+            });
+            // assessment student1_1 - student1 - advisor
+            await prisma.skripsi_Assessment.create({
+              data: {
+                skripsi_id: skripsi.id,
+                student_id: proposalStudent1_1.student_id,
+                dosen_id: advisor_1,
+                value: "9",
+              },
+            });
 
-              // submission 1 - 2
-              const submission = await prisma.submission.create({
-                data: {
-                  file_name: "iot_manufaktur.pdf",
-                  upload_date: new Date(),
-                  file_size: "2.5 MB",
-                  file_path: "link_iot_manufaktur",
-                  is_consultation: true,
-                  proposed_advisor_id: dosen1Id,
-                  proposed_co_advisor1_id: dosen2Id,
-                  is_approve: "Approve",
-                  classroom_id: classroomProposal1.id,
-                },
-              });
+            // changes student1_1 - ketua
+            await prisma.skripsi_Changes.create({
+              data: {
+                skripsi_id: skripsi.id,
+                dosen_id: chairman_1,
+                changes: "Ubah Bab 4",
+              },
+            });
 
-              if (submission) {
-                // proposal 1 - 2
-                const proposal = await prisma.proposal.create({
-                  data: {
-                    advisor_id: dosen1Id,
-                    co_advisor1_id: dosen2Id,
-                    classroom_id: classroomProposal1.id,
-                  },
-                });
-                const skripsi = await prisma.skripsi.create({
-                  data: {
-                    advisor_id: dosen1Id,
-                    co_advisor1_id: dosen2Id,
-                  },
-                });
-                await prisma.group.update({
-                  where: {
-                    id: group.id,
-                  },
-                  data: {
-                    submission_id: submission.id,
-                    proposal_id: proposal.id,
-                    skripsi_id: skripsi.id,
-                  },
-                });
-              }
-            }
+            // changes student1_1 - anggota
+            await prisma.skripsi_Changes.create({
+              data: {
+                skripsi_id: skripsi.id,
+                dosen_id: member_1,
+                changes: "Ubah Bab 5",
+              },
+            });
+
+            // changes student1_1 - advisor
+            await prisma.skripsi_Changes.create({
+              data: {
+                skripsi_id: skripsi.id,
+                dosen_id: advisor_1,
+                changes: "Ubah Bab use case",
+              },
+            });
+
+            // Update group
+            await prisma.group.update({
+              where: {
+                id: group_1.id,
+              },
+              data: {
+                submission_id: submission.id,
+                proposal_id: proposal.id,
+                skripsi_id: skripsi.id,
+              },
+            });
+
+            // History Submission
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengajukan Judul",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengubah Pengajuan Judul",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: kaprodiTIId,
+                description: "Mengganti Pembimbing",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: kaprodiTIId,
+                description: "Menyetujui Pengajuan Judul",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengganti Judul Penelitian",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            // History Proposal
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengunggah Dokumen Proposal",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: advisor_1,
+                description: "Advisor Menyetujui Dokumen Proposal",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengunggah Bukti Pembayaran Proposal",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengunggah Bukti Pembayaran Proposal",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengunggah Hasil Cek Plagiat Proposal",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: sekretarisId,
+                description: "Menyusun Jadwal Sidang Proposal",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_1,
+                description: "Sidang Proposal di Mulai",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_1,
+                description: "Sidang Proposal Berakhir",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Menggungah Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_1,
+                description: "Ketua Panelis Menyetujui Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: member_1,
+                description:
+                  "Anggota Panelis Menyetujui Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: advisor_1,
+                description: "Advisor Menyetujui Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            // History Skripsi
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengunggah Dokumen Skripsi",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: advisor_1,
+                description: "Advisor Menyetujui Dokumen Skripsi",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengunggah Bukti Pembayaran Skripsi",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengunggah Bukti Pembayaran Skripsi",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengunggah Hasil Cek Plagiat Skripsi",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: sekretarisId,
+                description: "Menyusun Jadwal Sidang Skripsi",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_1,
+                description: "Sidang Skripsi di Mulai",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_1,
+                description: "Sidang Skripsi Berakhir",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Menggungah Dokumen Revisi Skripsi",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_1,
+                description: "Ketua Panelis Menyetujui Dokumen Revisi Skripsi",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: member_1,
+                description:
+                  "Anggota Panelis Menyetujui Dokumen Revisi Skripsi",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: advisor_1,
+                description: "Advisor Menyetujui Dokumen Revisi Skripsi",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengunggah HKI",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengunggah Jurnal",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengunggah Source Code",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Mengunggah Link Source Code",
+                date: new Date(),
+                group_id: group_1.id,
+              },
+            });
+          }
+        }
+
+        // =========================================================
+
+        // student1_2
+        const proposalStudent1_2 = await prisma.proposal_Student.create({
+          data: {
+            student_id: student1_2,
+            classroom_id: classroomProposalGanjil.id,
+          },
+        });
+        // student2_2
+        const proposalStudent2_2 = await prisma.proposal_Student.create({
+          data: {
+            student_id: student2_2,
+            classroom_id: classroomProposalGanjil.id,
+          },
+        });
+        await prisma.skripsi_Student.create({
+          data: {
+            student_id: student1_2,
+            classroom_id: classroomSkripsiGanjilIF.id,
+          },
+        });
+        await prisma.skripsi_Student.create({
+          data: {
+            student_id: student2_2,
+            classroom_id: classroomSkripsiGanjilIF.id,
+          },
+        });
+        // Group
+        const group_2 = await prisma.group.create({
+          data: {
+            title: title_2,
+            progress: "Skripsi",
+          },
+        });
+        await prisma.group_Student.create({
+          data: {
+            group_id: group_2.id,
+            student_id: proposalStudent1_2.student_id,
+          },
+        });
+        await prisma.group_Student.create({
+          data: {
+            group_id: group_2.id,
+            student_id: proposalStudent2_2.student_id,
+          },
+        });
+        if (proposalStudent1_2) {
+          // Submission
+          const submission = await prisma.submission.create({
+            data: {
+              file_name: submissionFileName_2,
+              upload_date: new Date(),
+              file_size: "2.5 MB",
+              file_path: submissionFilePath_2,
+              is_consultation: true,
+              proposed_advisor_id: advisor_2,
+              proposed_co_advisor1_id: co_advisor1_2,
+              is_approve: "Approve",
+              classroom_id: classroomProposalGanjil.id,
+            },
+          });
+          // Proposal
+          const proposal = await prisma.proposal.create({
+            data: {
+              file_name_proposal: proposalFileName_2,
+              file_name_payment: proposalPaymentFileName_2,
+              file_name_plagiarismcheck: proposalPlagiatFileName_2,
+              upload_date_proposal: new Date(),
+              upload_date_payment: new Date(),
+              upload_date_plagiarismcheck: new Date(),
+              file_size_proposal: "2.5 MB",
+              file_size_payment: "2.5 MB",
+              file_size_plagiarismcheck: "2.5 MB",
+              file_path_proposal: proposalFilePath_2,
+              file_path_payment: proposalPaymentPath_2,
+              file_path_plagiarismcheck: proposalPlagiatPath_2,
+              advisor_id: advisor_2,
+              co_advisor1_id: co_advisor1_2,
+              classroom_id: classroomProposalGanjil.id,
+              is_proposal_approve_by_advisor: "Approve",
+              is_proposal_approve_by_co_advisor1: "Approve",
+              advisor_proposal_approved_date: new Date(),
+              co_advisor1_proposal_approved_date: new Date(),
+              panelist_chairman_id: chairman_2,
+              panelist_member_id: member_2,
+              start_defence: proposalStart_2,
+              end_defence: proposalEnd_2,
+              defence_room: proposalRoom_2,
+              defence_date: proposalDate_2,
+              is_report_open: true,
+              is_report_approve_by_dekan: true,
+              is_report_approve_by_panelist_chairman: true,
+              is_report_approve_by_panelist_member: true,
+              is_report_approve_by_advisor: true,
+              dekan_report_approve_date: new Date(),
+              panelist_chairman_report_approve_date: new Date(),
+              panelist_member_report_approve_date: new Date(),
+              advisor_report_approve_date: new Date(),
+              exam_conclution: "Approve",
+              changes_conclusion: "Minor",
+              assessment_conclution: "A-",
+              is_pass: "Pass",
+              report_date: proposalDate_2,
+              file_name_revision: proposalRevisiFileName_2,
+              upload_date_revision: new Date(),
+              file_size_revision: "2.5 MB",
+              file_path_revision: proposalRevisiFilePath_2,
+              is_revision_approve_by_panelist_chairman: "Approve",
+              is_revision_approve_by_panelist_member: "Approve",
+              is_revision_approve_by_advisor: "Approve",
+              panelist_chairman_revision_approve_date: new Date(),
+              panelist_member_revision_approve_date: new Date(),
+              advisor_revision_approve_date: new Date(),
+            },
+          });
+          if (proposal) {
+            // konsultasi - advisor (1)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_2.id,
+                description: "Konsultasi bab 1",
+                date: new Date(),
+                dosen_id: advisor_2,
+              },
+            });
+            // konsultasi - advisor (2)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_2.id,
+                description: "Konsultasi bab 2",
+                date: new Date(),
+                dosen_id: advisor_2,
+              },
+            });
+            // konsultasi - advisor (3)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_2.id,
+                description: "Konsultasi bab 3",
+                date: new Date(),
+                dosen_id: advisor_2,
+              },
+            });
+            // konsultasi - co-advisor1 (1)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_2.id,
+                description: "Konsultasi sistem",
+                date: new Date(),
+                dosen_id: co_advisor1_2,
+              },
+            });
+            // konsultasi - co-advisor1 (2)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_2.id,
+                description: "Konsultasi database",
+                date: new Date(),
+                dosen_id: co_advisor1_2,
+              },
+            });
+            // konsultasi - co-advisor1 (3)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_2.id,
+                description: "Konsultasi metode",
+                date: new Date(),
+                dosen_id: co_advisor1_2,
+              },
+            });
+
+            // assessment student1_2 - ketua
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent1_2.student_id,
+                dosen_id: chairman_2,
+                value: "9",
+              },
+            });
+            // assessment student1_2 - anggota
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent1_2.student_id,
+                dosen_id: member_2,
+                value: "9",
+              },
+            });
+            // assessment student1_2 - advisor
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent1_2.student_id,
+                dosen_id: advisor_2,
+                value: "9",
+              },
+            });
+            // assessment student2_2 - ketua
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent2_2.student_id,
+                dosen_id: chairman_2,
+                value: "9",
+              },
+            });
+            // assessment student2_2 - anggota
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent2_2.student_id,
+                dosen_id: member_2,
+                value: "9",
+              },
+            });
+            // assessment student2_2 - advisor
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent2_2.student_id,
+                dosen_id: advisor_2,
+                value: "9",
+              },
+            });
+
+            // changes - ketua
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: chairman_2,
+                changes: "Ubah Bab 1",
+              },
+            });
+            // changes - anggota
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: member_2,
+                changes: "Ubah Bab 2",
+              },
+            });
+            // changes - advisor
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: advisor_2,
+                changes: "Ubah Bab 3",
+              },
+            });
+            // changes - co-advisor1
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: co_advisor1_2,
+                changes: "Ubah Gambar",
+              },
+            });
+          }
+          // Skripsi
+          const skripsi = await prisma.skripsi.create({
+            data: {
+              advisor_id: advisor_2,
+              co_advisor1_id: co_advisor1_2,
+              classroom_id: classroomSkripsiGanjilIF.id,
+              panelist_chairman_id: chairman_2,
+              panelist_member_id: member_2,
+            },
+          });
+          if (skripsi) {
+            await prisma.group.update({
+              where: {
+                id: group_2.id,
+              },
+              data: {
+                submission_id: submission.id,
+                proposal_id: proposal.id,
+                skripsi_id: skripsi.id,
+              },
+            });
+
+            // History Submission
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_2,
+                description: "Mengajukan Judul",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_2,
+                description: "Mengubah Pengajuan Judul",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: kaprodiTIId,
+                description: "Mengganti Pembimbing",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: kaprodiTIId,
+                description: "Menyetujui Pengajuan Judul",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_2,
+                description: "Mengganti Judul Penelitian",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            // History Proposal
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_2,
+                description: "Mengunggah Dokumen Proposal",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: advisor_2,
+                description: "Advisor Menyetujui Dokumen Proposal",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: co_advisor1_2,
+                description: "Co-Advisor 1 Menyetujui Dokumen Proposal",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student2_2,
+                description: "Mengunggah Bukti Pembayaran Proposal",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student2_2,
+                description: "Mengunggah Bukti Pembayaran Proposal",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student2_2,
+                description: "Mengunggah Hasil Cek Plagiat Proposal",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: sekretarisId,
+                description: "Menyusun Jadwal Sidang Proposal",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_2,
+                description: "Sidang Proposal di Mulai",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_2,
+                description: "Sidang Proposal Berakhir",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_2,
+                description: "Menggungah Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_2,
+                description: "Ketua Panelis Menyetujui Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: member_2,
+                description:
+                  "Anggota Panelis Menyetujui Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: advisor_2,
+                description: "Advisor Menyetujui Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_2.id,
+              },
+            });
+          }
+        }
+
+        // =========================================================
+
+        // student1_3
+        const proposalStudent1_3 = await prisma.proposal_Student.create({
+          data: {
+            student_id: student1_3,
+            classroom_id: classroomProposalGanjil.id,
+          },
+        });
+        await prisma.skripsi_Student.create({
+          data: {
+            student_id: student1_3,
+            classroom_id: classroomSkripsiGanjilIF.id,
+          },
+        });
+        // Group student1_3
+        const group_3 = await prisma.group.create({
+          data: {
+            title: title_3,
+            progress: "Finished",
+          },
+        });
+        await prisma.group_Student.create({
+          data: {
+            group_id: group_3.id,
+            student_id: proposalStudent1_3.student_id,
+          },
+        });
+        if (proposalStudent1_3) {
+          // Submission
+          const submission = await prisma.submission.create({
+            data: {
+              file_name: submissionFileName_3,
+              upload_date: new Date(),
+              file_size: "2.5 MB",
+              file_path: submissionFilePath_3,
+              is_consultation: true,
+              proposed_advisor_id: advisor_3,
+              proposed_co_advisor1_id: co_advisor1_3,
+              proposed_co_advisor2_id: co_advisor2_3,
+              is_approve: "Approve",
+              classroom_id: classroomProposalGanjil.id,
+            },
+          });
+          // Proposal
+          const proposal = await prisma.proposal.create({
+            data: {
+              file_name_proposal: proposalFileName_3,
+              file_name_payment: proposalPaymentFileName_3,
+              file_name_plagiarismcheck: proposalPlagiatFileName_3,
+              upload_date_proposal: new Date(),
+              upload_date_payment: new Date(),
+              upload_date_plagiarismcheck: new Date(),
+              file_size_proposal: "2.5 MB",
+              file_size_payment: "2.5 MB",
+              file_size_plagiarismcheck: "2.5 MB",
+              file_path_proposal: proposalFilePath_3,
+              file_path_payment: proposalPaymentPath_3,
+              file_path_plagiarismcheck: proposalPlagiatPath_3,
+              advisor_id: advisor_3,
+              co_advisor1_id: co_advisor1_3,
+              co_advisor2_id: co_advisor2_3,
+              classroom_id: classroomProposalGanjil.id,
+              is_proposal_approve_by_advisor: "Approve",
+              advisor_proposal_approved_date: new Date(),
+              panelist_chairman_id: chairman_3,
+              panelist_member_id: member_3,
+              start_defence: proposalStart_3,
+              end_defence: proposalEnd_3,
+              defence_room: proposalRoom_3,
+              defence_date: proposalDate_3,
+              is_report_open: true,
+              is_report_approve_by_dekan: true,
+              is_report_approve_by_panelist_chairman: true,
+              is_report_approve_by_panelist_member: true,
+              is_report_approve_by_advisor: true,
+              dekan_report_approve_date: new Date(),
+              panelist_chairman_report_approve_date: new Date(),
+              panelist_member_report_approve_date: new Date(),
+              advisor_report_approve_date: new Date(),
+              exam_conclution: "Approve",
+              changes_conclusion: "Minor",
+              assessment_conclution: "A-",
+              is_pass: "Pass",
+              report_date: proposalDate_3,
+              file_name_revision: proposalRevisiFileName_3,
+              upload_date_revision: new Date(),
+              file_size_revision: "2.5 MB",
+              file_path_revision: proposalRevisiFilePath_3,
+              is_revision_approve_by_panelist_chairman: "Approve",
+              is_revision_approve_by_panelist_member: "Approve",
+              is_revision_approve_by_advisor: "Approve",
+              panelist_chairman_revision_approve_date: new Date(),
+              panelist_member_revision_approve_date: new Date(),
+              advisor_revision_approve_date: new Date(),
+            },
+          });
+          if (proposal) {
+            // konsultasi - advisor (1)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_3.id,
+                description: "Konsultasi bab 1",
+                date: new Date(),
+                dosen_id: advisor_3,
+              },
+            });
+            // konsultasi - advisor (2)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_3.id,
+                description: "Konsultasi bab 2",
+                date: new Date(),
+                dosen_id: advisor_3,
+              },
+            });
+            // konsultasi - advisor (3)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_3.id,
+                description: "Konsultasi bab 3",
+                date: new Date(),
+                dosen_id: advisor_3,
+              },
+            });
+            // konsultasi - co-advisor1 (1)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_3.id,
+                description: "Konsultasi sistem",
+                date: new Date(),
+                dosen_id: co_advisor1_3,
+              },
+            });
+            // konsultasi - co-advisor1 (2)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_3.id,
+                description: "Konsultasi database",
+                date: new Date(),
+                dosen_id: co_advisor1_3,
+              },
+            });
+            // konsultasi - co-advisor1 (3)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_3.id,
+                description: "Konsultasi metode",
+                date: new Date(),
+                dosen_id: co_advisor1_3,
+              },
+            });
+
+            // assessment student1_3 - ketua
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent1_3.student_id,
+                dosen_id: chairman_3,
+                value: "9",
+              },
+            });
+            // assessment student1_3 - anggota
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent1_3.student_id,
+                dosen_id: member_1,
+                value: "9",
+              },
+            });
+            // assessment student1_3 - advisor
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent1_3.student_id,
+                dosen_id: advisor_3,
+                value: "9",
+              },
+            });
+
+            // changes - ketua
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: chairman_3,
+                changes: "Ubah Bab 1",
+              },
+            });
+            // changes - anggota
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: member_3,
+                changes: "Ubah Bab 2",
+              },
+            });
+            // changes - advisor
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: advisor_3,
+                changes: "Ubah Bab 3",
+              },
+            });
+          }
+          // Skripsi
+          const skripsi = await prisma.skripsi.create({
+            data: {
+              file_name_skripsi: skripsiFileName_3,
+              file_name_payment: skripsiPaymentFileName_3,
+              file_name_plagiarismcheck: skripsiPlagiatFileName_3,
+              upload_date_skripsi: new Date(),
+              upload_date_payment: new Date(),
+              upload_date_plagiarismcheck: new Date(),
+              file_size_skripsi: "2.5 MB",
+              file_size_payment: "2.5 MB",
+              file_size_plagiarismcheck: "2.5 MB",
+              file_path_skripsi: skripsiFilePath_3,
+              file_path_payment: skripsiPaymentPath_3,
+              file_path_plagiarismcheck: skripsiPlagiatPath_3,
+              advisor_id: advisor_3,
+              co_advisor1_id: co_advisor1_3,
+              co_advisor2_id: co_advisor2_3,
+              classroom_id: classroomSkripsiGanjilSI.id,
+              is_skripsi_approve_by_advisor: "Approve",
+              is_skripsi_approve_by_co_advisor1: "Approve",
+              is_skripsi_approve_by_co_advisor2: "Approve",
+              advisor_skripsi_approved_date: new Date(),
+              co_advisor1_skripsi_approved_date: new Date(),
+              co_advisor2_skripsi_approved_date: new Date(),
+              panelist_chairman_id: chairman_3,
+              panelist_member_id: member_3,
+              start_defence: skripsiStart_3,
+              end_defence: skripsiEnd_3,
+              defence_room: skripsiRoom_3,
+              defence_date: skripsiDate_3,
+              is_report_open: true,
+              is_report_approve_by_dekan: true,
+              is_report_approve_by_panelist_chairman: true,
+              is_report_approve_by_panelist_member: true,
+              is_report_approve_by_advisor: true,
+              dekan_report_approve_date: new Date(),
+              panelist_chairman_report_approve_date: new Date(),
+              panelist_member_report_approve_date: new Date(),
+              advisor_report_approve_date: new Date(),
+              exam_conclution: "Approve",
+              changes_conclusion: "Minor",
+              assessment_conclution: "A-",
+              is_pass: "Pass",
+              report_date: skripsiDate_3,
+              file_name_revision: skripsiRevisiFileName_3,
+              upload_date_revision: new Date(),
+              file_size_revision: "2.5 MB",
+              file_path_revision: skripsiRevisiFilePath_3,
+              is_revision_approve_by_panelist_chairman: "Approve",
+              is_revision_approve_by_panelist_member: "Approve",
+              is_revision_approve_by_advisor: "Approve",
+              panelist_chairman_revision_approve_date: new Date(),
+              panelist_member_revision_approve_date: new Date(),
+              advisor_revision_approve_date: new Date(),
+              file_name_hki: "HKI.pdf",
+              file_name_journal: "Journal",
+              file_name_sourcecode: "Source_Code.zip",
+              upload_date_hki: new Date(),
+              upload_date_journal: new Date(),
+              upload_date_sourcecode: new Date(),
+              file_size_hki: "2.5 MB",
+              file_size_journal: "2.5 MB",
+              file_size_sourcecode: "2.5 MB",
+              link_soucecode: "link_source_code",
+              upload_date_link_soucecode: new Date(),
+              file_path_hki: "link_hki",
+              file_path_journal: "link_journal",
+              file_path_sourcecode: "link_source_code",
+            },
+          });
+          if (skripsi) {
+            // konsultasi - advisor (1)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_3.id,
+                description: "Konsultasi bab 4",
+                date: new Date(),
+                dosen_id: advisor_3,
+              },
+            });
+            // konsultasi - advisor (2)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_3.id,
+                description: "Konsultasi bab 5",
+                date: new Date(),
+                dosen_id: advisor_3,
+              },
+            });
+            // konsultasi - advisor (3)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_3.id,
+                description: "Konsultasi penulisan",
+                date: new Date(),
+                dosen_id: advisor_3,
+              },
+            });
+
+            // assessment student1_3 - ketua
+            await prisma.skripsi_Assessment.create({
+              data: {
+                skripsi_id: skripsi.id,
+                student_id: proposalStudent1_1.student_id,
+                dosen_id: chairman_3,
+                value: "9",
+              },
+            });
+            // assessment student1_3 - anggota
+            await prisma.skripsi_Assessment.create({
+              data: {
+                skripsi_id: skripsi.id,
+                student_id: proposalStudent1_1.student_id,
+                dosen_id: member_3,
+                value: "9",
+              },
+            });
+            // assessment student1_3 - advisor
+            await prisma.skripsi_Assessment.create({
+              data: {
+                skripsi_id: skripsi.id,
+                student_id: proposalStudent1_1.student_id,
+                dosen_id: advisor_3,
+                value: "9",
+              },
+            });
+
+            // changes - ketua
+            await prisma.skripsi_Changes.create({
+              data: {
+                skripsi_id: skripsi.id,
+                dosen_id: chairman_1,
+                changes: "Ubah Bab 4",
+              },
+            });
+
+            // changes - anggota
+            await prisma.skripsi_Changes.create({
+              data: {
+                skripsi_id: skripsi.id,
+                dosen_id: member_1,
+                changes: "Ubah Bab 5",
+              },
+            });
+
+            // changes - advisor
+            await prisma.skripsi_Changes.create({
+              data: {
+                skripsi_id: skripsi.id,
+                dosen_id: advisor_1,
+                changes: "Ubah Bab use case",
+              },
+            });
+
+            // Update group
+            await prisma.group.update({
+              where: {
+                id: group_3.id,
+              },
+              data: {
+                submission_id: submission.id,
+                proposal_id: proposal.id,
+                skripsi_id: skripsi.id,
+              },
+            });
+
+            // History Submission
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengajukan Judul",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengubah Pengajuan Judul",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: kaprodiSIId,
+                description: "Mengganti Pembimbing",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: kaprodiSIId,
+                description: "Menyetujui Pengajuan Judul",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengganti Judul Penelitian",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            // History Proposal
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengunggah Dokumen Proposal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: advisor_3,
+                description: "Advisor Menyetujui Dokumen Proposal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: co_advisor1_3,
+                description: "Co-Advisor 1 Menyetujui Dokumen Proposal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: co_advisor2_3,
+                description: "Co-Advisor 2 Menyetujui Dokumen Proposal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengunggah Bukti Pembayaran Proposal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengunggah Bukti Pembayaran Proposal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengunggah Hasil Cek Plagiat Proposal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: sekretarisId,
+                description: "Menyusun Jadwal Sidang Proposal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_3,
+                description: "Sidang Proposal di Mulai",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_3,
+                description: "Sidang Proposal Berakhir",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_1,
+                description: "Menggungah Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_3,
+                description: "Ketua Panelis Menyetujui Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: member_3,
+                description:
+                  "Anggota Panelis Menyetujui Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: advisor_3,
+                description: "Advisor Menyetujui Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            // History Skripsi
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengunggah Dokumen Skripsi",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: advisor_3,
+                description: "Advisor Menyetujui Dokumen Skripsi",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengunggah Bukti Pembayaran Skripsi",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengunggah Bukti Pembayaran Skripsi",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengunggah Hasil Cek Plagiat Skripsi",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: sekretarisId,
+                description: "Menyusun Jadwal Sidang Skripsi",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_3,
+                description: "Sidang Skripsi di Mulai",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_3,
+                description: "Sidang Skripsi Berakhir",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Menggungah Dokumen Revisi Skripsi",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_3,
+                description: "Ketua Panelis Menyetujui Dokumen Revisi Skripsi",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: member_3,
+                description:
+                  "Anggota Panelis Menyetujui Dokumen Revisi Skripsi",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: advisor_3,
+                description: "Advisor Menyetujui Dokumen Revisi Skripsi",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengunggah HKI",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengunggah Jurnal",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengunggah Source Code",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_3,
+                description: "Mengunggah Link Source Code",
+                date: new Date(),
+                group_id: group_3.id,
+              },
+            });
+          }
+        }
+
+        // // =========================================================
+
+        // student1_4
+        const proposalStudent1_4 = await prisma.proposal_Student.create({
+          data: {
+            student_id: student1_4,
+            classroom_id: classroomProposalGanjil.id,
+          },
+        });
+        // student2_4
+        const proposalStudent2_4 = await prisma.proposal_Student.create({
+          data: {
+            student_id: student2_4,
+            classroom_id: classroomProposalGanjil.id,
+          },
+        });
+        await prisma.skripsi_Student.create({
+          data: {
+            student_id: student1_4,
+            classroom_id: classroomSkripsiGanjilSI.id,
+          },
+        });
+        await prisma.skripsi_Student.create({
+          data: {
+            student_id: student2_4,
+            classroom_id: classroomSkripsiGanjilSI.id,
+          },
+        });
+        // Group
+        const group_4 = await prisma.group.create({
+          data: {
+            title: title_4,
+            progress: "Skripsi",
+          },
+        });
+        await prisma.group_Student.create({
+          data: {
+            group_id: group_4.id,
+            student_id: proposalStudent1_4.student_id,
+          },
+        });
+        await prisma.group_Student.create({
+          data: {
+            group_id: group_4.id,
+            student_id: proposalStudent2_4.student_id,
+          },
+        });
+        if (proposalStudent1_4) {
+          // Submission
+          const submission = await prisma.submission.create({
+            data: {
+              file_name: submissionFileName_4,
+              upload_date: new Date(),
+              file_size: "2.5 MB",
+              file_path: submissionFilePath_4,
+              is_consultation: true,
+              proposed_advisor_id: advisor_4,
+              proposed_co_advisor1_id: co_advisor1_4,
+              proposed_co_advisor2_id: co_advisor2_4,
+              is_approve: "Approve",
+              classroom_id: classroomProposalGanjil.id,
+            },
+          });
+          // Proposal
+          const proposal = await prisma.proposal.create({
+            data: {
+              file_name_proposal: proposalFileName_4,
+              file_name_payment: proposalPaymentFileName_4,
+              file_name_plagiarismcheck: proposalPlagiatFileName_4,
+              upload_date_proposal: new Date(),
+              upload_date_payment: new Date(),
+              upload_date_plagiarismcheck: new Date(),
+              file_size_proposal: "2.5 MB",
+              file_size_payment: "2.5 MB",
+              file_size_plagiarismcheck: "2.5 MB",
+              file_path_proposal: proposalFilePath_4,
+              file_path_payment: proposalPaymentPath_4,
+              file_path_plagiarismcheck: proposalPlagiatPath_4,
+              advisor_id: advisor_4,
+              co_advisor1_id: co_advisor1_4,
+              co_advisor2_id: co_advisor2_4,
+              classroom_id: classroomProposalGanjil.id,
+              is_proposal_approve_by_advisor: "Approve",
+              is_proposal_approve_by_co_advisor1: "Approve",
+              is_proposal_approve_by_co_advisor2: "Approve",
+              advisor_proposal_approved_date: new Date(),
+              co_advisor1_proposal_approved_date: new Date(),
+              co_advisor2_proposal_approved_date: new Date(),
+              panelist_chairman_id: chairman_4,
+              panelist_member_id: member_4,
+              start_defence: proposalStart_4,
+              end_defence: proposalEnd_4,
+              defence_room: proposalRoom_4,
+              defence_date: proposalDate_4,
+              is_report_open: true,
+              is_report_approve_by_dekan: true,
+              is_report_approve_by_panelist_chairman: true,
+              is_report_approve_by_panelist_member: true,
+              is_report_approve_by_advisor: true,
+              dekan_report_approve_date: new Date(),
+              panelist_chairman_report_approve_date: new Date(),
+              panelist_member_report_approve_date: new Date(),
+              advisor_report_approve_date: new Date(),
+              exam_conclution: "Approve",
+              changes_conclusion: "Minor",
+              assessment_conclution: "A-",
+              is_pass: "Pass",
+              report_date: proposalDate_4,
+              file_name_revision: proposalRevisiFileName_4,
+              upload_date_revision: new Date(),
+              file_size_revision: "2.5 MB",
+              file_path_revision: proposalRevisiFilePath_4,
+              is_revision_approve_by_panelist_chairman: "Approve",
+              is_revision_approve_by_panelist_member: "Approve",
+              is_revision_approve_by_advisor: "Approve",
+              panelist_chairman_revision_approve_date: new Date(),
+              panelist_member_revision_approve_date: new Date(),
+              advisor_revision_approve_date: new Date(),
+            },
+          });
+          if (proposal) {
+            // konsultasi - advisor (1)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_4.id,
+                description: "Konsultasi bab 1",
+                date: new Date(),
+                dosen_id: advisor_4,
+              },
+            });
+            // konsultasi - advisor (2)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_4.id,
+                description: "Konsultasi bab 2",
+                date: new Date(),
+                dosen_id: advisor_4,
+              },
+            });
+            // konsultasi - advisor (3)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_4.id,
+                description: "Konsultasi bab 3",
+                date: new Date(),
+                dosen_id: advisor_4,
+              },
+            });
+            // konsultasi - co-advisor1 (1)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_4.id,
+                description: "Konsultasi sistem",
+                date: new Date(),
+                dosen_id: co_advisor1_4,
+              },
+            });
+            // konsultasi - co-advisor1 (2)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_4.id,
+                description: "Konsultasi database",
+                date: new Date(),
+                dosen_id: co_advisor1_4,
+              },
+            });
+            // konsultasi - co-advisor1 (3)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_4.id,
+                description: "Konsultasi metode",
+                date: new Date(),
+                dosen_id: co_advisor1_4,
+              },
+            });
+            // konsultasi - co-advisor2 (1)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_4.id,
+                description: "Konsultasi UI",
+                date: new Date(),
+                dosen_id: co_advisor2_4,
+              },
+            });
+            // konsultasi - co-advisor2 (2)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_4.id,
+                description: "Konsultasi Warna",
+                date: new Date(),
+                dosen_id: co_advisor2_4,
+              },
+            });
+            // konsultasi - co-advisor2 (3)
+            await prisma.thesis_Consultation.create({
+              data: {
+                group_id: group_4.id,
+                description: "Konsultasi Konsep",
+                date: new Date(),
+                dosen_id: co_advisor2_4,
+              },
+            });
+
+            // assessment student1_4 - ketua
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent1_4.student_id,
+                dosen_id: chairman_4,
+                value: "9",
+              },
+            });
+            // assessment student1_4 - anggota
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent1_4.student_id,
+                dosen_id: member_4,
+                value: "9",
+              },
+            });
+            // assessment student1_4 - advisor
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent1_4.student_id,
+                dosen_id: advisor_4,
+                value: "9",
+              },
+            });
+            // assessment student2_4 - ketua
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent2_4.student_id,
+                dosen_id: chairman_4,
+                value: "9",
+              },
+            });
+            // assessment student2_4 - anggota
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent2_4.student_id,
+                dosen_id: member_4,
+                value: "9",
+              },
+            });
+            // assessment student2_4 - advisor
+            await prisma.proposal_Assessment.create({
+              data: {
+                proposal_id: proposal.id,
+                student_id: proposalStudent2_4.student_id,
+                dosen_id: advisor_4,
+                value: "9",
+              },
+            });
+
+            // changes - ketua
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: chairman_4,
+                changes: "Ubah Bab 1",
+              },
+            });
+            // changes - anggota
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: member_4,
+                changes: "Ubah Bab 2",
+              },
+            });
+            // changes - advisor
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: advisor_4,
+                changes: "Ubah Bab 3",
+              },
+            });
+            // changes - co-advisor1
+            await prisma.proposal_Changes.create({
+              data: {
+                proposal_id: proposal.id,
+                dosen_id: co_advisor1_4,
+                changes: "Ubah Gambar",
+              },
+            });
+          }
+          // Skripsi student1_2
+          const skripsi = await prisma.skripsi.create({
+            data: {
+              advisor_id: advisor_4,
+              co_advisor1_id: co_advisor2_4,
+              classroom_id: classroomSkripsiGanjilSI.id,
+              panelist_chairman_id: chairman_4,
+              panelist_member_id: member_4,
+            },
+          });
+          if (skripsi) {
+            await prisma.group.update({
+              where: {
+                id: group_4.id,
+              },
+              data: {
+                submission_id: submission.id,
+                proposal_id: proposal.id,
+                skripsi_id: skripsi.id,
+              },
+            });
+
+            // History Submission
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_4,
+                description: "Mengajukan Judul",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_4,
+                description: "Mengubah Pengajuan Judul",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: kaprodiTIId,
+                description: "Mengganti Pembimbing",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: kaprodiTIId,
+                description: "Menyetujui Pengajuan Judul",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student2_4,
+                description: "Mengganti Judul Penelitian",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            // History Proposal
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student2_4,
+                description: "Mengunggah Dokumen Proposal",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: advisor_4,
+                description: "Advisor Menyetujui Dokumen Proposal",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: co_advisor1_4,
+                description: "Co-Advisor 1 Menyetujui Dokumen Proposal",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: co_advisor2_4,
+                description: "Co-Advisor 2 Menyetujui Dokumen Proposal",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student2_4,
+                description: "Mengunggah Bukti Pembayaran Proposal",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student2_4,
+                description: "Mengunggah Bukti Pembayaran Proposal",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student2_4,
+                description: "Mengunggah Hasil Cek Plagiat Proposal",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: sekretarisId,
+                description: "Menyusun Jadwal Sidang Proposal",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_4,
+                description: "Sidang Proposal di Mulai",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_4,
+                description: "Sidang Proposal Berakhir",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_4,
+                description: "Menggungah Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: chairman_4,
+                description: "Ketua Panelis Menyetujui Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: member_4,
+                description:
+                  "Anggota Panelis Menyetujui Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: advisor_4,
+                description: "Advisor Menyetujui Dokumen Revisi Proposal",
+                date: new Date(),
+                group_id: group_4.id,
+              },
+            });
+          }
+        }
+
+        // =========================================================
+
+        // student1_5
+        const proposalStudent1_5 = await prisma.proposal_Student.create({
+          data: {
+            student_id: student1_5,
+            classroom_id: classroomProposalGanjil.id,
+          },
+        });
+        // student2_5
+        const proposalStudent2_5 = await prisma.proposal_Student.create({
+          data: {
+            student_id: student2_5,
+            classroom_id: classroomProposalGanjil.id,
+          },
+        });
+        // student3_5
+        const proposalStudent3_5 = await prisma.proposal_Student.create({
+          data: {
+            student_id: student3_5,
+            classroom_id: classroomProposalGanjil.id,
+          },
+        });
+        await prisma.skripsi_Student.create({
+          data: {
+            student_id: student1_5,
+            classroom_id: classroomSkripsiGanjilSI.id,
+          },
+        });
+        await prisma.skripsi_Student.create({
+          data: {
+            student_id: student2_5,
+            classroom_id: classroomSkripsiGanjilSI.id,
+          },
+        });
+        await prisma.skripsi_Student.create({
+          data: {
+            student_id: student3_5,
+            classroom_id: classroomSkripsiGanjilSI.id,
+          },
+        });
+        // Group
+        const group_5 = await prisma.group.create({
+          data: {
+            title: title_5,
+            progress: "Proposal",
+          },
+        });
+        await prisma.group_Student.create({
+          data: {
+            group_id: group_5.id,
+            student_id: proposalStudent1_5.student_id,
+          },
+        });
+        await prisma.group_Student.create({
+          data: {
+            group_id: group_5.id,
+            student_id: proposalStudent2_5.student_id,
+          },
+        });
+        await prisma.group_Student.create({
+          data: {
+            group_id: group_5.id,
+            student_id: proposalStudent3_5.student_id,
+          },
+        });
+        if (proposalStudent1_5) {
+          // Submission
+          const submission = await prisma.submission.create({
+            data: {
+              file_name: submissionFileName_5,
+              upload_date: new Date(),
+              file_size: "2.5 MB",
+              file_path: submissionFilePath_5,
+              is_consultation: true,
+              proposed_advisor_id: advisor_5,
+              is_approve: "Approve",
+              classroom_id: classroomProposalGanjil.id,
+            },
+          });
+          // Proposal
+          const proposal = await prisma.proposal.create({
+            data: {
+              advisor_id: advisor_5,
+              classroom_id: classroomProposalGanjil.id,
+              is_proposal_approve_by_advisor: "Approve",
+              advisor_proposal_approved_date: new Date(),
+            },
+          });
+          // Skripsi student1_2
+          const skripsi = await prisma.skripsi.create({
+            data: {
+              advisor_id: advisor_5,
+              classroom_id: classroomSkripsiGanjilIF.id,
+            },
+          });
+          if (skripsi) {
+            await prisma.group.update({
+              where: {
+                id: group_5.id,
+              },
+              data: {
+                submission_id: submission.id,
+                proposal_id: proposal.id,
+                skripsi_id: skripsi.id,
+              },
+            });
+
+            // History Submission
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_5,
+                description: "Mengajukan Judul",
+                date: new Date(),
+                group_id: group_5.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student1_5,
+                description: "Mengubah Pengajuan Judul",
+                date: new Date(),
+                group_id: group_5.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: kaprodiTIId,
+                description: "Mengganti Pembimbing",
+                date: new Date(),
+                group_id: group_5.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: kaprodiTIId,
+                description: "Menyetujui Pengajuan Judul",
+                date: new Date(),
+                group_id: group_5.id,
+              },
+            });
+            await prisma.thesis_History.create({
+              data: {
+                user_id: student2_5,
+                description: "Mengganti Judul Penelitian",
+                date: new Date(),
+                group_id: group_5.id,
+              },
+            });
           }
         }
       }
-
-      // // akademik 2
-      // const academicCalendar2 = await prisma.academic_Calendar.create({
-      //   data: {
-      //     semester: "Ganjil",
-      //     year: "2022/2023",
-      //   },
-      // });
-
-      // await prisma.classroom.create({
-      //   data: {
-      //     academic_id: academicCalendar2.id,
-      //     name: "Proposal",
-      //   },
-      // });
-
-      // await prisma.classroom.create({
-      //   data: {
-      //     academic_id: academicCalendar2.id,
-      //     name: "Skripsi",
-      //   },
-      // });
     } catch (error) {
       // Tangani kesalahan jika terjadi
       console.error(error);

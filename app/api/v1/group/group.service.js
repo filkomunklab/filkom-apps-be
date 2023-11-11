@@ -1,5 +1,7 @@
 //Layer untuk handle business logic
 
+const moment = require("moment-timezone");
+moment.tz = require("moment-timezone").tz;
 const groupRepository = require("./group.repository");
 const groupStudentRepository = require("../group_student/group_student.repository");
 const submissionRepository = require("../submission/submission.repository");
@@ -469,6 +471,7 @@ const getAdvisorTeamById = async (id) => {
   }
 
   const advisorTeamData = {
+    progress: group.progress,
     advisor: advisorName,
     co_advisor1: coAdvisor1Name,
     co_advisor2: coAdvisor2Name,
@@ -489,8 +492,12 @@ const getAllThesisHistoryById = async (id) => {
   if (thesisHistory);
 
   for (const history of thesisHistory) {
-    const dosen = employeeRepository.findEmployeeById(history.user_id);
-    const student = studentRepository.findStudentById(history.user_id);
+    const dosen = await employeeRepository.findEmployeeById(history.user_id);
+    const student = await studentRepository.findStudentById(history.user_id);
+    const formattedDate = moment(history.date)
+      .tz("Asia/Makassar")
+      .format("DD-MM-YYYY HH:mm:ss");
+
     if (dosen) {
       let name = dosen.firstName;
       if (dosen.lastName) {
@@ -500,7 +507,7 @@ const getAllThesisHistoryById = async (id) => {
         id: history.id,
         description: history.description,
         user: name,
-        date: history.date,
+        date: formattedDate,
       };
       groupHistory.push(data);
     } else {
@@ -512,7 +519,7 @@ const getAllThesisHistoryById = async (id) => {
         id: history.id,
         description: history.description,
         user: name,
-        date: history.date,
+        date: formattedDate,
       };
       groupHistory.push(data);
     }
