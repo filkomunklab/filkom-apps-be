@@ -432,46 +432,45 @@ const getDosenList = async () => {
 // @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
 const getAdvisorTeamById = async (id) => {
   const group = await groupRepository.findGroupById(id);
-  if (!group || !group.proposal_id) {
-    const advisorTeamData = {
-      advisor: null,
-      co_advisor1: null,
-      co_advisor2: null,
-    };
-    return advisorTeamData;
-  }
-  const proposal = await proposalRepository.findProposalById(group.proposal_id);
-
-  async function getEmployeeNameAndDegree(employeeId) {
-    const employee = await employeeRepository.findEmployeeById(employeeId);
-    let name = employee.firstName;
-
-    if (employee.lastName) {
-      name += ` ${employee.lastName}`;
-    }
-
-    if (employee.degree) {
-      name += `, ${employee.degree}`;
-    }
-
-    return name;
-  }
 
   let advisorName = null;
   let coAdvisor1Name = null;
   let coAdvisor2Name = null;
-  if (proposal.advisor_id) {
-    advisorName = await getEmployeeNameAndDegree(proposal.advisor_id);
-  }
-  if (proposal.co_advisor1_id) {
-    coAdvisor1Name = await getEmployeeNameAndDegree(proposal.co_advisor1_id);
-  }
-  if (proposal.co_advisor2_id) {
-    coAdvisor2Name = await getEmployeeNameAndDegree(proposal.co_advisor2_id);
+  if (group.proposal_id) {
+    const proposal = await proposalRepository.findProposalById(
+      group.proposal_id
+    );
+    async function getEmployeeNameAndDegree(employeeId) {
+      const employee = await employeeRepository.findEmployeeById(employeeId);
+      let name = employee.firstName;
+
+      if (employee.lastName) {
+        name += ` ${employee.lastName}`;
+      }
+
+      if (employee.degree) {
+        name += `, ${employee.degree}`;
+      }
+
+      return name;
+    }
+
+    if (proposal.advisor_id) {
+      advisorName = await getEmployeeNameAndDegree(proposal.advisor_id);
+    }
+    if (proposal.co_advisor1_id) {
+      coAdvisor1Name = await getEmployeeNameAndDegree(proposal.co_advisor1_id);
+    }
+    if (proposal.co_advisor2_id) {
+      coAdvisor2Name = await getEmployeeNameAndDegree(proposal.co_advisor2_id);
+    }
   }
 
   const advisorTeamData = {
     progress: group.progress,
+    submission_id: group.submission_id || null,
+    proposal_id: group.proposal_id || null,
+    skripsi_id: group.skripsi_id || null,
     advisor: advisorName,
     co_advisor1: coAdvisor1Name,
     co_advisor2: coAdvisor2Name,

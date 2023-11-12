@@ -87,7 +87,6 @@ const updateSubmissionById = async (req, res) => {
     if (
       !(
         payload.title &&
-        payload.is_consultation &&
         payload.proposed_advisor_id &&
         payload.submission_file.file_name &&
         payload.submission_file.file_size &&
