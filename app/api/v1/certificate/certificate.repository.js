@@ -97,6 +97,7 @@ const insertCertificate = async (payload, nim, path) => {
   const { title, category, description, employeeId } = payload;
   const { filename } = payload.certificateFile;
   console.log(nim);
+  console.log(employeeId)
   try {
     const certificate = await prisma.certificate.create({
       data: {

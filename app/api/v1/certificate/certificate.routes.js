@@ -11,9 +11,9 @@ router.get(
 router.get(
   "/certificate/student/:certificateId",
   certificateController.viewStudentCertificate
-); //View student certificate
+); //View student certificate by category
 router.get(
-  "/certificate/category/",
+  "/certificate/category/:nik",
   certificateController.viewCertificateCategory
 );
 
