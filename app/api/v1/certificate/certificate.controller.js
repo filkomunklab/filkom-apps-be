@@ -46,6 +46,7 @@ const viewCertificateCategory = async (req, res) => {
 const uploadCertificate = async (req, res) => {
   const payload = req.body;
   const { nim } = req.params;
+  console.log(payload)
   try {
     await certificateService.uploadCertificate(payload, nim);
     res.status(201).send({ status: "OK" });
