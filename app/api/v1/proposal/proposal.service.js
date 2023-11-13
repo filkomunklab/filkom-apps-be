@@ -1369,72 +1369,65 @@ const signProposalReportById = async (id, userId) => {
     "DEKAN"
   );
 
-  if (proposal.is_report_open) {
-    if (proposal.panelist_chairman_id === userId) {
-      const updatedProposal1 =
-        await proposalRepository.signChairmanProposalReportById(id);
+  if (proposal.panelist_chairman_id === userId) {
+    const updatedProposal1 =
+      await proposalRepository.signChairmanProposalReportById(id);
 
-      if (dekan) {
-        const updatedProposal2 =
-          await proposalRepository.signDekanProposalReportById(id);
-        return updatedProposal2;
-      }
-      // // history SIGN REPORT PROPOSAL by ID
-      // await thesisHistoryRepository.createThesisHistory(
-      //   userId,
-      //   "SIGN REPORT PROPOSAL by ID",
-      //   group.id
-      // );
-      return updatedProposal1;
-    } else if (proposal.panelist_member_id === userId) {
-      const updatedProposal =
-        await proposalRepository.signMemberProposalReportById(id);
-
-      if (dekan) {
-        const updatedProposal2 =
-          await proposalRepository.signDekanProposalReportById(id);
-        return updatedProposal2;
-      }
-      // // history SIGN REPORT PROPOSAL by ID
-      // await thesisHistoryRepository.createThesisHistory(
-      //   userId,
-      //   "SIGN REPORT PROPOSAL by ID",
-      //   group.id
-      // );
-      return updatedProposal;
-    } else if (proposal.advisor_id === userId) {
-      const updatedProposal =
-        await proposalRepository.signAdvisorProposalReportById(id);
-
-      if (dekan) {
-        const updatedProposal2 =
-          await proposalRepository.signDekanProposalReportById(id);
-        return updatedProposal2;
-      }
-      // // history SIGN REPORT PROPOSAL by ID
-      // await thesisHistoryRepository.createThesisHistory(
-      //   userId,
-      //   "SIGN REPORT PROPOSAL by ID",
-      //   group.id
-      // );
-      return updatedProposal;
-    } else if (dekan) {
-      const updatedProposal =
+    if (dekan) {
+      const updatedProposal2 =
         await proposalRepository.signDekanProposalReportById(id);
-
-      // // history SIGN REPORT PROPOSAL by ID
-      // await thesisHistoryRepository.createThesisHistory(
-      //   userId,
-      //   "SIGN REPORT PROPOSAL by ID",
-      //   group.id
-      // );
-      return updatedProposal;
+      return updatedProposal2;
     }
-  } else {
-    throw {
-      status: 400,
-      message: `You can't perform this action`,
-    };
+    // // history SIGN REPORT PROPOSAL by ID
+    // await thesisHistoryRepository.createThesisHistory(
+    //   userId,
+    //   "SIGN REPORT PROPOSAL by ID",
+    //   group.id
+    // );
+    return updatedProposal1;
+  } else if (proposal.panelist_member_id === userId) {
+    const updatedProposal =
+      await proposalRepository.signMemberProposalReportById(id);
+
+    if (dekan) {
+      const updatedProposal2 =
+        await proposalRepository.signDekanProposalReportById(id);
+      return updatedProposal2;
+    }
+    // // history SIGN REPORT PROPOSAL by ID
+    // await thesisHistoryRepository.createThesisHistory(
+    //   userId,
+    //   "SIGN REPORT PROPOSAL by ID",
+    //   group.id
+    // );
+    return updatedProposal;
+  } else if (proposal.advisor_id === userId) {
+    const updatedProposal =
+      await proposalRepository.signAdvisorProposalReportById(id);
+
+    if (dekan) {
+      const updatedProposal2 =
+        await proposalRepository.signDekanProposalReportById(id);
+      return updatedProposal2;
+    }
+    // // history SIGN REPORT PROPOSAL by ID
+    // await thesisHistoryRepository.createThesisHistory(
+    //   userId,
+    //   "SIGN REPORT PROPOSAL by ID",
+    //   group.id
+    // );
+    return updatedProposal;
+  } else if (dekan) {
+    const updatedProposal =
+      await proposalRepository.signDekanProposalReportById(id);
+
+    // // history SIGN REPORT PROPOSAL by ID
+    // await thesisHistoryRepository.createThesisHistory(
+    //   userId,
+    //   "SIGN REPORT PROPOSAL by ID",
+    //   group.id
+    // );
+    return updatedProposal;
   }
 };
 
