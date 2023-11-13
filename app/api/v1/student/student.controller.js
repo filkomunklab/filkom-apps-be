@@ -21,6 +21,8 @@ const getStudentByNim = async (req, res) => {
   }
 };
 
+const biodataStudent = async (req, res) => {};
+
 module.exports = {
   createStudent,
   getStudentByNim,
