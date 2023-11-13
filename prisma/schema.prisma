@@ -61,12 +61,13 @@ model Employee {
   proposal_changes          Proposal_Changes[]    @relation("Dosen")
   skripsi_changes           Skripsi_Changes[]     @relation("Dosen")
 
-  supervisior Academic_Consultation[]    @relation("supervisior")
-  reciever    Academic_Consultation[]    @relation("consultationRecivier")
-  preRegis    PreRegistration[]
-  transaction Transaction[]
-  message     Message[]
-  student     Student[]
+  supervisior            Academic_Consultation[]   @relation("supervisior")
+  reciever               Academic_Consultation[]   @relation("consultationRecivier")
+  preRegis               PreRegistration[]
+  transactionActivity    Transaction_Activity[]
+  transactionCertificate Transaction_Certificate[]
+  message                Message[]
+  student                Student[]
 
   @@unique([firstName, lastName])
   @@index([email])
@@ -115,13 +116,14 @@ model Student {
   skripsi_assessment  Skripsi_Assessment[]  @relation("Student")
   FormSPT             FormSPT[]
 
-  academic_Consultation      Academic_Consultation[]
-  preRegis          PreRegistration[]
-  transaction       Transaction[]
-  message           Message[]
-  Employee          Employee?         @relation(fields: [employeeId], references: [id])
-  employeeId        String?
-  Tracer_Study      Tracer_Study[]
+  academic_Consultation  Academic_Consultation[]
+  preRegis               PreRegistration[]
+  transactionActivity    Transaction_Activity[]
+  transactionCertivicate Transaction_Certificate[]
+  message                Message[]
+  Employee               Employee?                 @relation(fields: [employeeId], references: [id])
+  employeeId             String?
+  Tracer_Study           Tracer_Study[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
@@ -577,8 +579,8 @@ model PreRegistration {
 model Academic_Consultation {
   id         String            @id @default(uuid())
   topic      String
-  submitDate DateTime @default(now)
-  status     String @default(WAITING)
+  submitDate DateTime          @default(now())
+  status     status            @default(WAITING)
   message    Message[]
   history    HistoryAcademic[]
   Dosen      Employee?         @relation("supervisior", fields: [DosenId], references: [id])
@@ -590,61 +592,69 @@ model Academic_Consultation {
 }
 
 model Message {
-  id             String        @id @default(uuid())
-  academic_Consultation   Academic_Consultation? @relation(fields: [academicConsultationId], references: [id])
+  id                     String                 @id @default(uuid())
+  academic_Consultation  Academic_Consultation? @relation(fields: [academicConsultationId], references: [id])
   academicConsultationId String?
-  sendTime       DateTime      @default(now())
-  Student        Student?      @relation(fields: [studentId], references: [id])
-  studentId      String?
-  Employee       Employee?     @relation(fields: [employeeId], references: [id])
-  employeeId     String?
+  sendTime               DateTime               @default(now())
+  Student                Student?               @relation(fields: [studentId], references: [id])
+  studentId              String?
+  Employee               Employee?              @relation(fields: [employeeId], references: [id])
+  employeeId             String?
 }
 
 model Certificate {
-  id          String            @id @default(uuid())
+  id          String                    @id @default(uuid())
   filename    String
   path        String
   title       String
   category    String
   description String
-  submitDate  DateTime          @default(now())
-  status      status            @default(WAITING)
-  transaction Transaction[]
+  submitDate  DateTime                  @default(now())
+  status      status                    @default(WAITING)
+  transaction Transaction_Certificate[]
   history     HistoryAcademic[]
 }
 
 model Activity {
-  id          String            @id @default(uuid())
+  id          String                 @id @default(uuid())
   title       String
   description String
   date        DateTime
   time        String
-  transaction Transaction[]
+  transaction Transaction_Activity[]
   history     HistoryAcademic[]
 }
 
-model Transaction {
+model Transaction_Certificate {
   id            String       @id @default(uuid())
   Certificate   Certificate? @relation(fields: [certificateId], references: [id])
   certificateId String?
-  Activity      Activity?    @relation(fields: [activityId], references: [id])
-  activityId    String?
   Student       Student?     @relation(fields: [studentId], references: [nim])
   studentId     String?
   Employee      Employee?    @relation(fields: [employeeId], references: [nik])
   employeeId    String?
 }
 
+model Transaction_Activity {
+  id         String    @id @default(uuid())
+  Employee   Employee? @relation(fields: [employeeId], references: [nik])
+  employeeId String?
+  Student    Student?  @relation(fields: [studentId], references: [nim])
+  studentId  String?
+  Activity   Activity? @relation(fields: [activityId], references: [id])
+  activityId String?
+}
+
 model HistoryAcademic {
-  id                String           @id @default(uuid())
-  PreRegistration   PreRegistration? @relation(fields: [preRegistrationId], references: [id])
-  preRegistrationId String?
-  Consultation      Academic_Consultation?   @relation(fields: [academicConsultationId], references: [id])
-  academicConsultationId    String?
-  Certificate       Certificate?     @relation(fields: [certificateId], references: [id])
-  certificateId     String?
-  Activity          Activity?        @relation(fields: [activityId], references: [id])
-  activityId        String?
+  id                     String                 @id @default(uuid())
+  PreRegistration        PreRegistration?       @relation(fields: [preRegistrationId], references: [id])
+  preRegistrationId      String?
+  Consultation           Academic_Consultation? @relation(fields: [academicConsultationId], references: [id])
+  academicConsultationId String?
+  Certificate            Certificate?           @relation(fields: [certificateId], references: [id])
+  certificateId          String?
+  Activity               Activity?              @relation(fields: [activityId], references: [id])
+  activityId             String?
 }
 
 enum Major {
