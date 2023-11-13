@@ -635,6 +635,7 @@ model Transaction_Certificate {
   employeeId    String?
 }
 
+
 model Transaction_Activity {
   id         String    @id @default(uuid())
   Employee   Employee? @relation(fields: [employeeId], references: [nik])
