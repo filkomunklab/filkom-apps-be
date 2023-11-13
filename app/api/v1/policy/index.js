@@ -117,6 +117,8 @@ const policyFor = ({ user }) => {
     can("read", "proposal_revision_document");
     // Dekan view proposal list dekan
     can("read", "proposal_list_dekan");
+    // Dekan view is_report_open in proposal
+    can("read", "open_proposal_report");
     // ---------------------------------Skripsi--------------------------------
     // Dekan view skripsi document
     can("read", "skripsi_document");
@@ -178,6 +180,8 @@ const policyFor = ({ user }) => {
     can("read", "proposal_revision_document");
     // Kaprodi view proposal list kaprodi
     can("read", "proposal_list_kaprodi");
+    // Kaprodi view is_report_open in proposal
+    can("read", "open_proposal_report");
     // ---------------------------------Skripsi--------------------------------
     // Kaprodi view skripsi document
     can("read", "skripsi_document");
@@ -231,6 +235,8 @@ const policyFor = ({ user }) => {
     can("read", "proposal_plagiarism");
     // Ketua Panelis update is_report_open in proposal
     can("update", "open_proposal_report");
+    // (Dosen: Ketua, Anggota, Advisor) view is_report_open in proposal
+    can("read", "open_proposal_report");
     // (Dosen: Ketua, Anggota, Advisor) view proposal report
     can("read", "proposal_report");
     // (Dosen: Ketua, Anggota, Advisor) update is_report_approve

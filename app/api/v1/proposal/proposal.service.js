@@ -1125,6 +1125,25 @@ const openAccessProposalReportById = async (id, userId) => {
 };
 
 //===================================================================
+// @description     Get Open report
+// @route           Get /proposal/proposal-report/open-access/:id
+// @access          DOSEN, KAPRODI, DEKAN
+const getOpenAccessProposalReportById = async (id) => {
+  let data = {};
+  const proposal = await proposalRepository.findProposalById(id);
+  if (proposal) {
+    const group = await groupRepository.findGroupByProposalId(proposal.id);
+    data = {
+      proposal_id: proposal.id,
+      title: group.title,
+      is_open: proposal.is_report_open,
+    };
+  }
+
+  return data;
+};
+
+//===================================================================
 // @description     Update proposal assessment by id
 // @route           PUT /proposal/proposal-assessment/:id
 // @access          DOSEN
@@ -2066,6 +2085,7 @@ module.exports = {
   getProposalScheduleById,
 
   openAccessProposalReportById,
+  getOpenAccessProposalReportById,
   updateProposalAssessmentById,
   getAllProposalAssessmentById,
   updateProposalChangesById,
