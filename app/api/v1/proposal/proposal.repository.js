@@ -784,6 +784,7 @@ const updateProposalConclusionById = async (id, payload) => {
       changes_conclusion,
       assessment_conclution,
       is_pass,
+      is_report_open: false,
     },
     select: {
       id: true,
@@ -792,6 +793,7 @@ const updateProposalConclusionById = async (id, payload) => {
       assessment_conclution: true,
       is_pass: true,
       report_date: true,
+      is_report_open: true,
     },
   });
   return proposal;
