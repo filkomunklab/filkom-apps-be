@@ -140,6 +140,15 @@ router.put(
 );
 
 //===================================================================
+// @description     Get Open report
+// @access          DOSEN, KAPRODI, DEKAN
+router.get(
+  "/skripsi/skripsi-report/open-access/:id",
+  auth,
+  skripsiController.getOpenAccessSkripsiReportById
+);
+
+//===================================================================
 // @description     Update skripsi assessment by id
 // @access          DOSEN
 router.put(

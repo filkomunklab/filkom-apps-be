@@ -4,23 +4,30 @@ const prisma = require("../../../database");
 // @description     create thesis history by user id
 // @used            all
 const createThesisHistory = async (user_id, description, group_id) => {
-  try {
-    const date = new Date();
-    await prisma.thesis_History.create({
-      data: {
-        user_id,
-        description,
-        date,
-        group_id,
-      },
-    });
-    return true;
-  } catch (error) {
-    console.log(error.message);
-    return error.message;
-  }
+  const date = new Date();
+  const thesisHistory = await prisma.thesis_History.create({
+    data: {
+      user_id,
+      description,
+      date,
+      group_id,
+    },
+  });
+  return thesisHistory;
+};
+
+// @description     get thesis history by group_id
+// @used            group
+const findAllhesisHistoryByGroupId = async (group_id) => {
+  const thesisHistory = await prisma.thesis_History.findMany({
+    where: {
+      group_id,
+    },
+  });
+  return thesisHistory;
 };
 
 module.exports = {
   createThesisHistory,
+  findAllhesisHistoryByGroupId,
 };

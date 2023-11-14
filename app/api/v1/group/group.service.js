@@ -1,5 +1,7 @@
 //Layer untuk handle business logic
 
+const moment = require("moment-timezone");
+moment.tz = require("moment-timezone").tz;
 const groupRepository = require("./group.repository");
 const groupStudentRepository = require("../group_student/group_student.repository");
 const submissionRepository = require("../submission/submission.repository");
@@ -11,7 +13,7 @@ const classroomRepository = require("../classroom/classroom.repository");
 const proposalStudentRepository = require("../proposal_student/proposal_student.repository");
 const skripsiStudentRepository = require("../skripsi_student/skripsi_student.repository");
 const userManagementRepository = require("../user_management/user_namagement.repository");
-const { skripsi, submission } = require("../../../database");
+const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
 
 //===================================================================
 // @description     Get thesis list
@@ -221,12 +223,12 @@ const getSubmissionDetailsById = async (id) => {
     title: group.title,
     students: [],
     skripsi_status: {
-      advisor_status: skripsi ? skripsi.is_proposal_approve_by_advisor : null,
+      advisor_status: skripsi ? skripsi.is_skripsi_approve_by_advisor : null,
       co_advisor1_status: skripsi
-        ? skripsi.is_proposal_approve_by_co_advisor1
+        ? skripsi.is_skripsi_approve_by_co_advisor1
         : null,
       co_advisor2_status: skripsi
-        ? skripsi.is_proposal_approve_by_co_advisor2
+        ? skripsi.is_skripsi_approve_by_co_advisor2
         : null,
     },
     ready_status: {
@@ -265,12 +267,28 @@ const getSubmissionDetailsById = async (id) => {
     console.log("student:", studentId);
     const student = await studentRepository.findStudentById(studentId);
 
-    // Add student data to the groupData
-    submissionData.students.push({
-      fullName: `${student.firstName} ${student.lastName || ""}`,
-      nim: student.nim,
-      major: student.major,
-    });
+    // Add student data
+    if (submission) {
+      submissionData.students.push({
+        fullName: `${student.firstName} ${student.lastName || ""}`,
+        nim: student.nim,
+        major: student.major,
+      });
+    }
+    if (proposal) {
+      proposalData.students.push({
+        fullName: `${student.firstName} ${student.lastName || ""}`,
+        nim: student.nim,
+        major: student.major,
+      });
+    }
+    if (skripsi) {
+      skripsiData.students.push({
+        fullName: `${student.firstName} ${student.lastName || ""}`,
+        nim: student.nim,
+        major: student.major,
+      });
+    }
   }
 
   if (group.progress === "Submission") {
@@ -414,51 +432,98 @@ const getDosenList = async () => {
 // @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
 const getAdvisorTeamById = async (id) => {
   const group = await groupRepository.findGroupById(id);
-  if (!group || !group.proposal_id) {
-    const advisorTeamData = {
-      advisor: null,
-      co_advisor1: null,
-      co_advisor2: null,
-    };
-    return advisorTeamData;
-  }
-  const proposal = await proposalRepository.findProposalById(group.proposal_id);
-
-  async function getEmployeeNameAndDegree(employeeId) {
-    const employee = await employeeRepository.findEmployeeById(employeeId);
-    let name = employee.firstName;
-
-    if (employee.lastName) {
-      name += ` ${employee.lastName}`;
-    }
-
-    if (employee.degree) {
-      name += `, ${employee.degree}`;
-    }
-
-    return name;
-  }
 
   let advisorName = null;
   let coAdvisor1Name = null;
   let coAdvisor2Name = null;
-  if (proposal.advisor_id) {
-    advisorName = await getEmployeeNameAndDegree(proposal.advisor_id);
-  }
-  if (proposal.co_advisor1_id) {
-    coAdvisor1Name = await getEmployeeNameAndDegree(proposal.co_advisor1_id);
-  }
-  if (proposal.co_advisor2_id) {
-    coAdvisor2Name = await getEmployeeNameAndDegree(proposal.co_advisor2_id);
+  if (group.proposal_id) {
+    const proposal = await proposalRepository.findProposalById(
+      group.proposal_id
+    );
+    async function getEmployeeNameAndDegree(employeeId) {
+      const employee = await employeeRepository.findEmployeeById(employeeId);
+      let name = employee.firstName;
+
+      if (employee.lastName) {
+        name += ` ${employee.lastName}`;
+      }
+
+      if (employee.degree) {
+        name += `, ${employee.degree}`;
+      }
+
+      return name;
+    }
+
+    if (proposal.advisor_id) {
+      advisorName = await getEmployeeNameAndDegree(proposal.advisor_id);
+    }
+    if (proposal.co_advisor1_id) {
+      coAdvisor1Name = await getEmployeeNameAndDegree(proposal.co_advisor1_id);
+    }
+    if (proposal.co_advisor2_id) {
+      coAdvisor2Name = await getEmployeeNameAndDegree(proposal.co_advisor2_id);
+    }
   }
 
   const advisorTeamData = {
+    progress: group.progress,
+    submission_id: group.submission_id || null,
+    proposal_id: group.proposal_id || null,
+    skripsi_id: group.skripsi_id || null,
     advisor: advisorName,
     co_advisor1: coAdvisor1Name,
     co_advisor2: coAdvisor2Name,
   };
 
   return advisorTeamData;
+};
+
+//===================================================================
+// @description     Get thesis history by id
+// @route           GET /group/thesis_history/:id
+// @access          All
+const getAllThesisHistoryById = async (id) => {
+  let groupHistory = [];
+  const thesisHistory =
+    await thesisHistoryRepository.findAllhesisHistoryByGroupId(id);
+
+  if (thesisHistory);
+
+  for (const history of thesisHistory) {
+    const dosen = await employeeRepository.findEmployeeById(history.user_id);
+    const student = await studentRepository.findStudentById(history.user_id);
+    const formattedDate = moment(history.date)
+      .tz("Asia/Makassar")
+      .format("DD-MM-YYYY HH:mm:ss");
+
+    if (dosen) {
+      let name = dosen.firstName;
+      if (dosen.lastName) {
+        name += ` ${dosen.lastName}`;
+      }
+      const data = {
+        id: history.id,
+        description: history.description,
+        user: name,
+        date: formattedDate,
+      };
+      groupHistory.push(data);
+    } else {
+      let name = student.firstName;
+      if (student.lastName) {
+        name += ` ${student.lastName}`;
+      }
+      const data = {
+        id: history.id,
+        description: history.description,
+        user: name,
+        date: formattedDate,
+      };
+      groupHistory.push(data);
+    }
+  }
+  return groupHistory;
 };
 
 //===================================================================
@@ -1474,6 +1539,14 @@ const getProposalListCoAdvisor = async (userId) => {
         })
       );
 
+      let status_co_advisor;
+      if (entry.co_advisor1_id === userId) {
+        status_co_advisor = "CO_ADVISOR1";
+      }
+      if (entry.co_advisor2_id === userId) {
+        status_co_advisor = "CO_ADVISOR2";
+      }
+
       // variable to know if group has submit proposal
       let uploaded = false;
       if (entry.file_path_proposal) {
@@ -1482,6 +1555,7 @@ const getProposalListCoAdvisor = async (userId) => {
       const proposalData = {
         group_id: group.id,
         proposal_id: entry.id,
+        status_co_advisor,
         students,
         uploaded,
         title: group.title,
@@ -1594,6 +1668,14 @@ const getSkripsiListCoAdvisor = async (userId) => {
         })
       );
 
+      let status_co_advisor;
+      if (entry.co_advisor1_id === userId) {
+        status_co_advisor = "CO_ADVISOR1";
+      }
+      if (entry.co_advisor2_id === userId) {
+        status_co_advisor = "CO_ADVISOR2";
+      }
+
       // variable to know if group has submit proposal
       let uploaded = false;
       if (entry.file_path_skripsi) {
@@ -1602,6 +1684,7 @@ const getSkripsiListCoAdvisor = async (userId) => {
       const skripsiData = {
         group_id: group.id,
         skripsi_id: entry.id,
+        status_co_advisor,
         students,
         uploaded,
         title: group.title,
@@ -1636,7 +1719,7 @@ const getSkripsiListCoAdvisor = async (userId) => {
   };
 
   for (const semesterKey in skripsiBySemester) {
-    const semesterData = BySemester[semesterKey];
+    const semesterData = skripsiBySemester[semesterKey];
 
     // Iterate through submissions in the semester
     for (const skripsi of semesterData?.skripsis ?? []) {
@@ -1712,9 +1795,17 @@ const getHistoryListCoAdvisor = async (userId) => {
             };
           })
         );
+        let status_co_advisor;
+        if (entry.co_advisor1_id === userId) {
+          status_co_advisor = "CO_ADVISOR1";
+        }
+        if (entry.co_advisor2_id === userId) {
+          status_co_advisor = "CO_ADVISOR2";
+        }
 
         const data = {
           group_id: group.id,
+          status_co_advisor,
           students,
           title: group.title,
           approve_date: entry.approve_date,
@@ -1939,7 +2030,7 @@ const getSkripsiListChairman = async (userId) => {
       if (skripsi) {
         dashboard.total_group++; // Increment total_group count
 
-        if (proposal.defence_status === null) {
+        if (skripsi.defence_status === null) {
           dashboard.not_defence++; // Increment not_defence count
         } else {
           dashboard.has_defence++; // Increment has_defence count
@@ -3865,6 +3956,7 @@ module.exports = {
   getStudentListByClassroomId,
   getDosenList,
   getAdvisorTeamById,
+  getAllThesisHistoryById,
   getCommitteeList,
   getSubmissionListMK,
   getSubmissionListKaprodi,

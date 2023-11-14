@@ -143,6 +143,29 @@ const getAdvisorTeamById = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get thesis history by id
+// @route           GET /group/thesis_history/:id
+// @access          All
+const getAllThesisHistoryById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "thesis_history")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const group = await groupService.getAllThesisHistoryById(id);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
 // @description     Get committee list
 // @route           GET /group/committee-list
 // @access          DOSEN
@@ -802,6 +825,7 @@ module.exports = {
   getStudentListByClassroomId,
   getDosenList,
   getAdvisorTeamById,
+  getAllThesisHistoryById,
   getCommitteeList,
   getSubmissionListMK,
   getSubmissionListKaprodi,

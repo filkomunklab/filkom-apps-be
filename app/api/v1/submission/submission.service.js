@@ -212,12 +212,14 @@ const createSubmission = async (userId, payload) => {
     classroom_id: submission.classroom_id,
   };
 
-  // History CREATE SUBMISSION
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "CREATE SUBMISSION",
-    group.id
-  );
+  if (submission) {
+    // History CREATE SUBMISSION
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengajukan Judul",
+      group.id
+    );
+  }
 
   return Data;
 };
@@ -426,12 +428,14 @@ const updateSubmissionById = async (id, userId, payload) => {
     proposed_co_advisor2_id: updatedSubmission.proposed_co_advisor2_id,
   };
 
-  // History UPDATE SUBMISSION BY ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "UPDATE SUBMISSION BY ID",
-    group.id
-  );
+  if (updatedSubmission) {
+    // History UPDATE SUBMISSION BY ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengubah Pengajuan Judul",
+      group.id
+    );
+  }
 
   return Data;
 };
@@ -488,14 +492,17 @@ const updateAdvisorAndCoAdvisorById = async (id, userId, payload) => {
     proposed_co_advisor2_id: updatedSubmission.proposed_co_advisor2_id,
   };
 
-  const group = await groupRepository.findGroupBySubmissionId(id);
+  if (updatedSubmission) {
+    const group = await groupRepository.findGroupBySubmissionId(id);
 
-  // History CHANGE ADVISOR/CO BY ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "CHANGE ADVISOR/CO BY ID",
-    group.id
-  );
+    // History CHANGE ADVISOR/CO BY ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengganti Pembimbing",
+      group.id
+    );
+  }
+
   return Data;
 };
 
@@ -533,36 +540,45 @@ const approveSubmissionById = async (id, userId) => {
     id
   );
 
-  // create empty proposal
-  const proposal = await proposalRepository.insertProposal(updatedSubmission);
+  if (updatedSubmission) {
+    // create empty proposal
+    const proposal = await proposalRepository.insertProposal(updatedSubmission);
 
-  // update proposal_id in group
-  await groupRepository.updateGroupProposalIdBySubmissionId(id, proposal.id);
+    // update proposal_id in group
+    await groupRepository.updateGroupProposalIdBySubmissionId(id, proposal.id);
 
-  // create empty skripsi
-  const skripsi = await skripsiRepository.insertSkripsi(updatedSubmission);
+    // create empty skripsi
+    const skripsi = await skripsiRepository.insertSkripsi(updatedSubmission);
 
-  // update skripsi_id in group
-  await groupRepository.updateGroupSkripsiIdBySubmissionId(id, skripsi.id);
+    // update skripsi_id in group
+    await groupRepository.updateGroupSkripsiIdBySubmissionId(id, skripsi.id);
 
-  // update progress in group
-  await groupRepository.updateGroupProgressBySubmissionId(updatedSubmission.id);
+    // update progress in group
+    await groupRepository.updateGroupProgressBySubmissionId(
+      updatedSubmission.id
+    );
 
-  const Data = {
-    id: updatedSubmission.id,
-    is_approve: updatedSubmission.is_approve,
-  };
+    const Data = {
+      id: updatedSubmission.id,
+      is_approve: updatedSubmission.is_approve,
+    };
 
-  const group = await groupRepository.findGroupBySubmissionId(id);
+    const group = await groupRepository.findGroupBySubmissionId(id);
 
-  // History APPROVE SUBMISSION BY ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "APPROVE SUBMISSION BY ID",
-    group.id
-  );
+    // History APPROVE SUBMISSION BY ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menyetujui Pengajuan Judul",
+      group.id
+    );
 
-  return Data;
+    return Data;
+  } else {
+    throw {
+      status: 400,
+      message: `Failed to approve`,
+    };
+  }
 };
 
 //===================================================================
@@ -601,14 +617,17 @@ const rejectSubmissionById = async (id, userId) => {
     is_approve: updatedSubmission.is_approve,
   };
 
-  const group = await groupRepository.findGroupBySubmissionId(id);
+  if (updatedSubmission) {
+    const group = await groupRepository.findGroupBySubmissionId(id);
 
-  // History REJECT SUBMISSION BY ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "REJECT SUBMISSION BY ID",
-    group.id
-  );
+    // History REJECT SUBMISSION BY ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menolak Pengajuan Judul",
+      group.id
+    );
+  }
+
   return Data;
 };
 
@@ -648,12 +667,15 @@ const updateSubmissionTitleById = async (id, userId, payload) => {
     title: updatedGroup.title,
   };
 
-  // History UPDATE TITLE SUBMISSION by ID
-  await thesisHistoryRepository.createThesisHistory(
-    userId,
-    "UPDATE TITLE SUBMISSION by ID",
-    updatedGroup.id
-  );
+  if (updatedGroup) {
+    // History UPDATE TITLE SUBMISSION by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengganti Judul Penelitian",
+      updatedGroup.id
+    );
+  }
+
   return Data;
 };
 
