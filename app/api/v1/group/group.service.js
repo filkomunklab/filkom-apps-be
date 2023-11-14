@@ -2030,7 +2030,7 @@ const getSkripsiListChairman = async (userId) => {
       if (skripsi) {
         dashboard.total_group++; // Increment total_group count
 
-        if (proposal.defence_status === null) {
+        if (skripsi.defence_status === null) {
           dashboard.not_defence++; // Increment not_defence count
         } else {
           dashboard.has_defence++; // Increment has_defence count
