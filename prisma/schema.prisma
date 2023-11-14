@@ -388,7 +388,7 @@ model Proposal {
   end_defence                              String?
   defence_room                             String?
   defence_date                             String?
-  is_report_open                           Boolean               @default(false)
+  is_report_open                           Boolean?
   is_report_approve_by_dekan               Boolean?
   is_report_approve_by_panelist_chairman   Boolean?
   is_report_approve_by_panelist_member     Boolean?
@@ -454,7 +454,7 @@ model Skripsi {
   end_defence                              String?
   defence_room                             String?
   defence_date                             String?
-  is_report_open                           Boolean              @default(false)
+  is_report_open                           Boolean?
   is_report_approve_by_dekan               Boolean?
   is_report_approve_by_panelist_chairman   Boolean?
   is_report_approve_by_panelist_member     Boolean?
