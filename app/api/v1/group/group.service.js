@@ -1539,6 +1539,14 @@ const getProposalListCoAdvisor = async (userId) => {
         })
       );
 
+      let status_co_advisor;
+      if (entry.co_advisor1_id === userId) {
+        status_co_advisor = "CO_ADVISOR1";
+      }
+      if (entry.co_advisor2_id === userId) {
+        status_co_advisor = "CO_ADVISOR2";
+      }
+
       // variable to know if group has submit proposal
       let uploaded = false;
       if (entry.file_path_proposal) {
@@ -1547,6 +1555,7 @@ const getProposalListCoAdvisor = async (userId) => {
       const proposalData = {
         group_id: group.id,
         proposal_id: entry.id,
+        status_co_advisor,
         students,
         uploaded,
         title: group.title,
@@ -1659,6 +1668,14 @@ const getSkripsiListCoAdvisor = async (userId) => {
         })
       );
 
+      let status_co_advisor;
+      if (entry.co_advisor1_id === userId) {
+        status_co_advisor = "CO_ADVISOR1";
+      }
+      if (entry.co_advisor2_id === userId) {
+        status_co_advisor = "CO_ADVISOR2";
+      }
+
       // variable to know if group has submit proposal
       let uploaded = false;
       if (entry.file_path_skripsi) {
@@ -1667,6 +1684,7 @@ const getSkripsiListCoAdvisor = async (userId) => {
       const skripsiData = {
         group_id: group.id,
         skripsi_id: entry.id,
+        status_co_advisor,
         students,
         uploaded,
         title: group.title,
@@ -1777,9 +1795,17 @@ const getHistoryListCoAdvisor = async (userId) => {
             };
           })
         );
+        let status_co_advisor;
+        if (entry.co_advisor1_id === userId) {
+          status_co_advisor = "CO_ADVISOR1";
+        }
+        if (entry.co_advisor2_id === userId) {
+          status_co_advisor = "CO_ADVISOR2";
+        }
 
         const data = {
           group_id: group.id,
+          status_co_advisor,
           students,
           title: group.title,
           approve_date: entry.approve_date,
