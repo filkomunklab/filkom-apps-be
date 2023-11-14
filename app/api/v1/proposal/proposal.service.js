@@ -1324,6 +1324,7 @@ const getAllProposalChangesById = async (id) => {
 
   const changesData = {
     proposal_id: proposal.id,
+    is_report_open: proposal.is_report_open,
     changes_by_chairman: chairmanChanges ? chairmanChanges.changes : null,
     changes_by_member: memberChanges ? memberChanges.changes : null,
     changes_by_advisor: advisorChanges ? advisorChanges.changes : null,

@@ -1293,6 +1293,7 @@ const getAllSkripsiChangesById = async (id) => {
 
   const changesData = {
     skripsi_id: skripsi.id,
+    is_report_open: skripsi.is_report_open,
     changes_by_chairman: chairmanChanges ? chairmanChanges.changes : null,
     changes_by_member: memberChanges ? memberChanges.changes : null,
     changes_by_advisor: advisorChanges ? advisorChanges.changes : null,
