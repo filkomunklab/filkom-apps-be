@@ -1719,7 +1719,7 @@ const getSkripsiListCoAdvisor = async (userId) => {
   };
 
   for (const semesterKey in skripsiBySemester) {
-    const semesterData = BySemester[semesterKey];
+    const semesterData = skripsiBySemester[semesterKey];
 
     // Iterate through submissions in the semester
     for (const skripsi of semesterData?.skripsis ?? []) {
