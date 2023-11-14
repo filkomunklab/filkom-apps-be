@@ -142,6 +142,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_list_dekan");
     // Dekan view history list dekan
     can("read", "history_list_dekan");
+    // Dekan view is_report_open in skripsi
+    can("read", "open_skripsi_report");
   }
 
   if (hasRole("KAPRODI")) {
@@ -203,6 +205,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_list_kaprodi");
     // Kaprodi view history list kaprodi
     can("read", "history_list_kaprodi");
+    // Kaprodi view is_report_open in skripsi
+    can("read", "open_skripsi_report");
   }
 
   if (hasRole("DOSEN")) {
@@ -284,6 +288,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_plagiarism");
     // Ketua Panelis update is_report_open in skripsi
     can("update", "open_skripsi_report");
+    // (Dosen: Ketua, Anggota, Advisor) view is_report_open in skripsi
+    can("read", "open_skripsi_report");
     // (Dosen: Ketua, Anggota, Advisor) create Skripsi_Assessment
     can("update", "Skripsi_Assessment");
     // (Dosen: Ketua, Anggota, Advisor) view Skripsi_Assessment

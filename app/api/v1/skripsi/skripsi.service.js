@@ -1097,6 +1097,25 @@ const openAccessSkripsiReportById = async (id, userId) => {
 };
 
 //===================================================================
+// @description     Get Open report
+// @route           Get /skripsi/skripsi-report/open-access/:id
+// @access          DOSEN, KAPRODI, DEKAN
+const getOpenAccessSkripsiReportById = async (id) => {
+  let data = {};
+  const skripsi = await skripsiRepository.findSkripsiById(id);
+  if (skripsi) {
+    const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+    data = {
+      skripsi_id: skripsi.id,
+      title: group.title,
+      is_open: skripsi.is_report_open,
+    };
+  }
+
+  return data;
+};
+
+//===================================================================
 // @description     Update skripsi assessment by id
 // @route           PUT /skripsi/skripsi-assessment/:id
 // @access          DOSEN
@@ -1320,72 +1339,72 @@ const signSkripsiReportById = async (id, userId) => {
     "DEKAN"
   );
 
-  if (skripsi.is_report_open) {
-    if (skripsi.panelist_chairman_id === userId) {
-      const updatedSkripsi =
-        await skripsiRepository.signChairmanSkripsiReportById(id);
+  if (skripsi.panelist_chairman_id === userId) {
+    const updatedSkripsi =
+      await skripsiRepository.signChairmanSkripsiReportById(id);
 
-      if (dekan) {
-        const updatedProposal2 =
-          await skripsiRepository.signDekanSkripsiReportById(id);
-        return updatedProposal2;
-      }
-
-      // // history SIGN REPORT SKRIPSI by ID
-      // await thesisHistoryRepository.createThesisHistory(
-      //   userId,
-      //   "SIGN REPORT SKRIPSI by ID",
-      //   group.id
-      // );
-      return updatedSkripsi;
-    } else if (skripsi.panelist_member_id === userId) {
-      const updatedSkripsi =
-        await skripsiRepository.signMemberSkripsiReportById(id);
-
-      if (dekan) {
-        const updatedProposal2 =
-          await skripsiRepository.signDekanSkripsiReportById(id);
-        return updatedProposal2;
-      }
-      // await thesisHistoryRepository.createThesisHistory(
-      //   userId,
-      //   "SIGN REPORT SKRIPSI by ID",
-      //   group.id
-      // );
-      return updatedSkripsi;
-    } else if (skripsi.advisor_id === userId) {
-      const updatedSkripsi =
-        await skripsiRepository.signAdvisorSkripsiReportById(id);
-
-      if (dekan) {
-        const updatedProposal2 =
-          await skripsiRepository.signDekanSkripsiReportById(id);
-        return updatedProposal2;
-      }
-      // await thesisHistoryRepository.createThesisHistory(
-      //   userId,
-      //   "SIGN REPORT SKRIPSI by ID",
-      //   group.id
-      // );
-      return updatedSkripsi;
-    } else if (dekan) {
-      const updatedSkripsi = await skripsiRepository.signDekanSkripsiReportById(
-        id
-      );
-
-      // await thesisHistoryRepository.createThesisHistory(
-      //   userId,
-      //   "SIGN REPORT SKRIPSI by ID",
-      //   group.id
-      // );
-      return updatedSkripsi;
+    if (dekan) {
+      const updatedProposal2 =
+        await skripsiRepository.signDekanSkripsiReportById(id);
+      return updatedProposal2;
     }
-  } else {
-    throw {
-      status: 400,
-      message: `You can't perform this action`,
-    };
+
+    // // history SIGN REPORT SKRIPSI by ID
+    // await thesisHistoryRepository.createThesisHistory(
+    //   userId,
+    //   "SIGN REPORT SKRIPSI by ID",
+    //   group.id
+    // );
+    return updatedSkripsi;
+  } else if (skripsi.panelist_member_id === userId) {
+    const updatedSkripsi = await skripsiRepository.signMemberSkripsiReportById(
+      id
+    );
+
+    if (dekan) {
+      const updatedProposal2 =
+        await skripsiRepository.signDekanSkripsiReportById(id);
+      return updatedProposal2;
+    }
+    // await thesisHistoryRepository.createThesisHistory(
+    //   userId,
+    //   "SIGN REPORT SKRIPSI by ID",
+    //   group.id
+    // );
+    return updatedSkripsi;
+  } else if (skripsi.advisor_id === userId) {
+    const updatedSkripsi = await skripsiRepository.signAdvisorSkripsiReportById(
+      id
+    );
+
+    if (dekan) {
+      const updatedProposal2 =
+        await skripsiRepository.signDekanSkripsiReportById(id);
+      return updatedProposal2;
+    }
+    // await thesisHistoryRepository.createThesisHistory(
+    //   userId,
+    //   "SIGN REPORT SKRIPSI by ID",
+    //   group.id
+    // );
+    return updatedSkripsi;
+  } else if (dekan) {
+    const updatedSkripsi = await skripsiRepository.signDekanSkripsiReportById(
+      id
+    );
+
+    // await thesisHistoryRepository.createThesisHistory(
+    //   userId,
+    //   "SIGN REPORT SKRIPSI by ID",
+    //   group.id
+    // );
+    return updatedSkripsi;
   }
+
+  throw {
+    status: 400,
+    message: `You can't perform this action`,
+  };
 };
 
 //===================================================================
@@ -2416,6 +2435,7 @@ module.exports = {
   getSkripsiScheduleById,
 
   openAccessSkripsiReportById,
+  getOpenAccessSkripsiReportById,
   updateSkripsiAssessmentById,
   getAllSkripsiAssessmentById,
   updateSkripsiChangesById,

@@ -427,6 +427,28 @@ const openAccessSkripsiReportById = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get Open report
+// @route           Get /skripsi/skripsi-report/open-access/:id
+// @access          DOSEN, KAPRODI, DEKAN
+const getOpenAccessSkripsiReportById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "open_skripsi_report")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const skripsi = await skripsiService.getOpenAccessSkripsiReportById(id);
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+//===================================================================
 // @description     Update skripsi assessment by id
 // @route           PUT /skripsi/skripsi-assessment/:id
 // @access          DOSEN
@@ -1148,6 +1170,7 @@ module.exports = {
   getSkripsiScheduleById,
 
   openAccessSkripsiReportById,
+  getOpenAccessSkripsiReportById,
   updateSkripsiAssessmentById,
   getAllSkripsiAssessmentById,
   updateSkripsiChangesById,

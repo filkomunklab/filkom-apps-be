@@ -1429,6 +1429,11 @@ const signProposalReportById = async (id, userId) => {
     // );
     return updatedProposal;
   }
+
+  throw {
+    status: 400,
+    message: `You can't perform this action`,
+  };
 };
 
 //===================================================================
