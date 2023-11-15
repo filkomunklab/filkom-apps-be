@@ -2160,6 +2160,7 @@ const getProposalListMember = async (userId) => {
         entry.classroom_id
       );
 
+      const group = await groupRepository.findGroupByProposalId(entry.id);
       const groupStudents =
         await groupStudentRepository.findGroupStudentByGroupId(group.id);
 

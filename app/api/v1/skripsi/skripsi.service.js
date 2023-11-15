@@ -738,106 +738,101 @@ const getAllSkripsiSchedule = async () => {
   if (!skripsis) {
     return scheduleBySemester;
   }
-  // Dapatkan semua skripsi_id di sini
-  const skripsiIds = skripsis.map((skripsi) => skripsi.id);
-
-  // Dapatkan grup berdasarkan skripsiIds
-  const groups = await groupRepository.findManyGroupsBySkripsiIds(skripsiIds);
 
   // Menggabungkan data skripsi dengan data grup
   await Promise.all(
     skripsis.map(async (skripsi) => {
       // memproses pengambilan jadwal skripsi yang belum mulai sidang
       if (skripsi.is_report_open !== true) {
-        for (const group of groups) {
-          // memproses jika menemukan group yang progress di "SKRIPSI"
-          if (group && group.progress === "Skripsi") {
-            const studentIds =
-              await groupStudentRepository.findGroupStudentByGroupId(group.id);
+        // Dapatkan grup berdasarkan skripsiIds
+        const group = await groupRepository.findGroupByProposalId(skripsi.id);
+        // memproses jika menemukan group yang progress di "SKRIPSI"
+        if (group && group.progress === "Skripsi") {
+          const studentIds =
+            await groupStudentRepository.findGroupStudentByGroupId(group.id);
 
-            const students = [];
-            for (const entry of studentIds) {
-              const student = await studentRepository.findStudentById(entry);
-              let name = student.firstName;
-              if (student.lastName) {
-                name += ` ${student.lastName}`;
-              }
-              const studentData = {
-                id: student.id,
-                fullName: name,
-                nim: student.nim,
-              };
-              students.push(studentData);
+          const students = [];
+          for (const entry of studentIds) {
+            const student = await studentRepository.findStudentById(entry);
+            let name = student.firstName;
+            if (student.lastName) {
+              name += ` ${student.lastName}`;
             }
-
-            // Menggabungkan firstName dan lastName menjadi fullName
-            const getEmployeeNameAndDegree = async (
-              firstName,
-              lastName,
-              degree
-            ) => {
-              let name = firstName;
-
-              if (lastName) {
-                name += ` ${lastName}`;
-              }
-
-              if (degree) {
-                name += `, ${degree}`;
-              }
-
-              return name;
+            const studentData = {
+              id: student.id,
+              fullName: name,
+              nim: student.nim,
             };
-            const advisorName = await getEmployeeNameAndDegree(
-              skripsi.advisor.firstName,
-              skripsi.advisor.lastName,
-              skripsi.advisor.degree
-            );
-            const panelistChairmanName = await getEmployeeNameAndDegree(
-              skripsi.panelist_chairman?.firstName,
-              skripsi.panelist_chairman?.lastName,
-              skripsi.panelist_chairman?.degree
-            );
-            const panelistMemberName = await getEmployeeNameAndDegree(
-              skripsi.panelist_member?.firstName,
-              skripsi.panelist_member?.lastName,
-              skripsi.panelist_member?.degree
-            );
+            students.push(studentData);
+          }
 
-            // get classroom
-            if (group && skripsi.classroom_id) {
-              const classroom = await classroomRepository.findClassroomById(
-                skripsi.classroom_id
-              );
+          // Menggabungkan firstName dan lastName menjadi fullName
+          const getEmployeeNameAndDegree = async (
+            firstName,
+            lastName,
+            degree
+          ) => {
+            let name = firstName;
 
-              const data = {
-                group_id: group.id,
-                skripsi_id: skripsi.id,
-                title: group.title,
-                students,
-                advisor_id: proposal.advisor.id,
-                advisor: advisorName,
-                panelist_chairman_id: proposal.panelist_chairman?.id || null,
-                panelist_chairman: panelistChairmanName || null,
-                panelist_member_id: proposal.panelist_member?.id || null,
-                panelist_member: panelistMemberName || null,
-                start_defence: skripsi.start_defence,
-                end_defence: skripsi.end_defence,
-                defence_room: skripsi.defence_room,
-                defence_date: skripsi.defence_date,
-              };
-              // Create a semester key based on the Academic_Calendar data
-              const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
-
-              if (!scheduleBySemester[semesterKey]) {
-                scheduleBySemester[semesterKey] = {
-                  semester: semesterKey,
-                  schedules: [],
-                };
-              }
-
-              scheduleBySemester[semesterKey].schedules.push(data);
+            if (lastName) {
+              name += ` ${lastName}`;
             }
+
+            if (degree) {
+              name += `, ${degree}`;
+            }
+
+            return name;
+          };
+          const advisorName = await getEmployeeNameAndDegree(
+            skripsi.advisor.firstName,
+            skripsi.advisor.lastName,
+            skripsi.advisor.degree
+          );
+          const panelistChairmanName = await getEmployeeNameAndDegree(
+            skripsi.panelist_chairman?.firstName,
+            skripsi.panelist_chairman?.lastName,
+            skripsi.panelist_chairman?.degree
+          );
+          const panelistMemberName = await getEmployeeNameAndDegree(
+            skripsi.panelist_member?.firstName,
+            skripsi.panelist_member?.lastName,
+            skripsi.panelist_member?.degree
+          );
+
+          // get classroom
+          if (group && skripsi.classroom_id) {
+            const classroom = await classroomRepository.findClassroomById(
+              skripsi.classroom_id
+            );
+
+            const data = {
+              group_id: group.id,
+              skripsi_id: skripsi.id,
+              title: group.title,
+              students,
+              advisor_id: proposal.advisor.id,
+              advisor: advisorName,
+              panelist_chairman_id: proposal.panelist_chairman?.id || null,
+              panelist_chairman: panelistChairmanName || null,
+              panelist_member_id: proposal.panelist_member?.id || null,
+              panelist_member: panelistMemberName || null,
+              start_defence: skripsi.start_defence,
+              end_defence: skripsi.end_defence,
+              defence_room: skripsi.defence_room,
+              defence_date: skripsi.defence_date,
+            };
+            // Create a semester key based on the Academic_Calendar data
+            const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+            if (!scheduleBySemester[semesterKey]) {
+              scheduleBySemester[semesterKey] = {
+                semester: semesterKey,
+                schedules: [],
+              };
+            }
+
+            scheduleBySemester[semesterKey].schedules.push(data);
           }
         }
       }
