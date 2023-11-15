@@ -82,6 +82,12 @@ const getThesisList = async (userId) => {
 const getSubmissionDetailsById = async (id) => {
   // check group
   const group = await groupRepository.findGroupById(id);
+  if (!group) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
   // get all student in group_student by group_id
   const studentIds = await groupStudentRepository.findGroupStudentByGroupId(
     group.id
@@ -110,9 +116,9 @@ const getSubmissionDetailsById = async (id) => {
   let proposalPaymentStatus = false;
   let proposalPlagiarismStatus = false;
 
-  let panelistChairman = false;
-  let panelistMember = false;
-  let advisor = false;
+  let chairmanFullname;
+  let memberFullname;
+  let advisorFullname;
   if (proposal) {
     if (proposal.file_name_proposal) {
       proposalDocumentStatus = true;
@@ -124,16 +130,31 @@ const getSubmissionDetailsById = async (id) => {
       proposalPlagiarismStatus = true;
     }
 
-    // get panelist chairman in employee
-    panelistChairman = await employeeRepository.findEmployeeById(
-      proposal.panelist_chairman_id
-    );
-    // get panelist member in employee
-    panelistMember = await employeeRepository.findEmployeeById(
-      proposal.panelist_member_id
-    );
-    // get advisor in employee
-    advisor = await employeeRepository.findEmployeeById(proposal.advisor_id);
+    if (proposal.panelist_chairman_id) {
+      // get panelist chairman in employee
+      const panelistChairman = await employeeRepository.findEmployeeById(
+        proposal.panelist_chairman_id
+      );
+      chairmanFullname = `${panelistChairman.firstName} ${
+        panelistChairman.lastName || ""
+      }`;
+    }
+    if (proposal.panelist_member_id) {
+      // get panelist member in employee
+      const panelistMember = await employeeRepository.findEmployeeById(
+        proposal.panelist_member_id
+      );
+      memberFullname = `${panelistMember.firstName} ${
+        panelistMember.lastName || ""
+      }`;
+    }
+    if (proposal.advisor_id) {
+      // get advisor in employee
+      const advisor = await employeeRepository.findEmployeeById(
+        proposal.advisor_id
+      );
+      advisorFullname = `${advisor.firstName} ${advisor.lastName || ""}`;
+    }
   }
 
   //check status siap sidang skripsi
@@ -151,16 +172,6 @@ const getSubmissionDetailsById = async (id) => {
       skripsiPlagiarismStatus = true;
     }
   }
-
-  const chairmanFullname = `${panelistChairman.firstName} ${
-    panelistChairman.lastName || ""
-  }`;
-
-  const memberFullname = `${panelistMember.firstName} ${
-    panelistMember.lastName || ""
-  }`;
-
-  const advisorFullname = `${advisor.firstName} ${advisor.lastName || ""}`;
 
   // data beranda submission
   const submissionData = {
