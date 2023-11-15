@@ -21,11 +21,23 @@ const getStudentByNim = async (req, res) => {
   }
 };
 
-const biodataStudent = async (req, res) => {};
+const biodataStudent = async (req, res) => {
+  const { nim } = req.params;
+  try {
+    const student = await studentService.viewBiodataStudent(nim);
+    console.log(student);
+    res.status(201).send({ status: "OK", data: student });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
 
 module.exports = {
   createStudent,
   getStudentByNim,
+  biodataStudent,
   // getAllStudent,
   // getStudentById,
   // updateStudentById,

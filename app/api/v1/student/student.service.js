@@ -12,7 +12,17 @@ const findStudentByNim = async (nim) => {
   return student;
 };
 
+const viewBiodataStudent = async (nim) => {
+  try {
+    const student = await studentRepository.findBiodataStudent(nim);
+    return student;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   createStudent,
   findStudentByNim,
+  viewBiodataStudent,
 };

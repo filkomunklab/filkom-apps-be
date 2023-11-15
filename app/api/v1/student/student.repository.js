@@ -91,20 +91,19 @@ const findStudentByToken = async (token) => {
   return student;
 };
 
-const findBiodataStudent = async () => {
+const findBiodataStudent = async (nim) => {
   const student = await prisma.student.findUnique({
+    where: {
+      nim,
+    },
     include: {
-      transaction: {
-        include: {
-          Employee: {
-            select: {
-              firstName,
-              lastName,
-              phoneNum,
-              email,
-              Address,
-            },
-          },
+      Employee: {
+        select: {
+          firstName: true,
+          lastName: true,
+          phoneNum: true,
+          email: true,
+          Address: true,
         },
       },
     },
