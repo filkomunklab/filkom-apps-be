@@ -27,13 +27,16 @@ const findEmployeeByToken = async (token) => {
 };
 
 const insertEmployee = async (payload) => {
-  const { nik, password, firstName, lastName } = payload;
+  const { nik, password, firstName, lastName, email, Address, phoneNum } = payload;
   const employee = await prisma.employee.create({
     data: {
       nik,
       password,
       firstName,
       lastName,
+      email,
+      Address,
+      phoneNum,
     },
   });
   return employee;
