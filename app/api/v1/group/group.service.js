@@ -3920,34 +3920,33 @@ const getSkripsiListSekretaris = async () => {
   return result;
 };
 
-// const getGroupStudentById = async (id) => {
-//     const student_group = await groupRepository.findGroupStudentById(id);
-//     if (!student_group) {
-//       throw {
-//         status: 400,
-//         message: `Not found`,
-//       };
-//     }
-//     return student_group;
-// };
+//===================================================================
+// @description     Put metadata
+// @route           PUT /group/metadata/:id
+// @access          MAHASISWA
+const updateMetadataById = async (id, payload) => {
+  const updatedMetadata = await groupRepository.updateMetadataById(id, payload);
+  return updatedMetadata;
+};
 
-// const updateMetadataById = async (id, payload) => {
-//     await getGroupById(id);
-
-//     const group = await groupRepository.updateMetadata(id, payload);
-//     return group;
-// };
-
-// const getMetadataById = async (id) => {
-//     const group = await groupRepository.findMetadataById(id);
-//     if (!group) {
-//       throw {
-//         status: 400,
-//         message: `Not found`,
-//       };
-//     }
-//     return group;
-// };
+//===================================================================
+// @description     Get metadata
+// @route           GET /group/metadata/:id
+// @access          MAHASISWA
+const getMetadataById = async (id) => {
+  let data = {};
+  const group = await groupRepository.findGroupById(id);
+  if (group) {
+    data = {
+      id: group.id,
+      title: group.title,
+      keywords: group.keywords,
+      abstrak: group.abstrak,
+      reference: group.reference,
+    };
+  }
+  return data;
+};
 
 module.exports = {
   getThesisList,
@@ -3986,4 +3985,7 @@ module.exports = {
   getHistoryListMember,
   getHistoryListKaprodi,
   getHistoryListDekan,
+
+  updateMetadataById,
+  getMetadataById,
 };

@@ -281,12 +281,14 @@ router.get(
   groupController.getSkripsiListSekretaris
 );
 
-// //       melihat kelompok mahasiswa
-// router.get("/group_student/:id", groupController.getGroupStudentById);
+//===================================================================
+// @description     Put metadata
+// @access          MAHASISWA
+router.put("/group/metadata/:id", auth, groupController.updateMetadataById);
 
-// //       mengisi/update metadata
-// router.put("/group/metadata/:id", groupController.updateMetadataById);
-// //       melihat metadata
-// router.get("/group/metadata/:id", groupController.getMetadataById);
+//===================================================================
+// @description     Get metadata
+// @access          MAHASISWA
+router.get("/group/metadata/:id", auth, groupController.getMetadataById);
 
 module.exports = router;

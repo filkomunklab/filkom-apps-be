@@ -766,57 +766,57 @@ const getSkripsiListSekretaris = async (req, res) => {
   }
 };
 
-// const getGroupStudentById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const group_student = await groupService.getGroupStudentById(id);
-//         res.send({ status: "OK", data: group_student });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+//===================================================================
+// @description     Put metadata
+// @route           PUT /group/metadata/:id
+// @access          MAHASISWA
+const updateMetadataById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "metadata")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const payload = req.body;
+    if (!(payload.keywords && payload.abstrak && payload.reference)) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const group = await groupService.updateMetadataById(id, payload);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
 
-// const updateMetadataById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const payload = req.body;
-
-//         if (
-//             !(
-//                 payload.keywords  &&
-//                 payload.abstrak  &&
-//                 payload.reference
-//             )
-//         ) {
-//             return res
-//             .status(400)
-//             .send({ status: "FAILED", data: { error: "some field is missing" } });
-//         }
-//         const group = await groupService.updateMetadataById(
-//             id,
-//             payload
-//         );
-//         res.send({ status: "OK", data: group });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
-
-// const getMetadataById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const group = await groupService.getMetadataById(id);
-//         res.send({ status: "OK", data: group });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+//===================================================================
+// @description     Get metadata
+// @route           GET /group/metadata/:id
+// @access          MAHASISWA
+const getMetadataById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "metadata")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const group = await groupService.getMetadataById(id);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
 
 module.exports = {
   getThesisList,
@@ -855,4 +855,7 @@ module.exports = {
   getHistoryListMember,
   getHistoryListKaprodi,
   getHistoryListDekan,
+
+  updateMetadataById,
+  getMetadataById,
 };

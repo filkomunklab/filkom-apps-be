@@ -415,6 +415,10 @@ const policyFor = ({ user }) => {
     can("read", "advisor_team");
     // Mahasiswa view thesis history
     can("read", "thesis_history");
+    // Mahasiswa update metadata
+    can("update", "metadata");
+    // Mahasiswa view metadata
+    can("read", "metadata");
     // ---------------------------------Submission--------------------------------
     can("create", "Submission");
     // Mahasiswa view submission

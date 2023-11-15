@@ -319,45 +319,30 @@ const findTitleById = async (id) => {
   return group;
 };
 
-// // get kelompok mahasiswa
-// const findGroupStudentById = async (id) => {
-//     const group_student = await prisma.group_Student.findUnique({
-//         where: {
-//             id,
-//         },
-//     });
-//     return group_student;
-// };
-
-// // mengisi/memberbarui metadata
-// const updateMetadata = async (id, payload) => {
-//     const {
-//         keywords,
-//         abstrak,
-//         reference,
-//     } = payload;
-//     const group = await prisma.group.update({
-//         where: {
-//             id,
-//         },
-//         data: {
-//             keywords,
-//             abstrak,
-//             reference,
-//         },
-//     });
-//     return group;
-// };
-
-// // get metadata
-// const findMetadataById = async (id) => {
-//     const group = await prisma.group.findUnique({
-//         where: {
-//             id,
-//         },
-//     });
-//     return group;
-// };
+//===================================================================
+// @description     Put metadata
+// @route           PUT /group/metadata/:id
+// @access          MAHASISWA
+const updateMetadataById = async (id, payload) => {
+  const { keywords, abstrak, reference } = payload;
+  const group = await prisma.group.update({
+    where: {
+      id,
+    },
+    data: {
+      keywords,
+      abstrak,
+      reference,
+    },
+    select: {
+      id: true,
+      keywords: true,
+      abstrak: true,
+      reference: true,
+    },
+  });
+  return group;
+};
 
 module.exports = {
   findGroupBySubmissionId,
@@ -377,7 +362,5 @@ module.exports = {
 
   findSubmissionListById,
   findSubmissionDetailsById,
-  // findGroupStudentById,
-  // updateMetadata,
-  // findMetadataById,
+  updateMetadataById,
 };
