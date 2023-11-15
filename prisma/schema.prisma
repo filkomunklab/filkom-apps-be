@@ -121,7 +121,7 @@ model Student {
   transactionActivity    Transaction_Activity[]
   transactionCertivicate Transaction_Certificate[]
   message                Message[]
-  Employee               Employee?                 @relation(fields: [employeeId], references: [id])
+  Employee               Employee?                 @relation(fields: [employeeId], references: [nik])
   employeeId             String?
   Tracer_Study           Tracer_Study[]
 
@@ -634,7 +634,6 @@ model Transaction_Certificate {
   Employee      Employee?    @relation(fields: [employeeId], references: [nik])
   employeeId    String?
 }
-
 
 model Transaction_Activity {
   id         String    @id @default(uuid())
