@@ -68,7 +68,11 @@ const alumniTS = async (search_query) => {
         distinct: ["personal_email"],
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
+
   const data = alumniList.map((item) => ({
     // ...item,
     firstName: item.firstName,

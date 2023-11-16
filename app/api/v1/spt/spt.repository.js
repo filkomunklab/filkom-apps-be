@@ -27,6 +27,13 @@ const findCalonTamatanList = async (search_query) => {
           created_at: "desc",
         },
       ],
+      include: {
+        student: {
+          select: {
+            status: true,
+          },
+        },
+      },
     });
 
     return calonTamatan;
@@ -294,6 +301,44 @@ const checkFormSPT = async (studentId) => {
   }
 };
 
+//CHANGE STATUS STUDENT: ACTIVE, IN-ACTIVE, GRADUATE
+// const patchStudentStatus = async (nim, status) => {
+//   try {
+//     return await prisma.student.update({
+//       where: {
+//         nim: nim,
+//       },
+//       data: {
+//         status: status,
+//       },
+//     });
+
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+const patchStudentStatus = async (nim, status) => {
+  try {
+    let updateStatus = { status: status };
+
+    // Tambahkan logika untuk mengisi graduate_year jika status adalah "GRADUATE"
+    if (status === "GRADUATE") {
+      updateStatus.graduate_year = new Date().getFullYear().toString();
+    } else if (status === "ACTIVE") {
+      updateStatus.graduate_year = null;
+    }
+
+    return await prisma.student.update({
+      where: {
+        nim: nim,
+      },
+      data: updateStatus,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   insertSPT,
   listSPT,
@@ -306,4 +351,5 @@ module.exports = {
   filterSPT,
   checkFormSPT,
   findCalonTamatanList,
+  patchStudentStatus,
 };
