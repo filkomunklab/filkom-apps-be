@@ -39,6 +39,7 @@ const corsOptions = {
 
 //-------------------------BIMBINGAN AKADEMIK------------
 const certificateRoutes = require("./app/api/v1/certificate/certificate.routes");
+const activityRoutes = require("./app/api/v1/activity/activity.routes");
 const { url } = require("inspector");
 
 //--------------------------------------------------------
@@ -76,6 +77,7 @@ app.use(`${URL}`, skripsiRoutes);
 
 //--------BIMBINGAN AKADEMIK-------------------------------
 app.use(`${URL}`, certificateRoutes);
+app.use(`${URL}`, activityRoutes);
 //---------------------------------------------------
 
 app.use("/", (req, res) => {
