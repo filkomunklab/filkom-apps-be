@@ -21,4 +21,6 @@ router.get("/spt/fac-approved", sptController.listApprovedSPTbyFak);
 router.get("/spt/reg-approved", sptController.listApprovedSPTbyReg);
 router.get("/spt/checkSPT/:studentId", sptController.checkAvSPT);
 
+router.patch("/spt/reg-changeStatus/:nim", sptController.changeStudentStatus);
+
 module.exports = router;

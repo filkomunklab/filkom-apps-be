@@ -84,6 +84,11 @@ const checkFormSPT = async (studentId) => {
   }
 };
 
+//patch status mahasiswa
+const changeStudentStatus = async (nim, status) => {
+  return sptRepository.patchStudentStatus(nim, status);
+};
+
 module.exports = {
   createSPT,
   getListSPT,
@@ -95,4 +100,5 @@ module.exports = {
   sptApprovedbyReg,
   filterSPT,
   checkFormSPT,
+  changeStudentStatus,
 };

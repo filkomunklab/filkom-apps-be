@@ -102,6 +102,11 @@ const countCategoriesOfEmployment = async () => {
   try {
     const result = await prisma.tracer_Study.groupBy({
       by: ["f1101"],
+      where: {
+        f1101: {
+          not: "", // Exclude empty strings
+        },
+      },
       _count: true,
     });
     return result;
@@ -115,6 +120,11 @@ const countDataByMonth = async () => {
   try {
     const result = await prisma.tracer_Study.groupBy({
       by: ["f502"],
+      where: {
+        f1101: {
+          not: "", // Exclude empty strings
+        },
+      },
       _count: true,
     });
     return result;
