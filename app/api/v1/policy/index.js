@@ -30,6 +30,10 @@ const policyFor = ({ user }) => {
     can("read", "advisor_team");
     // Sekertaris view thesis history
     can("read", "thesis_history");
+    // Sekertaris view dosen skripsi
+    can("manage", "dosen_mk");
+    // Sekertaris view dosen
+    can("read", "dosen");
     // ---------------------------------Proposal--------------------------------
     // Sekertaris view proposal document
     can("read", "proposal_document");
