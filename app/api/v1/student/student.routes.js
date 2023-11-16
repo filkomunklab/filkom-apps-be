@@ -19,5 +19,6 @@ router.post("/student", studentController.createStudent);
 // router.delete("/student/:id", studentController.deleteStudentById);
 router.get("/student/:nim", studentController.getStudentByNim);
 router.patch("/student/biodata/:nim", studentController.biodataStudent);
+router.get("/student/:nik", studentController.viewByEmployeeNik);
 
 module.exports = router;

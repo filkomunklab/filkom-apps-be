@@ -34,10 +34,22 @@ const biodataStudent = async (req, res) => {
   }
 };
 
+const viewByEmployeeNik = async (req, res) => {
+  const { nik } = req.param;
+  try {
+    console.log(nik);
+    const student = await studentService.viewStudentbyEmployeeNik(nik);
+    res.status(201).send({ status: "OK", data: student });
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   createStudent,
   getStudentByNim,
   biodataStudent,
+  viewByEmployeeNik,
   // getAllStudent,
   // getStudentById,
   // updateStudentById,

@@ -21,8 +21,18 @@ const viewBiodataStudent = async (nim) => {
   }
 };
 
+const viewStudentbyEmployeeNik = async (nik) => {
+  try {
+    const student = await studentRepository.findStudentByEmployeeNik(nik);
+    return student;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   createStudent,
   findStudentByNim,
   viewBiodataStudent,
+  viewStudentbyEmployeeNik,
 };

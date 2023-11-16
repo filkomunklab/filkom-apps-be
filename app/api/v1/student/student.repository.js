@@ -23,6 +23,19 @@ const findStudentByNim = async (nim) => {
   return student;
 };
 
+const findStudentByEmployeeNik = async (nik) => {
+  try {
+    const student = await prisma.student.findMany({
+      where: {
+        employeeId: nik,
+      },
+    });
+    return student;
+  } catch (error) {
+    return error;
+  }
+};
+
 // create submission
 const insertStudent = async (payload) => {
   const {
@@ -41,6 +54,7 @@ const insertStudent = async (payload) => {
     guardianEmail,
     guardianPhoneNo,
     guardianAddress,
+    // employeeId,
   } = payload;
   const student = await prisma.student.create({
     data: {
@@ -59,6 +73,7 @@ const insertStudent = async (payload) => {
       guardianEmail,
       guardianPhoneNo,
       guardianAddress,
+      // employeeId,
     },
   });
 
@@ -118,4 +133,5 @@ module.exports = {
   updateStudent,
   findStudentByToken,
   findBiodataStudent,
+  findStudentByEmployeeNik,
 };
