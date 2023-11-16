@@ -745,7 +745,7 @@ const getAllSkripsiSchedule = async () => {
       // memproses pengambilan jadwal skripsi yang belum mulai sidang
       if (skripsi.is_report_open !== true) {
         // Dapatkan grup berdasarkan skripsiIds
-        const group = await groupRepository.findGroupByProposalId(skripsi.id);
+        const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
         // memproses jika menemukan group yang progress di "SKRIPSI"
         if (group && group.progress === "Skripsi") {
           const studentIds =
@@ -811,11 +811,11 @@ const getAllSkripsiSchedule = async () => {
               skripsi_id: skripsi.id,
               title: group.title,
               students,
-              advisor_id: proposal.advisor.id,
+              advisor_id: skripsi.advisor.id,
               advisor: advisorName,
-              panelist_chairman_id: proposal.panelist_chairman?.id || null,
+              panelist_chairman_id: skripsi.panelist_chairman?.id || null,
               panelist_chairman: panelistChairmanName || null,
-              panelist_member_id: proposal.panelist_member?.id || null,
+              panelist_member_id: skripsi.panelist_member?.id || null,
               panelist_member: panelistMemberName || null,
               start_defence: skripsi.start_defence,
               end_defence: skripsi.end_defence,
@@ -1340,9 +1340,9 @@ const signSkripsiReportById = async (id, userId) => {
       await skripsiRepository.signChairmanSkripsiReportById(id);
 
     if (dekan) {
-      const updatedProposal2 =
+      const updatedSkripsi2 =
         await skripsiRepository.signDekanSkripsiReportById(id);
-      return updatedProposal2;
+      return updatedSkripsi2;
     }
 
     // // history SIGN REPORT SKRIPSI by ID
@@ -1358,9 +1358,9 @@ const signSkripsiReportById = async (id, userId) => {
     );
 
     if (dekan) {
-      const updatedProposal2 =
+      const updatedSkripsi2 =
         await skripsiRepository.signDekanSkripsiReportById(id);
-      return updatedProposal2;
+      return updatedSkripsi2;
     }
     // await thesisHistoryRepository.createThesisHistory(
     //   userId,
@@ -1374,9 +1374,9 @@ const signSkripsiReportById = async (id, userId) => {
     );
 
     if (dekan) {
-      const updatedProposal2 =
+      const updatedSkripsi2 =
         await skripsiRepository.signDekanSkripsiReportById(id);
-      return updatedProposal2;
+      return updatedSkripsi2;
     }
     // await thesisHistoryRepository.createThesisHistory(
     //   userId,
