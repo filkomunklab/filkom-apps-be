@@ -1107,6 +1107,24 @@ const approveSkripsiRevisionDocumentByAdvisorById = async (id) => {
   return skripsi;
 };
 
+// @description     Update approve data by id
+// @used            approveSkripsiRevisionDocumentById
+const updateSkripsiApproveDate = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      approve_date: new Date(),
+    },
+    select: {
+      id: true,
+      approve_date: true,
+    },
+  });
+  return skripsi;
+};
+
 //===============================(1)====================================
 // @description     Reject dokumen revisi skripsi by chairman
 // @route           PUT /skripsi/skripsi-revision-document/reject/:id
@@ -1581,6 +1599,7 @@ module.exports = {
   approveSkripsiRevisionDocumentByChairmanById,
   approveSkripsiRevisionDocumentByMemberById,
   approveSkripsiRevisionDocumentByAdvisorById,
+  updateSkripsiApproveDate,
   rejectSkripsiRevisionDocumentByChairmanById,
   rejectSkripsiRevisionDocumentByMemberById,
   rejectSkripsiRevisionDocumentByAdvisorById,

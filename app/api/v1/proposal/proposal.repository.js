@@ -1123,6 +1123,24 @@ const rejectProposalRevisionDocumentByChairmanById = async (id) => {
   return proposal;
 };
 
+// @description     Update approve data by id
+// @used            approveProposalRevisionDocumentById
+const updateProposalApproveDate = async (id) => {
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      approve_date: new Date(),
+    },
+    select: {
+      id: true,
+      approve_date: true,
+    },
+  });
+  return proposal;
+};
+
 //===============================(2)====================================
 // @description     Reject dokumen revisi proposal by member
 // @route           PUT /proposal/proposal-revision-document/reject/:id
@@ -1302,6 +1320,7 @@ module.exports = {
   approveProposalRevisionDocumentByChairmanById,
   approveProposalRevisionDocumentByMemberById,
   approveProposalRevisionDocumentByAdvisorById,
+  updateProposalApproveDate,
   rejectProposalRevisionDocumentByChairmanById,
   rejectProposalRevisionDocumentByMemberById,
   rejectProposalRevisionDocumentByAdvisorById,

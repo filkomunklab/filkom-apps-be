@@ -1774,8 +1774,10 @@ const approveSkripsiRevisionDocumentById = async (id, userId) => {
         UpdatedSkripsi.is_revision_approve_by_panelist_member === "Approve" &&
         UpdatedSkripsi.is_revision_approve_by_advisor === "Approve"
       ) {
-        // update progress in group to "Skripsi"
+        // update progress in group to "Finished"
         await groupRepository.updateGroupProgressBySkripsiId(UpdatedSkripsi.id);
+        // update approve date of skripsi
+        await skripsiRepository.updateSkripsiApproveDate(UpdatedSkripsi.id);
       }
       const Data = {
         is_revision_approve_by_panelist_chairman:
@@ -1813,8 +1815,10 @@ const approveSkripsiRevisionDocumentById = async (id, userId) => {
         UpdatedSkripsi.is_revision_approve_by_panelist_member === "Approve" &&
         UpdatedSkripsi.is_revision_approve_by_advisor === "Approve"
       ) {
-        // update progress in group to "Skripsi"
+        // update progress in group to "Finished"
         await groupRepository.updateGroupProgressBySkripsiId(UpdatedSkripsi.id);
+        // update approve date of skripsi
+        await skripsiRepository.updateSkripsiApproveDate(UpdatedSkripsi.id);
       }
       const Data = {
         is_revision_approve_by_panelist_member:
@@ -1851,8 +1855,10 @@ const approveSkripsiRevisionDocumentById = async (id, userId) => {
         UpdatedSkripsi.is_revision_approve_by_panelist_member === "Approve" &&
         UpdatedSkripsi.is_revision_approve_by_advisor === "Approve"
       ) {
-        // update progress in group to "Skripsi"
+        // update progress in group to "Finished"
         await groupRepository.updateGroupProgressBySkripsiId(UpdatedSkripsi.id);
+        // update approve date of skripsi
+        await skripsiRepository.updateSkripsiApproveDate(UpdatedSkripsi.id);
       }
       const Data = {
         is_revision_approve_by_advisor:

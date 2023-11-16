@@ -1808,6 +1808,8 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
         await groupRepository.updateGroupProgressByProposalId(
           UpdatedProposal.id
         );
+        // update approve date of skripsi
+        await proposalRepository.updateProposalApproveDate(UpdatedProposal.id);
       }
       const Data = {
         is_revision_approve_by_panelist_chairman:
@@ -1852,6 +1854,8 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
         await groupRepository.updateGroupProgressByProposalId(
           UpdatedProposal.id
         );
+        // update approve date of skripsi
+        await proposalRepository.updateProposalApproveDate(UpdatedProposal.id);
       }
       const Data = {
         is_revision_approve_by_panelist_member:
@@ -1896,6 +1900,8 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
         await groupRepository.updateGroupProgressByProposalId(
           UpdatedProposal.id
         );
+        // update approve date of skripsi
+        await proposalRepository.updateProposalApproveDate(UpdatedProposal.id);
       }
       const Data = {
         is_revision_approve_by_advisor:
