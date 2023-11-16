@@ -96,7 +96,8 @@ const sendBroadcastWA = async (pesan, phoneNums) => {
     // const phoneNumbers = await alumniRepository.phoneNumbers();
 
     // UNCOMENT THIS TO USE WA BROADCAST
-    // const phoneNoTest = ["+6289612288774"];
+    console.log(phoneNums)
+    const phoneNoTest = ["+6289612288774"];
     const results = await Promise.all(
       phoneNums.map(async (phoneNo) => {
         if (phoneNo.startsWith("+62")) {
