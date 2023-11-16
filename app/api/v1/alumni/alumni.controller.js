@@ -116,7 +116,8 @@ const getAllAlumni = async (req, res) => {
 
 const broadcastWAChat = async (req, res) => {
   try {
-    const { pesan, phoneNums } = req.body;
+    const { phoneNums } = req.body;
+    const pesan = `Hallo Alumni UNKLAB! Kami dari tim Tracer Study UNKLAB sedang mengadakan Tracer untuk Alumni UNKLAB. Mohon bantuannya untuk mengisi form Tracer Study pada link berikut ini:  `;
 
     if (!pesan || !phoneNums) {
       return res.status(400).json({ status: "error", pesan: "Bad request" });

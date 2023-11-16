@@ -1,25 +1,5 @@
 const dashboardRepository = require("./dashboard_kb.repository");
 
-const totalAlumni = async () => {
-  return await dashboardRepository.totalAlumni();
-};
-
-const totalAlumniIF = async () => {
-  return await dashboardRepository.totalAlumniIF();
-};
-
-const totalAlumniSI = async () => {
-  return await dashboardRepository.totalAlumniSI();
-};
-
-const distribusiAlumni = async () => {
-  return await dashboardRepository.distribusiAlumni();
-};
-
-const totalTS = async () => {
-  return await dashboardRepository.countTS();
-};
-
 const getAllStatistic = async () => {
   try {
     const totalAlumni = await dashboardRepository.totalAlumni();
@@ -27,6 +7,10 @@ const getAllStatistic = async () => {
     const totalAlumniSI = await dashboardRepository.totalAlumniSI();
     const distribusiAlumni = await dashboardRepository.distribusiAlumni();
     const totalTS = await dashboardRepository.countTS();
+    const dataByMonth = await dashboardRepository.countDataByMonth();
+    const countCategories =
+      await dashboardRepository.countCategoriesOfEmployment();
+    const countDataForPeta = await dashboardRepository.peta();
 
     return {
       totalAlumni,
@@ -34,6 +18,9 @@ const getAllStatistic = async () => {
       totalAlumniSI,
       distribusiAlumni,
       totalTS,
+      dataByMonth,
+      countCategories,
+      countDataForPeta,
     };
   } catch (error) {
     return error;
@@ -41,10 +28,5 @@ const getAllStatistic = async () => {
 };
 
 module.exports = {
-  totalAlumni,
-  totalAlumniIF,
-  totalAlumniSI,
-  distribusiAlumni,
-  totalTS,
   getAllStatistic,
 };

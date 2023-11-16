@@ -1,5 +1,7 @@
 const { query } = require("express");
 const sptRepository = require("./spt.repository");
+const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
+const { storage } = require("../../../config/firebase");
 
 const getListSPT = async (search_query) => {
   try {

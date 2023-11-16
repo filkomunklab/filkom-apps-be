@@ -28,6 +28,38 @@ const totalAlumniSI = async () => {
 };
 
 //=============DASHBOARD PETA===================
+const peta = async () => {
+  try {
+    const result = await prisma.tracer_Study.groupBy({
+      by: ["f5a1"],
+      where: {
+        f1101: {
+          not: "", // Exclude empty strings
+        },
+      },
+      _count: true,
+    });
+
+    // Calculate total count
+    const totalCount = result.reduce((acc, group) => acc + group._count, 0);
+
+    // Calculate percentage for each group
+    const resultWithPercentage = result.map((group) => ({
+      category: group.f5a1,
+      count: group._count,
+      percentage: `${((group._count / totalCount) * 100).toFixed(1)}%`,
+    }));
+
+    // const filteredResult = resultWithPercentage.filter(
+    //   (item) => item.category !== " "
+    // );
+
+    // return filteredResult;
+    return resultWithPercentage;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
 
 //=================DASHBOARD DISTRIBUSI MAHASISWA=================
 const distribusiAlumni = async () => {
@@ -65,6 +97,33 @@ const distribusiAlumni = async () => {
   return formattedData;
 };
 
+//COMPANY CATEGORIES OF ALUMNI EMPLOYMENT
+const countCategoriesOfEmployment = async () => {
+  try {
+    const result = await prisma.tracer_Study.groupBy({
+      by: ["f1101"],
+      _count: true,
+    });
+    return result;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+//<12 bulan alumni bekerja
+const countDataByMonth = async () => {
+  try {
+    const result = await prisma.tracer_Study.groupBy({
+      by: ["f502"],
+      _count: true,
+    });
+    return result;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+//======alumni surveyed
 const countTS = async () => {
   const totalTS = await prisma.student.findMany({
     where: {
@@ -104,4 +163,7 @@ module.exports = {
   totalAlumniSI,
   distribusiAlumni,
   countTS,
+  countDataByMonth,
+  countCategoriesOfEmployment,
+  peta,
 };
