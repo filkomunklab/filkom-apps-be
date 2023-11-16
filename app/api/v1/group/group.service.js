@@ -14,6 +14,8 @@ const proposalStudentRepository = require("../proposal_student/proposal_student.
 const skripsiStudentRepository = require("../skripsi_student/skripsi_student.repository");
 const userManagementRepository = require("../user_management/user_namagement.repository");
 const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
+const proposalAssessmentRepository = require("../proposal_assessment/proposal_assessment.repository");
+const skripsiAssessmentRepository = require("../skripsi_assessment/skripsi_assessment.repository");
 
 //===================================================================
 // @description     Get thesis list
@@ -3960,6 +3962,153 @@ const getMetadataById = async (id) => {
   return data;
 };
 
+//===================================================================
+// @description     Get all value history
+// @route           GET /group/value-history
+// @access          DOSEN
+const getAllValueHistory = async (userId) => {
+  const valueHistoryBySemester = [];
+
+  // get all classroom
+  const classrooms = await classroomRepository.findClassroomsByDosenMk(userId);
+  if (classrooms) {
+    for (const entry of classrooms) {
+      const semesterKey = `${entry.name} - Semester ${entry.academic.semester} ${entry.academic.year}`;
+
+      const semesterData = {
+        semester: semesterKey,
+        students: [],
+        academic: entry.academic,
+      };
+
+      // Objek untuk melacak id mahasiswa yang sudah ditambahkan
+      const addedStudents = {};
+
+      if (entry.name === "Proposal") {
+        const proposals = await proposalRepository.findAllProposalByClassroomId(
+          entry.id
+        );
+        if (proposals) {
+          for (const proposal of proposals) {
+            if (
+              proposal.is_revision_approve_by_panelist_chairman === "Approve" &&
+              proposal.is_revision_approve_by_panelist_member === "Approve" &&
+              proposal.is_revision_approve_by_advisor === "Approve"
+            ) {
+              const assessments =
+                await proposalAssessmentRepository.findAllProposalAssessmentByProposalId(
+                  proposal.id
+                );
+
+              if (assessments) {
+                for (const assessment of assessments) {
+                  const student = await studentRepository.findStudentById(
+                    assessment.student_id
+                  );
+
+                  if (!addedStudents[student.id]) {
+                    let fullName = student.firstName;
+                    if (student.lastName) {
+                      fullName += ` ${student.lastName}`;
+                    }
+
+                    const studentData = {
+                      id: student.id,
+                      nim: student.nim,
+                      fullName,
+                      major: student.major,
+                      value: assessment.value,
+                    };
+                    semesterData.students.push(studentData);
+
+                    // Tandai bahwa mahasiswa dengan id ini sudah ditambahkan
+                    addedStudents[student.id] = true;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      if (entry.name === "Skripsi") {
+        const skripsis = await skripsiRepository.findAllSkripsiByClassroomId(
+          entry.id
+        );
+        if (skripsis) {
+          for (const skripsi of skripsis) {
+            if (
+              skripsi.is_revision_approve_by_panelist_chairman === "Approve" &&
+              skripsi.is_revision_approve_by_panelist_member === "Approve" &&
+              skripsi.is_revision_approve_by_advisor === "Approve"
+            ) {
+              const assessments =
+                await skripsiAssessmentRepository.findAllSkripsiAssessmentBySkripsiId(
+                  skripsi.id
+                );
+
+              if (assessments) {
+                for (const assessment of assessments) {
+                  const student = await studentRepository.findStudentById(
+                    assessment.student_id
+                  );
+
+                  if (!addedStudents[student.id]) {
+                    let fullName = student.firstName;
+                    if (student.lastName) {
+                      fullName += ` ${student.lastName}`;
+                    }
+
+                    const studentData = {
+                      id: student.id,
+                      nim: student.nim,
+                      fullName,
+                      major: student.major,
+                      value: assessment.value,
+                    };
+                    semesterData.students.push(studentData);
+
+                    // Tandai bahwa mahasiswa dengan id ini sudah ditambahkan
+                    addedStudents[student.id] = true;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      valueHistoryBySemester.push(semesterData);
+    }
+
+    valueHistoryBySemester.sort((semesterA, semesterB) => {
+      // Sort by year (descending order)
+      const yearComparison = semesterB.academic.year.localeCompare(
+        semesterA.academic.year
+      );
+
+      // Sort by semester (ganjil, genap, padat)
+      const semesterOrder = { Ganjil: 1, Genap: 2, Padat: 3 };
+      const semesterComparison =
+        semesterOrder[semesterA.academic.semester] -
+        semesterOrder[semesterB.academic.semester];
+
+      // Sort by name (proposal, skripsi)
+      const nameOrder = { Proposal: 1, Skripsi: 2 };
+      const nameComparison =
+        nameOrder[semesterA.name] - nameOrder[semesterB.name];
+
+      if (yearComparison !== 0) {
+        return yearComparison;
+      } else if (semesterComparison !== 0) {
+        return semesterComparison;
+      } else {
+        return nameComparison;
+      }
+    });
+
+    return valueHistoryBySemester;
+  }
+};
+
 module.exports = {
   getThesisList,
   getSubmissionDetailsById,
@@ -4000,4 +4149,5 @@ module.exports = {
 
   updateMetadataById,
   getMetadataById,
+  getAllValueHistory,
 };

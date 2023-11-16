@@ -291,4 +291,9 @@ router.put("/group/metadata/:id", auth, groupController.updateMetadataById);
 // @access          MAHASISWA
 router.get("/group/metadata/:id", auth, groupController.getMetadataById);
 
+//===================================================================
+// @description     Get all value history
+// @access          DOSEN
+router.get("/group/value-history", auth, groupController.getAllValueHistory);
+
 module.exports = router;

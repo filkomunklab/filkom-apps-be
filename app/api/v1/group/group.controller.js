@@ -818,6 +818,29 @@ const getMetadataById = async (req, res) => {
   }
 };
 
+//===================================================================
+// @description     Get all value history
+// @route           GET /group/value-history
+// @access          DOSEN
+const getAllValueHistory = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "value_history")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getAllValueHistory(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getThesisList,
   getSubmissionDetailsById,
@@ -858,4 +881,5 @@ module.exports = {
 
   updateMetadataById,
   getMetadataById,
+  getAllValueHistory,
 };

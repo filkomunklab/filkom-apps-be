@@ -340,6 +340,8 @@ const policyFor = ({ user }) => {
     can("read", "advisor_team");
     // Dosen MK view thesis history
     can("read", "thesis_history");
+    // Dosen MK view value history
+    can("read", "value_history");
     // ---------------------------------Submission--------------------------------
     // Dosen MK view submission
     can("read", "Submission");
