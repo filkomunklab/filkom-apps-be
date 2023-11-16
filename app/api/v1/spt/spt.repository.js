@@ -98,28 +98,28 @@ const findSPTByNIM = async (nim) => {
 };
 
 const insertSPT = async (dataSPT, path) => {
-  //mengambil tanggal saat ini
-  const currentDate = moment().format("DD/MM/YYYY");
-  // console.log(currentDate);
+  // //mengambil tanggal saat ini
+  // const currentDate = moment().format("DD/MM/YYYY");
+  // // console.log(currentDate);
 
-  //menambahkan logika perhitungan tahun ajaran
-  const semester =
-    parseInt(currentDate.split("/")[1], 10) > 6 ? "Semester I" : "Semester II";
-  const tahunLulus = moment(currentDate, "DD/MM/YYYY").format("YYYY");
-  const tahunAjaran =
-    semester === "Semester I"
-      ? `${tahunLulus}/${parseInt(tahunLulus, 10) + 1}` //2023/2024
-      : `${parseInt(tahunLulus, 10)}/${parseInt(tahunLulus, 10) + 1}`;
+  // //menambahkan logika perhitungan tahun ajaran
+  // const semester =
+  //   parseInt(currentDate.split("/")[1], 10) > 6 ? "Semester I" : "Semester II";
+  // const tahunLulus = moment(currentDate, "DD/MM/YYYY").format("YYYY");
+  // const tahunAjaran =
+  //   semester === "Semester I"
+  //     ? `${tahunLulus}/${parseInt(tahunLulus, 10) + 1}` //2023/2024
+  //     : `${parseInt(tahunLulus, 10)}/${parseInt(tahunLulus, 10) + 1}`;
 
-  const semesterLulus =
-    semester === "Semester I" ? "Semester II" : "Semester I";
-  const graduateYear =
-    semesterLulus === "Semester I"
-      ? moment(tahunLulus, "YYYY").format("YYYY")
-      : moment(tahunLulus, "YYYY").add(1, "y").format("YYYY");
+  // const semesterLulus =
+  //   semester === "Semester I" ? "Semester II" : "Semester I";
+  // const graduateYear =
+  //   semesterLulus === "Semester I"
+  //     ? moment(tahunLulus, "YYYY").format("YYYY")
+  //     : moment(tahunLulus, "YYYY").add(1, "y").format("YYYY");
 
-  // Mengisi kolom 'graduate_plan' dengan hasil perhitungan
-  dataSPT.graduate_plan = `${semesterLulus} ${tahunAjaran}`;
+  // // Mengisi kolom 'graduate_plan' dengan hasil perhitungan
+  // dataSPT.graduate_plan = `${semesterLulus} ${tahunAjaran}`;
 
   const spt = await prisma.formSPT.create({
     data: {
