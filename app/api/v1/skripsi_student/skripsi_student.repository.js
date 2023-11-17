@@ -19,8 +19,18 @@ const findSkripsiStudentByClassroomId = async (classroom_id) => {
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get skripsi_student by student_id & classroom_id
 // @used            Classroom,
-const findSkripsiStudentByStudentId = async (student_id, classroom_id) => {
+const findAllSkripsiStudentByStudentId = async (student_id, classroom_id) => {
   const skripsi_student = await prisma.skripsi_Student.findMany({
+    where: {
+      student_id,
+      classroom_id,
+    },
+  });
+  return skripsi_student;
+};
+
+const findSkripsiStudentByStudentId = async (student_id, classroom_id) => {
+  const skripsi_student = await prisma.skripsi_Student.findFirst({
     where: {
       student_id,
       classroom_id,

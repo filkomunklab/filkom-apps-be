@@ -627,6 +627,8 @@ const findProposalScheduleById = async (id) => {
       end_defence: true,
       defence_room: true,
       defence_date: true,
+      is_report_open: true,
+      is_pass: true,
     },
   });
   return proposal;

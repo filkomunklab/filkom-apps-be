@@ -1012,6 +1012,8 @@ const getProposalScheduleById = async (id) => {
     end_defence: proposal.end_defence,
     defence_room: proposal.defence_room,
     defence_date: proposal.defence_date,
+    is_report_open: proposal.is_report_open,
+    is_pass: proposal.is_pass,
   };
   return scheduleData;
 };
@@ -1808,7 +1810,7 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
         await groupRepository.updateGroupProgressByProposalId(
           UpdatedProposal.id
         );
-        // update approve date of skripsi
+        // update approve date of proposal
         await proposalRepository.updateProposalApproveDate(UpdatedProposal.id);
       }
       const Data = {

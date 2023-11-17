@@ -449,6 +449,10 @@ const getAdvisorTeamById = async (id) => {
   let advisorName = null;
   let coAdvisor1Name = null;
   let coAdvisor2Name = null;
+
+  // variable untuk mengetahui apakah proposal/skripsi sudah di unggah dokumen proposa/berita acara/revisi
+  let proposal_progress = null;
+  let skripsi_progress = null;
   if (group.proposal_id) {
     const proposal = await proposalRepository.findProposalById(
       group.proposal_id
@@ -477,10 +481,34 @@ const getAdvisorTeamById = async (id) => {
     if (proposal.co_advisor2_id) {
       coAdvisor2Name = await getEmployeeNameAndDegree(proposal.co_advisor2_id);
     }
+
+    const skripsi = await skripsiRepository.findSkripsiById(group.skripsi_id);
+
+    // proposal, revisi, selesai
+    // set progress
+    if (group.progress === "Proposal") {
+      proposal_progress = "proposal";
+      if (proposal.is_pass === "Pass") {
+        proposal_progress = "revisi";
+      }
+    }
+    if (group.progress === "Skripsi") {
+      proposal_progress = "revisi";
+      skripsi_progress = "skripsi";
+      if (skripsi.is_pass === "Pass") {
+        skripsi_progress = "revisi";
+      }
+    }
+    if (group.progress === "Finished") {
+      proposal_progress = "selesai";
+      skripsi_progress = "selesai";
+    }
   }
 
   const advisorTeamData = {
     progress: group.progress,
+    proposal_progress,
+    skripsi_progress,
     submission_id: group.submission_id || null,
     proposal_id: group.proposal_id || null,
     skripsi_id: group.skripsi_id || null,

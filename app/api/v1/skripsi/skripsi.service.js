@@ -987,6 +987,8 @@ const getSkripsiScheduleById = async (id) => {
     end_defence: skripsi.end_defence,
     defence_room: skripsi.defence_room,
     defence_date: skripsi.defence_date,
+    is_report_open: skripsi.is_report_open,
+    is_pass: skripsi.is_pass,
   };
   return scheduleData;
 };

@@ -340,12 +340,13 @@ const inputStudents = async (payload) => {
                   );
                 }
               }
+            } else {
+              throw {
+                status: 400,
+                message: `Student haven't completed proposal`,
+              };
             }
           }
-          throw {
-            status: 400,
-            message: `Student haven't completed proposal`,
-          };
         }
       }
     } else {
