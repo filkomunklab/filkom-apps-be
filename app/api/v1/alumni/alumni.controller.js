@@ -117,7 +117,17 @@ const getAllAlumni = async (req, res) => {
 const broadcastWAChat = async (req, res) => {
   try {
     const { phoneNums } = req.body;
-    const pesan = `Hallo Alumni UNKLAB! Kami dari tim Tracer Study UNKLAB sedang mengadakan Tracer untuk Alumni UNKLAB. Mohon bantuannya untuk mengisi form Tracer Study pada link berikut ini:  `;
+    const pesan = `Halo Alumnus UNKLAB!.
+    Perkenalkan, Kami dari Surveyor Universitas Klabat (UNKLAB), ingin mengirimkan kuesioner untuk pelaksanaan Tracer Study Tahun 2023, dalam hal pemeringkatan kampus kami.
+    Jika berkenan dan kalau ada waktu kosong, kiranya dapat membantu kami untuk mengisi kuesioner yang akan kami kirimkan, paling lambat sebelum tanggal 14 September 2023. 
+    
+    Untuk pengisian kuesioner dapat mengakses link website Unklab dibawah ini:
+    https://www.unklab.ac.id/tracer-study/ //ganti link
+    
+    Salam hangat,😊🙏
+    Tim Tracer Study
+    Alumni Universitas Klabat
+    Tahun 2023   `;
 
     if (!pesan || !phoneNums) {
       return res.status(400).json({ status: "error", pesan: "Bad request" });
