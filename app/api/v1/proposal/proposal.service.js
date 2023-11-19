@@ -987,6 +987,10 @@ const getProposalScheduleById = async (id) => {
     })
   );
   const formatNameWithDegree = (employee) => {
+    if (!employee) {
+      return ""; // Mengembalikan string kosong jika employee bernilai null atau undefined
+    }
+
     const { firstName, lastName, degree } = employee;
     let name = firstName;
     if (lastName) {

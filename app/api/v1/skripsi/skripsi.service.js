@@ -962,6 +962,10 @@ const getSkripsiScheduleById = async (id) => {
     })
   );
   const formatNameWithDegree = (employee) => {
+    if (!employee) {
+      return ""; // Mengembalikan string kosong jika employee bernilai null atau undefined
+    }
+
     const { firstName, lastName, degree } = employee;
     let name = firstName;
     if (lastName) {
@@ -2270,7 +2274,7 @@ const updateSourceCodeById = async (id, userId, payload) => {
     `skripsi/${group.id}/${payload.source_code_file.file_name_sourcecode}`
   );
   const metadata = {
-    contentType: "application/zip",
+    contentType: ["application/zip", "application/x-zip-compressed"],
   };
   const binaryString = atob(payload.source_code_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
