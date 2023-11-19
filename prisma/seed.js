@@ -962,6 +962,7 @@ async function main() {
         lastName: "Mandias",
         degree: "SKom, MCs",
         nik: "1001",
+        nidn: "0345676789",
         major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -994,6 +995,7 @@ async function main() {
         lastName: "Pungus",
         degree: "MT, PhD",
         nik: "1002",
+        nidn: "0767835678",
         major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1026,6 +1028,7 @@ async function main() {
         lastName: "Liem",
         degree: "MT, PhD",
         nik: "1003",
+        nidn: "0787567897",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1057,6 +1060,7 @@ async function main() {
         lastName: "Adam",
         degree: " SKom, MSc",
         nik: "1004",
+        nidn: "0364758257",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1088,6 +1092,7 @@ async function main() {
         lastName: "Moedjahedy",
         degree: " SKom, MKom, MM",
         nik: "1005",
+        nidn: "0364723337",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1119,6 +1124,7 @@ async function main() {
         lastName: "Lengkong",
         degree: " SKom, MDs, MM",
         nik: "1006",
+        nidn: "0987898757",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1171,7 +1177,6 @@ async function main() {
       //          coAdvisor1_2
       //          co_advisor2_3
       //          chairman_4
-      //          member_5
       // dosen2Id =
       //          advisor_2
       //          co_advisor1_3
@@ -3791,7 +3796,7 @@ async function main() {
         });
         await prisma.group_Student.create({
           data: {
-            group_id: group_5.id,
+            group_id: group_6.id,
             student_id: proposalStudent1_6.student_id,
           },
         });

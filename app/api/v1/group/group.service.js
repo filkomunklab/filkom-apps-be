@@ -1279,12 +1279,23 @@ const getProposalListAdvisor = async (userId) => {
       if (entry.file_path_proposal) {
         uploaded = true;
       }
+
+      let is_co_advisor1 = false;
+      let is_co_advisor2 = false;
+      if (entry.co_advisor1_id) {
+        is_co_advisor1 = true;
+      }
+      if (entry.co_advisor2_id) {
+        is_co_advisor2 = true;
+      }
       const proposalData = {
         group_id: group.id,
         proposal_id: entry.id,
         students,
         uploaded,
         title: group.title,
+        is_co_advisor1,
+        is_co_advisor2,
         approve_by_advisor: entry.is_proposal_approve_by_advisor,
         approve_by_co_advisor1: entry.is_proposal_approve_by_co_advisor1,
         approve_by_co_advisor2: entry.is_proposal_approve_by_co_advisor2,
@@ -1399,12 +1410,23 @@ const getSkripsiListAdvisor = async (userId) => {
       if (entry.file_path_skripsi) {
         uploaded = true;
       }
+
+      let is_co_advisor1 = false;
+      let is_co_advisor2 = false;
+      if (entry.co_advisor1_id) {
+        is_co_advisor1 = true;
+      }
+      if (entry.co_advisor2_id) {
+        is_co_advisor2 = true;
+      }
       const skripsiData = {
         group_id: group.id,
         skripsi_id: entry.id,
         students,
         uploaded,
         title: group.title,
+        is_co_advisor1,
+        is_co_advisor2,
         approve_by_advisor: entry.is_skripsi_approve_by_advisor,
         approve_by_co_advisor1: entry.is_skripsi_approve_by_co_advisor1,
         approve_by_co_advisor2: entry.is_skripsi_approve_by_co_advisor2,
@@ -1493,7 +1515,7 @@ const getHistoryListAdvisor = async (userId) => {
       const group = await groupRepository.findGroupBySkripsiId(entry.id);
 
       // check if progress is FINISH
-      if (group.progress === "Finished") {
+      if (group && group.progress === "Finished") {
         // get student data
         const groupStudents =
           await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -1593,6 +1615,15 @@ const getProposalListCoAdvisor = async (userId) => {
       if (entry.file_path_proposal) {
         uploaded = true;
       }
+
+      let is_co_advisor1 = false;
+      let is_co_advisor2 = false;
+      if (entry.co_advisor1_id) {
+        is_co_advisor1 = true;
+      }
+      if (entry.co_advisor2_id) {
+        is_co_advisor2 = true;
+      }
       const proposalData = {
         group_id: group.id,
         proposal_id: entry.id,
@@ -1600,6 +1631,8 @@ const getProposalListCoAdvisor = async (userId) => {
         students,
         uploaded,
         title: group.title,
+        is_co_advisor1,
+        is_co_advisor2,
         approve_by_advisor: entry.is_proposal_approve_by_advisor,
         approve_by_co_advisor1: entry.is_proposal_approve_by_co_advisor1,
         approve_by_co_advisor2: entry.is_proposal_approve_by_co_advisor2,
@@ -1722,6 +1755,15 @@ const getSkripsiListCoAdvisor = async (userId) => {
       if (entry.file_path_skripsi) {
         uploaded = true;
       }
+
+      let is_co_advisor1 = false;
+      let is_co_advisor2 = false;
+      if (entry.co_advisor1_id) {
+        is_co_advisor1 = true;
+      }
+      if (entry.co_advisor2_id) {
+        is_co_advisor2 = true;
+      }
       const skripsiData = {
         group_id: group.id,
         skripsi_id: entry.id,
@@ -1729,6 +1771,8 @@ const getSkripsiListCoAdvisor = async (userId) => {
         students,
         uploaded,
         title: group.title,
+        is_co_advisor1,
+        is_co_advisor2,
         approve_by_advisor: entry.is_skripsi_approve_by_advisor,
         approve_by_co_advisor1: entry.is_skripsi_approve_by_co_advisor1,
         approve_by_co_advisor2: entry.is_skripsi_approve_by_co_advisor2,
@@ -1817,7 +1861,7 @@ const getHistoryListCoAdvisor = async (userId) => {
       const group = await groupRepository.findGroupBySkripsiId(entry.id);
 
       // check if progress is FINISH
-      if (group.progress === "Finished") {
+      if (group && group.progress === "Finished") {
         // get student data
         const groupStudents =
           await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -2121,7 +2165,7 @@ const getHistoryListChairman = async (userId) => {
       const group = await groupRepository.findGroupBySkripsiId(entry.id);
 
       // check if progress is FINISH
-      if (group.progress === "Finished") {
+      if (group && group.progress === "Finished") {
         // get student data
         const groupStudents =
           await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -2420,7 +2464,7 @@ const getHistoryListMember = async (userId) => {
       const group = await groupRepository.findGroupBySkripsiId(entry.id);
 
       // check if progress is FINISH
-      if (group.progress === "Finished") {
+      if (group && group.progress === "Finished") {
         // get student data
         const groupStudents =
           await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -3011,6 +3055,7 @@ const getSkripsiListKaprodi = async (userId, userRole) => {
 
         // check if progress is in Skripsi and have skripsi classroom
         if (
+          group &&
           (group.progress === "Skripsi" || group.progress === "Finished") &&
           skripsi.classroom_id
         ) {
@@ -3121,6 +3166,7 @@ const getSkripsiListKaprodi = async (userId, userRole) => {
 
         // check if progress is in Skripsi and have skripsi classroom
         if (
+          group &&
           (group.progress === "Skripsi" || group.progress === "Finished") &&
           skripsi.classroom_id
         ) {
@@ -3284,9 +3330,10 @@ const getHistoryListKaprodi = async (userId, userRole) => {
     const skripsis = await skripsiRepository.findAllSkripsi();
     if (skripsis) {
       for (const skripsi of skripsis) {
-        if (skripsi.classroom_id) {
-          // get group
-          const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+        // get group
+        const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+
+        if (group && group.progress === "Finished") {
           // get all student in group
           const groupStudents =
             await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -3551,6 +3598,7 @@ const getSkripsiListDekan = async (userId, userRole) => {
 
       // check if progress is in Skripsi and have skripsi classroom
       if (
+        group &&
         (group.progress === "Skripsi" || group.progress === "Finished") &&
         entry.classroom_id
       ) {
@@ -3666,7 +3714,7 @@ const getHistoryListDekan = async (userId, userRole) => {
         const group = await groupRepository.findGroupBySkripsiId(entry.id);
 
         // check if progress is FINISH
-        if (group.progress === "Finished") {
+        if (group && group.progress === "Finished") {
           // get student data
           const groupStudents =
             await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -3734,7 +3782,7 @@ const getProposalListSekretaris = async () => {
     const group = await groupRepository.findGroupByProposalId(entry.id);
 
     // check if proposal is in progress Proposal
-    if (group.progress === "Proposal") {
+    if (group && group.progress === "Proposal") {
       const groupStudents =
         await groupStudentRepository.findGroupStudentByGroupId(group.id);
 
@@ -3867,7 +3915,7 @@ const getSkripsiListSekretaris = async () => {
     const group = await groupRepository.findGroupBySkripsiId(entry.id);
 
     // check if progress is in Skripsi and have skripsi classroom
-    if (group.progress === "Skripsi" && entry.classroom_id) {
+    if (group && group.progress === "Skripsi" && entry.classroom_id) {
       const groupStudents =
         await groupStudentRepository.findGroupStudentByGroupId(group.id);
 
