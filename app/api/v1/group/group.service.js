@@ -3006,9 +3006,14 @@ const getSkripsiListKaprodi = async (userId, userRole) => {
     const skripsis = await proposalRepository.findAllProposal();
     if (skripsis) {
       for (const skripsi of skripsis) {
-        if (skripsi.classroom_id) {
-          // get group
-          const group = await groupRepository.findGroupByProposalId(skripsi.id);
+        // get group
+        const group = await groupRepository.findGroupByProposalId(skripsi.id);
+
+        // check if progress is in Skripsi and have skripsi classroom
+        if (
+          (group.progress === "Skripsi" || group.progress === "Finished") &&
+          skripsi.classroom_id
+        ) {
           // get all student in group
           const groupStudents =
             await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -3111,9 +3116,14 @@ const getSkripsiListKaprodi = async (userId, userRole) => {
     const skripsis = await proposalRepository.findAllProposal();
     if (skripsis) {
       for (const skripsi of skripsis) {
-        if (skripsi.classroom_id) {
-          // get group
-          const group = await groupRepository.findGroupByProposalId(skripsi.id);
+        // get group
+        const group = await groupRepository.findGroupByProposalId(skripsi.id);
+
+        // check if progress is in Skripsi and have skripsi classroom
+        if (
+          (group.progress === "Skripsi" || group.progress === "Finished") &&
+          skripsi.classroom_id
+        ) {
           // get all student in group
           const groupStudents =
             await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -3537,9 +3547,13 @@ const getSkripsiListDekan = async (userId, userRole) => {
     }
 
     for (const entry of skripsi) {
-      if (entry.classroom_id) {
-        const group = await groupRepository.findGroupBySkripsiId(entry.id);
+      const group = await groupRepository.findGroupBySkripsiId(entry.id);
 
+      // check if progress is in Skripsi and have skripsi classroom
+      if (
+        (group.progress === "Skripsi" || group.progress === "Finished") &&
+        entry.classroom_id
+      ) {
         const groupStudents =
           await groupStudentRepository.findGroupStudentByGroupId(group.id);
 
