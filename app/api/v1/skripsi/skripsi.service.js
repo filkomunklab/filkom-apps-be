@@ -331,7 +331,7 @@ const approveSkripsiDocumentById = async (userId, id) => {
     }
   }
   if (co_advisor2) {
-    if (co_advisor2.is_skripsi_approve_by_co_advisor1 === "Approve") {
+    if (co_advisor2.is_skripsi_approve_by_co_advisor2 === "Approve") {
       throw {
         status: 400,
         message: `File has been approved`,
