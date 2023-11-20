@@ -84,11 +84,11 @@ model Student {
   gender              gender
   religion            String?
   bloodType           String?
-  marriageStatus      String?
+  MaritalStatus       String?
   studentEmail        String?               @unique
   curriculum          String?
   highSchoolGrad      String?
-  currentAdresss      String?
+  currentAddress      String?
   status              StudentStatus         @default(ACTIVE)
   personalEmail       String?               @unique
   faculty             String?
@@ -96,6 +96,7 @@ model Student {
   graduate_year       String?
   address             String?
   phoneNo             String?
+  AreaOfConcentration String?
   token               String?               @unique
   guardianName        String?
   guardianEducation   String?
@@ -109,6 +110,7 @@ model Student {
   updatedBy           String?
   createdAt           DateTime              @default(now())
   updatedAt           DateTime?
+  path                String?
   proposal_student    Proposal_Student[]    @relation("ProposalStudent")
   skripsi_student     Skripsi_Student[]     @relation("SkripsiStudent")
   group_student       Group_Student[]       @relation("StudentMember")
