@@ -399,142 +399,142 @@ async function main() {
   //   });
 
   // CREATE DOSEN
-  await prisma.employee
-    .create({
-      data: {
-        email: "dosen@test.com",
-        phoneNum: "081283498",
-        Address: "Manado",
-        firstName: "Lecturer",
-        lastName: "Dosen",
-        nik: "dosen",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (employee) => {
-      await prisma.userRole.create({
-        data: {
-          userId: employee.nik,
-          role: "DOSEN",
-        },
-      });
-    });
+  // await prisma.employee
+  //   .create({
+  //     data: {
+  //       email: "dosen@test.com",
+  //       phoneNum: "081283498",
+  //       Address: "Manado",
+  //       firstName: "Lecturer",
+  //       lastName: "Dosen",
+  //       nik: "dosen",
+  //       password:
+  //         "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+  //     },
+  //   })
+  //   .then(async (employee) => {
+  //     await prisma.userRole.create({
+  //       data: {
+  //         userId: employee.nik,
+  //         role: "DOSEN",
+  //       },
+  //     });
+  //   });
 
-  // CREATE DEKAN
-  await prisma.employee
-    .create({
-      data: {
-        Address: "Manado",
-        email: "dekan@test.com",
-        phoneNum: "08123874983",
-        firstName: "Dekan",
-        lastName: "Dekan",
-        nik: "dekan",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (employee) => {
-      await prisma.userRole.create({
-        data: {
-          userId: employee.nik,
-          role: "DEKAN",
-        },
-      });
-    });
+  // // CREATE DEKAN
+  // await prisma.employee
+  //   .create({
+  //     data: {
+  //       Address: "Manado",
+  //       email: "dekan@test.com",
+  //       phoneNum: "08123874983",
+  //       firstName: "Dekan",
+  //       lastName: "Dekan",
+  //       nik: "dekan",
+  //       password:
+  //         "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+  //     },
+  //   })
+  //   .then(async (employee) => {
+  //     await prisma.userRole.create({
+  //       data: {
+  //         userId: employee.nik,
+  //         role: "DEKAN",
+  //       },
+  //     });
+  //   });
 
-  // CREATE KAPRODI
-  await prisma.employee
-    .create({
-      data: {
-        Address: "Manado",
-        phoneNum: "0819834412",
-        email: "kaprodi@test.com",
-        firstName: "Kaprodi",
-        lastName: "Kaprodi",
-        nik: "kaprodi",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (employee) => {
-      await prisma.userRole.create({
-        data: {
-          userId: employee.nik,
-          role: "KAPRODI",
-        },
-      });
-    });
+  // // CREATE KAPRODI
+  // await prisma.employee
+  //   .create({
+  //     data: {
+  //       Address: "Manado",
+  //       phoneNum: "0819834412",
+  //       email: "kaprodi@test.com",
+  //       firstName: "Kaprodi",
+  //       lastName: "Kaprodi",
+  //       nik: "kaprodi",
+  //       password:
+  //         "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+  //     },
+  //   })
+  //   .then(async (employee) => {
+  //     await prisma.userRole.create({
+  //       data: {
+  //         userId: employee.nik,
+  //         role: "KAPRODI",
+  //       },
+  //     });
+  //   });
 
-  // CREATE SEKRETARIS
-  await prisma.employee
-    .create({
-      data: {
-        Address: "Manado",
-        phoneNum: "08193834412",
-        email: "sekretaris1@test.com",
-        firstName: "Sekretaris",
-        lastName: "Sekretaris",
-        nik: "sekretaris",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (employee) => {
-      await prisma.userRole.create({
-        data: {
-          userId: employee.nik,
-          role: "SEKRETARIS",
-        },
-      });
-    });
+  // // CREATE SEKRETARIS
+  // await prisma.employee
+  //   .create({
+  //     data: {
+  //       Address: "Manado",
+  //       phoneNum: "08193834412",
+  //       email: "sekretaris1@test.com",
+  //       firstName: "Sekretaris",
+  //       lastName: "Sekretaris",
+  //       nik: "sekretaris",
+  //       password:
+  //         "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+  //     },
+  //   })
+  //   .then(async (employee) => {
+  //     await prisma.userRole.create({
+  //       data: {
+  //         userId: employee.nik,
+  //         role: "SEKRETARIS",
+  //       },
+  //     });
+  //   });
 
-  // CREATE REGISTER
-  await prisma.employee
-    .create({
-      data: {
-        Address: "Manado",
-        phoneNum: "083834412",
-        email: "register@test.com",
-        firstName: "Register",
-        lastName: "Register",
-        nik: "register",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (employee) => {
-      await prisma.userRole.create({
-        data: {
-          userId: employee.nik,
-          role: "REGISTER",
-        },
-      });
-    });
+  // // CREATE REGISTER
+  // await prisma.employee
+  //   .create({
+  //     data: {
+  //       Address: "Manado",
+  //       phoneNum: "083834412",
+  //       email: "register@test.com",
+  //       firstName: "Register",
+  //       lastName: "Register",
+  //       nik: "register",
+  //       password:
+  //         "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+  //     },
+  //   })
+  //   .then(async (employee) => {
+  //     await prisma.userRole.create({
+  //       data: {
+  //         userId: employee.nik,
+  //         role: "REGISTER",
+  //       },
+  //     });
+  //   });
 
-  // CREATE OPERATOR
-  await prisma.employee
-    .create({
-      data: {
-        email: "operator@test.com",
-        phoneNum: "08128347934",
-        Address: "Manado",
-        firstName: "Operator",
-        lastName: "LPMI",
-        nik: "operatorlpmi",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (employee) => {
-      await prisma.userRole.create({
-        data: {
-          userId: employee.nik,
-          role: "OPERATOR_LPMI",
-        },
-      });
-    });
+  // // CREATE OPERATOR
+  // await prisma.employee
+  //   .create({
+  //     data: {
+  //       email: "operator@test.com",
+  //       phoneNum: "08128347934",
+  //       Address: "Manado",
+  //       firstName: "Operator",
+  //       lastName: "LPMI",
+  //       nik: "operatorlpmi",
+  //       password:
+  //         "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+  //     },
+  //   })
+  //   .then(async (employee) => {
+  //     await prisma.userRole.create({
+  //       data: {
+  //         userId: employee.nik,
+  //         role: "OPERATOR_LPMI",
+  //       },
+  //     });
+  //   });
 
   //--------------------------------------Skripsi App--------------------------------------------
   // IF

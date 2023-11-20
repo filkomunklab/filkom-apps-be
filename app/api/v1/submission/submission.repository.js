@@ -180,6 +180,24 @@ const findAllSubmission = async () => {
   return submission;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update submission approve
+// @used            updateSubmissionById
+const updateSubmissionApproveById = async (id) => {
+  const submission = await prisma.submission.update({
+    where: {
+      id,
+    },
+    data: {
+      is_approve: "Waiting",
+    },
+    select: {
+      is_approve: true,
+    },
+  });
+  return submission;
+};
+
 module.exports = {
   insertSubmission,
   findSubmissionById,
@@ -192,4 +210,5 @@ module.exports = {
   findAllSubmissionByClassroomIdAndIsApprove,
   findAllSubmission,
   // findAllSubmissionBy,
+  updateSubmissionApproveById,
 };
