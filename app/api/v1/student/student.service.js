@@ -12,9 +12,9 @@ const findStudentByNim = async (nim) => {
   return student;
 };
 
-const viewBiodataStudent = async (nim) => {
+const viewBiodataStudent = async (nim, payload) => {
   try {
-    const student = await studentRepository.findBiodataStudent(nim);
+    const student = await studentRepository.findBiodataStudent(nim, payload);
     return student;
   } catch (error) {
     return error;
