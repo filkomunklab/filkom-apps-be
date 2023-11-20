@@ -7,14 +7,16 @@ router.post("/certificate/:nim", certificateController.uploadCertificate); //Upl
 router.get(
   "/certificate/dosen/:nik",
   certificateController.viewAllStudentCertificate
-); //view students certificate
+);
+
 router.get(
   "/certificate/student/:certificateId",
-  certificateController.viewStudentCertificate
-); //View student certificate by category
+  certificateController.viewStudentCertificate //view students certificate
+);
+
 router.get(
   "/certificate/category/:nik",
-  certificateController.viewCertificateCategory
+  certificateController.viewCertificateCategory //View student certificate by category
 );
 
 module.exports = router;
