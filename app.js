@@ -34,12 +34,15 @@ const corsOptions = {
   origin: [
     "http://localhost:3000",
     "https://development-filkom-apps-fe.vercel.app",
+    "http://localhost:5173",
   ],
 };
 
 //-------------------------BIMBINGAN AKADEMIK------------
 const certificateRoutes = require("./app/api/v1/certificate/certificate.routes");
 const activityRoutes = require("./app/api/v1/activity/activity.routes");
+const curriculumRoutes = require("./app/api/v1/curriculum/curriculum.routes");
+const subjectRoutes = require("./app/api/v1/subject/subject.routes");
 const { url } = require("inspector");
 
 //--------------------------------------------------------
@@ -78,6 +81,8 @@ app.use(`${URL}`, skripsiRoutes);
 //--------BIMBINGAN AKADEMIK-------------------------------
 app.use(`${URL}`, certificateRoutes);
 app.use(`${URL}`, activityRoutes);
+app.use(`${URL}`, curriculumRoutes);
+app.use(`${URL}`, subjectRoutes);
 //---------------------------------------------------
 
 app.use("/", (req, res) => {

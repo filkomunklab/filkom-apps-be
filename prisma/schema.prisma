@@ -560,15 +560,25 @@ model Thesis_History {
 }
 
 //-------------------Bimbingan Akademik-------------------/
+
+model Curriculum {
+  id       String    @id @default(uuid())
+  major    String    @db.VarChar(100)
+  year     String    @db.VarChar(50)
+  Subjects Subject[]
+}
+
 model Subject {
-  id           String            @id @default(uuid())
-  sub_code     String
-  sub_name     String
-  grade        String
-  Type         String
-  preRequisite String
-  Status       String
-  preRegis     PreRegistration[]
+  id            String            @id @default(uuid())
+  curriculum    Curriculum        @relation(fields: [curriculum_id], references: [id])
+  curriculum_id String
+  code          String            @db.VarChar(50)
+  name          String            @db.VarChar(100)
+  credits       Int
+  type          String            @db.VarChar(50)
+  prerequisite  String?
+  semester      Int
+  preRegis      PreRegistration[]
 }
 
 model PreRegistration {
