@@ -4,6 +4,7 @@ const consultationRepository = require("./consultation.repository");
 const groupRepository = require("../group/group.repository");
 const proposalRepository = require("../proposal/proposal.repository");
 const employeeRepository = require("../employee/employee.repository");
+const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
 
 //===================================================================
 // @description     Create consultation
@@ -33,6 +34,32 @@ const createConsultation = async (userId, payload) => {
       payload,
       userId
     );
+    if (consultation) {
+      if (userId === proposal.advisor_id) {
+        // history
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Advisor Mencatat Konsultasi",
+          group.id
+        );
+      }
+      if (userId === proposal.co_advisor1_id) {
+        // history
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Co-Advisor 1 Mencatat Konsultasi",
+          group.id
+        );
+      }
+      if (userId === proposal.co_advisor2_id) {
+        // history
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Co-Advisor 2 Mencatat Konsultasi",
+          group.id
+        );
+      }
+    }
     return consultation;
   }
   if (
