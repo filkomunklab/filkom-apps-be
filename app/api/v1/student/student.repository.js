@@ -110,7 +110,7 @@ const findBiodataStudent = async (nim, payload) => {
   const {
     bloodType,
     studentEmail,
-    phoneNum,
+    phoneNo,
     AreaOfConcentration,
     highSchoolGrad,
     currentAddress,
@@ -119,14 +119,14 @@ const findBiodataStudent = async (nim, payload) => {
     guardianEmail,
     guardianPhoneNo,
   } = payload;
-  const student = await prisma.student.findUnique({
+  const student = await prisma.student.update({
     where: {
       nim,
     },
     data: {
       bloodType,
       studentEmail,
-      phoneNum,
+      phoneNo,
       AreaOfConcentration,
       highSchoolGrad,
       currentAddress,
