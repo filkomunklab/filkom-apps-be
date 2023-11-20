@@ -563,33 +563,33 @@ model Subject {
 }
 
 model PreRegistration {
-  id          String            @id @default(uuid())
-  submitDate  DateTime          @default(now())
+  id          String             @id @default(uuid())
+  submitDate  DateTime           @default(now())
   approveDate DateTime?
   status      String
   description String
   comments    String
-  history     HistoryAcademic[]
-  Subject     Subject?          @relation(fields: [subjectId], references: [id])
+  history     History_Academic[]
+  Subject     Subject?           @relation(fields: [subjectId], references: [id])
   subjectId   String?
-  Employee    Employee?         @relation(fields: [employeeId], references: [id])
+  Employee    Employee?          @relation(fields: [employeeId], references: [id])
   employeeId  String?
-  Student     Student?          @relation(fields: [studentId], references: [id])
+  Student     Student?           @relation(fields: [studentId], references: [id])
   studentId   String?
 }
 
 model Academic_Consultation {
-  id         String            @id @default(uuid())
+  id         String             @id @default(uuid())
   topic      String
-  submitDate DateTime          @default(now())
-  status     status            @default(WAITING)
+  submitDate DateTime           @default(now())
+  status     status             @default(WAITING)
   message    Message[]
-  history    HistoryAcademic[]
-  Dosen      Employee?         @relation("supervisior", fields: [DosenId], references: [id])
+  history    History_Academic[]
+  Dosen      Employee?          @relation("supervisior", fields: [DosenId], references: [id])
   DosenId    String?
-  Employee   Employee?         @relation("consultationRecivier", fields: [employeeId], references: [id])
+  Employee   Employee?          @relation("consultationRecivier", fields: [employeeId], references: [id])
   employeeId String?
-  Student    Student?          @relation(fields: [studentId], references: [id])
+  Student    Student?           @relation(fields: [studentId], references: [id])
   studentId  String?
 }
 
@@ -614,7 +614,7 @@ model Certificate {
   submitDate  DateTime                  @default(now())
   status      status                    @default(WAITING)
   transaction Transaction_Certificate[]
-  history     HistoryAcademic[]
+  history     History_Academic[]
 }
 
 model Activity {
@@ -624,7 +624,7 @@ model Activity {
   date        DateTime
   time        String
   transaction Transaction_Activity[]
-  history     HistoryAcademic[]
+  history     History_Academic[]
 }
 
 model Transaction_Certificate {
@@ -647,7 +647,7 @@ model Transaction_Activity {
   activityId String?
 }
 
-model HistoryAcademic {
+model History_Academic {
   id                     String                 @id @default(uuid())
   PreRegistration        PreRegistration?       @relation(fields: [preRegistrationId], references: [id])
   preRegistrationId      String?
