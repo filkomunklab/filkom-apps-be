@@ -13,6 +13,16 @@ const crateActivityForStudent = async (payload, nim) => {
   }
 };
 
+const viewDetailActivity = async (activityId) => {
+  try {
+    const activity = await activityRepository.findDetailActivity(activityId);
+    return activity;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   crateActivityForStudent,
+  viewDetailActivity,
 };

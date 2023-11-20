@@ -24,6 +24,20 @@ const addActivityForStudent = async (payload, nim) => {
   }
 };
 
+const findDetailActivity = async (activityId) => {
+  try {
+    const activity = await prisma.activity.findUnique({
+      where: {
+        id: activityId,
+      },
+    });
+    return activity;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   addActivityForStudent,
+  findDetailActivity,
 };
