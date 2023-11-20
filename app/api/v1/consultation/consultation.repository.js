@@ -11,7 +11,7 @@ const insertConsultation = async (payload, userId) => {
     data: {
       group_id,
       description,
-      date,
+      date: new Date(date),
       dosen_id: userId,
     },
   });

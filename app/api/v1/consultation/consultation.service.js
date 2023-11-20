@@ -25,12 +25,12 @@ const createConsultation = async (userId, payload) => {
     userId === proposal.co_advisor1_id ||
     userId === proposal.co_advisor2_id
   ) {
-    // Mengonversi format tanggal
-    const userDate = payload.date;
-    const [day, month, year] = userDate.split("/");
-    const isoDate = `${year}-${month}-${day}T00:00:00.000Z`;
+    // // Mengonversi format tanggal
+    // const [day, month, year] = payload.date.split("/");
+    // const formattedDate = `${year}-${month}-${day}T00:00:00Z`;
+    // payload.date = formattedDate;
     const consultation = await consultationRepository.insertConsultation(
-      { ...payload, date: isoDate }, // Menggunakan tanggal yang telah dikonversi
+      payload,
       userId
     );
     return consultation;
