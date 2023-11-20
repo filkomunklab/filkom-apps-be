@@ -106,10 +106,34 @@ const findStudentByToken = async (token) => {
   return student;
 };
 
-const findBiodataStudent = async (nim) => {
+const findBiodataStudent = async (nim, payload) => {
+  const {
+    bloodType,
+    studentEmail,
+    phoneNum,
+    AreaOfConcentration,
+    highSchoolGrad,
+    currentAddress,
+    guardianEducation,
+    guardianStatus,
+    guardianEmail,
+    guardianPhoneNo,
+  } = payload;
   const student = await prisma.student.findUnique({
     where: {
       nim,
+    },
+    data: {
+      bloodType,
+      studentEmail,
+      phoneNum,
+      AreaOfConcentration,
+      highSchoolGrad,
+      currentAddress,
+      guardianEducation,
+      guardianStatus,
+      guardianEmail,
+      guardianPhoneNo,
     },
     include: {
       Employee: {

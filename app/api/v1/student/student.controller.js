@@ -22,9 +22,10 @@ const getStudentByNim = async (req, res) => {
 };
 
 const biodataStudent = async (req, res) => {
+  const payload = req.body;
   const { nim } = req.params;
   try {
-    const student = await studentService.viewBiodataStudent(nim);
+    const student = await studentService.viewBiodataStudent(nim, payload);
     console.log(student);
     res.status(201).send({ status: "OK", data: student });
   } catch (error) {
@@ -35,7 +36,7 @@ const biodataStudent = async (req, res) => {
 };
 
 const viewByEmployeeNik = async (req, res) => {
-  const { nik } = req.param;
+  const { nik } = req.params;
   try {
     console.log(nik);
     const student = await studentService.viewStudentbyEmployeeNik(nik);
