@@ -1491,6 +1491,11 @@ const updateSkripsiConclusionById = async (id, userId, payload) => {
           await skripsiRepository.updateSkripsiConclusionById(id, payload);
 
         if (updatedSkripsi) {
+          // jika mengulang maka reset buka berita acara ke null
+          if (payload.is_pass === "Repeat") {
+            await skripsiRepository.resetOpenReprtById(updatedSkripsi.id);
+          }
+
           // history FILL REPORT CONCLUSION SKRIPSI by ID
           await thesisHistoryRepository.createThesisHistory(
             userId,

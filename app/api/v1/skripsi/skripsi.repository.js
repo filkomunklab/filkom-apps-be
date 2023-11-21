@@ -1541,6 +1541,21 @@ const updateSkripsiClassroomById = async (id, classroom_id) => {
   return skripsi;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update is_report_open by id
+// @used            updateProposalConclusionById,
+const resetOpenReprtById = async (id) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      is_report_open: null,
+    },
+  });
+  return skripsi;
+};
+
 module.exports = {
   insertSkripsi,
   updateSkripsiChairmanAndMemberById,
@@ -1626,4 +1641,5 @@ module.exports = {
   findAllSkripsi,
 
   updateSkripsiClassroomById,
+  resetOpenReprtById,
 };

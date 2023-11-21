@@ -1519,6 +1519,11 @@ const updateProposalConclusionById = async (id, userId, payload) => {
           await proposalRepository.updateProposalConclusionById(id, payload);
 
         if (updatedProposal) {
+          // jika mengulang maka reset buka berita acara ke null
+          if (payload.is_pass === "Repeat") {
+            await proposalRepository.resetOpenReprtById(updatedProposal.id);
+          }
+
           // history FILL REPORT CONCLUSION PROPOSAL by ID
           await thesisHistoryRepository.createThesisHistory(
             userId,

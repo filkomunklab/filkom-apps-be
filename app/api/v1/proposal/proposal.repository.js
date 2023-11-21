@@ -1266,6 +1266,21 @@ const findAllProposal = async () => {
   return proposal;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update is_report_open by id
+// @used            updateProposalConclusionById,
+const resetOpenReprtById = async (id) => {
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      is_report_open: null,
+    },
+  });
+  return proposal;
+};
+
 module.exports = {
   insertProposal,
   findProposalById,
@@ -1333,4 +1348,6 @@ module.exports = {
   findAllProposalByMember,
   findAllProposalByClassroomId,
   findAllProposal,
+
+  resetOpenReprtById,
 };
