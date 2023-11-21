@@ -55,9 +55,32 @@ const uploadCertificate = async (payload, nim) => {
   }
 };
 
+const studentHistoryCertificateView = async (nim) => {
+  try {
+    const certificate =
+      await certificateRepository.findStudentCertificateHistory(nim);
+    return certificate;
+  } catch (error) {
+    return error;
+  }
+};
+
+const advisorHistoryCertificateView = async (nik) => {
+  try {
+    const certificate =
+      await certificateRepository.findAdvisorCertificateHistory(nik);
+    return certificate;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
 module.exports = {
   uploadCertificate,
   findAllStudentCertificate,
   viewOneStudentCertificate,
   viewCertifiacateByCategory,
+  studentHistoryCertificateView,
+  advisorHistoryCertificateView,
 };
