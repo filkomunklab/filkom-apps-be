@@ -605,29 +605,29 @@ async function main() {
       });
     });
 
-  // await prisma.student
-  //   .create({
-  //     data: {
-  //       id: angelId,
-  //       gender: "FEMALE",
-  //       firstName: "Angel Triany",
-  //       lastName: "Pangkey",
-  //       studentEmail: "pangkey@mail.com",
-  //       nim: "105021920003",
-  //       faculty: "Fakultas Ilmu Komputer",
-  //       major: "IF",
-  //       password:
-  //         "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-  //     },
-  //   })
-  //   .then(async (student) => {
-  //     await prisma.userRole.create({
-  //       data: {
-  //         userId: student.nim,
-  //         role: "MAHASISWA",
-  //       },
-  //     });
-  //   });
+  await prisma.student
+    .create({
+      data: {
+        id: angelId,
+        gender: "FEMALE",
+        firstName: "Angel",
+        lastName: "Mackenzie",
+        studentEmail: "mackenzie@mail.com",
+        nim: "105021920003",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (student) => {
+      await prisma.userRole.create({
+        data: {
+          userId: student.nim,
+          role: "MAHASISWA",
+        },
+      });
+    });
 
   await prisma.student
     .create({

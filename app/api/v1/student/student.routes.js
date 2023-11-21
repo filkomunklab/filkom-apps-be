@@ -20,5 +20,10 @@ router.post("/student", studentController.createStudent);
 router.get("/student/:nim", studentController.getStudentByNim);
 router.patch("/student/biodata/:nim", studentController.biodataStudent);
 router.get("/student/:nik", studentController.viewByEmployeeNik);
+router.get("/management/student", studentController.getAllStudentForManagement);
+router.patch(
+  "/management/student/:nim/password",
+  studentController.updateStudentPassword
+);
 
 module.exports = router;

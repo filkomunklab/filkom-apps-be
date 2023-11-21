@@ -126,6 +126,24 @@ const findBiodataStudent = async (nim) => {
   return student;
 };
 
+const getAllStudent = async () => {
+  const students = await prisma.student.findMany({
+    orderBy: {
+      firstName: "asc",
+    },
+  });
+  return students;
+};
+
+const updateByNim = async (nim, payload) => {
+  await prisma.student.update({
+    where: {
+      nim,
+    },
+    data: payload,
+  });
+};
+
 module.exports = {
   findStudentById,
   findStudentByNim,
@@ -134,4 +152,6 @@ module.exports = {
   findStudentByToken,
   findBiodataStudent,
   findStudentByEmployeeNik,
+  getAllStudent,
+  updateByNim,
 };
