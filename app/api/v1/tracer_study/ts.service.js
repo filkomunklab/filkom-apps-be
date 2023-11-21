@@ -64,7 +64,7 @@ const exportTStoExcel = async (filename) => {
     { header: "f1769", key: "f1769" },
     { header: "f1770", key: "f1770" },
     { header: "f1771", key: "f1771" },
-    { header: "f1772", key: "f1772" }, //
+    { header: "f1772", key: "f1772" },
     { header: "f1773", key: "f1773" },
     { header: "f1774", key: "f1774" },
     { header: "f21", key: "f21" },

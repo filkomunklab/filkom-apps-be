@@ -87,7 +87,6 @@ const updateSubmissionById = async (req, res) => {
     if (
       !(
         payload.title &&
-        payload.is_consultation &&
         payload.proposed_advisor_id &&
         payload.submission_file.file_name &&
         payload.submission_file.file_size &&
@@ -206,7 +205,7 @@ const rejectSubmissionById = async (req, res) => {
 // @access          MAHASISWA
 const updateSubmissionTitleById = async (req, res) => {
   const policy = policyFor(req.user);
-  if (!policy.can("update", "title")) {
+  if (!policy.can("update", "Submission")) {
     return res.status(401).send({
       status: "FAILED",
       data: { error: "You don't have permission to perform this action" },

@@ -41,6 +41,8 @@ const policyFor = ({ user }) => {
     can("read", "Consultation");
     // Sekertaris view advisor team
     can("read", "advisor_team");
+    // Sekertaris view thesis history
+    can("read", "thesis_history");
     // ---------------------------------Proposal--------------------------------
     // Sekertaris view proposal document
     can("read", "proposal_document");
@@ -98,6 +100,8 @@ const policyFor = ({ user }) => {
     can("read", "advisor_team");
     // Dekan view Consultation
     can("read", "Consultation");
+    // Dekan view thesis history
+    can("read", "thesis_history");
     // ---------------------------------Submission--------------------------------
     // Dekan view submission
     can("read", "Submission");
@@ -126,6 +130,8 @@ const policyFor = ({ user }) => {
     can("read", "proposal_revision_document");
     // Dekan view proposal list dekan
     can("read", "proposal_list_dekan");
+    // Dekan view is_report_open in proposal
+    can("read", "open_proposal_report");
     // ---------------------------------Skripsi--------------------------------
     // Dekan view skripsi document
     can("read", "skripsi_document");
@@ -157,6 +163,10 @@ const policyFor = ({ user }) => {
     can("read", "alumni_list");
     //update status SPT
     can("update", "status_SPT");
+    // Dekan view history list dekan
+    can("read", "history_list_dekan");
+    // Dekan view is_report_open in skripsi
+    can("read", "open_skripsi_report");
   }
 
   if (hasRole("KAPRODI")) {
@@ -167,6 +177,8 @@ const policyFor = ({ user }) => {
     can("read", "Consultation");
     // Kaprodi view advisor team
     can("read", "advisor_team");
+    // Kaprodi view thesis history
+    can("read", "thesis_history");
     // ---------------------------------Submission--------------------------------
     // Kaprodi view submission
     can("read", "Submission");
@@ -193,6 +205,8 @@ const policyFor = ({ user }) => {
     can("read", "proposal_revision_document");
     // Kaprodi view proposal list kaprodi
     can("read", "proposal_list_kaprodi");
+    // Kaprodi view is_report_open in proposal
+    can("read", "open_proposal_report");
     // ---------------------------------Skripsi--------------------------------
     // Kaprodi view skripsi document
     can("read", "skripsi_document");
@@ -222,6 +236,10 @@ const policyFor = ({ user }) => {
     can("read", "alumni_list");
     //update status SPT
     can("update", "status_SPT");
+    // Kaprodi view history list kaprodi
+    can("read", "history_list_kaprodi");
+    // Kaprodi view is_report_open in skripsi
+    can("read", "open_skripsi_report");
   }
 
   if (hasRole("DOSEN")) {
@@ -234,6 +252,8 @@ const policyFor = ({ user }) => {
     can("create", "Consultation");
     // Advisor, Co-advisor view Consultation
     can("read", "Consultation");
+    // (Dosen: All) view thesis history
+    can("read", "thesis_history");
     // ---------------------------------Submission--------------------------------
     // Dosen view committee list
     can("read", "committee_list");
@@ -252,6 +272,8 @@ const policyFor = ({ user }) => {
     can("read", "proposal_plagiarism");
     // Ketua Panelis update is_report_open in proposal
     can("update", "open_proposal_report");
+    // (Dosen: Ketua, Anggota, Advisor) view is_report_open in proposal
+    can("read", "open_proposal_report");
     // (Dosen: Ketua, Anggota, Advisor) view proposal report
     can("read", "proposal_report");
     // (Dosen: Ketua, Anggota, Advisor) update is_report_approve
@@ -299,6 +321,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_plagiarism");
     // Ketua Panelis update is_report_open in skripsi
     can("update", "open_skripsi_report");
+    // (Dosen: Ketua, Anggota, Advisor) view is_report_open in skripsi
+    can("read", "open_skripsi_report");
     // (Dosen: Ketua, Anggota, Advisor) create Skripsi_Assessment
     can("update", "Skripsi_Assessment");
     // (Dosen: Ketua, Anggota, Advisor) view Skripsi_Assessment
@@ -319,6 +343,14 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_revision_document");
     // (Dosen: Ketua, Anggota, Advisor) approve document revisi skripsi
     can("update", "is_skripsi_revision_approve");
+    // (Dosen: Advisor) view history list advisor
+    can("update", "history_list_advisor");
+    // (Dosen: Co-Advisor) view history list coadvisor
+    can("update", "history_list_co_advisor");
+    // (Dosen: Chairman) view history list chairman
+    can("update", "history_list_chairman");
+    // (Dosen: Member) view history list member
+    can("update", "history_list_member");
   }
 
   if (hasRole("DOSEN_MK")) {
@@ -335,6 +367,8 @@ const policyFor = ({ user }) => {
     can("read", "Consultation");
     // Dosen MK view advisor team
     can("read", "advisor_team");
+    // Dosen MK view thesis history
+    can("read", "thesis_history");
     // ---------------------------------Submission--------------------------------
     // Dosen MK view submission
     can("read", "Submission");
@@ -412,6 +446,8 @@ const policyFor = ({ user }) => {
     can("read", "dosen_list");
     // Mahasiswa view advisor team
     can("read", "advisor_team");
+    // Mahasiswa view thesis history
+    can("read", "thesis_history");
     // ---------------------------------Submission--------------------------------
     can("create", "Submission");
     // Mahasiswa view submission

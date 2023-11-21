@@ -144,6 +144,15 @@ router.put(
 );
 
 //===================================================================
+// @description     Get Open report
+// @access          DOSEN, KAPRODI, DEKAN
+router.get(
+  "/proposal/proposal-report/open-access/:id",
+  auth,
+  proposalController.getOpenAccessProposalReportById
+);
+
+//===================================================================
 // @description     Update proposal assessment by id
 // @access          DOSEN
 router.put(

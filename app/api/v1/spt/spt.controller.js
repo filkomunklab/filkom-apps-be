@@ -65,6 +65,7 @@ const submitSPT = async (req, res) => {
   try {
     const dataSPT = req.body;
     const spt = await sptService.createSPT(dataSPT);
+    console.log('success')
     res.status(201).send({ status: "Form SPT has been submitted", data: spt });
   } catch (error) {
     res

@@ -355,6 +355,7 @@ const updateProposalScheduleById = async (req, res) => {
   }
   try {
     const id = req.params.id;
+    const userId = req.user.user.id;
     const payload = req.body;
     if (
       !(
@@ -372,6 +373,7 @@ const updateProposalScheduleById = async (req, res) => {
     }
     const proposal = await proposalService.updateProposalScheduleById(
       id,
+      userId,
       payload
     );
     res.send({ status: "OK", data: proposal });
@@ -424,6 +426,29 @@ const openAccessProposalReportById = async (req, res) => {
       id,
       userId
     );
+    res.send({ status: "OK", data: proposal });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get Open report
+// @route           Get /proposal/proposal-report/open-access/:id
+// @access          DOSEN, KAPRODI, DEKAN
+const getOpenAccessProposalReportById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "open_proposal_report")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const proposal = await proposalService.getOpenAccessProposalReportById(id);
     res.send({ status: "OK", data: proposal });
   } catch (error) {
     res
@@ -814,6 +839,7 @@ module.exports = {
   getProposalScheduleById,
 
   openAccessProposalReportById,
+  getOpenAccessProposalReportById,
   updateProposalAssessmentById,
   getAllProposalAssessmentById,
   updateProposalChangesById,

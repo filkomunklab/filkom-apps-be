@@ -17,6 +17,8 @@ const proposalAssessmentRepository = require("../proposal_assessment/proposal_as
 const proposalChangesRepository = require("../proposal_changes/proposal_changes.repository");
 const skripsiRepository = require("../skripsi/skripsi.repository");
 const classroomRepository = require("../classroom/classroom.repository");
+const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
+const userManagementRepository = require("../user_management/user_namagement.repository");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get proposal by id
@@ -136,6 +138,16 @@ const updateProposalDocumentById = async (userId, id, payload) => {
     is_proposal_approve_by_co_advisor2:
       lastUpdatedProposal.is_proposal_approve_by_co_advisor2,
   };
+
+  if (UpdatedProposal) {
+    // history UPLOAD DOKUMEN PROPOSAL by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengunggah Dokumen Proposal",
+      group.id
+    );
+  }
+
   return Data;
 };
 
@@ -214,6 +226,15 @@ const deleteProposalDocumentById = async (userId, id) => {
   ) {
     await proposalRepository.deleteProposalDocumentApproveByCoAdvisor2ById(id);
   }
+
+  if (UpdatedProposal) {
+    // history DELETE DOKUMEN PROPOSAL by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menghapus Dokumen Proposal",
+      group.id
+    );
+  }
 };
 
 //===================================================================
@@ -252,6 +273,9 @@ const approveProposalDocumentById = async (userId, id) => {
       userId
     );
 
+  const group = await groupRepository.findGroupByProposalId(id);
+  console.log("ini group: ", group);
+
   if (advisor) {
     if (advisor.is_proposal_approve_by_advisor === "Approve") {
       throw {
@@ -267,6 +291,16 @@ const approveProposalDocumentById = async (userId, id) => {
         advisor_proposal_approved_date:
           UpdatedProposal.advisor_proposal_approved_date,
       };
+
+      if (UpdatedProposal) {
+        // history APPROVE DOKUMEN PROPOSAL by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Advisor Menyetujui Dokumen Proposal",
+          group.id
+        );
+      }
+
       return Data;
     }
   }
@@ -285,6 +319,15 @@ const approveProposalDocumentById = async (userId, id) => {
         co_advisor1_proposal_approved_date:
           UpdatedProposal.co_advisor1_proposal_approved_date,
       };
+      if (UpdatedProposal) {
+        // history APPROVE DOKUMEN PROPOSAL by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Co-Advisor 1 Menyetujui Dokumen Proposal",
+          group.id
+        );
+      }
+
       return Data;
     }
   }
@@ -303,6 +346,16 @@ const approveProposalDocumentById = async (userId, id) => {
         co_advisor2_proposal_approved_date:
           UpdatedProposal.co_advisor2_proposal_approved_date,
       };
+
+      if (UpdatedProposal) {
+        // history APPROVE DOKUMEN PROPOSAL by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Co-Advisor 2 Menyetujui Dokumen Proposal",
+          group.id
+        );
+      }
+
       return Data;
     }
   }
@@ -351,6 +404,8 @@ const rejectProposalDocumentById = async (userId, id) => {
       userId
     );
 
+  const group = await groupRepository.findGroupByProposalId(id);
+
   if (advisor) {
     if (
       advisor.is_proposal_approve_by_advisor === "Rejected" ||
@@ -369,6 +424,16 @@ const rejectProposalDocumentById = async (userId, id) => {
         advisor_proposal_approved_date:
           UpdatedProposal.advisor_proposal_approved_date,
       };
+
+      if (UpdatedProposal) {
+        // history REJECT DOKUMEN PROPOSAL by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Advisor Menolak Dokumen Proposal",
+          group.id
+        );
+      }
+
       return Data;
     }
   }
@@ -390,6 +455,14 @@ const rejectProposalDocumentById = async (userId, id) => {
         co_advisor1_proposal_approved_date:
           UpdatedProposal.co_advisor1_proposal_approved_date,
       };
+      if (UpdatedProposal) {
+        // history REJECT DOKUMEN PROPOSAL by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Co-Advisor 1 Menolak Dokumen Proposal",
+          group.id
+        );
+      }
       return Data;
     }
   }
@@ -411,6 +484,14 @@ const rejectProposalDocumentById = async (userId, id) => {
         co_advisor2_proposal_approved_date:
           UpdatedProposal.co_advisor2_proposal_approved_date,
       };
+      if (UpdatedProposal) {
+        // history REJECT DOKUMEN PROPOSAL by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Co-Advisor 2 Menolak Dokumen Proposal",
+          group.id
+        );
+      }
       return Data;
     }
   }
@@ -468,6 +549,16 @@ const updateProposalPaymentById = async (id, userId, payload) => {
     payload,
     path
   );
+
+  if (UpdatedProposal) {
+    // history UPLOAD PEMBAYARAN PROPOSAL by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengunggah Bukti Pembayaran Proposal",
+      group.id
+    );
+  }
+
   return UpdatedProposal;
 };
 
@@ -509,7 +600,18 @@ const deleteProposalPaymentById = async (id, userId) => {
   await deleteObject(desertRef);
 
   // delete/update proposal document
-  await proposalRepository.deleteProposalPaymentById(id);
+  const updatedProposal = await proposalRepository.deleteProposalPaymentById(
+    id
+  );
+
+  if (updatedProposal) {
+    // history DELETE PEMBAYARAN PROPOSAL by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menghapus Bukti Pembayaran Proposal",
+      group.id
+    );
+  }
 };
 
 //===================================================================
@@ -557,6 +659,16 @@ const updateProposalPlagiarismById = async (id, userId, payload) => {
     payload,
     path
   );
+
+  if (UpdatedProposal) {
+    // history UPLOAD PLAGIARISM PROPOSAL by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Mengunggah Hasil Cek Plagiat Proposal",
+      group.id
+    );
+  }
+
   return UpdatedProposal;
 };
 
@@ -598,7 +710,18 @@ const deleteProposalPlagiarismById = async (id, userId) => {
   await deleteObject(desertRef);
 
   // delete/update proposal plagiarism
-  await proposalRepository.deleteProposalPlagiarismById(id);
+  const updatedProposal = await proposalRepository.deleteProposalPlagiarismById(
+    id
+  );
+
+  if (updatedProposal) {
+    // history DELETE PLAGIARISM PROPOSAL by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menghapus Hasil Cek Plagiat Proposal",
+      group.id
+    );
+  }
 };
 
 //===================================================================
@@ -771,7 +894,7 @@ const checkScheduleConflict = async (id, payload) => {
 // @description     Create/Update proposal schedule
 // @route           PUT /proposal/schedule/:id
 // @access          OPERATOR_FAKULTAS
-const updateProposalScheduleById = async (id, payload) => {
+const updateProposalScheduleById = async (id, userId, payload) => {
   // check proposal
   const proposal = await getProposalById(id);
   const { panelist_chairman_id, panelist_member_id } = payload;
@@ -810,6 +933,15 @@ const updateProposalScheduleById = async (id, payload) => {
     const updatedProposal = await proposalRepository.updateProposalScheduleById(
       id,
       payload
+    );
+
+    const group = await groupRepository.findGroupByProposalId(id);
+
+    // history UPDATE SCHEDULE PROPOSAL by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menyusun Jadwal Sidang Proposal",
+      group.id
     );
     return updatedProposal;
   } else {
@@ -908,11 +1040,11 @@ const openAccessProposalReportById = async (id, userId) => {
     }
     const updatedProposal =
       await proposalRepository.openAccessProposalReportById(id);
+
+    // get group
+    const group = await groupRepository.findGroupByProposalId(proposal.id);
     // check if success open report
     if (updatedProposal) {
-      // get group
-      const group = await groupRepository.findGroupByProposalId(proposal.id);
-
       // input chairman and member into skripsi
       await skripsiRepository.updateSkripsiChairmanAndMemberById(
         group.skripsi_id,
@@ -974,7 +1106,15 @@ const openAccessProposalReportById = async (id, userId) => {
           proposal.co_advisor2_id
         );
       }
+
+      // history OPEN REPORT PROPOSAL by ID
+      await thesisHistoryRepository.createThesisHistory(
+        userId,
+        "Sidang Proposal di Mulai",
+        group.id
+      );
     }
+
     return updatedProposal;
   } else {
     throw {
@@ -982,6 +1122,25 @@ const openAccessProposalReportById = async (id, userId) => {
       message: `You can't perform this action`,
     };
   }
+};
+
+//===================================================================
+// @description     Get Open report
+// @route           Get /proposal/proposal-report/open-access/:id
+// @access          DOSEN, KAPRODI, DEKAN
+const getOpenAccessProposalReportById = async (id) => {
+  let data = {};
+  const proposal = await proposalRepository.findProposalById(id);
+  if (proposal) {
+    const group = await groupRepository.findGroupByProposalId(proposal.id);
+    data = {
+      proposal_id: proposal.id,
+      title: group.title,
+      is_open: proposal.is_report_open,
+    };
+  }
+
+  return data;
 };
 
 //===================================================================
@@ -1008,6 +1167,16 @@ const updateProposalAssessmentById = async (id, userId, payload) => {
       assessment.id,
       payload.value
     );
+
+  const group = await groupRepository.findGroupByProposalId(id);
+
+  // // history INPUT/UPDATE ASSESSMENT PROPOSAL by ID
+  // await thesisHistoryRepository.createThesisHistory(
+  //   userId,
+  //   "INPUT/UPDATE ASSESSMENT PROPOSAL by ID",
+  //   group.id
+  // );
+
   return updateAssessment;
 };
 
@@ -1102,6 +1271,16 @@ const updateProposalChangesById = async (id, userId, payload) => {
     change.id,
     payload.changes
   );
+
+  const group = await groupRepository.findGroupByProposalId(id);
+
+  // // history UPDATE PROPOSAL CHANGES by ID
+  // await thesisHistoryRepository.createThesisHistory(
+  //   userId,
+  //   "UPDATE PROPOSAL CHANGES by ID",
+  //   group.id
+  // );
+
   return updateChange;
 };
 
@@ -1145,6 +1324,7 @@ const getAllProposalChangesById = async (id) => {
 
   const changesData = {
     proposal_id: proposal.id,
+    is_report_open: proposal.is_report_open,
     changes_by_chairman: chairmanChanges ? chairmanChanges.changes : null,
     changes_by_member: memberChanges ? memberChanges.changes : null,
     changes_by_advisor: advisorChanges ? advisorChanges.changes : null,
@@ -1181,30 +1361,80 @@ const getProposalReportById = async (id) => {
 const signProposalReportById = async (id, userId) => {
   // check proposal
   const proposal = await getProposalById(id);
-  if (proposal.is_report_open) {
-    if (proposal.panelist_chairman_id === userId) {
-      const updatedProposal =
-        await proposalRepository.signChairmanProposalReportById(id);
-      return updatedProposal;
-    } else if (proposal.panelist_member_id === userId) {
-      const updatedProposal =
-        await proposalRepository.signMemberProposalReportById(id);
-      return updatedProposal;
-    } else if (proposal.advisor_id === userId) {
-      const updatedProposal =
-        await proposalRepository.signAdvisorProposalReportById(id);
-      return updatedProposal;
-    } else {
-      const updatedProposal =
+
+  // const group = await groupRepository.findGroupByProposalId(id);
+
+  const dosen = await employeeRepository.findEmployeeById(userId);
+  const dekan = await userManagementRepository.findUserByNIKAndRole(
+    dosen.nik,
+    "DEKAN"
+  );
+
+  if (proposal.panelist_chairman_id === userId) {
+    const updatedProposal1 =
+      await proposalRepository.signChairmanProposalReportById(id);
+
+    if (dekan) {
+      const updatedProposal2 =
         await proposalRepository.signDekanProposalReportById(id);
-      return updatedProposal;
+      return updatedProposal2;
     }
-  } else {
-    throw {
-      status: 400,
-      message: `You can't perform this action`,
-    };
+    // // history SIGN REPORT PROPOSAL by ID
+    // await thesisHistoryRepository.createThesisHistory(
+    //   userId,
+    //   "SIGN REPORT PROPOSAL by ID",
+    //   group.id
+    // );
+    return updatedProposal1;
+  } else if (proposal.panelist_member_id === userId) {
+    const updatedProposal =
+      await proposalRepository.signMemberProposalReportById(id);
+
+    if (dekan) {
+      const updatedProposal2 =
+        await proposalRepository.signDekanProposalReportById(id);
+      return updatedProposal2;
+    }
+    // // history SIGN REPORT PROPOSAL by ID
+    // await thesisHistoryRepository.createThesisHistory(
+    //   userId,
+    //   "SIGN REPORT PROPOSAL by ID",
+    //   group.id
+    // );
+    return updatedProposal;
+  } else if (proposal.advisor_id === userId) {
+    const updatedProposal =
+      await proposalRepository.signAdvisorProposalReportById(id);
+
+    if (dekan) {
+      const updatedProposal2 =
+        await proposalRepository.signDekanProposalReportById(id);
+      return updatedProposal2;
+    }
+    // // history SIGN REPORT PROPOSAL by ID
+    // await thesisHistoryRepository.createThesisHistory(
+    //   userId,
+    //   "SIGN REPORT PROPOSAL by ID",
+    //   group.id
+    // );
+    return updatedProposal;
+  } else if (dekan) {
+    const updatedProposal =
+      await proposalRepository.signDekanProposalReportById(id);
+
+    // // history SIGN REPORT PROPOSAL by ID
+    // await thesisHistoryRepository.createThesisHistory(
+    //   userId,
+    //   "SIGN REPORT PROPOSAL by ID",
+    //   group.id
+    // );
+    return updatedProposal;
   }
+
+  throw {
+    status: 400,
+    message: `You can't perform this action`,
+  };
 };
 
 //===================================================================
@@ -1287,6 +1517,16 @@ const updateProposalConclusionById = async (id, userId, payload) => {
       ) {
         const updatedProposal =
           await proposalRepository.updateProposalConclusionById(id, payload);
+
+        if (updatedProposal) {
+          // history FILL REPORT CONCLUSION PROPOSAL by ID
+          await thesisHistoryRepository.createThesisHistory(
+            userId,
+            "Sidang Proposal Berakhir",
+            group.id
+          );
+        }
+
         return updatedProposal;
       } else {
         throw {
@@ -1405,6 +1645,16 @@ const updateProposalRevisionDocumentById = async (id, userId, payload) => {
     is_revision_approve_by_advisor:
       lastUpdatedProposal.is_revision_approve_by_advisor,
   };
+
+  if (updatedProposal) {
+    // history UPLOAD DOKUMEN REVISI PROPOSAL by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menggungah Dokumen Revisi Proposal",
+      group.id
+    );
+  }
+
   return Data;
 };
 
@@ -1490,6 +1740,15 @@ const deleteProposalRevisionDocumentById = async (id, userId) => {
       id
     );
   }
+
+  if (updatedProposal) {
+    // history DELETE DOKUMEN REVISI PROPOSAL by ID
+    await thesisHistoryRepository.createThesisHistory(
+      userId,
+      "Menghapus Dokumen Revisi Proposal",
+      group.id
+    );
+  }
 };
 
 //===================================================================
@@ -1499,6 +1758,9 @@ const deleteProposalRevisionDocumentById = async (id, userId) => {
 const approveProposalRevisionDocumentById = async (id, userId) => {
   // check proposal
   const proposal = await getProposalById(id);
+
+  // ambil informasi group untuk keperluan thesis history
+  const group = await groupRepository.findGroupByProposalId(id);
 
   // check exist proposal document
   if (
@@ -1559,6 +1821,16 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
         panelist_chairman_revision_approve_date:
           UpdatedProposal.panelist_chairman_revision_approve_date,
       };
+
+      if (UpdatedProposal) {
+        // history APPROVE DOKUMEN REVISI PROPOSAL by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Ketua Panelis Menyetujui Dokumen Revisi Proposal",
+          group.id
+        );
+      }
+
       return Data;
     }
   }
@@ -1593,6 +1865,16 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
         panelist_member_revision_approve_date:
           UpdatedProposal.panelist_member_revision_approve_date,
       };
+
+      if (UpdatedProposal) {
+        // history APPROVE DOKUMEN REVISI PROPOSAL by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Anggota Panelis Menyetujui Dokumen Revisi Proposal",
+          group.id
+        );
+      }
+
       return Data;
     }
   }
@@ -1627,6 +1909,16 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
         advisor_revision_approve_date:
           UpdatedProposal.advisor_revision_approve_date,
       };
+
+      if (UpdatedProposal) {
+        // history APPROVE DOKUMEN REVISI PROPOSAL by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Advisor Menyetujui Dokumen Revisi Proposal",
+          group.id
+        );
+      }
+
       return Data;
     }
   }
@@ -1639,6 +1931,9 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
 const rejectProposalRevisionDocumentById = async (id, userId) => {
   // check proposal
   const proposal = await getProposalById(id);
+
+  // ambil informasi group untuk keperluan thesis history
+  const group = await groupRepository.findGroupByProposalId(id);
 
   // check exist proposal document
   if (
@@ -1690,6 +1985,16 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
         panelist_chairman_revision_approve_date:
           UpdatedProposal.panelist_chairman_revision_approve_date,
       };
+
+      if (UpdatedProposal) {
+        // history REJECT DOKUMEN REVISI PROPOSAL by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Ketua Panelis Menolak Dokumen Revisi Proposal",
+          group.id
+        );
+      }
+
       return Data;
     }
   }
@@ -1713,6 +2018,15 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
         panelist_member_revision_approve_date:
           UpdatedProposal.panelist_member_revision_approve_date,
       };
+
+      if (UpdatedProposal) {
+        // history REJECT DOKUMEN REVISI PROPOSAL by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Anggota Panelis Menolak Dokumen Revisi Proposal",
+          group.id
+        );
+      }
       return Data;
     }
   }
@@ -1738,6 +2052,15 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
         advisor_revision_approve_date:
           UpdatedProposal.advisor_revision_approve_date,
       };
+
+      if (UpdatedProposal) {
+        // history REJECT DOKUMEN REVISI PROPOSAL by ID
+        await thesisHistoryRepository.createThesisHistory(
+          userId,
+          "Advisor Menolak Dokumen Revisi Proposal",
+          group.id
+        );
+      }
       return Data;
     }
   }
@@ -1761,6 +2084,7 @@ module.exports = {
   getProposalScheduleById,
 
   openAccessProposalReportById,
+  getOpenAccessProposalReportById,
   updateProposalAssessmentById,
   getAllProposalAssessmentById,
   updateProposalChangesById,

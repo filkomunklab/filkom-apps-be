@@ -143,6 +143,29 @@ const getAdvisorTeamById = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get thesis history by id
+// @route           GET /group/thesis_history/:id
+// @access          All
+const getAllThesisHistoryById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "thesis_history")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const group = await groupService.getAllThesisHistoryById(id);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
 // @description     Get committee list
 // @route           GET /group/committee-list
 // @access          DOSEN
@@ -280,6 +303,29 @@ const getSkripsiListAdvisor = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get history list advisor
+// @route           GET /group/history-list-advisor
+// @access          DOSEN
+const getHistoryListAdvisor = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "history_list_advisor")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getHistoryListAdvisor(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
 // @description     Get proposal list co-advisor
 // @route           GET /group/proposal-list-co-advisor
 // @access          DOSEN
@@ -317,6 +363,29 @@ const getSkripsiListCoAdvisor = async (req, res) => {
   try {
     const userId = req.user.user.id;
     const group = await groupService.getSkripsiListCoAdvisor(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get history list co-advisor
+// @route           GET /group/history-list-co-advisor
+// @access          DOSEN
+const getHistoryListCoAdvisor = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "history_list_co_advisor")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getHistoryListCoAdvisor(userId);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -372,6 +441,29 @@ const getSkripsiListChairman = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get history list chairman
+// @route           GET /group/history-list-chairman
+// @access          DOSEN
+const getHistoryListChairman = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "history_list_chairman")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getHistoryListChairman(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
 // @description     Get proposal list member
 // @route           GET /group/proposal-list-member
 // @access          DOSEN
@@ -409,6 +501,29 @@ const getSkripsiListMember = async (req, res) => {
   try {
     const userId = req.user.user.id;
     const group = await groupService.getSkripsiListMember(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get history list member
+// @route           GET /group/history-list-member
+// @access          DOSEN
+const getHistoryListMember = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "history_list_member")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getHistoryListMember(userId);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -512,6 +627,30 @@ const getSkripsiListKaprodi = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get history list kaprodi IF/SI
+// @route           GET /group/history-list-kaprodi
+// @access          DOSEN
+const getHistoryListKaprodi = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "history_list_kaprodi")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const userRole = req.user.user.role;
+    const group = await groupService.getHistoryListKaprodi(userId, userRole);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
 // @description     Get proposal list dekan
 // @route           GET /group/proposal-list-dekan
 // @access          DEKAN
@@ -551,6 +690,30 @@ const getSkripsiListDekan = async (req, res) => {
     const userId = req.user.user.id;
     const userRole = req.user.user.role;
     const group = await groupService.getSkripsiListDekan(userId, userRole);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get history list dekan
+// @route           GET /group/history-list-dekan
+// @access          DOSEN
+const getHistoryListDekan = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "history_list_dekan")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const userRole = req.user.user.role;
+    const group = await groupService.getHistoryListDekan(userId, userRole);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -662,6 +825,7 @@ module.exports = {
   getStudentListByClassroomId,
   getDosenList,
   getAdvisorTeamById,
+  getAllThesisHistoryById,
   getCommitteeList,
   getSubmissionListMK,
   getSubmissionListKaprodi,
@@ -685,4 +849,10 @@ module.exports = {
   getSkripsiListKaprodi,
   getSkripsiListDekan,
   getSkripsiListSekretaris,
+  getHistoryListAdvisor,
+  getHistoryListCoAdvisor,
+  getHistoryListChairman,
+  getHistoryListMember,
+  getHistoryListKaprodi,
+  getHistoryListDekan,
 };

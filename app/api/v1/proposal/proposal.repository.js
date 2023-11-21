@@ -667,6 +667,10 @@ const findProposalReportById = async (id) => {
       is_report_approve_by_panelist_chairman: true,
       is_report_approve_by_panelist_member: true,
       is_report_approve_by_advisor: true,
+      dekan_report_approve_date: true,
+      panelist_chairman_report_approve_date: true,
+      panelist_member_report_approve_date: true,
+      advisor_report_approve_date: true,
     },
   });
   return proposal;
@@ -683,10 +687,12 @@ const signChairmanProposalReportById = async (id) => {
     },
     data: {
       is_report_approve_by_panelist_chairman: true,
+      panelist_chairman_report_approve_date: new Date(),
     },
     select: {
       id: true,
       is_report_approve_by_panelist_chairman: true,
+      panelist_chairman_report_approve_date: true,
     },
   });
   return proposal;
@@ -703,10 +709,12 @@ const signMemberProposalReportById = async (id) => {
     },
     data: {
       is_report_approve_by_panelist_member: true,
+      panelist_member_report_approve_date: new Date(),
     },
     select: {
       id: true,
       is_report_approve_by_panelist_member: true,
+      panelist_member_report_approve_date: true,
     },
   });
   return proposal;
@@ -723,10 +731,12 @@ const signAdvisorProposalReportById = async (id) => {
     },
     data: {
       is_report_approve_by_advisor: true,
+      advisor_report_approve_date: new Date(),
     },
     select: {
       id: true,
       is_report_approve_by_advisor: true,
+      advisor_report_approve_date: true,
     },
   });
   return proposal;
@@ -743,10 +753,12 @@ const signDekanProposalReportById = async (id) => {
     },
     data: {
       is_report_approve_by_dekan: true,
+      dekan_report_approve_date: new Date(),
     },
     select: {
       id: true,
       is_report_approve_by_dekan: true,
+      dekan_report_approve_date: true,
     },
   });
   return proposal;
@@ -772,6 +784,7 @@ const updateProposalConclusionById = async (id, payload) => {
       changes_conclusion,
       assessment_conclution,
       is_pass,
+      is_report_open: false,
     },
     select: {
       id: true,
@@ -780,6 +793,7 @@ const updateProposalConclusionById = async (id, payload) => {
       assessment_conclution: true,
       is_pass: true,
       report_date: true,
+      is_report_open: true,
     },
   });
   return proposal;

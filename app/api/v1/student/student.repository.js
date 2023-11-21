@@ -23,10 +23,39 @@ const findStudentByNim = async (nim) => {
   return student;
 };
 
+const findStudentByEmployeeNik = async (nik) => {
+  try {
+    const student = await prisma.student.findMany({
+      where: {
+        employeeId: nik,
+      },
+    });
+    return student;
+  } catch (error) {
+    return error;
+  }
+};
+
 // create submission
 const insertStudent = async (payload) => {
-  const { nim, password, firstName, lastName, faculty, major, gender } =
-    payload;
+  const {
+    nim,
+    password,
+    firstName,
+    lastName,
+    faculty,
+    major,
+    gender,
+    guardianName,
+    guardianEducation,
+    guardianReligion,
+    guardianStatus,
+    familyRelation,
+    guardianEmail,
+    guardianPhoneNo,
+    guardianAddress,
+    // employeeId,
+  } = payload;
   const student = await prisma.student.create({
     data: {
       nim,
@@ -36,6 +65,15 @@ const insertStudent = async (payload) => {
       faculty,
       major,
       gender,
+      guardianName,
+      guardianEducation,
+      guardianReligion,
+      guardianStatus,
+      familyRelation,
+      guardianEmail,
+      guardianPhoneNo,
+      guardianAddress,
+      // employeeId,
     },
   });
 
@@ -68,11 +106,76 @@ const findStudentByToken = async (token) => {
   return student;
 };
 
+const findBiodataStudent = async (nim, payload) => {
+  const {
+    bloodType,
+    studentEmail,
+    phoneNo,
+    AreaOfConcentration,
+    highSchoolGrad,
+    currentAddress,
+    guardianEducation,
+    guardianStatus,
+    guardianEmail,
+    guardianPhoneNo,
+  } = payload;
+  const student = await prisma.student.update({
+    where: {
+      nim,
+    },
+    data: {
+      bloodType,
+      studentEmail,
+      phoneNo,
+      AreaOfConcentration,
+      highSchoolGrad,
+      currentAddress,
+      guardianEducation,
+      guardianStatus,
+      guardianEmail,
+      guardianPhoneNo,
+    },
+    include: {
+      Employee: {
+        select: {
+          firstName: true,
+          lastName: true,
+          phoneNum: true,
+          email: true,
+          Address: true,
+        },
+      },
+    },
+  });
+  return student;
+};
+
+const getAllStudent = async () => {
+  const students = await prisma.student.findMany({
+    orderBy: {
+      firstName: "asc",
+    },
+  });
+  return students;
+};
+
+const updateByNim = async (nim, payload) => {
+  await prisma.student.update({
+    where: {
+      nim,
+    },
+    data: payload,
+  });
+};
+
 module.exports = {
   findStudentById,
   findStudentByNim,
-
   insertStudent,
   updateStudent,
   findStudentByToken,
+  findBiodataStudent,
+  findStudentByEmployeeNik,
+  getAllStudent,
+  updateByNim,
 };
