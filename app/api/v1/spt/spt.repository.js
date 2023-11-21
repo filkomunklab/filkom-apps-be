@@ -319,7 +319,8 @@ const checkFormSPT = async (studentId) => {
 // };
 const patchStudentStatus = async (nim, status) => {
   try {
-    let updateStatus = { status: status };
+    const currentDate = moment();
+    let updateStatus = { status: status, updatedAt: currentDate };
 
     // Tambahkan logika untuk mengisi graduate_year jika status adalah "GRADUATE"
     if (status === "GRADUATE") {

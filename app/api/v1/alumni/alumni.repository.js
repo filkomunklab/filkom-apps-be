@@ -69,7 +69,7 @@ const alumniTS = async (search_query) => {
       },
     },
     orderBy: {
-      createdAt: "desc",
+      updatedAt: "asc",
     },
   });
 

@@ -16,7 +16,7 @@ const auth = async (req, res, next) => {
     }
 
     req.user = jwt.verify(token, secretKey);
-    
+    // console.log(req.user);
     const isAdmin = await adminRepository.findAdminByToken(token);
     const isEmployee = await employeeRepository.findEmployeeByToken(token);
     const isStudent = await studentRepository.findStudentByToken(token);

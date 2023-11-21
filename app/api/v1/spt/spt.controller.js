@@ -2,8 +2,17 @@
 //Biasanya juga handle validasi body
 
 const sptService = require("./spt.service");
+const { policyFor } = require("../policy");
 
 const getListSPT = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "calon_tamatan_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  // console.log("huruf A", policy.can("read", "calonTamatan_list"));
   try {
     const search_query = req.query.search_query || "";
 
@@ -46,6 +55,13 @@ const getSPTByNIM = async (req, res) => {
 };
 
 const submitSPT = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("create", "SPT")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const dataSPT = req.body;
     const spt = await sptService.createSPT(dataSPT);
@@ -58,6 +74,13 @@ const submitSPT = async (req, res) => {
 };
 
 const patchStatusByFak = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "status_SPT")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const id = req.params.id;
     const status = req.query.status;
@@ -83,6 +106,13 @@ const listApprovedSPTbyFak = async (req, res) => {
 };
 
 const patchStatusByReg = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "status_SPT")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const id = req.params.id;
     const status = req.query.status;
@@ -138,6 +168,13 @@ const checkAvSPT = async (req, res) => {
 
 //change student status
 const changeStudentStatus = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "status_mahasiswa")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const nim = req.params.nim;
     const status = req.query.status;

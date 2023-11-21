@@ -1,4 +1,5 @@
 const alumniService = require("./alumni.service");
+const { policyFor } = require("../policy");
 
 //daftar alumni
 const getAlumniList = async (req, res) => {
@@ -14,6 +15,13 @@ const getAlumniList = async (req, res) => {
 
 //daftar alumni --> operator get
 const alumniStatusTS = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "alumni_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   const search_query = req.query.search_query || "";
   try {
     const alumniOP = await alumniService.alumniTS(search_query);
@@ -46,6 +54,13 @@ const filterAlumniBy = async (req, res) => {
 
 //send email
 const sendBroadcastEmail = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("broadcastEmail", "alumni_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const recipientEmails = req.body.recipientEmails;
     await alumniService.sendEmail(recipientEmails);
@@ -90,6 +105,13 @@ const getAlumniHasTracerStudyByOperator = async (req, res) => {
 };
 
 const getAllAlumni = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "alumni_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const search_query = req.query.search_query || "";
     // const page = parseInt(req.query.page) - 1 || 0;
@@ -115,6 +137,13 @@ const getAllAlumni = async (req, res) => {
 };
 
 const broadcastWAChat = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("broadcastWa", "alumni_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const { phoneNums } = req.body;
     const pesan = `Halo Alumnus UNKLAB!.

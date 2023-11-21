@@ -1,4 +1,5 @@
 const tsService = require("./ts.service");
+const { policyFor } = require("../policy");
 
 const getListTS = async (req, res) => {
   try {
@@ -12,6 +13,13 @@ const getListTS = async (req, res) => {
 };
 
 const submitTS = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("create", "TS")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const dataTS = req.body;
     const tracerStudy = await tsService.createTS(dataTS);
@@ -28,6 +36,13 @@ const submitTS = async (req, res) => {
 
 //export database
 const exportTStoExcel = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("export", "alumni_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   const filename = "tracerStudy.xlsx";
 
   try {
