@@ -84,10 +84,8 @@ const findCertificateByCategory = async (category, nik) => {
         },
       },
     });
-    console.log(certificate);
     return certificate;
   } catch (error) {
-    console.log(error);
     return error;
   }
 };
@@ -121,9 +119,64 @@ const insertCertificate = async (payload, nim, path) => {
   }
 };
 
+const findStudentCertificateHistory = async (nim) => {
+  try {
+    const certificate = await prisma.transaction_Certificate.findMany({
+      where: {
+        studentId: nim,
+      },
+      include: {
+        Certificate: {
+          select: {
+            title: true,
+          },
+        },
+        Student: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    return certificate;
+  } catch (error) {
+    return error;
+  }
+};
+
+const findAdvisorCertificateHistory = async (nik) => {
+  try {
+    const certificate = await prisma.transaction_Certificate.findMany({
+      where: {
+        employeeId: nik,
+      },
+      include: {
+        Certificate: {
+          select: {
+            title: true,
+          },
+        },
+        Student: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    return certificate;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
 module.exports = {
   findCertificate,
   insertCertificate,
   findOneCertificate,
   findCertificateByCategory,
+  findStudentCertificateHistory,
+  findAdvisorCertificateHistory,
 };
