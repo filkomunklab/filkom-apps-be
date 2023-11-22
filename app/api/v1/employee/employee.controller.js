@@ -4,6 +4,7 @@
 const employeeService = require("./employee.service");
 const { policyFor } = require("../policy");
 const { subject } = require("@casl/ability");
+const { message } = require("../../../database");
 
 const getAllEmployees = async (req, res) => {
   const policy = policyFor(req.user);
@@ -38,13 +39,13 @@ const getEmployeeById = async (req, res) => {
 };
 
 const createEmployee = async (req, res) => {
-  const policy = policyFor(req.user);
-  if (!policy.can("create", "Employee")) {
-    return res.status(401).send({
-      status: "FAILED",
-      data: { error: "You don't have permission to perform this action" },
-    });
-  }
+  // const policy = policyFor(req.user);
+  // if (!policy.can("create", "Employee")) {
+  //   return res.status(401).send({
+  //     status: "FAILED",
+  //     data: { error: "You don't have permission to perform this action" },
+  //   });
+  // }
 
   const payload = req.body;
   const employee = await employeeService.createEmployee(payload);
@@ -130,6 +131,30 @@ const updateEmployeeById = async (req, res) => {
   }
 };
 
+const viewDosenByMajor = async (req, res) => {
+  const { major } = req.params;
+  try {
+    const employee = await employeeService.getEmployeeByMajor(major);
+    res.status(201).send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const viewDosenDetailProfile = async (req, res) => {
+  const { nik } = req.params;
+  try {
+    const employee = await employeeService.getDosenDetailProfile(nik);
+    res.status(201).send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -137,4 +162,6 @@ module.exports = {
   deleteEmployeeById,
   patchEmployeeById,
   updateEmployeeById,
+  viewDosenByMajor,
+  viewDosenDetailProfile,
 };
