@@ -40,7 +40,30 @@ const getAllCurriculum = async (req, res) => {
   }
 };
 
+const deleteCurriculum = async (req, res) => {
+  try {
+    const curriculum_id = req.params.curriculum_id;
+    console.log("ini curriculum id: ", curriculum_id);
+
+    const curriculum =
+      await curriculumService.deleteCurriculumWithSubjectByCurriculumId(
+        curriculum_id
+      );
+
+    res.status(200).send({
+      status: "OK",
+      data: curriculum,
+    });
+  } catch (error) {
+    res.status(error?.status || 500).send({
+      status: "FAILED",
+      data: { error: error?.message || error },
+    });
+  }
+};
+
 module.exports = {
   createCurriculumWithItsSubject,
   getAllCurriculum,
+  deleteCurriculum,
 };

@@ -1,4 +1,3 @@
-const excelToJson = require("convert-excel-to-json");
 const curriculumRepository = require("./curriculum.repository");
 const subjectRepository = require("../subject/subject.repository");
 
@@ -29,7 +28,7 @@ const createCurriculumWithItsSubjects = async (payload) => {
       subjectData
     );
 
-    console.log("sukses subject: ", subject);
+    return curriculum;
   } catch (error) {
     throw new Error(error.message);
   }
@@ -46,7 +45,25 @@ const GetAllCurriculum = async () => {
   }
 };
 
+const deleteCurriculumWithSubjectByCurriculumId = async (curriculum_id) => {
+  try {
+    // delete subject
+    const subject = await subjectRepository.deleteAllSubjectByCurriculumId(
+      curriculum_id
+    );
+
+    // delete curriculum
+    const curriculum =
+      await curriculumRepository.deleteCurriculumByIdCurriculum(curriculum_id);
+
+    return curriculum;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   createCurriculumWithItsSubjects,
   GetAllCurriculum,
+  deleteCurriculumWithSubjectByCurriculumId,
 };

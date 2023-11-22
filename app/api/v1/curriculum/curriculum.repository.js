@@ -33,7 +33,26 @@ const selectAllCurriculum = async () => {
   }
 };
 
+// @description     Delete curriculum
+// @route           Delete /curriculum/:curriculum_id
+// @access
+const deleteCurriculumByIdCurriculum = async (curriculum_id) => {
+  try {
+    const curriculum = await prisma.curriculum.delete({
+      where: {
+        id: curriculum_id,
+      },
+    });
+
+    return curriculum;
+  } catch (error) {
+    console.log("ini eror curriculum delete: ", error.message);
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   insertCurriculum,
   selectAllCurriculum,
+  deleteCurriculumByIdCurriculum,
 };

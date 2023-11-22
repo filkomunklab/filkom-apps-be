@@ -14,4 +14,12 @@ router.post("/curriculum", curriculumController.createCurriculumWithItsSubject);
 // @access
 router.get("/curriculum", curriculumController.getAllCurriculum);
 
+//===================================================================
+// @description     Delete Curriculum
+// @access
+router.delete(
+  "/curriculums/:curriculum_id",
+  curriculumController.deleteCurriculum
+);
+
 module.exports = router;
