@@ -146,12 +146,11 @@ const broadcastWAChat = async (req, res) => {
   }
   try {
     const { phoneNums } = req.body;
-    const pesan = `Halo Alumnus UNKLAB!.
-    Perkenalkan, Kami dari Surveyor Universitas Klabat (UNKLAB), ingin mengirimkan kuesioner untuk pelaksanaan Tracer Study Tahun 2023, dalam hal pemeringkatan kampus kami.
+    const pesan = `Halo Alumnus UNKLAB!. Perkenalkan, Kami dari Surveyor Universitas Klabat (UNKLAB), ingin mengirimkan kuesioner untuk pelaksanaan Tracer Study Tahun 2023, dalam hal pemeringkatan kampus kami.
     Jika berkenan dan kalau ada waktu kosong, kiranya dapat membantu kami untuk mengisi kuesioner yang akan kami kirimkan, paling lambat sebelum tanggal 14 September 2023. 
     
     Untuk pengisian kuesioner dapat mengakses link website Unklab dibawah ini:
-    https://www.unklab.ac.id/tracer-study/ //ganti link
+    https://development-filkom-apps-fe.vercel.app/
     
     Salam hangat,😊🙏
     Tim Tracer Study
