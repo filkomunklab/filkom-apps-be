@@ -12,7 +12,7 @@ const employeeRoutes = require("./app/api/v1/employee/employee.routes");
 
 // dokumentasi
 const swaggerUi = require("swagger-ui-express");
-const swaggerSpecs = require("./public/doc/filkom-api-doc.json");
+const swaggerSpecs = require("../filkom-api-doc.json");
 
 // Middleware untuk menampilkan Spesifikasi API dengan Swagger UI
 app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
