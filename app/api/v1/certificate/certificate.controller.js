@@ -1,4 +1,3 @@
-const { certificate } = require("../../../database");
 const certificateService = require("./certificate.service");
 
 const viewAllStudentCertificate = async (req, res) => {
