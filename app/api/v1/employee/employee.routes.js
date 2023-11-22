@@ -12,5 +12,7 @@ router.post("/employee", employeeController.createEmployee);
 router.delete("/employee/:id", employeeController.deleteEmployeeById);
 router.patch("/employee/:id", employeeController.patchEmployeeById);
 router.put("/employee/:id", employeeController.updateEmployeeById);
+router.get("/employee/dosen/:major", employeeController.viewDosenByMajor);
+router.get("/employee/profile/:nik", employeeController.viewDosenDetailProfile);
 
 module.exports = router;

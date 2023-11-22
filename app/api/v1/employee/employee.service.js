@@ -44,10 +44,30 @@ const updateOrPatchEmployeeById = async (id, payload) => {
   return employee;
 };
 
+const getEmployeeByMajor = async (major) => {
+  try {
+    const employee = await employeeRepository.findEmployeeByMajor(major);
+    return employee;
+  } catch (error) {
+    return error;
+  }
+};
+
+const getDosenDetailProfile = async (nik) => {
+  try {
+    const employee = await employeeRepository.findDosenDetailProfile(nik);
+    return employee;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
   createEmployee,
   deleteEmployeeById,
   updateOrPatchEmployeeById,
+  getEmployeeByMajor,
+  getDosenDetailProfile,
 };

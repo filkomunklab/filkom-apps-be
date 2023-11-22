@@ -27,7 +27,16 @@ const findEmployeeByToken = async (token) => {
 };
 
 const insertEmployee = async (payload) => {
-  const { nik, password, firstName, lastName, email, Address, phoneNum } = payload;
+  const {
+    nik,
+    password,
+    firstName,
+    lastName,
+    email,
+    Address,
+    phoneNum,
+    major,
+  } = payload;
   const employee = await prisma.employee.create({
     data: {
       nik,
@@ -37,6 +46,7 @@ const insertEmployee = async (payload) => {
       email,
       Address,
       phoneNum,
+      major,
     },
   });
   return employee;
@@ -79,6 +89,45 @@ const findEmployeeByNIK = async (nik) => {
   return employee;
 };
 
+const findEmployeeByMajor = async (major) => {
+  try {
+    const employee = await prisma.employee.findMany({
+      where: {
+        major,
+      },
+    });
+    return employee;
+  } catch (error) {
+    return error;
+  }
+};
+
+//Dosen biodata
+const findDosenDetailProfile = async (nik) => {
+  try {
+    const employee = await prisma.employee.findUnique({
+      where: {
+        nik,
+      },
+      include: {
+        student: {
+          select: {
+            nim: true,
+            firstName: true,
+            lastName: true,
+            major: true,
+            arrival_Year: true,
+            status: true,
+          },
+        },
+      },
+    });
+    return employee;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   findEmployees,
   findEmployeeById,
@@ -87,4 +136,6 @@ module.exports = {
   deleteEmployee,
   updateEmployee,
   findEmployeeByNIK,
+  findEmployeeByMajor,
+  findDosenDetailProfile,
 };
