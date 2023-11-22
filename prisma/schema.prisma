@@ -87,6 +87,7 @@ model Student {
   MaritalStatus       String?
   studentEmail        String?               @unique
   curriculum          String?
+  arrival_Year        String?
   highSchoolGrad      String?
   currentAddress      String?
   status              StudentStatus         @default(ACTIVE)
