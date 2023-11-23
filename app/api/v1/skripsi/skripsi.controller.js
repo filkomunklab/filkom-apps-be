@@ -804,9 +804,16 @@ const rejectSkripsiRevisionDocumentById = async (req, res) => {
   try {
     const id = req.params.id;
     const userId = req.user.user.id;
+    const payload = req.body;
+    if (!payload.comment) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
     const skripsi = await skripsiService.rejectSkripsiRevisionDocumentById(
       id,
-      userId
+      userId,
+      payload
     );
     res.send({ status: "OK", data: skripsi });
   } catch (error) {

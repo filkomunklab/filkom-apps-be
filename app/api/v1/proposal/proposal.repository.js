@@ -535,6 +535,8 @@ const findAllProposalSchedule = async () => {
     select: {
       id: true,
       advisor: true,
+      co_advisor1: true,
+      co_advisor2: true,
       panelist_chairman: true,
       panelist_member: true,
       start_defence: true,
@@ -623,6 +625,8 @@ const findProposalScheduleById = async (id) => {
       panelist_chairman: true,
       panelist_member: true,
       advisor: true,
+      co_advisor1: true,
+      co_advisor2: true,
       start_defence: true,
       end_defence: true,
       defence_room: true,
@@ -924,6 +928,9 @@ const findProposalRevisionDocumentById = async (id) => {
       is_revision_approve_by_panelist_chairman: true,
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
+      panelist_chairman_revision_comment: true,
+      panelist_member_revision_comment: true,
+      advisor_revision_comment: true,
     },
   });
   return proposal;
@@ -1041,6 +1048,7 @@ const approveProposalRevisionDocumentByChairmanById = async (id) => {
     data: {
       is_revision_approve_by_panelist_chairman: "Approve",
       panelist_chairman_revision_approve_date: new Date(),
+      panelist_chairman_revision_comment: null,
     },
     select: {
       id: true,
@@ -1048,6 +1056,7 @@ const approveProposalRevisionDocumentByChairmanById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       panelist_chairman_revision_approve_date: true,
+      panelist_chairman_revision_comment: true,
     },
   });
   return proposal;
@@ -1065,6 +1074,7 @@ const approveProposalRevisionDocumentByMemberById = async (id) => {
     data: {
       is_revision_approve_by_panelist_member: "Approve",
       panelist_member_revision_approve_date: new Date(),
+      panelist_member_revision_comment: null,
     },
     select: {
       id: true,
@@ -1072,6 +1082,7 @@ const approveProposalRevisionDocumentByMemberById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       panelist_member_revision_approve_date: true,
+      panelist_member_revision_comment: true,
     },
   });
   return proposal;
@@ -1089,6 +1100,7 @@ const approveProposalRevisionDocumentByAdvisorById = async (id) => {
     data: {
       is_revision_approve_by_advisor: "Approve",
       advisor_revision_approve_date: new Date(),
+      advisor_revision_comment: null,
     },
     select: {
       id: true,
@@ -1096,6 +1108,7 @@ const approveProposalRevisionDocumentByAdvisorById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       advisor_revision_approve_date: true,
+      advisor_revision_comment: true,
     },
   });
   return proposal;
@@ -1105,7 +1118,8 @@ const approveProposalRevisionDocumentByAdvisorById = async (id) => {
 // @description     Reject dokumen revisi proposal by chairman
 // @route           PUT /proposal/proposal-revision-document/reject/:id
 // @access          DOSEN
-const rejectProposalRevisionDocumentByChairmanById = async (id) => {
+const rejectProposalRevisionDocumentByChairmanById = async (id, payload) => {
+  const { comment } = payload;
   const proposal = await prisma.proposal.update({
     where: {
       id,
@@ -1113,6 +1127,7 @@ const rejectProposalRevisionDocumentByChairmanById = async (id) => {
     data: {
       is_revision_approve_by_panelist_chairman: "Rejected",
       panelist_chairman_revision_approve_date: new Date(),
+      panelist_chairman_revision_comment: comment,
     },
     select: {
       id: true,
@@ -1120,6 +1135,73 @@ const rejectProposalRevisionDocumentByChairmanById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       panelist_chairman_revision_approve_date: true,
+      panelist_chairman_revision_comment: true,
+    },
+  });
+  return proposal;
+};
+
+//===============================(2)====================================
+// @description     Reject dokumen revisi proposal by member
+// @route           PUT /proposal/proposal-revision-document/reject/:id
+// @access          DOSEN
+const rejectProposalRevisionDocumentByMemberById = async (id, payload) => {
+  const { comment } = payload;
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_panelist_member: "Rejected",
+      panelist_member_revision_approve_date: new Date(),
+      panelist_member_revision_comment: comment,
+    },
+    select: {
+      id: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+      panelist_member_revision_approve_date: true,
+      panelist_member_revision_comment: true,
+    },
+  });
+  return proposal;
+};
+
+//===============================(3)====================================
+// @description     Reject dokumen revisi proposal by member
+// @route           PUT /proposal/proposal-revision-document/reject/:id
+// @access          DOSEN
+const rejectProposalRevisionDocumentByAdvisorById = async (id, payload) => {
+  const { comment } = payload;
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      is_revision_approve_by_advisor: "Rejected",
+      advisor_revision_approve_date: new Date(),
+      advisor_revision_comment: comment,
+    },
+    select: {
+      id: true,
+      is_revision_approve_by_panelist_chairman: true,
+      is_revision_approve_by_panelist_member: true,
+      is_revision_approve_by_advisor: true,
+      advisor_revision_approve_date: true,
+      advisor_revision_comment: true,
+    },
+  });
+  return proposal;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal by advisor id
+// @used            Group,
+const findAllProposalByAdvisorId = async (userId) => {
+  const proposal = await prisma.proposal.findMany({
+    where: {
+      advisor_id: userId,
     },
   });
   return proposal;
@@ -1138,66 +1220,6 @@ const updateProposalApproveDate = async (id) => {
     select: {
       id: true,
       approve_date: true,
-    },
-  });
-  return proposal;
-};
-
-//===============================(2)====================================
-// @description     Reject dokumen revisi proposal by member
-// @route           PUT /proposal/proposal-revision-document/reject/:id
-// @access          DOSEN
-const rejectProposalRevisionDocumentByMemberById = async (id) => {
-  const proposal = await prisma.proposal.update({
-    where: {
-      id,
-    },
-    data: {
-      is_revision_approve_by_panelist_member: "Rejected",
-      panelist_member_revision_approve_date: new Date(),
-    },
-    select: {
-      id: true,
-      is_revision_approve_by_panelist_chairman: true,
-      is_revision_approve_by_panelist_member: true,
-      is_revision_approve_by_advisor: true,
-      panelist_member_revision_approve_date: true,
-    },
-  });
-  return proposal;
-};
-
-//===============================(3)====================================
-// @description     Reject dokumen revisi proposal by member
-// @route           PUT /proposal/proposal-revision-document/reject/:id
-// @access          DOSEN
-const rejectProposalRevisionDocumentByAdvisorById = async (id) => {
-  const proposal = await prisma.proposal.update({
-    where: {
-      id,
-    },
-    data: {
-      is_revision_approve_by_advisor: "Rejected",
-      advisor_revision_approve_date: new Date(),
-    },
-    select: {
-      id: true,
-      is_revision_approve_by_panelist_chairman: true,
-      is_revision_approve_by_panelist_member: true,
-      is_revision_approve_by_advisor: true,
-      advisor_revision_approve_date: true,
-    },
-  });
-  return proposal;
-};
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @description     Get all proposal by advisor id
-// @used            Group,
-const findAllProposalByAdvisorId = async (userId) => {
-  const proposal = await prisma.proposal.findMany({
-    where: {
-      advisor_id: userId,
     },
   });
   return proposal;

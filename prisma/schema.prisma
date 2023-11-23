@@ -73,47 +73,49 @@ model Employee {
 }
 
 model Student {
-  id                  String                @id @default(uuid())
-  reg_num             String?               @unique
-  nim                 String                @unique
-  password            String
-  firstName           String
-  lastName            String?
-  dateOfBirth         DateTime?
-  gender              gender
-  religion            String?
-  bloodType           String?
-  marriageStatus      String?
-  studentEmail        String?               @unique
-  curriculum          String?
-  highSchoolGrad      String?
-  currentAdresss      String?
-  status              StudentStatus         @default(ACTIVE)
-  personalEmail       String?               @unique
-  faculty             String?
-  major               Major?
-  graduate_year       String?
-  address             String?
-  phoneNo             String?
-  token               String?               @unique
-  guardianName        String?
-  guardianEducation   String?
-  guardianReligion    String?
-  guardianStatus      String?
-  familyRelation      String?
-  guardianEmail       String?
-  guardianPhoneNo     String?
-  guardianAddress     String?
-  createdBy           String?
-  updatedBy           String?
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime?
-  proposal_student    Proposal_Student[]    @relation("ProposalStudent")
-  skripsi_student     Skripsi_Student[]     @relation("SkripsiStudent")
-  group_student       Group_Student[]       @relation("StudentMember")
-  proposal_assessment Proposal_Assessment[] @relation("Student")
-  skripsi_assessment  Skripsi_Assessment[]  @relation("Student")
-  FormSPT             FormSPT[]
+  id                        String                @id @default(uuid())
+  reg_num                   String?               @unique
+  nim                       String                @unique
+  password                  String
+  firstName                 String
+  lastName                  String?
+  dateOfBirth               DateTime?
+  gender                    gender
+  religion                  String?
+  bloodType                 String?
+  marriageStatus            String?
+  studentEmail              String?               @unique
+  curriculum                String?
+  highSchoolGrad            String?
+  currentAdresss            String?
+  status                    StudentStatus         @default(ACTIVE)
+  personalEmail             String?               @unique
+  faculty                   String?
+  major                     Major?
+  graduate_year             String?
+  address                   String?
+  phoneNo                   String?
+  token                     String?               @unique
+  guardianName              String?
+  guardianEducation         String?
+  guardianReligion          String?
+  guardianStatus            String?
+  familyRelation            String?
+  guardianEmail             String?
+  guardianPhoneNo           String?
+  guardianAddress           String?
+  createdBy                 String?
+  updatedBy                 String?
+  createdAt                 DateTime              @default(now())
+  updatedAt                 DateTime?
+  proposal_student          Proposal_Student[]    @relation("ProposalStudent")
+  skripsi_student           Skripsi_Student[]     @relation("SkripsiStudent")
+  group_student             Group_Student[]       @relation("StudentMember")
+  proposal_assessment       Proposal_Assessment[] @relation("Student")
+  proposal_conclusion_value Proposal_Conclusion[] @relation("Student")
+  skripsi_assessment        Skripsi_Assessment[]  @relation("Student")
+  skripsi_conclusion_value  Skripsi_Conclusion[]  @relation("Student")
+  FormSPT                   FormSPT[]
 
   consultation Consultation[]
   preRegis     PreRegistration[]
@@ -397,10 +399,6 @@ model Proposal {
   panelist_chairman_report_approve_date    DateTime?
   panelist_member_report_approve_date      DateTime?
   advisor_report_approve_date              DateTime?
-  exam_conclution                          Exam_Conclution?
-  changes_conclusion                       Changes_Conclusion?
-  assessment_conclution                    String?
-  is_pass                                  Pass?
   report_date                              String?
   file_name_revision                       String?
   upload_date_revision                     DateTime?
@@ -412,10 +410,14 @@ model Proposal {
   panelist_chairman_revision_approve_date  DateTime?
   panelist_member_revision_approve_date    DateTime?
   advisor_revision_approve_date            DateTime?
+  panelist_chairman_revision_comment       String?
+  panelist_member_revision_comment         String?
+  advisor_revision_comment                 String?
   approve_date                             DateTime?
   group                                    Group?                @relation("Proposal")
   assessment                               Proposal_Assessment[] @relation("Assessment")
   changes                                  Proposal_Changes[]    @relation("Changes")
+  conclusion_value                         Proposal_Conclusion[] @relation("Conclusion_Value")
 }
 
 model Skripsi {
@@ -463,10 +465,6 @@ model Skripsi {
   panelist_chairman_report_approve_date    DateTime?
   panelist_member_report_approve_date      DateTime?
   advisor_report_approve_date              DateTime?
-  exam_conclution                          Exam_Conclution?
-  changes_conclusion                       Changes_Conclusion?
-  assessment_conclution                    String?
-  is_pass                                  Pass?
   report_date                              String?
   file_name_revision                       String?
   upload_date_revision                     DateTime?
@@ -478,6 +476,9 @@ model Skripsi {
   panelist_chairman_revision_approve_date  DateTime?
   panelist_member_revision_approve_date    DateTime?
   advisor_revision_approve_date            DateTime?
+  panelist_chairman_revision_comment       String?
+  panelist_member_revision_comment         String?
+  advisor_revision_comment                 String?
   approve_date                             DateTime?
   file_name_hki                            String?
   file_name_journal                        String?
@@ -496,6 +497,7 @@ model Skripsi {
   group                                    Group?               @relation("Skripsi")
   assessment                               Skripsi_Assessment[] @relation("Assessment")
   changes                                  Skripsi_Changes[]    @relation("Changes")
+  conclusion_value                         Skripsi_Conclusion[] @relation("Conclusion_Value")
 }
 
 model Proposal_Assessment {
@@ -526,7 +528,10 @@ model Proposal_Changes {
   proposal_id String
   dosen       Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id    String
-  changes     String?
+  bab1        String?
+  bab2        String?
+  bab3        String?
+  other       String?
 }
 
 model Skripsi_Changes {
@@ -536,6 +541,36 @@ model Skripsi_Changes {
   dosen      Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id   String
   changes    String?
+  bab1       String?
+  bab2       String?
+  bab3       String?
+  bab4       String?
+  bab5       String?
+  other      String?
+}
+
+model Proposal_Conclusion {
+  id                    String              @id @default(uuid())
+  proposal              Proposal            @relation("Conclusion_Value", fields: [proposal_id], references: [id])
+  proposal_id           String
+  student               Student             @relation("Student", fields: [student_id], references: [id])
+  student_id            String
+  exam_conclution       Exam_Conclution?
+  changes_conclusion    Changes_Conclusion?
+  assessment_conclution String?
+  is_pass               Pass?
+}
+
+model Skripsi_Conclusion {
+  id                    String              @id @default(uuid())
+  skripsi               Skripsi             @relation("Conclusion_Value", fields: [skripsi_id], references: [id])
+  skripsi_id            String
+  student               Student             @relation("Student", fields: [student_id], references: [id])
+  student_id            String
+  exam_conclution       Exam_Conclution?
+  changes_conclusion    Changes_Conclusion?
+  assessment_conclution String?
+  is_pass               Pass?
 }
 
 model Thesis_Consultation {

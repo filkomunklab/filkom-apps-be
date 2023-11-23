@@ -306,10 +306,6 @@ CREATE TABLE "Proposal" (
     "panelist_chairman_report_approve_date" TIMESTAMP(3),
     "panelist_member_report_approve_date" TIMESTAMP(3),
     "advisor_report_approve_date" TIMESTAMP(3),
-    "exam_conclution" "Exam_Conclution",
-    "changes_conclusion" "Changes_Conclusion",
-    "assessment_conclution" TEXT,
-    "is_pass" "Pass",
     "report_date" TEXT,
     "file_name_revision" TEXT,
     "upload_date_revision" TIMESTAMP(3),
@@ -321,6 +317,9 @@ CREATE TABLE "Proposal" (
     "panelist_chairman_revision_approve_date" TIMESTAMP(3),
     "panelist_member_revision_approve_date" TIMESTAMP(3),
     "advisor_revision_approve_date" TIMESTAMP(3),
+    "panelist_chairman_revision_comment" TEXT,
+    "panelist_member_revision_comment" TEXT,
+    "advisor_revision_comment" TEXT,
     "approve_date" TIMESTAMP(3),
 
     CONSTRAINT "Proposal_pkey" PRIMARY KEY ("id")
@@ -366,10 +365,6 @@ CREATE TABLE "Skripsi" (
     "panelist_chairman_report_approve_date" TIMESTAMP(3),
     "panelist_member_report_approve_date" TIMESTAMP(3),
     "advisor_report_approve_date" TIMESTAMP(3),
-    "exam_conclution" "Exam_Conclution",
-    "changes_conclusion" "Changes_Conclusion",
-    "assessment_conclution" TEXT,
-    "is_pass" "Pass",
     "report_date" TEXT,
     "file_name_revision" TEXT,
     "upload_date_revision" TIMESTAMP(3),
@@ -381,6 +376,9 @@ CREATE TABLE "Skripsi" (
     "panelist_chairman_revision_approve_date" TIMESTAMP(3),
     "panelist_member_revision_approve_date" TIMESTAMP(3),
     "advisor_revision_approve_date" TIMESTAMP(3),
+    "panelist_chairman_revision_comment" TEXT,
+    "panelist_member_revision_comment" TEXT,
+    "advisor_revision_comment" TEXT,
     "approve_date" TIMESTAMP(3),
     "file_name_hki" TEXT,
     "file_name_journal" TEXT,
@@ -427,7 +425,10 @@ CREATE TABLE "Proposal_Changes" (
     "id" TEXT NOT NULL,
     "proposal_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
-    "changes" TEXT,
+    "bab1" TEXT,
+    "bab2" TEXT,
+    "bab3" TEXT,
+    "other" TEXT,
 
     CONSTRAINT "Proposal_Changes_pkey" PRIMARY KEY ("id")
 );
@@ -438,8 +439,40 @@ CREATE TABLE "Skripsi_Changes" (
     "skripsi_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
     "changes" TEXT,
+    "bab1" TEXT,
+    "bab2" TEXT,
+    "bab3" TEXT,
+    "bab4" TEXT,
+    "bab5" TEXT,
+    "other" TEXT,
 
     CONSTRAINT "Skripsi_Changes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Proposal_Conclusion" (
+    "id" TEXT NOT NULL,
+    "proposal_id" TEXT NOT NULL,
+    "student_id" TEXT NOT NULL,
+    "exam_conclution" "Exam_Conclution",
+    "changes_conclusion" "Changes_Conclusion",
+    "assessment_conclution" TEXT,
+    "is_pass" "Pass",
+
+    CONSTRAINT "Proposal_Conclusion_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Skripsi_Conclusion" (
+    "id" TEXT NOT NULL,
+    "skripsi_id" TEXT NOT NULL,
+    "student_id" TEXT NOT NULL,
+    "exam_conclution" "Exam_Conclution",
+    "changes_conclusion" "Changes_Conclusion",
+    "assessment_conclution" TEXT,
+    "is_pass" "Pass",
+
+    CONSTRAINT "Skripsi_Conclusion_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -589,6 +622,18 @@ ALTER TABLE "Skripsi_Changes" ADD CONSTRAINT "Skripsi_Changes_skripsi_id_fkey" F
 
 -- AddForeignKey
 ALTER TABLE "Skripsi_Changes" ADD CONSTRAINT "Skripsi_Changes_dosen_id_fkey" FOREIGN KEY ("dosen_id") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Proposal_Conclusion" ADD CONSTRAINT "Proposal_Conclusion_proposal_id_fkey" FOREIGN KEY ("proposal_id") REFERENCES "Proposal"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Proposal_Conclusion" ADD CONSTRAINT "Proposal_Conclusion_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi_Conclusion" ADD CONSTRAINT "Skripsi_Conclusion_skripsi_id_fkey" FOREIGN KEY ("skripsi_id") REFERENCES "Skripsi"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Skripsi_Conclusion" ADD CONSTRAINT "Skripsi_Conclusion_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Thesis_Consultation" ADD CONSTRAINT "Thesis_Consultation_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

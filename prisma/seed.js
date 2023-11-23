@@ -4017,7 +4017,7 @@ async function main() {
   }
 
   // Panggil fungsi untuk membuat entitas akademik
-  createSkripsiAppData();
+  // createSkripsiAppData();
 
   //--------------------------------------Klabat Bridge--------------------------------------------
   // Create Alumni

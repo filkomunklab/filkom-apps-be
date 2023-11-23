@@ -786,6 +786,16 @@ const getAllProposalSchedule = async () => {
             proposal.advisor.lastName,
             proposal.advisor.degree
           );
+          const coAdvisor1Name = await getEmployeeNameAndDegree(
+            proposal.co_advisor1?.firstName,
+            proposal.co_advisor1?.lastName,
+            proposal.co_advisor1?.degree
+          );
+          const coAdvisor2Name = await getEmployeeNameAndDegree(
+            proposal.co_advisor2?.firstName,
+            proposal.co_advisor2?.lastName,
+            proposal.co_advisor2?.degree
+          );
           const panelistChairmanName = await getEmployeeNameAndDegree(
             proposal.panelist_chairman?.firstName,
             proposal.panelist_chairman?.lastName,
@@ -809,6 +819,10 @@ const getAllProposalSchedule = async () => {
             students,
             advisor_id: proposal.advisor.id,
             advisor_name: advisorName,
+            co_advisor1_id: proposal.co_advisor1?.id || null,
+            co_advisor1_name: coAdvisor1Name || null,
+            co_advisor2_id: proposal.co_advisor2?.id || null,
+            co_advisor2_name: coAdvisor2Name || null,
             panelist_chairman_id: proposal.panelist_chairman?.id || null,
             panelist_chairman_name: panelistChairmanName || null,
             panelist_member_id: proposal.panelist_member?.id || null,
@@ -1005,6 +1019,14 @@ const getProposalScheduleById = async (id) => {
   const panelistChairman = formatNameWithDegree(proposal.panelist_chairman);
   const panelistMember = formatNameWithDegree(proposal.panelist_member);
   const advisor = formatNameWithDegree(proposal.advisor);
+  let coAdvisor1;
+  let coAdvisor2;
+  if (proposal.co_advisor1) {
+    coAdvisor1 = formatNameWithDegree(proposal.co_advisor1);
+  }
+  if (proposal.co_advisor2) {
+    coAdvisor2 = formatNameWithDegree(proposal.co_advisor2);
+  }
   const scheduleData = {
     id: proposal.id,
     title: group.title,
@@ -1012,6 +1034,8 @@ const getProposalScheduleById = async (id) => {
     panelist_chairman: panelistChairman,
     panelist_member: panelistMember,
     advisor: advisor,
+    co_advisor1: coAdvisor1 || null,
+    co_advisor2: coAdvisor2 || null,
     start_defence: proposal.start_defence,
     end_defence: proposal.end_defence,
     defence_room: proposal.defence_room,
@@ -1688,6 +1712,10 @@ const getProposalRevisionDocumentById = async (id) => {
     is_revision_approve_by_panelist_member:
       proposal.is_revision_approve_by_panelist_member,
     is_revision_approve_by_advisor: proposal.is_revision_approve_by_advisor,
+    panelist_chairman_revision_comment:
+      proposal.panelist_chairman_revision_comment,
+    panelist_member_revision_comment: proposal.panelist_member_revision_comment,
+    advisor_revision_comment: proposal.advisor_revision_comment,
   };
   return Data;
 };
@@ -1939,7 +1967,7 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
 // @description     Reject dokumen revisi proposal
 // @route           PUT /proposal/proposal-revision-document/reject/:id
 // @access          DOSEN
-const rejectProposalRevisionDocumentById = async (id, userId) => {
+const rejectProposalRevisionDocumentById = async (id, userId, payload) => {
   // check proposal
   const proposal = await getProposalById(id);
 
@@ -1988,7 +2016,8 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
       // reject revisi
       const UpdatedProposal =
         await proposalRepository.rejectProposalRevisionDocumentByChairmanById(
-          id
+          id,
+          payload
         );
       const Data = {
         is_revision_approve_by_panelist_chairman:
@@ -2022,7 +2051,10 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
     } else {
       // reject revisi
       const UpdatedProposal =
-        await proposalRepository.rejectProposalRevisionDocumentByMemberById(id);
+        await proposalRepository.rejectProposalRevisionDocumentByMemberById(
+          id,
+          payload
+        );
       const Data = {
         is_revision_approve_by_panelist_member:
           UpdatedProposal.is_revision_approve_by_panelist_member,
@@ -2041,7 +2073,7 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
       return Data;
     }
   }
-  // if user is member
+  // if user is advisor
   if (advisor) {
     if (
       advisor.is_revision_approve_by_advisor === "Rejected" ||
@@ -2055,7 +2087,8 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
       // reject revisi
       const UpdatedProposal =
         await proposalRepository.rejectProposalRevisionDocumentByAdvisorById(
-          id
+          id,
+          payload
         );
       const Data = {
         is_revision_approve_by_advisor:

@@ -789,6 +789,16 @@ const getAllSkripsiSchedule = async () => {
             skripsi.advisor.lastName,
             skripsi.advisor.degree
           );
+          const coAdvisor1Name = await getEmployeeNameAndDegree(
+            skripsi.co_advisor1?.firstName,
+            skripsi.co_advisor1?.lastName,
+            skripsi.co_advisor1?.degree
+          );
+          const coAdvisor2Name = await getEmployeeNameAndDegree(
+            skripsi.co_advisor2?.firstName,
+            skripsi.co_advisor2?.lastName,
+            skripsi.co_advisor2?.degree
+          );
           const panelistChairmanName = await getEmployeeNameAndDegree(
             skripsi.panelist_chairman?.firstName,
             skripsi.panelist_chairman?.lastName,
@@ -813,6 +823,10 @@ const getAllSkripsiSchedule = async () => {
               students,
               advisor_id: skripsi.advisor.id,
               advisor: advisorName,
+              co_advisor1_id: skripsi.co_advisor1?.id || null,
+              co_advisor1_name: coAdvisor1Name,
+              co_advisor2_id: skripsi.co_advisor2?.id || null,
+              co_advisor2_name: coAdvisor2Name,
               panelist_chairman_id: skripsi.panelist_chairman?.id || null,
               panelist_chairman: panelistChairmanName || null,
               panelist_member_id: skripsi.panelist_member?.id || null,
@@ -980,6 +994,14 @@ const getSkripsiScheduleById = async (id) => {
   const panelistChairman = formatNameWithDegree(skripsi.panelist_chairman);
   const panelistMember = formatNameWithDegree(skripsi.panelist_member);
   const advisor = formatNameWithDegree(skripsi.advisor);
+  let coAdvisor1;
+  let coAdvisor2;
+  if (skripsi.co_advisor1) {
+    coAdvisor1 = formatNameWithDegree(skripsi.co_advisor1);
+  }
+  if (skripsi.co_advisor2) {
+    coAdvisor2 = formatNameWithDegree(skripsi.co_advisor2);
+  }
   const scheduleData = {
     id: skripsi.id,
     title: group.title,
@@ -987,6 +1009,8 @@ const getSkripsiScheduleById = async (id) => {
     panelist_chairman: panelistChairman,
     panelist_member: panelistMember,
     advisor: advisor,
+    co_advisor1: coAdvisor1 || null,
+    co_advisor2: coAdvisor2 || null,
     start_defence: skripsi.start_defence,
     end_defence: skripsi.end_defence,
     defence_room: skripsi.defence_room,
@@ -1660,6 +1684,10 @@ const getSkripsiRevisionDocumentById = async (id) => {
     is_revision_approve_by_panelist_member:
       skripsi.is_revision_approve_by_panelist_member,
     is_revision_approve_by_advisor: skripsi.is_revision_approve_by_advisor,
+    panelist_chairman_revision_comment:
+      skripsi.panelist_chairman_revision_comment,
+    panelist_member_revision_comment: skripsi.panelist_member_revision_comment,
+    advisor_revision_comment: skripsi.advisor_revision_comment,
   };
   return Data;
 };
@@ -1895,7 +1923,7 @@ const approveSkripsiRevisionDocumentById = async (id, userId) => {
 // @description     Reject dokumen revisi skripsi
 // @route           PUT /skripsi/skripsi-revision-document/reject/:id
 // @access          DOSEN
-const rejectSkripsiRevisionDocumentById = async (id, userId) => {
+const rejectSkripsiRevisionDocumentById = async (id, userId, payload) => {
   // check skripsi
   const skripsi = await getSkripsiById(id);
 
@@ -1942,7 +1970,10 @@ const rejectSkripsiRevisionDocumentById = async (id, userId) => {
     } else {
       // reject revisi
       const UpdatedSkripsi =
-        await skripsiRepository.rejectSkripsiRevisionDocumentByChairmanById(id);
+        await skripsiRepository.rejectSkripsiRevisionDocumentByChairmanById(
+          id,
+          payload
+        );
       const Data = {
         is_revision_approve_by_panelist_chairman:
           UpdatedSkripsi.is_revision_approve_by_panelist_chairman,
@@ -1975,7 +2006,10 @@ const rejectSkripsiRevisionDocumentById = async (id, userId) => {
     } else {
       // reject revisi
       const UpdatedSkripsi =
-        await skripsiRepository.rejectSkripsiRevisionDocumentByMemberById(id);
+        await skripsiRepository.rejectSkripsiRevisionDocumentByMemberById(
+          id,
+          payload
+        );
       const Data = {
         is_revision_approve_by_panelist_member:
           UpdatedSkripsi.is_revision_approve_by_panelist_member,
@@ -2007,7 +2041,10 @@ const rejectSkripsiRevisionDocumentById = async (id, userId) => {
     } else {
       // reject revisi
       const UpdatedSkripsi =
-        await skripsiRepository.rejectSkripsiRevisionDocumentByAdvisorById(id);
+        await skripsiRepository.rejectSkripsiRevisionDocumentByAdvisorById(
+          id,
+          payload
+        );
       const Data = {
         is_revision_approve_by_advisor:
           UpdatedSkripsi.is_revision_approve_by_advisor,

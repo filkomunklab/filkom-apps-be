@@ -554,6 +554,8 @@ const findAllSkripsiSchedule = async () => {
     select: {
       id: true,
       advisor: true,
+      co_advisor1: true,
+      co_advisor2: true,
       panelist_chairman: true,
       panelist_member: true,
       start_defence: true,
@@ -631,6 +633,8 @@ const findSkripsiScheduleById = async (id) => {
       panelist_chairman: true,
       panelist_member: true,
       advisor: true,
+      co_advisor1: true,
+      co_advisor2: true,
       start_defence: true,
       end_defence: true,
       defence_room: true,
@@ -932,6 +936,9 @@ const findSkripsiRevisionDocumentById = async (id) => {
       is_revision_approve_by_panelist_chairman: true,
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
+      panelist_chairman_revision_comment: true,
+      panelist_member_revision_comment: true,
+      advisor_revision_comment: true,
     },
   });
   return skripsi;
@@ -1049,6 +1056,7 @@ const approveSkripsiRevisionDocumentByChairmanById = async (id) => {
     data: {
       is_revision_approve_by_panelist_chairman: "Approve",
       panelist_chairman_revision_approve_date: new Date(),
+      panelist_chairman_revision_comment: null,
     },
     select: {
       id: true,
@@ -1056,6 +1064,7 @@ const approveSkripsiRevisionDocumentByChairmanById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       panelist_chairman_revision_approve_date: true,
+      panelist_chairman_revision_comment: true,
     },
   });
   return skripsi;
@@ -1073,6 +1082,7 @@ const approveSkripsiRevisionDocumentByMemberById = async (id) => {
     data: {
       is_revision_approve_by_panelist_member: "Approve",
       panelist_member_revision_approve_date: new Date(),
+      panelist_member_revision_comment: null,
     },
     select: {
       id: true,
@@ -1080,6 +1090,7 @@ const approveSkripsiRevisionDocumentByMemberById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       panelist_member_revision_approve_date: true,
+      panelist_member_revision_comment: true,
     },
   });
   return skripsi;
@@ -1097,6 +1108,7 @@ const approveSkripsiRevisionDocumentByAdvisorById = async (id) => {
     data: {
       is_revision_approve_by_advisor: "Approve",
       advisor_revision_approve_date: new Date(),
+      advisor_revision_comment: null,
     },
     select: {
       id: true,
@@ -1104,6 +1116,7 @@ const approveSkripsiRevisionDocumentByAdvisorById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       advisor_revision_approve_date: true,
+      advisor_revision_comment: true,
     },
   });
   return skripsi;
@@ -1131,7 +1144,8 @@ const updateSkripsiApproveDate = async (id) => {
 // @description     Reject dokumen revisi skripsi by chairman
 // @route           PUT /skripsi/skripsi-revision-document/reject/:id
 // @access          DOSEN
-const rejectSkripsiRevisionDocumentByChairmanById = async (id) => {
+const rejectSkripsiRevisionDocumentByChairmanById = async (id, payload) => {
+  const { comment } = payload;
   const skripsi = await prisma.skripsi.update({
     where: {
       id,
@@ -1139,6 +1153,7 @@ const rejectSkripsiRevisionDocumentByChairmanById = async (id) => {
     data: {
       is_revision_approve_by_panelist_chairman: "Rejected",
       panelist_chairman_revision_approve_date: new Date(),
+      panelist_chairman_revision_comment: comment,
     },
     select: {
       id: true,
@@ -1146,6 +1161,7 @@ const rejectSkripsiRevisionDocumentByChairmanById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       panelist_chairman_revision_approve_date: true,
+      panelist_chairman_revision_comment: true,
     },
   });
   return skripsi;
@@ -1155,7 +1171,8 @@ const rejectSkripsiRevisionDocumentByChairmanById = async (id) => {
 // @description     Reject dokumen revisi skripsi by member
 // @route           PUT /skripsi/skripsi-revision-document/reject/:id
 // @access          DOSEN
-const rejectSkripsiRevisionDocumentByMemberById = async (id) => {
+const rejectSkripsiRevisionDocumentByMemberById = async (id, payload) => {
+  const { comment } = payload;
   const skripsi = await prisma.skripsi.update({
     where: {
       id,
@@ -1163,6 +1180,7 @@ const rejectSkripsiRevisionDocumentByMemberById = async (id) => {
     data: {
       is_revision_approve_by_panelist_member: "Rejected",
       panelist_member_revision_approve_date: new Date(),
+      panelist_member_revision_comment: comment,
     },
     select: {
       id: true,
@@ -1170,6 +1188,7 @@ const rejectSkripsiRevisionDocumentByMemberById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       panelist_member_revision_approve_date: true,
+      panelist_member_revision_comment: true,
     },
   });
   return skripsi;
@@ -1179,7 +1198,8 @@ const rejectSkripsiRevisionDocumentByMemberById = async (id) => {
 // @description     Reject dokumen revisi skripsi by member
 // @route           PUT /skripsi/skripsi-revision-document/reject/:id
 // @access          DOSEN
-const rejectSkripsiRevisionDocumentByAdvisorById = async (id) => {
+const rejectSkripsiRevisionDocumentByAdvisorById = async (id, payload) => {
+  const { comment } = payload;
   const skripsi = await prisma.skripsi.update({
     where: {
       id,
@@ -1187,6 +1207,7 @@ const rejectSkripsiRevisionDocumentByAdvisorById = async (id) => {
     data: {
       is_revision_approve_by_advisor: "Rejected",
       advisor_revision_approve_date: new Date(),
+      advisor_revision_comment: comment,
     },
     select: {
       id: true,
@@ -1194,6 +1215,7 @@ const rejectSkripsiRevisionDocumentByAdvisorById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       advisor_revision_approve_date: true,
+      advisor_revision_comment: true,
     },
   });
   return skripsi;
