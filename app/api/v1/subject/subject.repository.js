@@ -26,6 +26,9 @@ const selectAllCurriculumByIdCurriculum = async (curriculum_id) => {
       where: {
         curriculum_id,
       },
+      orderBy: {
+        semester: "asc",
+      },
     });
 
     return subjects;
