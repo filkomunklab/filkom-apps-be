@@ -575,10 +575,10 @@ model Subject {
   id            String            @id @default(uuid())
   curriculum    Curriculum        @relation(fields: [curriculum_id], references: [id])
   curriculum_id String
-  code          String            @db.VarChar(50)
-  name          String            @db.VarChar(100)
+  code          String            @db.VarChar(100)
+  name          String
   credits       Int
-  type          String            @db.VarChar(50)
+  type          String            @db.VarChar(100)
   prerequisite  String?
   semester      Int
   preRegis      PreRegistration[]
