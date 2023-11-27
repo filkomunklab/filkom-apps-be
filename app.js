@@ -68,6 +68,7 @@ const certificateRoutes = require("./app/api/v1/certificate/certificate.routes")
 const activityRoutes = require("./app/api/v1/activity/activity.routes");
 const curriculumRoutes = require("./app/api/v1/curriculum/curriculum.routes");
 const subjectRoutes = require("./app/api/v1/subject/subject.routes");
+const preRegisRoutes = require("./app/api/v1/pre_regis/preRegis.routes");
 const { url } = require("inspector");
 
 //--------------------------------------------------------
@@ -108,6 +109,7 @@ app.use(`${URL}`, certificateRoutes);
 app.use(`${URL}`, activityRoutes);
 app.use(`${URL}`, curriculumRoutes);
 app.use(`${URL}`, subjectRoutes);
+app.use(`${URL}`, preRegisRoutes);
 //---------------------------------------------------
 
 app.use("/", (req, res) => {
