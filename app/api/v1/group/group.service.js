@@ -4330,9 +4330,6 @@ const getAllValueHistory = async (userId) => {
         academic: entry.academic,
       };
 
-      // Objek untuk melacak id mahasiswa yang sudah ditambahkan
-      const addedStudents = {};
-
       if (entry.name === "Proposal") {
         const proposals = await proposalRepository.findAllProposalByClassroomId(
           entry.id
@@ -4344,35 +4341,25 @@ const getAllValueHistory = async (userId) => {
               proposal.is_revision_approve_by_panelist_member === "Approve" &&
               proposal.is_revision_approve_by_advisor === "Approve"
             ) {
-              const assessments =
-                await proposalAssessmentRepository.findAllProposalAssessmentByProposalId(
+              const conclusionValues =
+                await proposalConclusionRepository.findAllConclusionById(
                   proposal.id
                 );
 
-              if (assessments) {
-                for (const assessment of assessments) {
+              if (conclusionValues) {
+                for (const value of conclusionValues) {
                   const student = await studentRepository.findStudentById(
-                    assessment.student_id
+                    value.student_id
                   );
 
-                  if (!addedStudents[student.id]) {
-                    let fullName = student.firstName;
-                    if (student.lastName) {
-                      fullName += ` ${student.lastName}`;
-                    }
-
-                    const studentData = {
-                      id: student.id,
-                      nim: student.nim,
-                      fullName,
-                      major: student.major,
-                      value: assessment.value,
-                    };
-                    semesterData.students.push(studentData);
-
-                    // Tandai bahwa mahasiswa dengan id ini sudah ditambahkan
-                    addedStudents[student.id] = true;
-                  }
+                  const studentData = {
+                    id: student.id,
+                    nim: student.nim,
+                    fullName,
+                    major: student.major,
+                    assessment_conclution: value.assessment_conclution,
+                  };
+                  semesterData.students.push(studentData);
                 }
               }
             }
@@ -4390,35 +4377,25 @@ const getAllValueHistory = async (userId) => {
               skripsi.is_revision_approve_by_panelist_member === "Approve" &&
               skripsi.is_revision_approve_by_advisor === "Approve"
             ) {
-              const assessments =
-                await skripsiAssessmentRepository.findAllSkripsiAssessmentBySkripsiId(
+              const conclusionValues =
+                await skripsiConclusionRepository.findAllConclusionById(
                   skripsi.id
                 );
 
-              if (assessments) {
-                for (const assessment of assessments) {
+              if (conclusionValues) {
+                for (const value of conclusionValues) {
                   const student = await studentRepository.findStudentById(
-                    assessment.student_id
+                    value.student_id
                   );
 
-                  if (!addedStudents[student.id]) {
-                    let fullName = student.firstName;
-                    if (student.lastName) {
-                      fullName += ` ${student.lastName}`;
-                    }
-
-                    const studentData = {
-                      id: student.id,
-                      nim: student.nim,
-                      fullName,
-                      major: student.major,
-                      value: assessment.value,
-                    };
-                    semesterData.students.push(studentData);
-
-                    // Tandai bahwa mahasiswa dengan id ini sudah ditambahkan
-                    addedStudents[student.id] = true;
-                  }
+                  const studentData = {
+                    id: student.id,
+                    nim: student.nim,
+                    fullName,
+                    major: student.major,
+                    assessment_conclution: value.assessment_conclution,
+                  };
+                  semesterData.students.push(studentData);
                 }
               }
             }
