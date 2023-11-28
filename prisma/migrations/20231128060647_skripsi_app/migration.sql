@@ -39,6 +39,9 @@ CREATE TYPE "Semester" AS ENUM ('Ganjil', 'Genap', 'Padat');
 CREATE TYPE "Progress" AS ENUM ('Submission', 'Proposal', 'Skripsi', 'Finished');
 
 -- CreateEnum
+CREATE TYPE "Consultation_Status" AS ENUM ('Proposal', 'Skripsi');
+
+-- CreateEnum
 CREATE TYPE "Exam_Conclution" AS ENUM ('Rejected', 'Approve');
 
 -- CreateEnum
@@ -488,6 +491,7 @@ CREATE TABLE "Thesis_Consultation" (
     "description" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "dosen_id" TEXT NOT NULL,
+    "consultation_status" "Consultation_Status" NOT NULL,
 
     CONSTRAINT "Thesis_Consultation_pkey" PRIMARY KEY ("id")
 );

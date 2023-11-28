@@ -580,13 +580,14 @@ model Skripsi_Conclusion {
 }
 
 model Thesis_Consultation {
-  id          String   @id @default(uuid())
-  group       Group    @relation("ThesisConsultation", fields: [group_id], references: [id])
-  group_id    String
-  description String
-  date        DateTime
-  dosen       Employee @relation("ThesisConsultation", fields: [dosen_id], references: [id])
-  dosen_id    String
+  id                  String              @id @default(uuid())
+  group               Group               @relation("ThesisConsultation", fields: [group_id], references: [id])
+  group_id            String
+  description         String
+  date                DateTime
+  dosen               Employee            @relation("ThesisConsultation", fields: [dosen_id], references: [id])
+  dosen_id            String
+  consultation_status Consultation_Status
 }
 
 model Thesis_History {
@@ -743,6 +744,11 @@ enum Progress {
   Proposal
   Skripsi
   Finished
+}
+
+enum Consultation_Status {
+  Proposal
+  Skripsi
 }
 
 enum status {

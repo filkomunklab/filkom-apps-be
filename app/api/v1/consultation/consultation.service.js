@@ -5,6 +5,7 @@ const groupRepository = require("../group/group.repository");
 const proposalRepository = require("../proposal/proposal.repository");
 const employeeRepository = require("../employee/employee.repository");
 const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
+const { status } = require("@prisma/client");
 
 //===================================================================
 // @description     Create consultation
@@ -30,37 +31,77 @@ const createConsultation = async (userId, payload) => {
     // const [day, month, year] = payload.date.split("/");
     // const formattedDate = `${year}-${month}-${day}T00:00:00Z`;
     // payload.date = formattedDate;
-    const consultation = await consultationRepository.insertConsultation(
-      payload,
-      userId
-    );
-    if (consultation) {
-      if (userId === proposal.advisor_id) {
-        // history
-        await thesisHistoryRepository.createThesisHistory(
-          userId,
-          "Advisor Mencatat Konsultasi",
-          group.id
-        );
+
+    if (group.progress === "Proposal") {
+      const consultation = await consultationRepository.insertConsultation(
+        payload,
+        userId,
+        "Proposal"
+      );
+
+      if (consultation) {
+        if (userId === proposal.advisor_id) {
+          // history
+          await thesisHistoryRepository.createThesisHistory(
+            userId,
+            "Advisor Mencatat Konsultasi Proposal",
+            group.id
+          );
+        }
+        if (userId === proposal.co_advisor1_id) {
+          // history
+          await thesisHistoryRepository.createThesisHistory(
+            userId,
+            "Co-Advisor 1 Mencatat Konsultasi Proposal",
+            group.id
+          );
+        }
+        if (userId === proposal.co_advisor2_id) {
+          // history
+          await thesisHistoryRepository.createThesisHistory(
+            userId,
+            "Co-Advisor 2 Mencatat Konsultasi Proposal",
+            group.id
+          );
+        }
       }
-      if (userId === proposal.co_advisor1_id) {
-        // history
-        await thesisHistoryRepository.createThesisHistory(
-          userId,
-          "Co-Advisor 1 Mencatat Konsultasi",
-          group.id
-        );
-      }
-      if (userId === proposal.co_advisor2_id) {
-        // history
-        await thesisHistoryRepository.createThesisHistory(
-          userId,
-          "Co-Advisor 2 Mencatat Konsultasi",
-          group.id
-        );
-      }
+      return consultation;
     }
-    return consultation;
+    if (group.progress === "Skripsi") {
+      const consultation = await consultationRepository.insertConsultation(
+        payload,
+        userId,
+        "Skripsi"
+      );
+
+      if (consultation) {
+        if (userId === proposal.advisor_id) {
+          // history
+          await thesisHistoryRepository.createThesisHistory(
+            userId,
+            "Advisor Mencatat Konsultasi Skripsi",
+            group.id
+          );
+        }
+        if (userId === proposal.co_advisor1_id) {
+          // history
+          await thesisHistoryRepository.createThesisHistory(
+            userId,
+            "Co-Advisor 1 Mencatat Konsultasi Skripsi",
+            group.id
+          );
+        }
+        if (userId === proposal.co_advisor2_id) {
+          // history
+          await thesisHistoryRepository.createThesisHistory(
+            userId,
+            "Co-Advisor 2 Mencatat Konsultasi Skripsi",
+            group.id
+          );
+        }
+      }
+      return consultation;
+    }
   }
   if (
     !userId === proposal.advisor_id &&
@@ -90,7 +131,7 @@ const getAllConsultationByGroupId = async (id) => {
 
   const consultationData = {
     group_id: id,
-    constultation: [],
+    consultation: [],
   };
   for (const entry of consultations) {
     const employee = await employeeRepository.findEmployeeById(entry.dosen_id);
@@ -108,8 +149,9 @@ const getAllConsultationByGroupId = async (id) => {
       description: entry.description,
       date: entry.date,
       dosen: name,
+      consultation_status: entry.consultation_status,
     };
-    consultationData.constultation.push(data);
+    consultationData.consultation.push(data);
   }
   return consultationData;
 };
