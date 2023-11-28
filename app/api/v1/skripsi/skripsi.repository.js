@@ -783,12 +783,7 @@ const signDekanSkripsiReportById = async (id) => {
 // @route           PUT /skripsi/skripsi-report/conclusion/:id
 // @access          DOSEN
 const updateSkripsiConclusionById = async (id, payload) => {
-  const {
-    exam_conclution,
-    changes_conclusion,
-    assessment_conclution,
-    is_pass,
-  } = payload;
+  const { exam_conclution, changes_conclusion, is_pass } = payload;
   const skripsi = await prisma.skripsi.update({
     where: {
       id,
@@ -796,7 +791,6 @@ const updateSkripsiConclusionById = async (id, payload) => {
     data: {
       exam_conclution,
       changes_conclusion,
-      assessment_conclution,
       is_pass,
       is_report_open: false,
     },
@@ -804,7 +798,6 @@ const updateSkripsiConclusionById = async (id, payload) => {
       id: true,
       exam_conclution: true,
       changes_conclusion: true,
-      assessment_conclution: true,
       is_pass: true,
       report_date: true,
       is_report_open: true,
@@ -826,7 +819,6 @@ const findSkripsiConclusionById = async (id) => {
       id: true,
       exam_conclution: true,
       changes_conclusion: true,
-      assessment_conclution: true,
       is_pass: true,
       report_date: true,
     },
@@ -1565,7 +1557,7 @@ const updateSkripsiClassroomById = async (id, classroom_id) => {
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Update is_report_open by id
-// @used            updateProposalConclusionById,
+// @used            updateSkripsiConclusionById,
 const resetOpenReprtById = async (id) => {
   const skripsi = await prisma.skripsi.update({
     where: {
@@ -1573,6 +1565,22 @@ const resetOpenReprtById = async (id) => {
     },
     data: {
       is_report_open: null,
+    },
+  });
+  return skripsi;
+};
+
+//===================================================================
+// @description     Update submission dateline
+// @route           PUT /skripsi/submission-dateline/:id
+// @access          DOSEN
+const updateSkripsiSubmissonDatelineById = async (id, submission_dateline) => {
+  const skripsi = await prisma.skripsi.update({
+    where: {
+      id,
+    },
+    data: {
+      submission_dateline: new Date(submission_dateline),
     },
   });
   return skripsi;
@@ -1664,4 +1672,5 @@ module.exports = {
 
   updateSkripsiClassroomById,
   resetOpenReprtById,
+  updateSkripsiSubmissonDatelineById,
 };

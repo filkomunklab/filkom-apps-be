@@ -225,6 +225,10 @@ const policyFor = ({ user }) => {
     can("read", "Consultation");
     // (Dosen: All) view thesis history
     can("read", "thesis_history");
+    // (Dosen: Ketua Panelis) view submission_dateline
+    can("read", "submission_dateline");
+    // (Dosen: Ketua Panelis) update submission_dateline
+    can("update", "submission_dateline");
     // ---------------------------------Submission--------------------------------
     // Dosen view committee list
     can("read", "committee_list");

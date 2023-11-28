@@ -19,6 +19,7 @@ const skripsiRepository = require("../skripsi/skripsi.repository");
 const classroomRepository = require("../classroom/classroom.repository");
 const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
 const userManagementRepository = require("../user_management/user_namagement.repository");
+const proposalConclusionRepository = require("../proposal_conclusion/proposal_conclusion_repository");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get proposal by id
@@ -1100,6 +1101,12 @@ const openAccessProposalReportById = async (id, userId) => {
           student,
           proposal.advisor_id
         );
+
+        // create nilai kesimpulan perstudent
+        await proposalConclusionRepository.createConclusion(
+          proposal.id,
+          student
+        );
       }
       // create empty change for chairman
       await proposalChangesRepository.insertEmptyProposalChanges(
@@ -1192,15 +1199,6 @@ const updateProposalAssessmentById = async (id, userId, payload) => {
       payload.value
     );
 
-  const group = await groupRepository.findGroupByProposalId(id);
-
-  // // history INPUT/UPDATE ASSESSMENT PROPOSAL by ID
-  // await thesisHistoryRepository.createThesisHistory(
-  //   userId,
-  //   "INPUT/UPDATE ASSESSMENT PROPOSAL by ID",
-  //   group.id
-  // );
-
   return updateAssessment;
 };
 
@@ -1256,6 +1254,12 @@ const getAllProposalAssessmentById = async (id) => {
       (assessment) => assessment.dosen_id === proposal.advisor_id
     );
 
+    // get nilai kesimpulan
+    const conclusionValue = await proposalConclusionRepository.findConclusion(
+      proposal.id,
+      studentId
+    );
+
     const studentData = {
       proposal_id: proposal.id,
       student_id: student.id,
@@ -1265,6 +1269,7 @@ const getAllProposalAssessmentById = async (id) => {
       value_by_chairman: chairmanValue ? chairmanValue.value : null,
       value_by_member: memberValue ? memberValue.value : null,
       value_by_advisor: advisorValue ? advisorValue.value : null,
+      value_conclusion: conclusionValue.assessment_conclution,
     };
 
     result.push(studentData);
@@ -1293,17 +1298,8 @@ const updateProposalChangesById = async (id, userId, payload) => {
   // update change
   const updateChange = await proposalChangesRepository.updateProposalChangeById(
     change.id,
-    payload.changes
+    payload
   );
-
-  const group = await groupRepository.findGroupByProposalId(id);
-
-  // // history UPDATE PROPOSAL CHANGES by ID
-  // await thesisHistoryRepository.createThesisHistory(
-  //   userId,
-  //   "UPDATE PROPOSAL CHANGES by ID",
-  //   group.id
-  // );
 
   return updateChange;
 };
@@ -1349,14 +1345,50 @@ const getAllProposalChangesById = async (id) => {
   const changesData = {
     proposal_id: proposal.id,
     is_report_open: proposal.is_report_open,
-    changes_by_chairman: chairmanChanges ? chairmanChanges.changes : null,
-    changes_by_member: memberChanges ? memberChanges.changes : null,
-    changes_by_advisor: advisorChanges ? advisorChanges.changes : null,
-    changes_by_co_advisor1: coAdvisor1Changes
-      ? coAdvisor1Changes.changes
+    changes_by_chairman_judul: chairmanChanges ? chairmanChanges.judul : null,
+    changes_by_chairman_bab1: chairmanChanges ? chairmanChanges.bab1 : null,
+    changes_by_chairman_bab2: chairmanChanges ? chairmanChanges.bab2 : null,
+    changes_by_chairman_bab3: chairmanChanges ? chairmanChanges.bab3 : null,
+    changes_by_chairman_other: chairmanChanges ? chairmanChanges.other : null,
+    changes_by_member_judul: memberChanges ? memberChanges.judul : null,
+    changes_by_member_bab1: memberChanges ? memberChanges.bab1 : null,
+    changes_by_member_bab2: memberChanges ? memberChanges.bab2 : null,
+    changes_by_member_bab3: memberChanges ? memberChanges.bab3 : null,
+    changes_by_member_other: memberChanges ? memberChanges.other : null,
+    changes_by_advisor_judul: advisorChanges ? advisorChanges.judul : null,
+    changes_by_advisor_bab1: advisorChanges ? advisorChanges.bab1 : null,
+    changes_by_advisor_bab2: advisorChanges ? advisorChanges.bab2 : null,
+    changes_by_advisor_bab3: advisorChanges ? advisorChanges.bab3 : null,
+    changes_by_advisor_other: advisorChanges ? advisorChanges.other : null,
+    changes_by_co_advisor1_judul: coAdvisor1Changes
+      ? coAdvisor1Changes.judul
       : null,
-    changes_by_co_advisor2: coAdvisor2Changes
-      ? coAdvisor2Changes.changes
+    changes_by_co_advisor1_bab1: coAdvisor1Changes
+      ? coAdvisor1Changes.bab1
+      : null,
+    changes_by_co_advisor1_bab2: coAdvisor1Changes
+      ? coAdvisor1Changes.bab2
+      : null,
+    changes_by_co_advisor1_bab3: coAdvisor1Changes
+      ? coAdvisor1Changes.bab3
+      : null,
+    changes_by_co_advisor1_other: coAdvisor1Changes
+      ? coAdvisor1Changes.other
+      : null,
+    changes_by_co_advisor2_judul: coAdvisor2Changes
+      ? coAdvisor2Changes.judul
+      : null,
+    changes_by_co_advisor2_bab1: coAdvisor2Changes
+      ? coAdvisor2Changes.bab1
+      : null,
+    changes_by_co_advisor2_bab2: coAdvisor2Changes
+      ? coAdvisor2Changes.bab2
+      : null,
+    changes_by_co_advisor2_bab3: coAdvisor2Changes
+      ? coAdvisor2Changes.bab3
+      : null,
+    changes_by_co_advisor2_other: coAdvisor2Changes
+      ? coAdvisor2Changes.other
       : null,
   };
 
@@ -1532,7 +1564,6 @@ const updateProposalConclusionById = async (id, userId, payload) => {
     memberChanges &&
     advisorChanges
   ) {
-    console.log("sudah terisi");
     if (proposal.panelist_chairman_id === userId) {
       if (
         proposal.is_report_approve_by_panelist_chairman &&
@@ -1590,6 +1621,88 @@ const getProposalConclusionById = async (id) => {
     };
   }
   return proposal;
+};
+
+//===================================================================
+// @description     Update conclusion value
+// @route           PUT /proposal/proposal-report/conclusion-value/:id
+// @access          DOSEN
+const updateProposalConclusionValueById = async (id, userId, payload) => {
+  // check if user is chairman
+  const chairman =
+    await proposalRepository.findChairmanInProposalByIdAndChairmanId(
+      id,
+      userId
+    );
+  if (!chairman) {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
+  }
+
+  const proposal = await proposalRepository.findProposalById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+
+  // check existing conclusion value
+  const existConclusionValue =
+    await proposalConclusionRepository.findConclusion(id, payload.student_id);
+  if (!existConclusionValue) {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+
+  const updateConclusionValule =
+    await proposalConclusionRepository.updateConclusion(
+      existConclusionValue.id,
+      payload.assessment_conclution
+    );
+
+  return updateConclusionValule;
+};
+
+//===================================================================
+// @description     Get conclusion value
+// @route           GET /proposal/proposal-report/conclusion-value/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getProposalConclusionValueById = async (id) => {
+  const result = [];
+  const proposal = await proposalRepository.findProposalById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  const conclusionValue =
+    await proposalConclusionRepository.findAllConclusionById(id);
+
+  for (const entry of conclusionValue) {
+    const student = await studentRepository.findStudentById(entry.student_id);
+    let fullName = student.firstName;
+    if (student.lastName) {
+      fullName += ` ${student.lastName}`;
+    }
+
+    const data = {
+      id: entry.id,
+      proposal_id: entry.proposal_id,
+      student_id: entry.student_id,
+      fullName,
+      assessment_conclution: entry.assessment_conclution,
+    };
+
+    result.push(data);
+  }
+
+  return result;
 };
 
 //===================================================================
@@ -2110,6 +2223,67 @@ const rejectProposalRevisionDocumentById = async (id, userId, payload) => {
   }
 };
 
+//===================================================================
+// @description     Update submission dateline
+// @route           PUT /proposal/submission-dateline/:id
+// @access          DOSEN
+const updateProposalSubmissonDatelineById = async (id, userId, payload) => {
+  // check if user is chairman
+  const chairman =
+    await proposalRepository.findChairmanInProposalByIdAndChairmanId(
+      id,
+      userId
+    );
+  if (!chairman) {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
+  }
+
+  const proposal = await proposalRepository.findProposalById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Proposal not found`,
+    };
+  }
+
+  const updatedProposal =
+    await proposalRepository.updateProposalSubmissonDatelineById(
+      id,
+      payload.submission_dateline
+    );
+
+  const data = {
+    id: updatedProposal.id,
+    submission_dateline: updatedProposal.submission_dateline,
+  };
+
+  return data;
+};
+
+//===================================================================
+// @description     Get submission dateline
+// @route           GET /proposal/submission-dateline/:id
+// @access          DOSEN
+const getProposalSubmissonDatelineById = async (id) => {
+  const proposal = await proposalRepository.findProposalById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Proposal not found`,
+    };
+  }
+
+  const data = {
+    proposal_id: proposal.id,
+    submission_dateline: proposal.submission_dateline,
+  };
+
+  return data;
+};
+
 module.exports = {
   updateProposalDocumentById,
   getProposalDocumentById,
@@ -2137,10 +2311,15 @@ module.exports = {
   signProposalReportById,
   updateProposalConclusionById,
   getProposalConclusionById,
+  updateProposalConclusionValueById,
+  getProposalConclusionValueById,
 
   updateProposalRevisionDocumentById,
   getProposalRevisionDocumentById,
   deleteProposalRevisionDocumentById,
   approveProposalRevisionDocumentById,
   rejectProposalRevisionDocumentById,
+
+  updateProposalSubmissonDatelineById,
+  getProposalSubmissonDatelineById,
 };

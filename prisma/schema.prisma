@@ -399,6 +399,9 @@ model Proposal {
   panelist_chairman_report_approve_date    DateTime?
   panelist_member_report_approve_date      DateTime?
   advisor_report_approve_date              DateTime?
+  exam_conclution                          Exam_Conclution?
+  changes_conclusion                       Changes_Conclusion?
+  is_pass                                  Pass?
   report_date                              String?
   file_name_revision                       String?
   upload_date_revision                     DateTime?
@@ -413,6 +416,8 @@ model Proposal {
   panelist_chairman_revision_comment       String?
   panelist_member_revision_comment         String?
   advisor_revision_comment                 String?
+  submission_dateline                      DateTime?
+  completed_status                         Boolean?
   approve_date                             DateTime?
   group                                    Group?                @relation("Proposal")
   assessment                               Proposal_Assessment[] @relation("Assessment")
@@ -465,6 +470,9 @@ model Skripsi {
   panelist_chairman_report_approve_date    DateTime?
   panelist_member_report_approve_date      DateTime?
   advisor_report_approve_date              DateTime?
+  exam_conclution                          Exam_Conclution?
+  changes_conclusion                       Changes_Conclusion?
+  is_pass                                  Pass?
   report_date                              String?
   file_name_revision                       String?
   upload_date_revision                     DateTime?
@@ -479,6 +487,8 @@ model Skripsi {
   panelist_chairman_revision_comment       String?
   panelist_member_revision_comment         String?
   advisor_revision_comment                 String?
+  submission_dateline                      DateTime?
+  completed_status                         Boolean?
   approve_date                             DateTime?
   file_name_hki                            String?
   file_name_journal                        String?
@@ -528,6 +538,7 @@ model Proposal_Changes {
   proposal_id String
   dosen       Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id    String
+  judul       String?
   bab1        String?
   bab2        String?
   bab3        String?
@@ -541,6 +552,7 @@ model Skripsi_Changes {
   dosen      Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id   String
   changes    String?
+  abstrak    String?
   bab1       String?
   bab2       String?
   bab3       String?
@@ -550,27 +562,21 @@ model Skripsi_Changes {
 }
 
 model Proposal_Conclusion {
-  id                    String              @id @default(uuid())
-  proposal              Proposal            @relation("Conclusion_Value", fields: [proposal_id], references: [id])
+  id                    String   @id @default(uuid())
+  proposal              Proposal @relation("Conclusion_Value", fields: [proposal_id], references: [id])
   proposal_id           String
-  student               Student             @relation("Student", fields: [student_id], references: [id])
+  student               Student  @relation("Student", fields: [student_id], references: [id])
   student_id            String
-  exam_conclution       Exam_Conclution?
-  changes_conclusion    Changes_Conclusion?
   assessment_conclution String?
-  is_pass               Pass?
 }
 
 model Skripsi_Conclusion {
-  id                    String              @id @default(uuid())
-  skripsi               Skripsi             @relation("Conclusion_Value", fields: [skripsi_id], references: [id])
+  id                    String  @id @default(uuid())
+  skripsi               Skripsi @relation("Conclusion_Value", fields: [skripsi_id], references: [id])
   skripsi_id            String
-  student               Student             @relation("Student", fields: [student_id], references: [id])
+  student               Student @relation("Student", fields: [student_id], references: [id])
   student_id            String
-  exam_conclution       Exam_Conclution?
-  changes_conclusion    Changes_Conclusion?
   assessment_conclution String?
-  is_pass               Pass?
 }
 
 model Thesis_Consultation {

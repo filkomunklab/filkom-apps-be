@@ -523,7 +523,13 @@ const updateSkripsiChangesById = async (req, res) => {
     const id = req.params.id;
     const userId = req.user.user.id;
     const payload = req.body;
-    if (!payload.changes) {
+    if (
+      !payload.judul &&
+      !payload.bab1 &&
+      !payload.bab2 &&
+      !payload.bab3 &&
+      !payload.other
+    ) {
       return res
         .status(400)
         .send({ status: "FAILED", data: { error: "some field is missing" } });
@@ -631,7 +637,6 @@ const updateSkripsiConclusionById = async (req, res) => {
       !(
         payload.exam_conclution &&
         payload.changes_conclusion &&
-        payload.assessment_conclution &&
         payload.is_pass
       )
     ) {
@@ -667,6 +672,63 @@ const getSkripsiConclusionById = async (req, res) => {
   try {
     const id = req.params.id;
     const skripsi = await skripsiService.getSkripsiConclusionById(id);
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Update conclusion value
+// @route           PUT /skripsi/skripsi-report/conclusion-value/:id
+// @access          DOSEN
+const updateSkripsiConclusionValueById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "skripsi_report_conclusion")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const payload = req.body;
+    if (!(payload.student_id && payload.assessment_conclution)) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const skripsi = await skripsiService.updateSkripsiConclusionValueById(
+      id,
+      userId,
+      payload
+    );
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get conclusion value
+// @route           GET /skripsi/skripsi-report/conclusion-value/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getSkripsiConclusionValueById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_report_conclusion")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const skripsi = await skripsiService.getSkripsiConclusionValueById(id);
     res.send({ status: "OK", data: skripsi });
   } catch (error) {
     res
@@ -1157,6 +1219,63 @@ const deleteLinkSourceCodeById = async (req, res) => {
   }
 };
 
+//===================================================================
+// @description     Update submission dateline
+// @route           PUT /skripsi/submission-dateline/:id
+// @access          DOSEN
+const updateSkripsiSubmissonDatelineById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "submission_dateline")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const payload = req.body;
+    if (!payload.submission_dateline) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const skripsi = await skripsiService.updateSkripsiSubmissonDatelineById(
+      id,
+      userId,
+      payload
+    );
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get submission dateline
+// @route           GET /skripsi/submission-dateline/:id
+// @access          DOSEN
+const getSkripsiSubmissonDatelineById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "submission_dateline")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const skripsi = await skripsiService.getSkripsiSubmissonDatelineById(id);
+    res.send({ status: "OK", data: skripsi });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   updateSkripsiDocumentById,
   getSkripsiDocumentById,
@@ -1186,6 +1305,8 @@ module.exports = {
   signSkripsiReportById,
   updateSkripsiConclusionById,
   getSkripsiConclusionById,
+  updateSkripsiConclusionValueById,
+  getSkripsiConclusionValueById,
 
   updateSkripsiRevisionDocumentById,
   getSkripsiRevisionDocumentById,
@@ -1205,4 +1326,7 @@ module.exports = {
   updateLinkSourceCodeById,
   getLinkSourceCodeById,
   deleteLinkSourceCodeById,
+
+  updateSkripsiSubmissonDatelineById,
+  getSkripsiSubmissonDatelineById,
 };

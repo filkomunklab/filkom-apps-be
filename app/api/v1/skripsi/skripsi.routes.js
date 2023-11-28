@@ -221,6 +221,24 @@ router.get(
 );
 
 //===================================================================
+// @description     Get conclusion value
+// @access          DOSEN
+router.put(
+  "/proposal/proposal-report/conclusion-value/:id",
+  auth,
+  skripsiController.updateSkripsiConclusionValueById
+);
+
+//===================================================================
+// @description     Get conclusion value
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/proposal/proposal-report/conclusion-value/:id",
+  auth,
+  skripsiController.getSkripsiConclusionValueById
+);
+
+//===================================================================
 // @description     Upload/Update dokumen revisi skripsi
 // @access          MAHASISWA
 router.put(
@@ -351,6 +369,24 @@ router.put(
   "/skripsi/link-source-code/delete/:id",
   auth,
   skripsiController.deleteLinkSourceCodeById
+);
+
+//===================================================================
+// @description     Update submission dateline
+// @access          DOSEN
+router.put(
+  "/skripsi/submission-dateline/:id",
+  auth,
+  skripsiController.updateSkripsiSubmissonDatelineById
+);
+
+//===================================================================
+// @description     Get submission dateline
+// @access          DOSEN
+router.get(
+  "/skripsi/submission-dateline/:id",
+  auth,
+  skripsiController.getSkripsiSubmissonDatelineById
 );
 
 module.exports = router;

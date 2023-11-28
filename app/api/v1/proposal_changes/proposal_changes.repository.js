@@ -63,13 +63,18 @@ const insertEmptyProposalChanges = async (proposal_id, dosen_id) => {
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Update proposal change by id
 // @used            Proposal
-const updateProposalChangeById = async (id, changes) => {
+const updateProposalChangeById = async (id, payload) => {
+  const { judul, bab1, bab2, bab3, other } = payload;
   const proposalChanges = await prisma.proposal_Changes.update({
     where: {
       id,
     },
     data: {
-      changes,
+      judul,
+      bab1,
+      bab2,
+      bab3,
+      other,
     },
   });
 

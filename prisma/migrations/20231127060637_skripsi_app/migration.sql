@@ -306,6 +306,9 @@ CREATE TABLE "Proposal" (
     "panelist_chairman_report_approve_date" TIMESTAMP(3),
     "panelist_member_report_approve_date" TIMESTAMP(3),
     "advisor_report_approve_date" TIMESTAMP(3),
+    "exam_conclution" "Exam_Conclution",
+    "changes_conclusion" "Changes_Conclusion",
+    "is_pass" "Pass",
     "report_date" TEXT,
     "file_name_revision" TEXT,
     "upload_date_revision" TIMESTAMP(3),
@@ -320,6 +323,8 @@ CREATE TABLE "Proposal" (
     "panelist_chairman_revision_comment" TEXT,
     "panelist_member_revision_comment" TEXT,
     "advisor_revision_comment" TEXT,
+    "submission_dateline" TIMESTAMP(3),
+    "completed_status" BOOLEAN,
     "approve_date" TIMESTAMP(3),
 
     CONSTRAINT "Proposal_pkey" PRIMARY KEY ("id")
@@ -365,6 +370,9 @@ CREATE TABLE "Skripsi" (
     "panelist_chairman_report_approve_date" TIMESTAMP(3),
     "panelist_member_report_approve_date" TIMESTAMP(3),
     "advisor_report_approve_date" TIMESTAMP(3),
+    "exam_conclution" "Exam_Conclution",
+    "changes_conclusion" "Changes_Conclusion",
+    "is_pass" "Pass",
     "report_date" TEXT,
     "file_name_revision" TEXT,
     "upload_date_revision" TIMESTAMP(3),
@@ -379,6 +387,8 @@ CREATE TABLE "Skripsi" (
     "panelist_chairman_revision_comment" TEXT,
     "panelist_member_revision_comment" TEXT,
     "advisor_revision_comment" TEXT,
+    "submission_dateline" TIMESTAMP(3),
+    "completed_status" BOOLEAN,
     "approve_date" TIMESTAMP(3),
     "file_name_hki" TEXT,
     "file_name_journal" TEXT,
@@ -425,6 +435,7 @@ CREATE TABLE "Proposal_Changes" (
     "id" TEXT NOT NULL,
     "proposal_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
+    "judul" TEXT,
     "bab1" TEXT,
     "bab2" TEXT,
     "bab3" TEXT,
@@ -439,6 +450,7 @@ CREATE TABLE "Skripsi_Changes" (
     "skripsi_id" TEXT NOT NULL,
     "dosen_id" TEXT NOT NULL,
     "changes" TEXT,
+    "abstrak" TEXT,
     "bab1" TEXT,
     "bab2" TEXT,
     "bab3" TEXT,
@@ -454,10 +466,7 @@ CREATE TABLE "Proposal_Conclusion" (
     "id" TEXT NOT NULL,
     "proposal_id" TEXT NOT NULL,
     "student_id" TEXT NOT NULL,
-    "exam_conclution" "Exam_Conclution",
-    "changes_conclusion" "Changes_Conclusion",
     "assessment_conclution" TEXT,
-    "is_pass" "Pass",
 
     CONSTRAINT "Proposal_Conclusion_pkey" PRIMARY KEY ("id")
 );
@@ -467,10 +476,7 @@ CREATE TABLE "Skripsi_Conclusion" (
     "id" TEXT NOT NULL,
     "skripsi_id" TEXT NOT NULL,
     "student_id" TEXT NOT NULL,
-    "exam_conclution" "Exam_Conclution",
-    "changes_conclusion" "Changes_Conclusion",
     "assessment_conclution" TEXT,
-    "is_pass" "Pass",
 
     CONSTRAINT "Skripsi_Conclusion_pkey" PRIMARY KEY ("id")
 );

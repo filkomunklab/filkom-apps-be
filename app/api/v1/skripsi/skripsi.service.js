@@ -18,6 +18,7 @@ const skripsiChangesRepository = require("../skripsi_changes/skripsi_changes.rep
 const classroomRepository = require("../classroom/classroom.repository");
 const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
 const userManagementRepository = require("../user_management/user_namagement.repository");
+const skripsiConclusionRepository = require("../skripsi_conclusion/skripsi_conclusion.repository");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get skripsi by id
@@ -1073,6 +1074,9 @@ const openAccessSkripsiReportById = async (id, userId) => {
           student,
           skripsi.advisor_id
         );
+
+        // create nilai kesimpulan perstudent
+        await skripsiConclusionRepository.createConclusion(skripsi.id, student);
       }
       // create empty change for chairman
       await skripsiChangesRepository.insertEmptySkripsiChanges(
@@ -1165,15 +1169,6 @@ const updateSkripsiAssessmentById = async (id, userId, payload) => {
       payload.value
     );
 
-  // ambil informasi group untuk thesis history
-  const group = await groupRepository.findGroupBySkripsiId(id);
-
-  // // history INPUT/UPDATE ASSESSMENT SKRIPSI by ID
-  // await thesisHistoryRepository.createThesisHistory(
-  //   userId,
-  //   "INPUT/UPDATE ASSESSMENT SKRIPSI by ID",
-  //   group.id
-  // );
   return updateAssessment;
 };
 
@@ -1227,6 +1222,12 @@ const getAllSkripsiAssessmentById = async (id) => {
       (assessment) => assessment.dosen_id === skripsi.advisor_id
     );
 
+    // get nilai kesimpulan
+    const conclusionValue = await skripsiConclusionRepository.findConclusion(
+      skripsi.id,
+      studentId
+    );
+
     const studentData = {
       skripsi_id: skripsi.id,
       student_id: student.id,
@@ -1236,6 +1237,7 @@ const getAllSkripsiAssessmentById = async (id) => {
       value_by_chairman: chairmanValue ? chairmanValue.value : null,
       value_by_member: memberValue ? memberValue.value : null,
       value_by_advisor: advisorValue ? advisorValue.value : null,
+      value_conclusion: conclusionValue.assessment_conclution,
     };
 
     result.push(studentData);
@@ -1264,18 +1266,9 @@ const updateSkripsiChangesById = async (id, userId, payload) => {
   // update change
   const updateChange = await skripsiChangesRepository.updateSkripsiChangeById(
     change.id,
-    payload.changes
+    payload
   );
 
-  // ambil informasi group untuk thesis history
-  const group = await groupRepository.findGroupBySkripsiId(id);
-
-  // // history INPUT/UPDATE CHANGE SKRIPSI by ID
-  // await thesisHistoryRepository.createThesisHistory(
-  //   userId,
-  //   "INPUT/UPDATE CHANGE SKRIPSI by ID",
-  //   group.id
-  // );
   return updateChange;
 };
 
@@ -1319,14 +1312,70 @@ const getAllSkripsiChangesById = async (id) => {
   const changesData = {
     skripsi_id: skripsi.id,
     is_report_open: skripsi.is_report_open,
-    changes_by_chairman: chairmanChanges ? chairmanChanges.changes : null,
-    changes_by_member: memberChanges ? memberChanges.changes : null,
-    changes_by_advisor: advisorChanges ? advisorChanges.changes : null,
-    changes_by_co_advisor1: coAdvisor1Changes
-      ? coAdvisor1Changes.changes
+    changes_by_chairman_abstrak: chairmanChanges
+      ? chairmanChanges.abstrak
       : null,
-    changes_by_co_advisor2: coAdvisor2Changes
-      ? coAdvisor2Changes.changes
+    changes_by_chairman_bab1: chairmanChanges ? chairmanChanges.bab1 : null,
+    changes_by_chairman_bab2: chairmanChanges ? chairmanChanges.bab2 : null,
+    changes_by_chairman_bab3: chairmanChanges ? chairmanChanges.bab3 : null,
+    changes_by_chairman_bab4: chairmanChanges ? chairmanChanges.bab4 : null,
+    changes_by_chairman_bab5: chairmanChanges ? chairmanChanges.bab5 : null,
+    changes_by_chairman_other: chairmanChanges ? chairmanChanges.other : null,
+    changes_by_member_abstrak: memberChanges ? memberChanges.abstrak : null,
+    changes_by_member_bab1: memberChanges ? memberChanges.bab1 : null,
+    changes_by_member_bab2: memberChanges ? memberChanges.bab2 : null,
+    changes_by_member_bab3: memberChanges ? memberChanges.bab3 : null,
+    changes_by_member_bab4: memberChanges ? memberChanges.bab4 : null,
+    changes_by_member_bab5: memberChanges ? memberChanges.bab5 : null,
+    changes_by_member_other: memberChanges ? memberChanges.other : null,
+    changes_by_advisor_abstrak: advisorChanges ? advisorChanges.abstrak : null,
+    changes_by_advisor_bab1: advisorChanges ? advisorChanges.bab1 : null,
+    changes_by_advisor_bab2: advisorChanges ? advisorChanges.bab2 : null,
+    changes_by_advisor_bab3: advisorChanges ? advisorChanges.bab3 : null,
+    changes_by_advisor_bab4: advisorChanges ? advisorChanges.bab4 : null,
+    changes_by_advisor_bab5: advisorChanges ? advisorChanges.bab5 : null,
+    changes_by_advisor_other: advisorChanges ? advisorChanges.other : null,
+    changes_by_co_advisor1_abstrak: coAdvisor1Changes
+      ? coAdvisor1Changes.abstrak
+      : null,
+    changes_by_co_advisor1_bab1: coAdvisor1Changes
+      ? coAdvisor1Changes.bab1
+      : null,
+    changes_by_co_advisor1_bab2: coAdvisor1Changes
+      ? coAdvisor1Changes.bab2
+      : null,
+    changes_by_co_advisor1_bab3: coAdvisor1Changes
+      ? coAdvisor1Changes.bab3
+      : null,
+    changes_by_co_advisor1_bab4: coAdvisor1Changes
+      ? coAdvisor1Changes.bab4
+      : null,
+    changes_by_co_advisor1_bab5: coAdvisor1Changes
+      ? coAdvisor1Changes.bab5
+      : null,
+    changes_by_co_advisor1_other: coAdvisor1Changes
+      ? coAdvisor1Changes.other
+      : null,
+    changes_by_co_advisor2_abstrak: coAdvisor2Changes
+      ? coAdvisor2Changes.abstrak
+      : null,
+    changes_by_co_advisor2_bab1: coAdvisor2Changes
+      ? coAdvisor2Changes.bab1
+      : null,
+    changes_by_co_advisor2_bab2: coAdvisor2Changes
+      ? coAdvisor2Changes.bab2
+      : null,
+    changes_by_co_advisor2_bab3: coAdvisor2Changes
+      ? coAdvisor2Changes.bab3
+      : null,
+    changes_by_co_advisor2_bab4: coAdvisor2Changes
+      ? coAdvisor2Changes.bab4
+      : null,
+    changes_by_co_advisor2_bab5: coAdvisor2Changes
+      ? coAdvisor2Changes.bab5
+      : null,
+    changes_by_co_advisor2_other: coAdvisor2Changes
+      ? coAdvisor2Changes.other
       : null,
   };
 
@@ -1504,7 +1553,6 @@ const updateSkripsiConclusionById = async (id, userId, payload) => {
     memberChanges &&
     advisorChanges
   ) {
-    console.log("sudah terisi");
     if (skripsi.panelist_chairman_id === userId) {
       if (
         skripsi.is_report_approve_by_panelist_chairman &&
@@ -1562,6 +1610,87 @@ const getSkripsiConclusionById = async (id) => {
     };
   }
   return skripsi;
+};
+
+//===================================================================
+// @description     Update conclusion value
+// @route           PUT /skripsi/skripsi-report/conclusion-value/:id
+// @access          DOSEN
+const updateSkripsiConclusionValueById = async (id, userId, payload) => {
+  // check if user is chairman
+  const chairman =
+    await skripsiRepository.findChairmanInSkripsiByIdAndChairmanId(id, userId);
+  if (!chairman) {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
+  }
+
+  const skripsi = await skripsiRepository.findSkripsiById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+
+  // check existing conclusion value
+  const existConclusionValue = await skripsiConclusionRepository.findConclusion(
+    id,
+    payload.student_id
+  );
+  if (!existConclusionValue) {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+
+  const updateConclusionValule =
+    await skripsiConclusionRepository.updateConclusion(
+      existConclusionValue.id,
+      payload.assessment_conclution
+    );
+
+  return updateConclusionValule;
+};
+
+//===================================================================
+// @description     Get conclusion value
+// @route           GET /skripsi/skripsi-report/conclusion-value/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getSkripsiConclusionValueById = async (id) => {
+  const result = [];
+  const skripsi = await skripsiRepository.findSkripsiById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  const conclusionValue =
+    await skripsiConclusionRepository.findAllConclusionById(id);
+
+  for (const entry of conclusionValue) {
+    const student = await studentRepository.findStudentById(entry.student_id);
+    let fullName = student.firstName;
+    if (student.lastName) {
+      fullName += ` ${student.lastName}`;
+    }
+
+    const data = {
+      id: entry.id,
+      skripsi_id: entry.skripsi_id,
+      student_id: entry.student_id,
+      fullName,
+      assessment_conclution: entry.assessment_conclution,
+    };
+
+    result.push(data);
+  }
+
+  return result;
 };
 
 //===================================================================
@@ -2465,6 +2594,64 @@ const deleteLinkSourceCodeById = async (id, userId) => {
   }
 };
 
+//===================================================================
+// @description     Update submission dateline
+// @route           PUT /skripsi/submission-dateline/:id
+// @access          DOSEN
+const updateSkripsiSubmissonDatelineById = async (id, userId, payload) => {
+  // check if user is chairman
+  const chairman =
+    await skripsiRepository.findChairmanInSkripsiByIdAndChairmanId(id, userId);
+  if (!chairman) {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
+  }
+
+  const skripsi = await skripsiRepository.findSkripsiById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Skripsi not found`,
+    };
+  }
+
+  const updatedSkripsi =
+    await skripsiRepository.updateSkripsiSubmissonDatelineById(
+      id,
+      payload.submission_dateline
+    );
+
+  const data = {
+    id: updatedSkripsi.id,
+    submission_dateline: updatedSkripsi.submission_dateline,
+  };
+
+  return data;
+};
+
+//===================================================================
+// @description     Get submission dateline
+// @route           GET /skripsi/submission-dateline/:id
+// @access          DOSEN
+const getSkripsiSubmissonDatelineById = async (id) => {
+  const skripsi = await skripsiRepository.findSkripsiById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Skripsi not found`,
+    };
+  }
+
+  const data = {
+    skripsi_id: skripsi.id,
+    submission_dateline: skripsi.submission_dateline,
+  };
+
+  return data;
+};
+
 module.exports = {
   updateSkripsiDocumentById,
   getSkripsiDocumentById,
@@ -2494,6 +2681,8 @@ module.exports = {
   signSkripsiReportById,
   updateSkripsiConclusionById,
   getSkripsiConclusionById,
+  updateSkripsiConclusionValueById,
+  getSkripsiConclusionValueById,
 
   updateSkripsiRevisionDocumentById,
   getSkripsiRevisionDocumentById,
@@ -2513,4 +2702,7 @@ module.exports = {
   updateLinkSourceCodeById,
   getLinkSourceCodeById,
   deleteLinkSourceCodeById,
+
+  updateSkripsiSubmissonDatelineById,
+  getSkripsiSubmissonDatelineById,
 };

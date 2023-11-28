@@ -775,12 +775,7 @@ const signDekanProposalReportById = async (id) => {
 // @route           PUT /proposal/proposal-report/conclusion/:id
 // @access          DOSEN
 const updateProposalConclusionById = async (id, payload) => {
-  const {
-    exam_conclution,
-    changes_conclusion,
-    assessment_conclution,
-    is_pass,
-  } = payload;
+  const { exam_conclution, changes_conclusion, is_pass } = payload;
   const proposal = await prisma.proposal.update({
     where: {
       id,
@@ -788,7 +783,6 @@ const updateProposalConclusionById = async (id, payload) => {
     data: {
       exam_conclution,
       changes_conclusion,
-      assessment_conclution,
       is_pass,
       is_report_open: false,
     },
@@ -796,7 +790,6 @@ const updateProposalConclusionById = async (id, payload) => {
       id: true,
       exam_conclution: true,
       changes_conclusion: true,
-      assessment_conclution: true,
       is_pass: true,
       report_date: true,
       is_report_open: true,
@@ -818,7 +811,6 @@ const findProposalConclusionById = async (id) => {
       id: true,
       exam_conclution: true,
       changes_conclusion: true,
-      assessment_conclution: true,
       is_pass: true,
       report_date: true,
     },
@@ -1303,6 +1295,22 @@ const resetOpenReprtById = async (id) => {
   return proposal;
 };
 
+//===================================================================
+// @description     Update submission dateline
+// @route           PUT /proposal/submission-dateline/:id
+// @access          DOSEN
+const updateProposalSubmissonDatelineById = async (id, submission_dateline) => {
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      submission_dateline: new Date(submission_dateline),
+    },
+  });
+  return proposal;
+};
+
 module.exports = {
   insertProposal,
   findProposalById,
@@ -1372,4 +1380,5 @@ module.exports = {
   findAllProposal,
 
   resetOpenReprtById,
+  updateProposalSubmissonDatelineById,
 };
