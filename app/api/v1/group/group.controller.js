@@ -885,6 +885,21 @@ const getAllValueHistory = async (req, res) => {
   }
 };
 
+//===================================================================
+// @description     Get all complete skripsi
+// @route           GET /group/skripsi-filkom
+// @access          All
+const getAllCompleteSkripsi = async (req, res) => {
+  try {
+    const group = await groupService.getAllCompleteSkripsi();
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getThesisList,
   getSubmissionDetailsById,
@@ -928,4 +943,5 @@ module.exports = {
   getAllValueHistory,
   getProposalHistoryListSekretaris,
   getSkripsiHistoryListSekretaris,
+  getAllCompleteSkripsi,
 };

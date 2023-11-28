@@ -314,4 +314,13 @@ router.get("/group/metadata/:id", auth, groupController.getMetadataById);
 // @access          DOSEN
 router.get("/group/value-history", auth, groupController.getAllValueHistory);
 
+//===================================================================
+// @description     Get all complete skripsi
+// @access          All
+router.get(
+  "/group/skripsi-filkom",
+  // auth,
+  groupController.getAllCompleteSkripsi
+);
+
 module.exports = router;

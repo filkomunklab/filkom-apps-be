@@ -344,6 +344,22 @@ const updateMetadataById = async (id, payload) => {
   return group;
 };
 
+//===================================================================
+// @description     Get all complete skripsi
+// @route           GET /group/skripsi-filkom
+// @access          All
+const findAllCompleteSkripsi = async () => {
+  const group = prisma.group.findMany({
+    where: {
+      progress: "Finished",
+    },
+    select: {
+      title: true,
+    },
+  });
+  return group;
+};
+
 module.exports = {
   findGroupBySubmissionId,
   findGroupByProposalId,
@@ -363,4 +379,5 @@ module.exports = {
   findSubmissionListById,
   findSubmissionDetailsById,
   updateMetadataById,
+  findAllCompleteSkripsi,
 };

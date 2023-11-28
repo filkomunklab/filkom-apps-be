@@ -4435,6 +4435,16 @@ const getAllValueHistory = async (userId) => {
   }
 };
 
+//===================================================================
+// @description     Get all complete skripsi
+// @route           GET /group/skripsi-filkom
+// @access          All
+const getAllCompleteSkripsi = async () => {
+  const group = await groupRepository.findAllCompleteSkripsi();
+
+  return group;
+};
+
 module.exports = {
   getThesisList,
   getSubmissionDetailsById,
@@ -4479,4 +4489,5 @@ module.exports = {
   updateMetadataById,
   getMetadataById,
   getAllValueHistory,
+  getAllCompleteSkripsi,
 };
