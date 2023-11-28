@@ -744,7 +744,7 @@ const getAllSkripsiSchedule = async () => {
   await Promise.all(
     skripsis.map(async (skripsi) => {
       // memproses pengambilan jadwal skripsi yang belum mulai sidang
-      if (skripsi.is_report_open !== true) {
+      if (skripsi.is_pass === null || skripsi.is_pass === "Repeat") {
         // Dapatkan grup berdasarkan skripsiIds
         const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
         // memproses jika menemukan group yang progress di "SKRIPSI"
@@ -902,7 +902,11 @@ const updateSkripsiScheduleById = async (id, userId, payload) => {
   const group = await groupRepository.findGroupBySkripsiId(id);
 
   // check if has defence
-  if (skripsi.is_pass) {
+  if (
+    skripsi.is_pass === "Pass" ||
+    skripsi.is_pass === "Fail" ||
+    skripsi.is_report_open === true
+  ) {
     throw {
       status: 400,
       message: `Can't perform this action`,

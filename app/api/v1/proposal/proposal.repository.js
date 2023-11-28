@@ -544,7 +544,7 @@ const findAllProposalSchedule = async () => {
       defence_room: true,
       defence_date: true,
       classroom_id: true,
-      is_report_open: true,
+      is_pass: true,
     },
   });
 

@@ -741,7 +741,7 @@ const getAllProposalSchedule = async () => {
   await Promise.all(
     proposals.map(async (proposal) => {
       // memproses pengambilan jadwal proposal yang belum mulai sidang
-      if (proposal.is_report_open !== true) {
+      if (proposal.is_pass === null || proposal.is_pass === "Repeat") {
         // Dapatkan grup berdasarkan proposalIds
         const group = await groupRepository.findGroupByProposalId(proposal.id);
 
@@ -909,7 +909,11 @@ const updateProposalScheduleById = async (id, userId, payload) => {
   const { panelist_chairman_id, panelist_member_id } = payload;
 
   // check if has defence
-  if (proposal.is_report_open === true) {
+  if (
+    proposal.is_pass === "Pass" ||
+    proposal.is_pass === "Fail" ||
+    proposal.is_report_open === true
+  ) {
     throw {
       status: 400,
       message: `Can't perform this action`,
