@@ -64,10 +64,23 @@ const deleteRoleById = async (id) => {
   return userRole;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get user by role
+// @used            Group
+const findUserByRole = async (role) => {
+  const userRole = await prisma.userRole.findFirst({
+    where: {
+      role,
+    },
+  });
+  return userRole;
+};
+
 module.exports = {
   findAllUserByRole,
   findUserByNIKAndRole,
   findAllUserByNIKAndRole,
   inputRoleByNIK,
   deleteRoleById,
+  findUserByRole,
 };

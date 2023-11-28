@@ -282,6 +282,24 @@ router.get(
 );
 
 //===================================================================
+// @description     Get proposal history list operator fakultas/filkom
+// @access          OPERATOR_FAKULTAS
+router.get(
+  "/group/proposal-history-list-sekretaris",
+  auth,
+  groupController.getProposalHistoryListSekretaris
+);
+
+//===================================================================
+// @description     Get skripsi history list operator fakultas/filkom
+// @access          OPERATOR_FAKULTAS
+router.get(
+  "/group/skripsi-history-list-sekretaris",
+  auth,
+  groupController.getSkripsiHistoryListSekretaris
+);
+
+//===================================================================
 // @description     Put metadata
 // @access          MAHASISWA
 router.put("/group/metadata/:id", auth, groupController.updateMetadataById);

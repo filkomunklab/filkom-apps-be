@@ -16,6 +16,8 @@ const userManagementRepository = require("../user_management/user_namagement.rep
 const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
 const proposalAssessmentRepository = require("../proposal_assessment/proposal_assessment.repository");
 const skripsiAssessmentRepository = require("../skripsi_assessment/skripsi_assessment.repository");
+const proposalConclusionRepository = require("../proposal_conclusion/proposal_conclusion_repository");
+const skripsiConclusionRepository = require("../skripsi_conclusion/skripsi_conclusion.repository");
 
 //===================================================================
 // @description     Get thesis list
@@ -4030,6 +4032,258 @@ const getSkripsiListSekretaris = async () => {
 };
 
 //===================================================================
+// @description     Get proposal history list operator fakultas/filkom
+// @route           GET /group/proposal-history-list-sekretaris
+// @access          OPERATOR_FAKULTAS
+const getProposalHistoryListSekretaris = async () => {
+  const scheduleBySemester = {};
+
+  const proposal = await proposalRepository.findAllProposal();
+  if (!proposal) {
+    return scheduleBySemester;
+  }
+
+  for (const entry of proposal) {
+    const group = await groupRepository.findGroupByProposalId(entry.id);
+
+    // check if proposal is in Finished - lulus atau tidak lulus menjadi riwayat
+    if (
+      group &&
+      group.progress === "Proposal" &&
+      (entry.is_pass === "Fail" || entry.is_pass === "Pass")
+    ) {
+      // get student
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+      const students = await Promise.all(
+        groupStudents.map(async (student_id) => {
+          const student = await studentRepository.findStudentById(student_id);
+          let fullName = student.firstName;
+
+          if (student.lastName) {
+            fullName += ` ${student.lastName}`;
+          }
+
+          // get conclusion value
+          const conclusionValue =
+            await proposalConclusionRepository.findConclusion(
+              entry.id,
+              student.id
+            );
+
+          return {
+            id: student.id,
+            fullName: fullName,
+            nim: student.nim,
+            major: student.major,
+            assessment_conclution: conclusionValue.assessment_conclution,
+          };
+        })
+      );
+
+      async function getEmployeeData(employeeId) {
+        const employee = await employeeRepository.findEmployeeById(employeeId);
+        let name = employee.firstName;
+
+        if (employee.lastName) {
+          name += ` ${employee.lastName}`;
+        }
+
+        if (employee.degree) {
+          name += `, ${employee.degree}`;
+        }
+
+        const data = {
+          id: employee.id,
+          nidn: employee.nidn,
+          name,
+        };
+
+        return data;
+      }
+
+      // get dekan
+      const role = await userManagementRepository.findUserByRole("DEKAN");
+      const isDekan = await employeeRepository.findEmployeeByNIK(role.userId);
+
+      // get panelis team
+      const dekan = await getEmployeeData(isDekan.id);
+      const panelis_chairman = await getEmployeeData(
+        entry.panelist_chairman_id
+      );
+      const panelis_member = await getEmployeeData(entry.panelist_member_id);
+      const advisor = await getEmployeeData(entry.advisor_id);
+
+      const scheduleData = {
+        group_id: group.id,
+        proposal_id: entry.id,
+        students,
+        title: group.title,
+        defence_date: entry.defence_date,
+        start_defence: entry.start_defence,
+        defence_room: entry.defence_room,
+        is_pass: entry.is_pass,
+        dekan,
+        is_sign_by_dekan: entry.is_report_approve_by_dekan,
+        panelis_chairman,
+        is_sign_by_chairman: entry.is_report_approve_by_panelist_chairman,
+        panelis_member,
+        is_sign_by_member: entry.is_report_approve_by_panelist_member,
+        advisor,
+        is_sign_by_advisor: entry.is_report_approve_by_advisor,
+      };
+
+      // get classroom
+      const classroom = await classroomRepository.findClassroomById(
+        entry.classroom_id
+      );
+
+      // Create a semester key based on the Academic_Calendar data
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
+
+      if (!scheduleBySemester[semesterKey]) {
+        scheduleBySemester[semesterKey] = {
+          semester: semesterKey,
+          schedules: [],
+        };
+      }
+
+      scheduleBySemester[semesterKey].schedules.push(scheduleData);
+    }
+  }
+
+  // Convert the submissionBySemester object into an array of semesters
+  const scheduleList = Object.values(scheduleBySemester);
+
+  return scheduleList;
+};
+
+//===================================================================
+// @description     Get skripsi history list operator fakultas/filkom
+// @route           GET /group/skripsi-history-list-sekretaris
+// @access          OPERATOR_FAKULTAS
+const getSkripsiHistoryListSekretaris = async () => {
+  const scheduleBySemester = {};
+
+  const skripsi = await skripsiRepository.findAllSkripsi();
+  if (!skripsi) {
+    return scheduleBySemester;
+  }
+
+  for (const entry of skripsi) {
+    const group = await groupRepository.findGroupBySkripsiId(entry.id);
+
+    // check if skripsi is in Finished
+    if (group && group.progress === "Finished") {
+      // get student
+      const groupStudents =
+        await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+      const students = await Promise.all(
+        groupStudents.map(async (student_id) => {
+          const student = await studentRepository.findStudentById(student_id);
+          let fullName = student.firstName;
+
+          if (student.lastName) {
+            fullName += ` ${student.lastName}`;
+          }
+
+          // get conclusion value
+          const conclusionValue =
+            await skripsiConclusionRepository.findConclusion(
+              entry.id,
+              student.id
+            );
+
+          return {
+            id: student.id,
+            fullName: fullName,
+            nim: student.nim,
+            major: student.major,
+            assessment_conclution: conclusionValue.assessment_conclution,
+          };
+        })
+      );
+
+      async function getEmployeeData(employeeId) {
+        const employee = await employeeRepository.findEmployeeById(employeeId);
+        let name = employee.firstName;
+
+        if (employee.lastName) {
+          name += ` ${employee.lastName}`;
+        }
+
+        if (employee.degree) {
+          name += `, ${employee.degree}`;
+        }
+
+        const data = {
+          id: employee.id,
+          nidn: employee.nidn,
+          name,
+        };
+
+        return data;
+      }
+
+      // get dekan
+      const role = await userManagementRepository.findUserByRole("DEKAN");
+      const isDekan = await employeeRepository.findEmployeeByNIK(role.userId);
+
+      // get panelis team
+      const dekan = await getEmployeeData(isDekan.id);
+      const panelis_chairman = await getEmployeeData(
+        entry.panelist_chairman_id
+      );
+      const panelis_member = await getEmployeeData(entry.panelist_member_id);
+      const advisor = await getEmployeeData(entry.advisor_id);
+
+      const scheduleData = {
+        group_id: group.id,
+        skripsi_id: entry.id,
+        students,
+        title: group.title,
+        defence_date: entry.defence_date,
+        start_defence: entry.start_defence,
+        defence_room: entry.defence_room,
+        is_pass: entry.is_pass,
+        dekan,
+        is_sign_by_dekan: entry.is_report_approve_by_dekan,
+        panelis_chairman,
+        is_sign_by_chairman: entry.is_report_approve_by_panelist_chairman,
+        panelis_member,
+        is_sign_by_member: entry.is_report_approve_by_panelist_member,
+        advisor,
+        is_sign_by_advisor: entry.is_report_approve_by_advisor,
+      };
+
+      // get classroom
+      const classroom = await classroomRepository.findClassroomById(
+        entry.classroom_id
+      );
+
+      // Create a semester key based on the Academic_Calendar data
+      const semesterKey = `Semester ${classroom.academic.semester} ${classroom.academic.year}`;
+
+      if (!scheduleBySemester[semesterKey]) {
+        scheduleBySemester[semesterKey] = {
+          semester: semesterKey,
+          schedules: [],
+        };
+      }
+
+      scheduleBySemester[semesterKey].schedules.push(scheduleData);
+    }
+  }
+
+  // Convert the submissionBySemester object into an array of semesters
+  const scheduleList = Object.values(scheduleBySemester);
+
+  return scheduleList;
+};
+
+//===================================================================
 // @description     Put metadata
 // @route           PUT /group/metadata/:id
 // @access          MAHASISWA
@@ -4241,6 +4495,9 @@ module.exports = {
   getHistoryListMember,
   getHistoryListKaprodi,
   getHistoryListDekan,
+
+  getProposalHistoryListSekretaris,
+  getSkripsiHistoryListSekretaris,
 
   updateMetadataById,
   getMetadataById,

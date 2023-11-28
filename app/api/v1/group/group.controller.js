@@ -745,6 +745,50 @@ const getProposalListSekretaris = async (req, res) => {
 };
 
 //===================================================================
+// @description     Get proposal history list operator fakultas/filkom
+// @route           GET /group/proposal-history-list-sekretaris
+// @access          OPERATOR_FAKULTAS
+const getProposalHistoryListSekretaris = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "proposal_history_list_sekretaris")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const group = await groupService.getProposalHistoryListSekretaris();
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get skripsi history list operator fakultas/filkom
+// @route           GET /group/skripsi-history-list-sekretaris
+// @access          OPERATOR_FAKULTAS
+const getSkripsiHistoryListSekretaris = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_history_list_sekretaris")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const group = await groupService.getSkripsiHistoryListSekretaris();
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
 // @description     Get skripsi list operator fakultas/filkom
 // @route           GET /group/skripsi-list-sekretaris
 // @access          OPERATOR_FAKULTAS
@@ -882,4 +926,6 @@ module.exports = {
   updateMetadataById,
   getMetadataById,
   getAllValueHistory,
+  getProposalHistoryListSekretaris,
+  getSkripsiHistoryListSekretaris,
 };

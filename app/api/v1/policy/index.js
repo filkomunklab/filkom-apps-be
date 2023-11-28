@@ -57,6 +57,8 @@ const policyFor = ({ user }) => {
     can("read", "proposal_revision_document");
     // Sekertaris view proposal list sekretaris
     can("read", "proposal_list_sekretaris");
+    // Sekertaris view proposal_history_list_sekretaris
+    can("read", "proposal_history_list_sekretaris");
     // ---------------------------------Skripsi--------------------------------
     // Sekertaris view skripsi document
     can("read", "skripsi_document");
@@ -80,6 +82,8 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_revision_document");
     // Sekertaris view skripsi list sekretaris
     can("read", "skripsi_list_sekretaris");
+    // Sekertaris view skripsi_history_list_sekretaris
+    can("read", "skripsi_history_list_sekretaris");
   }
 
   if (hasRole("DEKAN")) {
