@@ -2,6 +2,8 @@
 
 const studentRepository = require("./student.repository");
 const bcrypt = require("bcrypt");
+const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
+const { storage } = require("../../../config/firebase");
 
 const createStudent = async (payload) => {
   const student = await studentRepository.insertStudent(payload);
@@ -13,12 +15,23 @@ const findStudentByNim = async (nim) => {
   return student;
 };
 
-const viewBiodataStudent = async (nim, payload) => {
+const updateBiodataStudent = async (nim, payload) => {
+  const storageRef = ref(
+    storage,
+    `student/${nim}/${payload.studentImage.filename}`
+  );
+  const metadata = { contentType: "image/jpeg" };
   try {
-    const student = await studentRepository.findBiodataStudent(nim, payload);
-    return student;
+    const binaryString = atob(payload.studentImage.buffer);
+    const byteArray = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      byteArray[i] = binaryString.charCodeAt(i);
+    }
+    await uploadBytes(storageRef, byteArray, metadata);
+    const path = await getDownloadURL(storageRef);
+    await studentRepository.findBiodataStudent(nim, payload, path);
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
@@ -27,7 +40,7 @@ const viewStudentbyEmployeeNik = async (nik) => {
     const student = await studentRepository.findStudentByEmployeeNik(nik);
     return student;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
@@ -61,7 +74,7 @@ const updateStudentPassword = async (nim, payload) => {
 module.exports = {
   createStudent,
   findStudentByNim,
-  viewBiodataStudent,
+  updateBiodataStudent,
   viewStudentbyEmployeeNik,
   getAllStudent,
   updateStudentPassword,

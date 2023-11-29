@@ -11,11 +11,29 @@ const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
 
 // dokumentasi
+const {
+  SwaggerUIBundle,
+  SwaggerUIStandalonePreset,
+} = require("swagger-ui-dist");
+const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-const swaggerSpecs = require("./public/doc/filkom-api-doc.json");
+
+// Load Swagger JSON documentation from a file
+const options = {
+  swaggerDefinition: require("./public/docs/filkom-api-doc.json"),
+  apis: [],
+};
+const swaggerSpec = swaggerJsdoc(options);
 
 // Middleware untuk menampilkan Spesifikasi API dengan Swagger UI
-app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCssUrl:
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.1/swagger-ui.min.css",
+  })
+);
 
 //--------------------KlabatBridge------------------------------
 const sptRoutes = require("./app/api/v1/spt/spt.routes");
@@ -50,6 +68,7 @@ const certificateRoutes = require("./app/api/v1/certificate/certificate.routes")
 const activityRoutes = require("./app/api/v1/activity/activity.routes");
 const curriculumRoutes = require("./app/api/v1/curriculum/curriculum.routes");
 const subjectRoutes = require("./app/api/v1/subject/subject.routes");
+const preRegisRoutes = require("./app/api/v1/pre_regis/preRegis.routes");
 const { url } = require("inspector");
 
 //--------------------------------------------------------
@@ -90,6 +109,7 @@ app.use(`${URL}`, certificateRoutes);
 app.use(`${URL}`, activityRoutes);
 app.use(`${URL}`, curriculumRoutes);
 app.use(`${URL}`, subjectRoutes);
+app.use(`${URL}`, preRegisRoutes);
 //---------------------------------------------------
 
 app.use("/", (req, res) => {

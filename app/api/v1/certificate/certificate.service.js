@@ -8,6 +8,7 @@ const findAllStudentCertificate = async (nik) => {
     const certificate = await certificateRepository.findCertificate(nik);
     return certificate;
   } catch (error) {
+    console.log("Ini error: ", error);
     return error;
   }
 };

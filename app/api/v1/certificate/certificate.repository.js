@@ -22,28 +22,6 @@ const findCertificate = async (nik) => {
               lastName: true,
             },
           },
-        },
-      },
-    },
-  });
-  console.log(certificate);
-  return certificate;
-};
-
-const findOneCertificate = async (certificateId) => {
-  const certificate = await prisma.certificate.findUnique({
-    where: {
-      id: certificateId,
-    },
-    include: {
-      transaction: {
-        include: {
-          Student: {
-            select: {
-              firstName: true,
-              lastName: true,
-            },
-          },
           Employee: {
             select: {
               firstName: true,
@@ -55,6 +33,38 @@ const findOneCertificate = async (certificateId) => {
     },
   });
   return certificate;
+};
+
+const findOneCertificate = async (certificateId) => {
+  try {
+    const certificate = await prisma.certificate.findUnique({
+      where: {
+        id: certificateId,
+      },
+      include: {
+        transaction: {
+          include: {
+            Student: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+            Employee: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return certificate;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 };
 
 // find Certificate by category
