@@ -514,6 +514,8 @@ const policyFor = ({ user }) => {
     can("read", "dashboard");
     //mengisi form SPT
     can("create", "SPT");
+    //mengisi form TS
+    can("create", "TS");
   }
 
   if (hasRole("ALUMNI")) {

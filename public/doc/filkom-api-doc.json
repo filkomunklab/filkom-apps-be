@@ -658,6 +658,11 @@
     },
     "/spt/detail/id/{id}": {
       "get": {
+        "security": [
+          {
+            "securitySchemes": []
+          }
+        ],
         "tags": ["Klabat Bridge"],
         "summary": "== SPT ==",
         "description": "Melihat SPT berdasarkan id SPT",
@@ -760,6 +765,11 @@
     },
     "/spt": {
       "get": {
+        "security": [
+          {
+            "securitySchemes": []
+          }
+        ],
         "tags": ["Klabat Bridge"],
         "summary": "== SPT ==",
         "description": "Mengambil semua data SPT. SPT adalah Surat Permohonan Tamat.",
@@ -878,6 +888,11 @@
         }
       },
       "post": {
+        "security": [
+          {
+            "securitySchemes": []
+          }
+        ],
         "tags": ["Klabat Bridge"],
         "summary": "== SPT ==",
         "description": "Submit SPT",
@@ -1073,6 +1088,11 @@
     },
     "/spt/fac-approval/{id}?status=": {
       "patch": {
+        "security": [
+          {
+            "securitySchemes": []
+          }
+        ],
         "tags": ["Klabat Bridge"],
         "summary": "== SPT ==",
         "description": "Update status SPT dari Fakultas. Status bisa APPROVED dan REJECTED. contoh endpoint: /spt/fak-approval/:id?status=APPROVED",
@@ -1207,6 +1227,11 @@
     },
     "/spt/reg-approval/{id}?status=": {
       "patch": {
+        "security": [
+          {
+            "securitySchemes": []
+          }
+        ],
         "tags": ["Klabat Bridge"],
         "summary": "== SPT ==",
         "description": "Update status SPT dari Registrar. Status bisa APPROVED dan REJECTED. contoh endpoint: /spt/fak-approval/:id?status=APPROVED",
@@ -1342,6 +1367,11 @@
     },
     "/dashboard/statistic": {
       "get": {
+        "security": [
+          {
+            "securitySchemes": []
+          }
+        ],
         "tags": ["Klabat Bridge"],
         "summary": "== Dasboard ==",
         "description": "Dashboard Statistik pada page admin, fakultas dan operator.",
@@ -1465,6 +1495,11 @@
     },
     "/fakultas/alumni?search_query=": {
       "get": {
+        "security": [
+          {
+            "securitySchemes": []
+          }
+        ],
         "tags": ["Klabat Bridge"],
         "summary": "== ALUMNI ==",
         "description": "Mendapatkan semua alumni. Tidak ada hubungan dengan tracer study",
@@ -1712,6 +1747,11 @@
     },
     "/admin-operator/alumni?search_query=": {
       "get": {
+        "security": [
+          {
+            "securitySchemes": []
+          }
+        ],
         "tags": ["Klabat Bridge"],
         "summary": "== ALUMNI",
         "description": "Mendapat semua alumni beserta status sudah mengisi tracer study atau belum",
@@ -1959,6 +1999,11 @@
     },
     "/tracer-study": {
       "post": {
+        "security": [
+          {
+            "securitySchemes": []
+          }
+        ],
         "tags": ["Klabat Bridge"],
         "summary": "== Tracer Study ==",
         "description": "alumni Submit form tracer study",
@@ -2720,6 +2765,157 @@
                     "studentId": "20502201008"
                   }
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/operator/alumni/send-broadcast-whatsapp": {
+      "post": {
+        "security": [
+          {
+            "securitySchemes": []
+          }
+        ],
+        "tags": ["Klabat Bridge"],
+        "summary": "== Broadcast WA ==",
+        "description": "endpoint ini untuk mengirimkan reminder untuk mengisi tracer study",
+        "requestBody": {
+          "required": true,
+          "description": "nomor yang dituju, dapat lebih dari satu nomor",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phoneNums": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "phoneNums": ["08961238189", "08123457832"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sukses melakukan broadcast WA",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string"
+                      },
+                      "pesan": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "status": "success",
+                    "pesan": "Pesan Terkirim ke 628961238189@c.us !"
+                  },
+                  {
+                    "status": "success",
+                    "pesan": "Pesan Terkirim ke 628123457832@c.us !"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/operator/send-broadcast-email": {
+      "post": {
+        "security": [
+          {
+            "securitySchemes": []
+          }
+        ],
+        "tags": ["Klabat Bridge"],
+        "summary": "== Broadcast Email ==",
+        "description": "endpoint ini untuk mengirimkan reminder untuk mengisi tracer study",
+        "requestBody": {
+          "required": true,
+          "description": "Alamat email yang dituju, dapat lebih dari satu alamat email",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "personalEmails": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "personalEmails": ["angel@gmail.com", "brenda@gmail.com"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sukses melakukan broadcast Email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "status": "OK",
+                  "message": "broadcast email sent successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin-operator/exportDataTS": {
+      "get": {
+        "security": [
+          {
+            "securitySchemes": []
+          }
+        ],
+        "tags": ["Klabat Bridge"],
+        "summary": "== Export to Excel ==",
+        "description": "endpoint ini untuk export data tracer alumni dari database.",
+        "responses": {
+          "200": {
+            "description": "Sukses mendapatkan file excel",
+            "content": {
+              "excel/xlsx": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                },
+                "example": "file excel dalam format binary"
               }
             }
           }

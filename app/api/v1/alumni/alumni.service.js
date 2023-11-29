@@ -59,7 +59,7 @@ const sendEmail = async (recipientEmails) => {
     Jika berkenan dan kalau ada waktu kosong, kiranya dapat membantu kami untuk mengisi kuesioner yang akan kami kirimkan, paling lambat sebelum tanggal 14 September 2023. 
     
     Untuk pengisian kuesioner dapat mengakses link website Unklab dibawah ini:
-    https://www.unklab.ac.id/tracer-study/ //ganti link
+    https://www.unklab.ac.id/tracer-study/
     
     Salam hangat,😊🙏
     Tim Tracer Study
