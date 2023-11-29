@@ -106,7 +106,7 @@ const findStudentByToken = async (token) => {
   return student;
 };
 
-const findBiodataStudent = async (nim, payload) => {
+const findBiodataStudent = async (nim, payload, path) => {
   const {
     bloodType,
     studentEmail,
@@ -119,35 +119,43 @@ const findBiodataStudent = async (nim, payload) => {
     guardianEmail,
     guardianPhoneNo,
   } = payload;
-  const student = await prisma.student.update({
-    where: {
-      nim,
-    },
-    data: {
-      bloodType,
-      studentEmail,
-      phoneNo,
-      AreaOfConcentration,
-      highSchoolGrad,
-      currentAddress,
-      guardianEducation,
-      guardianStatus,
-      guardianEmail,
-      guardianPhoneNo,
-    },
-    include: {
-      Employee: {
-        select: {
-          firstName: true,
-          lastName: true,
-          phoneNum: true,
-          email: true,
-          Address: true,
+  const { filename } = payload.studentImage;
+  try {
+    const student = await prisma.student.update({
+      where: {
+        nim,
+      },
+      data: {
+        bloodType,
+        studentEmail,
+        phoneNo,
+        AreaOfConcentration,
+        highSchoolGrad,
+        currentAddress,
+        guardianEducation,
+        guardianStatus,
+        guardianEmail,
+        guardianPhoneNo,
+        filename,
+        path,
+      },
+      include: {
+        Employee: {
+          select: {
+            firstName: true,
+            lastName: true,
+            phoneNum: true,
+            email: true,
+            Address: true,
+          },
         },
       },
-    },
-  });
-  return student;
+    });
+    return student;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 const getAllStudent = async () => {
