@@ -111,6 +111,7 @@ model Student {
   updatedBy           String?
   createdAt           DateTime              @default(now())
   updatedAt           DateTime?
+  filename            String?
   path                String?
   proposal_student    Proposal_Student[]    @relation("ProposalStudent")
   skripsi_student     Skripsi_Student[]     @relation("SkripsiStudent")
@@ -575,10 +576,10 @@ model Curriculum {
 model Subject {
   id            String          @id @default(uuid())
   curriculum_id String
-  code          String            @db.VarChar(100)
+  code          String          @db.VarChar(100)
   name          String
   credits       Int
-  type          String            @db.VarChar(100)
+  type          String          @db.VarChar(100)
   prerequisite  String?
   semester      Int
   list          List_PreRegis[]
