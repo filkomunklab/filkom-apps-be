@@ -1,6 +1,7 @@
 //Layer untuk handle request dan response
 //Biasanya juga handle validasi body
 
+const { student } = require("../../../database");
 const studentService = require("./student.service");
 
 const createStudent = async (req, res) => {
@@ -26,7 +27,7 @@ const biodataStudent = async (req, res) => {
   const { nim } = req.params;
   try {
     await studentService.updateBiodataStudent(nim, payload);
-    res.status(201).send({ status: "OK" });
+    res.status(201).send({ status: "OK", data: student });
   } catch (error) {
     res
       .status(error?.status || 500)

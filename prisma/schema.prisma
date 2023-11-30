@@ -697,6 +697,7 @@ model History_Academic {
 enum Major {
   SI
   IF
+  DKV
 }
 
 enum StudentStatus {
