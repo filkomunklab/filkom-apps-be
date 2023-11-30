@@ -1,3 +1,4 @@
+const { certificate } = require("../../../database");
 const certificateService = require("./certificate.service");
 
 const viewAllStudentCertificate = async (req, res) => {
@@ -46,10 +47,12 @@ const viewCertificateCategory = async (req, res) => {
 const uploadCertificate = async (req, res) => {
   const payload = req.body;
   const { nim } = req.params;
-  console.log(payload);
   try {
-    await certificateService.uploadCertificate(payload, nim);
-    res.status(201).send({ status: "OK" });
+    const certificate = await certificateService.uploadCertificate(
+      payload,
+      nim
+    );
+    res.status(201).send({ status: "OK", data: certificate });
   } catch (error) {
     res
       .status(error?.status || 500)
