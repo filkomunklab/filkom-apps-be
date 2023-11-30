@@ -155,6 +155,18 @@ const viewDosenDetailProfile = async (req, res) => {
   }
 };
 
+const getDekanAndKaprodiByMajor = async (req, res) => {
+  const { major } = req.params;
+  try {
+    const employee = await employeeService.getDekanAndKaprodiByMajor(major);
+    res.status(200).send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -164,4 +176,5 @@ module.exports = {
   updateEmployeeById,
   viewDosenByMajor,
   viewDosenDetailProfile,
+  getDekanAndKaprodiByMajor,
 };

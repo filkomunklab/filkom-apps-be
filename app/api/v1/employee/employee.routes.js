@@ -8,6 +8,11 @@ const { auth } = require("../../../middleware/auth");
 
 router.get("/employee", employeeController.getAllEmployees);
 router.get("/employee/:id", employeeController.getEmployeeById);
+router.get("/employee/:id", employeeController.getEmployeeById);
+router.get(
+  "/employee/head/:major",
+  employeeController.getDekanAndKaprodiByMajor
+);
 router.post("/employee", employeeController.createEmployee);
 router.delete("/employee/:id", employeeController.deleteEmployeeById);
 router.patch("/employee/:id", employeeController.patchEmployeeById);

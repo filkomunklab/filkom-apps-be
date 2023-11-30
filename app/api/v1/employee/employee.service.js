@@ -62,6 +62,42 @@ const getDosenDetailProfile = async (nik) => {
   }
 };
 
+const getDekanAndKaprodiByMajor = async (major) => {
+  try {
+    // ambil nik
+    const dekan = await employeeRepository.selectDekan();
+    const kaprodi = await employeeRepository.selectKaprodi();
+
+    // ambil nama dekan berdasarkan nik kemudian tambah key role
+    let dekanName = await employeeRepository.selectDekanName(dekan);
+    dekanName = dekanName.map((value) => {
+      return {
+        ...value,
+        role: "dekan",
+      };
+    });
+
+    // ambil nama kaprodi berdasarkan nik dan major kemudian tambah key role
+    let kaprodiNameByMajor = await employeeRepository.selectKaprodiNameByMajor(
+      major,
+      kaprodi
+    );
+    kaprodiNameByMajor = kaprodiNameByMajor.map((value) => {
+      return {
+        ...value,
+        role: "kaprodi",
+      };
+    });
+
+    // gabung array dekan dan kaprodi jadi satu array
+    const employees = dekanName.concat(kaprodiNameByMajor);
+
+    return employees;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -70,4 +106,5 @@ module.exports = {
   updateOrPatchEmployeeById,
   getEmployeeByMajor,
   getDosenDetailProfile,
+  getDekanAndKaprodiByMajor,
 };
