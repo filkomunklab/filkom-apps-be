@@ -61,12 +61,12 @@ model Employee {
   proposal_changes          Proposal_Changes[]    @relation("Dosen")
   skripsi_changes           Skripsi_Changes[]     @relation("Dosen")
 
-  supervisior            Academic_Consultation[]   @relation("supervisior")
-  reciever               Academic_Consultation[]   @relation("consultationRecivier")
+  // supervisior            Academic_Consultation[]   @relation("supervisior")
+  // reciever               Academic_Consultation[]   @relation("consultationRecivier")
+  academic_consultations Academic_Consultation[]
   preRegis               PreRegistration[]
   transactionActivity    Transaction_Activity[]
   transactionCertificate Transaction_Certificate[]
-  message                Message[]
   student                Student[]
 
   @@unique([firstName, lastName])
@@ -124,7 +124,6 @@ model Student {
   preRegis               PreRegistration[]
   transactionActivity    Transaction_Activity[]
   transactionCertivicate Transaction_Certificate[]
-  message                Message[]
   Employee               Employee?                 @relation(fields: [employeeId], references: [nik])
   employeeId             String?
   Tracer_Study           Tracer_Study[]
@@ -587,6 +586,41 @@ model Subject {
   curriculumId  String?
 }
 
+model Academic_Consultation {
+  id String @id @default(uuid())
+
+  student     Student @relation(fields: [student_nim], references: [nim])
+  student_nim String
+
+  receiver     Employee @relation(fields: [receiver_nik], references: [nik])
+  receiver_nik String
+
+  receiver_name        String              @db.VarChar(255)
+  topic                String              @db.VarChar(50)
+  student_name         String              @db.VarChar(255)
+  supervisor_name      String              @db.VarChar(255)
+  student_major        String              @db.VarChar(50)
+  student_arrival_year String              @db.VarChar(50)
+  createdAt            DateTime            @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime            @default(now()) @db.Timestamptz(3)
+  status               Consultation_Status @default(Waiting)
+
+  messages Message[]
+
+  History_Academic History_Academic[]
+}
+
+model Message {
+  id String @id @default(uuid())
+
+  academic_consultation    Academic_Consultation @relation(fields: [academic_consultation_id], references: [id])
+  academic_consultation_id String
+
+  sender_name String   @db.VarChar(255)
+  content     String
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+}
+
 model PreRegistration {
   id           String             @id @default(uuid())
   submitDate   DateTime           @default(now())
@@ -611,32 +645,6 @@ model List_PreRegis {
   subjectId         String?
   PreRegistration   PreRegistration? @relation(fields: [preRegistrationId], references: [id])
   preRegistrationId String?
-}
-
-model Academic_Consultation {
-  id         String             @id @default(uuid())
-  topic      String
-  submitDate DateTime           @default(now())
-  status     status             @default(WAITING)
-  message    Message[]
-  history    History_Academic[]
-  Dosen      Employee?          @relation("supervisior", fields: [DosenId], references: [id])
-  DosenId    String?
-  Employee   Employee?          @relation("consultationRecivier", fields: [employeeId], references: [id])
-  employeeId String?
-  Student    Student?           @relation(fields: [studentId], references: [id])
-  studentId  String?
-}
-
-model Message {
-  id                     String                 @id @default(uuid())
-  academic_Consultation  Academic_Consultation? @relation(fields: [academicConsultationId], references: [id])
-  academicConsultationId String?
-  sendTime               DateTime               @default(now())
-  Student                Student?               @relation(fields: [studentId], references: [id])
-  studentId              String?
-  Employee               Employee?              @relation(fields: [employeeId], references: [id])
-  employeeId             String?
 }
 
 model Certificate {
@@ -783,4 +791,10 @@ enum Revision_Approve {
   Waiting
   Approve
   Rejected
+}
+
+enum Consultation_Status {
+  Waiting
+  OnProcess
+  Complete
 }
