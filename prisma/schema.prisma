@@ -111,8 +111,8 @@ model Student {
   updatedBy           String?
   createdAt           DateTime              @default(now())
   updatedAt           DateTime?
-  filename            String?
-  path                String?
+  filename            String
+  path                String
   proposal_student    Proposal_Student[]    @relation("ProposalStudent")
   skripsi_student     Skripsi_Student[]     @relation("SkripsiStudent")
   group_student       Group_Student[]       @relation("StudentMember")

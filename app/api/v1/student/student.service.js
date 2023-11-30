@@ -29,7 +29,11 @@ const updateBiodataStudent = async (nim, payload) => {
     }
     await uploadBytes(storageRef, byteArray, metadata);
     const path = await getDownloadURL(storageRef);
-    await studentRepository.findBiodataStudent(nim, payload, path);
+    return await studentRepository.findToUpdateBiodataStudent(
+      nim,
+      payload,
+      path
+    );
   } catch (error) {
     throw error;
   }
