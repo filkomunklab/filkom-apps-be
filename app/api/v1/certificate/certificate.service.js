@@ -50,7 +50,7 @@ const uploadCertificate = async (payload, nim) => {
     }
     await uploadBytes(storageRef, byteArray, metadata);
     const path = await getDownloadURL(storageRef);
-    await certificateRepository.insertCertificate(payload, nim, path);
+    return await certificateRepository.insertCertificate(payload, nim, path);
   } catch (error) {
     throw error;
   }
