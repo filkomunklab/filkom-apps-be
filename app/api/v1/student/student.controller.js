@@ -26,7 +26,7 @@ const biodataStudent = async (req, res) => {
   const payload = req.body;
   const { nim } = req.params;
   try {
-    await studentService.updateBiodataStudent(nim, payload);
+    const student = await studentService.updateBiodataStudent(nim, payload);
     res.status(201).send({ status: "OK", data: student });
   } catch (error) {
     res

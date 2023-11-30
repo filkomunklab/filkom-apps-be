@@ -106,7 +106,7 @@ const findStudentByToken = async (token) => {
   return student;
 };
 
-const findBiodataStudent = async (nim, payload, path) => {
+const findToUpdateBiodataStudent = async (nim, payload, path) => {
   const {
     bloodType,
     studentEmail,
@@ -114,6 +114,10 @@ const findBiodataStudent = async (nim, payload, path) => {
     AreaOfConcentration,
     highSchoolGrad,
     currentAddress,
+    guardianName,
+    guardianReligion,
+    familyRelation,
+    guardianAddress,
     guardianEducation,
     guardianStatus,
     guardianEmail,
@@ -132,6 +136,10 @@ const findBiodataStudent = async (nim, payload, path) => {
         AreaOfConcentration,
         highSchoolGrad,
         currentAddress,
+        guardianName,
+        guardianReligion,
+        familyRelation,
+        guardianAddress,
         guardianEducation,
         guardianStatus,
         guardianEmail,
@@ -179,11 +187,11 @@ const updateByNim = async (nim, payload) => {
 module.exports = {
   findStudentById,
   findStudentByNim,
+  findStudentByEmployeeNik,
   insertStudent,
   updateStudent,
   findStudentByToken,
-  findBiodataStudent,
-  findStudentByEmployeeNik,
+  findToUpdateBiodataStudent,
   getAllStudent,
   updateByNim,
 };
