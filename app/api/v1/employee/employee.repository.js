@@ -128,6 +128,93 @@ const findDosenDetailProfile = async (nik) => {
   }
 };
 
+const selectDekan = async () => {
+  try {
+    const dekan = await prisma.userRole.findMany({
+      where: {
+        role: "DEKAN",
+      },
+      select: {
+        userId: true,
+      },
+    });
+
+    return dekan;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const selectKaprodi = async () => {
+  try {
+    const kaprodi = await prisma.userRole.findMany({
+      where: {
+        role: "KAPRODI",
+      },
+      select: {
+        userId: true,
+      },
+    });
+
+    return kaprodi;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const selectDekanName = async (niks) => {
+  try {
+    const dekanName = await prisma.employee.findMany({
+      where: {
+        OR: [
+          {
+            nik: {
+              in: niks.map((value) => value.userId),
+            },
+          },
+        ],
+      },
+      select: {
+        nik: true,
+        firstName: true,
+        lastName: true,
+      },
+    });
+
+    return dekanName;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const selectKaprodiNameByMajor = async (major, niks) => {
+  try {
+    const kaprodiNameByMajor = await prisma.employee.findMany({
+      where: {
+        AND: [
+          {
+            nik: {
+              in: niks.map((value) => value.userId),
+            },
+          },
+          {
+            major,
+          },
+        ],
+      },
+      select: {
+        nik: true,
+        firstName: true,
+        lastName: true,
+      },
+    });
+
+    return kaprodiNameByMajor;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
 module.exports = {
   findEmployees,
   findEmployeeById,
@@ -138,4 +225,8 @@ module.exports = {
   findEmployeeByNIK,
   findEmployeeByMajor,
   findDosenDetailProfile,
+  selectDekan,
+  selectDekanName,
+  selectKaprodi,
+  selectKaprodiNameByMajor,
 };
