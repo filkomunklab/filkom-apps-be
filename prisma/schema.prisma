@@ -604,6 +604,7 @@ model Academic_Consultation {
   createdAt            DateTime            @default(now()) @db.Timestamptz(3)
   updatedAt            DateTime            @default(now()) @db.Timestamptz(3)
   status               Consultation_Status @default(Waiting)
+  description          String
 
   messages Message[]
 
