@@ -2,6 +2,14 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function main() {
+  // CREATE MAJOR
+  await prisma.majorGlobal.createMany({
+    data: [
+      { id: "55201", shortName: "IF", name: "Informatika" },
+      { id: "57201", shortName: "SI", name: "Sistem Informasi" },
+    ],
+  });
+
   // CREATE ADMIN
   await prisma.admin.create({
     data: {
@@ -66,6 +74,7 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        // majorGlobalId: 55201,
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4992,6 +5001,24 @@ async function main() {
         studentId: "10502201002",
       },
     ],
+  });
+
+  await prisma.student.updateMany({
+    where: {
+      major: "IF",
+    },
+    data: {
+      majorGlobalId: "55201",
+    },
+  });
+
+  await prisma.student.updateMany({
+    where: {
+      major: "SI",
+    },
+    data: {
+      majorGlobalId: "57201",
+    },
   });
 }
 

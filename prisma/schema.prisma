@@ -94,6 +94,8 @@ model Student {
   personalEmail       String?               @unique
   faculty             String?
   major               Major?
+  MajorGlobal         MajorGlobal?          @relation(fields: [majorGlobalId], references: [id])
+  majorGlobalId       String?
   graduate_year       String?
   address             String?
   phoneNo             String?
@@ -131,6 +133,13 @@ model Student {
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
+}
+
+model MajorGlobal {
+  id        String    @id
+  shortName String
+  name      String
+  Student   Student[]
 }
 
 model UserRole {

@@ -119,6 +119,7 @@ const signInStudent = async (username, password) => {
             nim: checkNIM.nim,
             name: `${checkNIM.firstName} ${checkNIM.lastName}`,
             role: role,
+            majorGlobalId: checkNIM.majorGlobalId,
           },
         },
         secretKey
