@@ -900,6 +900,113 @@ const getAllCompleteSkripsi = async (req, res) => {
   }
 };
 
+//===================================================================
+// @description     Create link
+// @route           POST /skripsi/link
+// @access          MAHASISWA
+const createLink = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("create", "link")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const payload = req.body;
+    if (!payload.name && !payload.link) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const group = await groupService.createLink(id, userId, payload);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Update link
+// @route           PUT /skripsi/link/:id
+// @access          MAHASISWA
+const updateLinkByLinkId = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "link")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const payload = req.body;
+    if (!payload.name && !payload.link) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const group = await groupService.updateLinkByLinkId(id, userId, payload);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Delete link
+// @route           DELETE /skripsi/link/:id
+// @access          MAHASISWA
+const deleteLinkByLinkId = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("delete", "link")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    await groupService.deleteLinkByLinkId(id, userId);
+    res.status(200).send({ status: "OK" });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get link all link
+// @route           GET /skripsi/all-link/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN
+const getAllLinkById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "link")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const group = await groupService.getAllLinkById(id);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getThesisList,
   getSubmissionDetailsById,
@@ -944,4 +1051,8 @@ module.exports = {
   getProposalHistoryListSekretaris,
   getSkripsiHistoryListSekretaris,
   getAllCompleteSkripsi,
+  createLink,
+  updateLinkByLinkId,
+  deleteLinkByLinkId,
+  getAllLinkById,
 };

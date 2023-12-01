@@ -323,4 +323,28 @@ router.get(
   groupController.getAllCompleteSkripsi
 );
 
+//===================================================================
+// @description     Create link
+// @access          MAHASISWA
+router.post("/skripsi/link", auth, groupController.createLink);
+
+//===================================================================
+// @description     Update link
+// @access          MAHASISWA
+router.put("/skripsi/link/:id", auth, groupController.updateLinkByLinkId);
+
+//===================================================================
+// @description     Delete link
+// @access          MAHASISWA
+router.delete(
+  "/skripsi/link/delete/:id",
+  auth,
+  groupController.deleteLinkByLinkId
+);
+
+//===================================================================
+// @description     Get all link
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN
+router.get("/skripsi/all-link/:id", auth, groupController.getAllLinkById);
+
 module.exports = router;

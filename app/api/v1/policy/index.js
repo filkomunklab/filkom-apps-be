@@ -97,6 +97,8 @@ const policyFor = ({ user }) => {
     can("read", "Consultation");
     // Dekan view thesis history
     can("read", "thesis_history");
+    // Dekan view link
+    can("read", "link");
     // ---------------------------------Submission--------------------------------
     // Dekan view submission
     can("read", "Submission");
@@ -164,6 +166,8 @@ const policyFor = ({ user }) => {
     can("read", "advisor_team");
     // Kaprodi view thesis history
     can("read", "thesis_history");
+    // Kaprodi view link
+    can("read", "link");
     // ---------------------------------Submission--------------------------------
     // Kaprodi view submission
     can("read", "Submission");
@@ -233,6 +237,8 @@ const policyFor = ({ user }) => {
     can("read", "submission_dateline");
     // (Dosen: Ketua Panelis) update submission_dateline
     can("update", "submission_dateline");
+    // Dosen view link
+    can("read", "link");
     // ---------------------------------Submission--------------------------------
     // Dosen view committee list
     can("read", "committee_list");
@@ -350,6 +356,8 @@ const policyFor = ({ user }) => {
     can("read", "thesis_history");
     // Dosen MK view value history
     can("read", "value_history");
+    // Dosen MK view link
+    can("read", "link");
     // ---------------------------------Submission--------------------------------
     // Dosen MK view submission
     can("read", "Submission");
@@ -433,6 +441,8 @@ const policyFor = ({ user }) => {
     can("update", "metadata");
     // Mahasiswa view metadata
     can("read", "metadata");
+    // Mahasiswa manage link
+    can("manage", "link");
     // ---------------------------------Submission--------------------------------
     can("create", "Submission");
     // Mahasiswa view submission

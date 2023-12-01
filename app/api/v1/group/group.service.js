@@ -18,6 +18,7 @@ const proposalAssessmentRepository = require("../proposal_assessment/proposal_as
 const skripsiAssessmentRepository = require("../skripsi_assessment/skripsi_assessment.repository");
 const proposalConclusionRepository = require("../proposal_conclusion/proposal_conclusion_repository");
 const skripsiConclusionRepository = require("../skripsi_conclusion/skripsi_conclusion.repository");
+const thesisLinkRepository = require("../thesis_link/thesis_link.repository");
 
 //===================================================================
 // @description     Get thesis list
@@ -4049,7 +4050,7 @@ const getProposalHistoryListSekretaris = async () => {
     // check if proposal is in Finished - lulus atau tidak lulus menjadi riwayat
     if (
       group &&
-      group.progress === "Proposal" &&
+      (group.progress === "Proposal" || group.progress === "Skripsi") &&
       (entry.is_pass === "Fail" || entry.is_pass === "Pass")
     ) {
       // get student
@@ -4445,6 +4446,119 @@ const getAllCompleteSkripsi = async () => {
   return group;
 };
 
+//===================================================================
+// @description     Create link
+// @route           POST /skripsi/link
+// @access          MAHASISWA
+const createLink = async (id, userId, payload) => {
+  // check group is exist
+  const group = await groupRepository.findGroupById(id);
+  if (!group) {
+    throw {
+      status: 400,
+      message: `Group doesn't exist`,
+    };
+  }
+  // check if user in group
+  const groupStudent =
+    await groupStudentRepository.findGroupStudentByStudentIdAndGroupId(
+      userId,
+      id
+    );
+  if (!groupStudent) {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+
+  // create link
+  const createLink = await thesisLinkRepository.insertLink(id, payload);
+
+  return createLink;
+};
+
+//===================================================================
+// @description     Update link
+// @route           PUT /skripsi/link/:id
+// @access          MAHASISWA
+const updateLinkByLinkId = async (id, userId, payload) => {
+  // check link is exist
+  const existingLink = await thesisLinkRepository.findLinkById(id);
+
+  if (!existingLink) {
+    throw {
+      status: 400,
+      message: `Link not found`,
+    };
+  }
+
+  // check if user in group
+  const groupStudent =
+    await groupStudentRepository.findGroupStudentByStudentIdAndGroupId(
+      userId,
+      existingLink.group_id
+    );
+  if (!groupStudent) {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+
+  const updateLink = await thesisLinkRepository.updateLinkByLinkId(
+    existingLink.id,
+    payload
+  );
+
+  return updateLink;
+};
+
+//===================================================================
+// @description     Delete link
+// @route           DELETE /skripsi/link/:id
+// @access          MAHASISWA
+const deleteLinkByLinkId = async (id, userId) => {
+  // check link is exist
+  const existingLink = await thesisLinkRepository.findLinkById(id);
+
+  if (!existingLink) {
+    throw {
+      status: 400,
+      message: `Link not found`,
+    };
+  }
+
+  // check if user in group
+  const groupStudent =
+    await groupStudentRepository.findGroupStudentByStudentIdAndGroupId(
+      userId,
+      existingLink.group_id
+    );
+  if (!groupStudent) {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+
+  await thesisLinkRepository.deleteLinkByLinkId(id);
+};
+
+//===================================================================
+// @description     Get link all link
+// @route           GET /skripsi/all-link/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN
+const getAllLinkById = async (id) => {
+  const links = await thesisLinkRepository.findAllLinkById(id);
+
+  if (!links) {
+    return [];
+  }
+
+  return links;
+};
+
 module.exports = {
   getThesisList,
   getSubmissionDetailsById,
@@ -4490,4 +4604,8 @@ module.exports = {
   getMetadataById,
   getAllValueHistory,
   getAllCompleteSkripsi,
+  createLink,
+  updateLinkByLinkId,
+  deleteLinkByLinkId,
+  getAllLinkById,
 };

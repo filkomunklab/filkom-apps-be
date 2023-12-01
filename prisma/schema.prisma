@@ -310,6 +310,7 @@ model Group {
   group_student       Group_Student[]       @relation("Group")
   thesis_consultation Thesis_Consultation[] @relation("ThesisConsultation")
   History             Thesis_History[]      @relation("History")
+  Link                Thesis_Link[]         @relation("Link")
 }
 
 model Academic_Calendar {
@@ -597,6 +598,15 @@ model Thesis_History {
   date        DateTime
   group       Group    @relation("History", fields: [group_id], references: [id])
   group_id    String
+}
+
+model Thesis_Link {
+  id       String   @id @default(uuid())
+  group    Group    @relation("Link", fields: [group_id], references: [id])
+  group_id String
+  name     String
+  link     String
+  date     DateTime
 }
 
 //-------------------Bimbingan Akademik-------------------/

@@ -507,6 +507,17 @@ CREATE TABLE "Thesis_History" (
     CONSTRAINT "Thesis_History_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Thesis_Link" (
+    "id" TEXT NOT NULL,
+    "group_id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "link" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Thesis_Link_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Group_submission_id_key" ON "Group"("submission_id");
 
@@ -653,3 +664,6 @@ ALTER TABLE "Thesis_Consultation" ADD CONSTRAINT "Thesis_Consultation_dosen_id_f
 
 -- AddForeignKey
 ALTER TABLE "Thesis_History" ADD CONSTRAINT "Thesis_History_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Thesis_Link" ADD CONSTRAINT "Thesis_Link_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
