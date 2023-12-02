@@ -63,7 +63,7 @@ const deleteLinkByLinkId = async (id) => {
 
 //===================================================================
 // @description     Get link all link
-// @route           GET /skripsi/all-link/:id
+// @route           GET /group/skripsi/all-link/:id
 // @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN
 const findAllLinkById = async (group_id) => {
   const thesisLink = await prisma.thesis_Link.findMany({

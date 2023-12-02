@@ -902,7 +902,7 @@ const getAllCompleteSkripsi = async (req, res) => {
 
 //===================================================================
 // @description     Create link
-// @route           POST /skripsi/link
+// @route           POST /group/skripsi/link
 // @access          MAHASISWA
 const createLink = async (req, res) => {
   const policy = policyFor(req.user);
@@ -913,7 +913,6 @@ const createLink = async (req, res) => {
     });
   }
   try {
-    const id = req.params.id;
     const userId = req.user.user.id;
     const payload = req.body;
     if (!payload.name && !payload.link) {
@@ -921,7 +920,7 @@ const createLink = async (req, res) => {
         .status(400)
         .send({ status: "FAILED", data: { error: "some field is missing" } });
     }
-    const group = await groupService.createLink(id, userId, payload);
+    const group = await groupService.createLink(userId, payload);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -932,7 +931,7 @@ const createLink = async (req, res) => {
 
 //===================================================================
 // @description     Update link
-// @route           PUT /skripsi/link/:id
+// @route           PUT /group/skripsi/link/:id
 // @access          MAHASISWA
 const updateLinkByLinkId = async (req, res) => {
   const policy = policyFor(req.user);
@@ -962,7 +961,7 @@ const updateLinkByLinkId = async (req, res) => {
 
 //===================================================================
 // @description     Delete link
-// @route           DELETE /skripsi/link/:id
+// @route           DELETE /group/skripsi/link/:id
 // @access          MAHASISWA
 const deleteLinkByLinkId = async (req, res) => {
   const policy = policyFor(req.user);
@@ -986,7 +985,7 @@ const deleteLinkByLinkId = async (req, res) => {
 
 //===================================================================
 // @description     Get link all link
-// @route           GET /skripsi/all-link/:id
+// @route           GET /group/skripsi/all-link/:id
 // @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN
 const getAllLinkById = async (req, res) => {
   const policy = policyFor(req.user);

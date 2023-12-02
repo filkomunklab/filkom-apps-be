@@ -4448,11 +4448,11 @@ const getAllCompleteSkripsi = async () => {
 
 //===================================================================
 // @description     Create link
-// @route           POST /skripsi/link
+// @route           POST /group/skripsi/link
 // @access          MAHASISWA
-const createLink = async (id, userId, payload) => {
+const createLink = async (userId, payload) => {
   // check group is exist
-  const group = await groupRepository.findGroupById(id);
+  const group = await groupRepository.findGroupById(payload.group_id);
   if (!group) {
     throw {
       status: 400,
@@ -4463,7 +4463,7 @@ const createLink = async (id, userId, payload) => {
   const groupStudent =
     await groupStudentRepository.findGroupStudentByStudentIdAndGroupId(
       userId,
-      id
+      payload.group_id
     );
   if (!groupStudent) {
     throw {
@@ -4473,14 +4473,17 @@ const createLink = async (id, userId, payload) => {
   }
 
   // create link
-  const createLink = await thesisLinkRepository.insertLink(id, payload);
+  const createLink = await thesisLinkRepository.insertLink(
+    payload.group_id,
+    payload
+  );
 
   return createLink;
 };
 
 //===================================================================
 // @description     Update link
-// @route           PUT /skripsi/link/:id
+// @route           PUT /group/skripsi/link/:id
 // @access          MAHASISWA
 const updateLinkByLinkId = async (id, userId, payload) => {
   // check link is exist
@@ -4516,7 +4519,7 @@ const updateLinkByLinkId = async (id, userId, payload) => {
 
 //===================================================================
 // @description     Delete link
-// @route           DELETE /skripsi/link/:id
+// @route           DELETE /group/skripsi/link/:id
 // @access          MAHASISWA
 const deleteLinkByLinkId = async (id, userId) => {
   // check link is exist
@@ -4547,7 +4550,7 @@ const deleteLinkByLinkId = async (id, userId) => {
 
 //===================================================================
 // @description     Get link all link
-// @route           GET /skripsi/all-link/:id
+// @route           GET /group/skripsi/all-link/:id
 // @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN
 const getAllLinkById = async (id) => {
   const links = await thesisLinkRepository.findAllLinkById(id);
