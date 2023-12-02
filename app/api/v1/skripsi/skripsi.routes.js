@@ -224,7 +224,7 @@ router.get(
 // @description     Get conclusion value
 // @access          DOSEN
 router.put(
-  "/proposal/proposal-report/conclusion-value/:id",
+  "/skripsi/skripsi-report/conclusion-value/:id",
   auth,
   skripsiController.updateSkripsiConclusionValueById
 );
@@ -233,7 +233,7 @@ router.put(
 // @description     Get conclusion value
 // @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
 router.get(
-  "/proposal/proposal-report/conclusion-value/:id",
+  "/skripsi/skripsi-report/conclusion-value/:id",
   auth,
   skripsiController.getSkripsiConclusionValueById
 );

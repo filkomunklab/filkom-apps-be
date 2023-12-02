@@ -4050,8 +4050,8 @@ const getProposalHistoryListSekretaris = async () => {
     // check if proposal is in Finished - lulus atau tidak lulus menjadi riwayat
     if (
       group &&
-      (group.progress === "Proposal" || group.progress === "Skripsi") &&
-      (entry.is_pass === "Fail" || entry.is_pass === "Pass")
+      group.progress !== "Submission" &&
+      entry.defence_date !== null
     ) {
       // get student
       const groupStudents =
@@ -4073,13 +4073,25 @@ const getProposalHistoryListSekretaris = async () => {
               student.id
             );
 
-          return {
-            id: student.id,
-            fullName: fullName,
-            nim: student.nim,
-            major: student.major,
-            assessment_conclution: conclusionValue.assessment_conclution,
-          };
+          // Check if conclusionValue is not null before accessing its properties
+          if (conclusionValue) {
+            return {
+              id: student.id,
+              fullName: fullName,
+              nim: student.nim,
+              major: student.major,
+              assessment_conclution: conclusionValue.assessment_conclution,
+            };
+          } else {
+            // Handle the case when conclusionValue is null
+            return {
+              id: student.id,
+              fullName: fullName,
+              nim: student.nim,
+              major: student.major,
+              assessment_conclution: null, // Or handle it accordingly
+            };
+          }
         })
       );
 
@@ -4128,11 +4140,17 @@ const getProposalHistoryListSekretaris = async () => {
         dekan,
         is_sign_by_dekan: entry.is_report_approve_by_dekan,
         panelis_chairman,
+        dekan_report_approve_date: entry.dekan_report_approve_date,
         is_sign_by_chairman: entry.is_report_approve_by_panelist_chairman,
+        panelist_chairman_report_approve_date:
+          entry.panelist_chairman_report_approve_date,
         panelis_member,
         is_sign_by_member: entry.is_report_approve_by_panelist_member,
+        panelist_member_report_approve_date:
+          entry.panelist_member_report_approve_date,
         advisor,
         is_sign_by_advisor: entry.is_report_approve_by_advisor,
+        advisor_report_approve_date: entry.advisor_report_approve_date,
       };
 
       // get classroom
@@ -4176,7 +4194,11 @@ const getSkripsiHistoryListSekretaris = async () => {
     const group = await groupRepository.findGroupBySkripsiId(entry.id);
 
     // check if skripsi is in Finished
-    if (group && group.progress === "Finished") {
+    if (
+      group &&
+      (group.progress === "Skripsi" || group.progress === "Finished") &&
+      entry.defence_date !== null
+    ) {
       // get student
       const groupStudents =
         await groupStudentRepository.findGroupStudentByGroupId(group.id);
@@ -4197,13 +4219,25 @@ const getSkripsiHistoryListSekretaris = async () => {
               student.id
             );
 
-          return {
-            id: student.id,
-            fullName: fullName,
-            nim: student.nim,
-            major: student.major,
-            assessment_conclution: conclusionValue.assessment_conclution,
-          };
+          // Check if conclusionValue is not null before accessing its properties
+          if (conclusionValue) {
+            return {
+              id: student.id,
+              fullName: fullName,
+              nim: student.nim,
+              major: student.major,
+              assessment_conclution: conclusionValue.assessment_conclution,
+            };
+          } else {
+            // Handle the case when conclusionValue is null
+            return {
+              id: student.id,
+              fullName: fullName,
+              nim: student.nim,
+              major: student.major,
+              assessment_conclution: null, // Or handle it accordingly
+            };
+          }
         })
       );
 
@@ -4252,11 +4286,17 @@ const getSkripsiHistoryListSekretaris = async () => {
         dekan,
         is_sign_by_dekan: entry.is_report_approve_by_dekan,
         panelis_chairman,
+        dekan_report_approve_date: entry.dekan_report_approve_date,
         is_sign_by_chairman: entry.is_report_approve_by_panelist_chairman,
+        panelist_chairman_report_approve_date:
+          entry.panelist_chairman_report_approve_date,
         panelis_member,
         is_sign_by_member: entry.is_report_approve_by_panelist_member,
+        panelist_member_report_approve_date:
+          entry.panelist_member_report_approve_date,
         advisor,
         is_sign_by_advisor: entry.is_report_approve_by_advisor,
+        advisor_report_approve_date: entry.advisor_report_approve_date,
       };
 
       // get classroom
@@ -4331,6 +4371,7 @@ const getAllValueHistory = async (userId) => {
         academic: entry.academic,
       };
 
+      // get proposal classroom
       if (entry.name === "Proposal") {
         const proposals = await proposalRepository.findAllProposalByClassroomId(
           entry.id
@@ -4352,6 +4393,13 @@ const getAllValueHistory = async (userId) => {
                   const student = await studentRepository.findStudentById(
                     value.student_id
                   );
+                  let fullName = student.firstName;
+
+                  if (student.lastName) {
+                    fullName += ` ${student.lastName}`;
+                  }
+
+                  console.log("nilai: ", value.assessment_conclution);
 
                   const studentData = {
                     id: student.id,
@@ -4367,6 +4415,7 @@ const getAllValueHistory = async (userId) => {
           }
         }
       }
+      // get skripsi classroom
       if (entry.name === "Skripsi") {
         const skripsis = await skripsiRepository.findAllSkripsiByClassroomId(
           entry.id
@@ -4388,6 +4437,11 @@ const getAllValueHistory = async (userId) => {
                   const student = await studentRepository.findStudentById(
                     value.student_id
                   );
+                  let fullName = student.firstName;
+
+                  if (student.lastName) {
+                    fullName += ` ${student.lastName}`;
+                  }
 
                   const studentData = {
                     id: student.id,

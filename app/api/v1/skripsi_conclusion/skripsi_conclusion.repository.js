@@ -11,8 +11,7 @@ const createConclusion = async (skripsi_id, student_id) => {
   return conclusion;
 };
 
-const updateConclusion = async (payload) => {
-  const { assessment_conclution } = payload;
+const updateConclusion = async (id, assessment_conclution) => {
   const conclusion = prisma.skripsi_Conclusion.update({
     where: {
       id,
