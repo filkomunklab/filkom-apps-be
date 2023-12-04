@@ -5,7 +5,7 @@ const viewAllStudentCertificate = async (req, res) => {
   const { nik } = req.params;
   try {
     const certificate = await certificateService.findAllStudentCertificate(nik);
-    res.status(201).send({ status: "OK", data: certificate });
+    res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -20,7 +20,7 @@ const viewStudentCertificate = async (req, res) => {
       certificateId
     );
     console.log("hello world", certificate);
-    res.status(201).send({ status: "OK", data: certificate });
+    res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -36,7 +36,7 @@ const viewCertificateCategory = async (req, res) => {
       category,
       nik
     );
-    res.status(201).send({ status: "OK", data: certificate });
+    res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -66,7 +66,7 @@ const studentCertificateHistory = async (req, res) => {
     const certificate = await certificateService.studentHistoryCertificateView(
       nim
     );
-    res.status(201).send({ status: "OK", data: certificate });
+    res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     console.log("eror: ", error);
     res
@@ -81,9 +81,22 @@ const advisorCertificateHistory = async (req, res) => {
     const certificate = await certificateService.advisorHistoryCertificateView(
       nik
     );
-    res.status(201).send({ status: "OK", data: certificate });
+    res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
-    console.log(error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const patchStatusCertificate = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const status = req.query.status;
+    const certificate = await certificateService.approveCertificate(id, status);
+
+    res.send({ status: "OK", data: certificate });
+  } catch (error) {
     res
       .status(error?.status || 500)
       .send({ status: "FAILED", data: { error: error?.message || error } });
@@ -97,4 +110,5 @@ module.exports = {
   viewCertificateCategory,
   studentCertificateHistory,
   advisorCertificateHistory,
+  patchStatusCertificate,
 };
