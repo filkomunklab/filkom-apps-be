@@ -77,6 +77,14 @@ const advisorHistoryCertificateView = async (nik) => {
   }
 };
 
+const approveCertificate = async (id, status) => {
+  try {
+    return certificateRepository.approvalStudentCertificate(id, status);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   uploadCertificate,
   findAllStudentCertificate,
@@ -84,4 +92,5 @@ module.exports = {
   viewCertifiacateByCategory,
   studentHistoryCertificateView,
   advisorHistoryCertificateView,
+  approveCertificate,
 };
