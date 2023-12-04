@@ -22,7 +22,20 @@ const viewDetailActivity = async (activityId) => {
   }
 };
 
+const studentGradesSubmission = async (payload, nim) => {
+  try {
+    const activity = await activityRepository.studentInsertGradeSubmission(
+      payload,
+      nim
+    );
+    return activity;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   crateActivityForStudent,
   viewDetailActivity,
+  studentGradesSubmission,
 };
