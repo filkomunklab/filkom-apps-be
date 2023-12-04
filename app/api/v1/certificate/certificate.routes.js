@@ -31,4 +31,11 @@ router.get(
   "/certificate/history/dosen/:nik",
   certificateController.advisorCertificateHistory
 );
+
+//approval certificate
+router.patch(
+  "/certificate/approval/:id",
+  certificateController.patchStatusCertificate
+);
+
 module.exports = router;

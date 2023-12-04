@@ -35,6 +35,7 @@ const findCertificate = async (nik) => {
   return certificate;
 };
 
+//find detail certificate
 const findOneCertificate = async (certificateId) => {
   try {
     const certificate = await prisma.certificate.findUnique({
@@ -102,10 +103,8 @@ const findCertificateByCategory = async (category, nik) => {
 
 //add certification
 const insertCertificate = async (payload, nim, path) => {
-  const { title, category, description, employeeId } = payload;
+  const { title, category, description, employeeNik } = payload;
   const { filename } = payload.certificateFile;
-  console.log(nim);
-  console.log(employeeId);
   try {
     const certificate = await prisma.certificate.create({
       data: {
@@ -116,8 +115,8 @@ const insertCertificate = async (payload, nim, path) => {
         path,
         transaction: {
           create: {
-            studentId: nim,
-            employeeId,
+            studentNim: nim,
+            employeeNik,
           },
         },
       },
@@ -129,6 +128,7 @@ const insertCertificate = async (payload, nim, path) => {
   }
 };
 
+//history submited certificate
 const findStudentCertificateHistory = async (nim) => {
   try {
     const certificate = await prisma.transaction_Certificate.findMany({
@@ -155,6 +155,7 @@ const findStudentCertificateHistory = async (nim) => {
   }
 };
 
+//list certificate submited history
 const findAdvisorCertificateHistory = async (nik) => {
   try {
     const certificate = await prisma.transaction_Certificate.findMany({
@@ -182,6 +183,19 @@ const findAdvisorCertificateHistory = async (nik) => {
   }
 };
 
+const approvalStudentCertificate = async (id, status) => {
+  try {
+    return await prisma.certificate.update({
+      where: { id },
+      data: {
+        approval_status: status,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   findCertificate,
   insertCertificate,
@@ -189,4 +203,5 @@ module.exports = {
   findCertificateByCategory,
   findStudentCertificateHistory,
   findAdvisorCertificateHistory,
+  approvalStudentCertificate,
 };
