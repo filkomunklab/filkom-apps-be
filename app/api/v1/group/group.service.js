@@ -1192,6 +1192,11 @@ const getSubmissionListDekan = async (userId) => {
 
       submissionBySemester[semesterKey].submissions.push(submissionData);
     }
+  } else {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
   }
 
   // Convert the submissionBySemester object into an array of semesters
@@ -3532,6 +3537,11 @@ const getProposalListDekan = async (userId, userRole) => {
 
       proposalBySemester[semesterKey].proposals.push(proposalData);
     }
+  } else {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
   }
 
   // Convert the submissionBySemester object into an array of semesters
@@ -3650,6 +3660,11 @@ const getSkripsiListDekan = async (userId, userRole) => {
         skripsiBySemester[semesterKey].skripsis.push(skripsiData);
       }
     }
+  } else {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
   }
 
   // Convert the submissionBySemester object into an array of semesters
@@ -3763,6 +3778,11 @@ const getHistoryListDekan = async (userId, userRole) => {
         }
       }
     }
+  } else {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
   }
   // Convert the submissionBySemester object into an array of semesters
   const historyList = Object.values(historyData);
