@@ -595,8 +595,8 @@ model Curriculum {
 model Subject {
   id               String          @id @default(uuid())
   curriculum_id    String
-  code             String          @unique @db.VarChar(100)
-  name             String          @unique
+  code             String          @db.VarChar(100)
+  name             String
   credits          Int
   type             String          @db.VarChar(100)
   prerequisite     String?
@@ -605,7 +605,7 @@ model Subject {
   grade            Grades[]
   Curriculum       Curriculum?     @relation(fields: [curriculumId], references: [id])
   curriculumId     String?
-  student_GradesId String
+  student_GradesId String?
 }
 
 model Grades {
@@ -618,8 +618,10 @@ model Grades {
   Student       Student? @relation(fields: [student_Nim], references: [nim])
   student_Nim   String?
   // paralel     Paralel[]
-  Subject       Subject? @relation(fields: [subjectName], references: [name])
+  // Subject       Subject? @relation(fields: [subjectName], references: [name])
   subjectName   String?
+  Subject       Subject? @relation(fields: [subjectId], references: [id])
+  subjectId     String?
 }
 
 model Academic_Consultation {
