@@ -98,6 +98,17 @@ const getDekanAndKaprodiByMajor = async (major) => {
   }
 };
 
+const assignStudentGuidance = async (payload) => {
+  try {
+    const employee = await employeeRepository.addStudentGuidanceForLecturer(
+      payload
+    );
+    return employee;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -107,4 +118,5 @@ module.exports = {
   getEmployeeByMajor,
   getDosenDetailProfile,
   getDekanAndKaprodiByMajor,
+  assignStudentGuidance,
 };

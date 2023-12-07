@@ -215,6 +215,26 @@ const selectKaprodiNameByMajor = async (major, niks) => {
   }
 };
 
+const addStudentGuidanceForLecturer = async (payload) => {
+  const { employeeNik, student } = payload;
+  try {
+    const employee = await prisma.student.updateMany({
+      where: {
+        nim: {
+          in: student,
+        },
+      },
+      data: {
+        employeeNik,
+      },
+    });
+    return employee;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 module.exports = {
   findEmployees,
   findEmployeeById,
@@ -229,4 +249,5 @@ module.exports = {
   selectDekanName,
   selectKaprodi,
   selectKaprodiNameByMajor,
+  addStudentGuidanceForLecturer,
 };

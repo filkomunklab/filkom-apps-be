@@ -167,6 +167,18 @@ const getDekanAndKaprodiByMajor = async (req, res) => {
   }
 };
 
+const addStudentGuidance = async (req, res) => {
+  const payload = req.body;
+  try {
+    const employee = await employeeService.assignStudentGuidance(payload);
+    res.status(201).send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -177,4 +189,5 @@ module.exports = {
   viewDosenByMajor,
   viewDosenDetailProfile,
   getDekanAndKaprodiByMajor,
+  addStudentGuidance,
 };
