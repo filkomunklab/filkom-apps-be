@@ -40,7 +40,7 @@ const viewByEmployeeNik = async (req, res) => {
   try {
     console.log(nik);
     const student = await studentService.viewStudentbyEmployeeNik(nik);
-    res.status(201).send({ status: "OK", data: student });
+    res.status(200).send({ status: "OK", data: student });
   } catch (error) {
     return error;
   }
@@ -79,6 +79,30 @@ const updateStudentPassword = async (req, res) => {
   }
 };
 
+const getStudentbyMajor = async (req, res) => {
+  const { major } = req.params;
+  try {
+    const student = await studentService.viewStudentByMajor(major);
+    res.status(200).send({ status: "OK", data: student });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getStudentbyArrivalYear = async (req, res) => {
+  const { arrival_Year } = req.params;
+  try {
+    const student = await studentService.viewStudentByArrivalYear(arrival_Year);
+    res.status(200).send({ status: "OK", data: student });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   createStudent,
   getStudentByNim,
@@ -86,6 +110,8 @@ module.exports = {
   viewByEmployeeNik,
   getAllStudentForManagement,
   updateStudentPassword,
+  getStudentbyMajor,
+  getStudentbyArrivalYear,
   // getStudentById,
   // updateStudentById,
   // deleteStudentById,

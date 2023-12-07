@@ -26,6 +26,13 @@ router.get("/student/dosen/:nik", studentController.viewByEmployeeNik);
 
 router.get("/management/student", studentController.getAllStudentForManagement);
 
+router.get("/student/major/:major", studentController.getStudentbyMajor);
+
+router.get(
+  "/student/arrivalYear/:arrival_Year",
+  studentController.getStudentbyArrivalYear
+);
+
 router.patch(
   "/management/student/:nim/password",
   studentController.updateStudentPassword
