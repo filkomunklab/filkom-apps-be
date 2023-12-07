@@ -184,6 +184,33 @@ const updateByNim = async (nim, payload) => {
   });
 };
 
+const findStudentByMajor = async (major) => {
+  try {
+    const student = await prisma.student.findMany({
+      where: {
+        major,
+      },
+    });
+    return student;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const findStudentByArrivalYear = async (arrival_Year) => {
+  try {
+    const student = await prisma.student.findMany({
+      where: {
+        arrival_Year,
+      },
+    });
+    return student;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   findStudentById,
   findStudentByNim,
@@ -194,4 +221,6 @@ module.exports = {
   findToUpdateBiodataStudent,
   getAllStudent,
   updateByNim,
+  findStudentByMajor,
+  findStudentByArrivalYear,
 };

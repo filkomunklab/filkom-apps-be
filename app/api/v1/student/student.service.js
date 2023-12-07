@@ -75,6 +75,26 @@ const updateStudentPassword = async (nim, payload) => {
   }
 };
 
+const viewStudentByMajor = async (major) => {
+  try {
+    const student = await studentRepository.findStudentByMajor(major);
+    return student;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const viewStudentByArrivalYear = async (arrival_Year) => {
+  try {
+    const student = await studentRepository.findStudentByArrivalYear(
+      arrival_Year
+    );
+    return student;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createStudent,
   findStudentByNim,
@@ -82,4 +102,6 @@ module.exports = {
   viewStudentbyEmployeeNik,
   getAllStudent,
   updateStudentPassword,
+  viewStudentByMajor,
+  viewStudentByArrivalYear,
 };
