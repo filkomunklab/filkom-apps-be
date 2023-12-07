@@ -934,8 +934,7 @@ const getSubmissionListKaprodi = async (userId) => {
         }
       }
     }
-  }
-  if (userKaprodi && kaprodi.major === "SI") {
+  } else if (userKaprodi && kaprodi.major === "SI") {
     // get all submission
     const submissions = await submissionRepository.findAllSubmission();
     if (submissions) {
@@ -1046,6 +1045,11 @@ const getSubmissionListKaprodi = async (userId) => {
         }
       }
     }
+  } else {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
   }
 
   // Convert the submissionBySemester object into an array of semesters
@@ -2885,8 +2889,7 @@ const getProposalListKaprodi = async (userId, userRole) => {
         }
       }
     }
-  }
-  if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
+  } else if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
     // get all proposal
     const proposals = await proposalRepository.findAllProposal();
     if (proposals) {
@@ -2994,6 +2997,11 @@ const getProposalListKaprodi = async (userId, userRole) => {
         }
       }
     }
+  } else {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
   }
 
   // Convert the submissionBySemester object into an array of semesters
@@ -3163,8 +3171,7 @@ const getSkripsiListKaprodi = async (userId, userRole) => {
         }
       }
     }
-  }
-  if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
+  } else if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
     // get all proposal
     const skripsis = await proposalRepository.findAllProposal();
     if (skripsis) {
@@ -3274,6 +3281,11 @@ const getSkripsiListKaprodi = async (userId, userRole) => {
         }
       }
     }
+  } else {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
   }
 
   // Convert the submissionBySemester object into an array of semesters
@@ -3401,8 +3413,7 @@ const getHistoryListKaprodi = async (userId, userRole) => {
         }
       }
     }
-  }
-  if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
+  } else if (userRole.includes("KAPRODI") && kaprodi.major === "SI") {
     // get all skripsi
     const skripsis = await skripsiRepository.findAllSkripsi();
     if (skripsis) {
@@ -3469,7 +3480,13 @@ const getHistoryListKaprodi = async (userId, userRole) => {
         }
       }
     }
+  } else {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
   }
+
   // Convert the submissionBySemester object into an array of semesters
   const historyList = Object.values(historyData);
   return historyList;
