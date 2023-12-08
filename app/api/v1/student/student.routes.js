@@ -38,4 +38,6 @@ router.patch(
   studentController.updateStudentPassword
 );
 
+router.get("/Student", studentController.getAllStudent);
+
 module.exports = router;
