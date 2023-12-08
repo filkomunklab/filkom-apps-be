@@ -103,6 +103,17 @@ const getStudentbyArrivalYear = async (req, res) => {
   }
 };
 
+const getAllStudent = async (req, res) => {
+  try {
+    const student = await studentService.viewAllStudent();
+    res.status(200).send({ status: "OK", data: student });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   createStudent,
   getStudentByNim,
@@ -112,6 +123,7 @@ module.exports = {
   updateStudentPassword,
   getStudentbyMajor,
   getStudentbyArrivalYear,
+  getAllStudent,
   // getStudentById,
   // updateStudentById,
   // deleteStudentById,

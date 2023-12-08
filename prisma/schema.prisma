@@ -68,7 +68,7 @@ model Employee {
   transactionActivity    Transaction_Activity[]
   transactionCertificate Transaction_Certificate[]
   student                Student[]
-  // paralel                Paralel[]
+  studentGrades          transaction_Grades[]
 
   @@unique([firstName, lastName])
   @@index([email])
@@ -127,10 +127,10 @@ model Student {
   preRegis               PreRegistration[]
   transactionActivity    Transaction_Activity[]
   transactionCertivicate Transaction_Certificate[]
-  Employee               Employee?                 @relation(fields: [employeeId], references: [nik])
-  employeeId             String?
+  Employee               Employee?                 @relation(fields: [employeeNik], references: [nik])
+  employeeNik            String?
   Tracer_Study           Tracer_Study[]
-  studentGrade           Grades[]
+  studentGrade           transaction_Grades[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
@@ -593,35 +593,42 @@ model Curriculum {
 }
 
 model Subject {
-  id               String          @id @default(uuid())
-  curriculum_id    String
-  code             String          @db.VarChar(100)
-  name             String
-  credits          Int
-  type             String          @db.VarChar(100)
-  prerequisite     String?
-  semester         Int
-  list             List_PreRegis[]
-  grade            Grades[]
-  Curriculum       Curriculum?     @relation(fields: [curriculumId], references: [id])
-  curriculumId     String?
-  student_GradesId String?
+  id            String          @id @default(uuid())
+  curriculum_id String
+  code          String          @unique @db.VarChar(100)
+  name          String          @unique
+  credits       Int
+  type          String          @db.VarChar(100)
+  prerequisite  String?
+  semester      Int
+  list          List_PreRegis[]
+  grade         Grades[]
+  Curriculum    Curriculum?     @relation(fields: [curriculumId], references: [id])
+  curriculumId  String?
 }
 
 model Grades {
-  id            String   @id @default(uuid())
+  id            String               @id @default(uuid())
   grades        String?
   retrival_to   Int?
   paralel       String?
-  submited_Date DateTime @default(now())
-  status        status   @default(WAITING)
-  Student       Student? @relation(fields: [student_Nim], references: [nim])
-  student_Nim   String?
-  // paralel     Paralel[]
-  // Subject       Subject? @relation(fields: [subjectName], references: [name])
+  submited_Date DateTime             @default(now())
+  Subject       Subject?             @relation(fields: [subjectName], references: [name])
   subjectName   String?
-  Subject       Subject? @relation(fields: [subjectId], references: [id])
-  subjectId     String?
+  transaction   transaction_Grades[]
+}
+
+model transaction_Grades {
+  id           String    @id @default(uuid())
+  submitedDate DateTime  @default(now())
+  comments     String
+  status       status    @default(WAITING)
+  Employee     Employee? @relation(fields: [employeeNik], references: [nik])
+  employeeNik  String?
+  Student      Student?  @relation(fields: [student_Nim], references: [nim])
+  student_Nim  String?
+  Grades       Grades?   @relation(fields: [gradesId], references: [id])
+  gradesId     String?
 }
 
 model Academic_Consultation {
@@ -699,15 +706,20 @@ model Certificate {
 }
 
 model Activity {
-  id            String                 @id @default(uuid())
-  title         String
-  description   String
-  date          DateTime
-  time          String
-  grades_access Boolean
-  preReg_access Boolean
-  transaction   Transaction_Activity[]
-  history       History_Academic[]
+  id          String                 @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  time        String
+  isExpired   Boolean
+  transaction Transaction_Activity[]
+  history     History_Academic[]
+}
+
+model Open_Access {
+  id   String   @id @default(uuid())
+  name String?
+  Open Boolean?
 }
 
 model Transaction_Certificate {

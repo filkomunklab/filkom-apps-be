@@ -95,6 +95,15 @@ const viewStudentByArrivalYear = async (arrival_Year) => {
   }
 };
 
+const viewAllStudent = async () => {
+  try {
+    const student = await studentRepository.findAllStudent();
+    return student;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createStudent,
   findStudentByNim,
@@ -104,4 +113,5 @@ module.exports = {
   updateStudentPassword,
   viewStudentByMajor,
   viewStudentByArrivalYear,
+  viewAllStudent,
 };
