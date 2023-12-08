@@ -211,6 +211,15 @@ const findStudentByArrivalYear = async (arrival_Year) => {
   }
 };
 
+const findAllStudent = async () => {
+  try {
+    const student = await prisma.student.findMany();
+    return student;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   findStudentById,
   findStudentByNim,
@@ -223,4 +232,5 @@ module.exports = {
   updateByNim,
   findStudentByMajor,
   findStudentByArrivalYear,
+  findAllStudent,
 };
