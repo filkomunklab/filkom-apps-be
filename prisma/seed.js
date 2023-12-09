@@ -1383,6 +1383,9 @@ async function main() {
         nim: "105021920001",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        curriculum: kurikulum_informatika,
+        arrival_Year: "2020",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1407,6 +1410,9 @@ async function main() {
         nim: "105021920002",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        curriculum: kurikulum_informatika,
+        arrival_Year: "2020",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1431,6 +1437,9 @@ async function main() {
         nim: "105021920003",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        curriculum: kurikulum_informatika,
+        arrival_Year: "2020",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1455,6 +1464,8 @@ async function main() {
         nim: "105021920004",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1479,6 +1490,8 @@ async function main() {
         nim: "105021920005",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1002",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1503,6 +1516,8 @@ async function main() {
         nim: "105021920006",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1002",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1527,6 +1542,8 @@ async function main() {
         nim: "105021920007",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1002",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1551,6 +1568,8 @@ async function main() {
         nim: "105021920008",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1002",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1575,6 +1594,8 @@ async function main() {
         nim: "105021920009",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1003",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1599,6 +1620,8 @@ async function main() {
         nim: "105021920010",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1003",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1622,7 +1645,9 @@ async function main() {
         studentEmail: "cindy@mail.com",
         nim: "105021920011",
         faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
+        major: "DKV",
+        arrival_Year: "2020",
+        employeeNik: "1006",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1646,7 +1671,9 @@ async function main() {
         studentEmail: "robby@mail.com",
         nim: "105021920012",
         faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
+        major: "DKV",
+        arrival_Year: "2020",
+        employeeNik: "1006",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1670,7 +1697,9 @@ async function main() {
         studentEmail: "siti@mail.com",
         nim: "105021920013",
         faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
+        major: "DKV",
+        arrival_Year: "2020",
+        employeeNik: "1006",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1694,7 +1723,9 @@ async function main() {
         studentEmail: "wahyu@mail.com",
         nim: "105021920014",
         faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
+        major: "DKV",
+        arrival_Year: "2020",
+        employeeNik: "1006",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1718,7 +1749,9 @@ async function main() {
         studentEmail: "nadia@mail.com",
         nim: "105021920015",
         faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
+        mmajor: "DKV",
+        arrival_Year: "2020",
+        employeeNik: "1006",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
