@@ -1835,7 +1835,7 @@ async function main() {
         Address: "Airmadidi",
         phoneNum: "081234567893",
         email: "adam@test.com",
-        firstName: "Senly",
+        firstName: "Stenly",
         lastName: "Adam",
         degree: " SKom, MSc",
         nik: "1004",
@@ -4518,7 +4518,7 @@ async function main() {
         major: "IF",
         curriculum: kurikulum_informatika,
         arrival_Year: "2020",
-        employeeId: "1005",
+        employeeNik: "1004",
         // majorGlobalId: 55201,
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -4533,7 +4533,7 @@ async function main() {
         major: "IF",
         curriculum: kurikulum_informatika,
         arrival_Year: "2020",
-        employeeId: "1005",
+        employeeNik: "1004",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4546,7 +4546,7 @@ async function main() {
         faculty: "Fakultas Ilmu Komputer",
         major: "DKV",
         arrival_Year: "2020",
-        employeeId: "1001",
+        employeeNik: "1006",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4559,7 +4559,7 @@ async function main() {
         faculty: "Fakultas Ilmu Komputer",
         major: "DKV",
         arrival_Year: "2020",
-        employeeId: "1001",
+        employeeNik: "1006",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4572,7 +4572,7 @@ async function main() {
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
         arrival_Year: "2020",
-        employeeId: "1003",
+        employeeNik: "1002",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4585,7 +4585,7 @@ async function main() {
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
         arrival_Year: "2020",
-        employeeId: "1003",
+        employeeNik: "1002",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4599,7 +4599,7 @@ async function main() {
         major: "IF",
         curriculum: kurikulum_informatika,
         arrival_Year: "2020",
-        employeeId: "1004",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4613,7 +4613,7 @@ async function main() {
         major: "IF",
         curriculum: kurikulum_informatika,
         arrival_Year: "2020",
-        employeeId: "1002",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4627,7 +4627,7 @@ async function main() {
         major: "IF",
         curriculum: kurikulum_informatika,
         arrival_Year: "2020",
-        employeeId: "1002",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4641,7 +4641,7 @@ async function main() {
         major: "IF",
         curriculum: kurikulum_informatika,
         arrival_Year: "2020",
-        employeeId: "1005",
+        employeeNik: "1004",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4653,6 +4653,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4664,6 +4666,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4675,6 +4679,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4686,6 +4692,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4696,7 +4704,9 @@ async function main() {
         lastName: "MacKettrick",
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
+        major: "DKV",
+        arrival_Year: "2020",
+        employeeNik: "1006",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4707,7 +4717,9 @@ async function main() {
         lastName: "Simonds",
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
+        major: "DKV",
+        arrival_Year: "2020",
+        employeeNik: "1006",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4719,6 +4731,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4730,6 +4744,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4741,6 +4757,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4752,6 +4770,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4770,6 +4790,9 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        curriculum: kurikulum_informatika,
+        arrival_Year: "2020",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4783,6 +4806,9 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        curriculum: kurikulum_informatika,
+        arrival_Year: "2020",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4796,6 +4822,9 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        curriculum: kurikulum_informatika,
+        arrival_Year: "2020",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4809,6 +4838,9 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        curriculum: kurikulum_informatika,
+        arrival_Year: "2020",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4822,6 +4854,9 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        curriculum: kurikulum_informatika,
+        arrival_Year: "2020",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4835,6 +4870,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4848,6 +4885,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4861,6 +4900,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4874,6 +4915,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4887,6 +4930,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4900,6 +4945,9 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        curriculum: kurikulum_informatika,
+        arrival_Year: "2020",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4913,6 +4961,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4926,6 +4976,9 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        curriculum: kurikulum_informatika,
+        arrival_Year: "2020",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4939,6 +4992,9 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        curriculum: kurikulum_informatika,
+        arrival_Year: "2020",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4952,6 +5008,9 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
+        curriculum: kurikulum_informatika,
+        arrival_Year: "2020",
+        employeeNik: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4965,6 +5024,8 @@ async function main() {
         gender: "MALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4978,6 +5039,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -4991,6 +5054,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -5004,6 +5069,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
@@ -5017,6 +5084,8 @@ async function main() {
         gender: "FEMALE",
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
+        arrival_Year: "2020",
+        employeeNik: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
         status: "GRADUATE",
