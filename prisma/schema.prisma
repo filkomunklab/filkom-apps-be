@@ -595,8 +595,8 @@ model Curriculum {
 model Subject {
   id            String          @id @default(uuid())
   curriculum_id String
-  code          String          @unique @db.VarChar(100)
-  name          String          @unique
+  code          String          @db.VarChar(100)
+  name          String
   credits       Int
   type          String          @db.VarChar(100)
   prerequisite  String?
@@ -613,8 +613,8 @@ model Grades {
   retrival_to   Int?
   paralel       String?
   submited_Date DateTime             @default(now())
-  Subject       Subject?             @relation(fields: [subjectName], references: [name])
-  subjectName   String?
+  Subject       Subject?             @relation(fields: [subjectId], references: [id])
+  subjectId     String?
   transaction   transaction_Grades[]
 }
 
