@@ -4518,7 +4518,7 @@ async function main() {
         major: "IF",
         curriculum: kurikulum_informatika,
         arrival_Year: "2020",
-        employeeId: "1005",
+        // employeeId: "1005",
         // majorGlobalId: 55201,
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -4533,7 +4533,7 @@ async function main() {
         major: "IF",
         curriculum: kurikulum_informatika,
         arrival_Year: "2020",
-        employeeId: "1005",
+        // employeeId: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4546,7 +4546,7 @@ async function main() {
         faculty: "Fakultas Ilmu Komputer",
         major: "DKV",
         arrival_Year: "2020",
-        employeeId: "1001",
+        // employeeId: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4559,7 +4559,7 @@ async function main() {
         faculty: "Fakultas Ilmu Komputer",
         major: "DKV",
         arrival_Year: "2020",
-        employeeId: "1001",
+        // employeeId: "1001",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4572,7 +4572,7 @@ async function main() {
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
         arrival_Year: "2020",
-        employeeId: "1003",
+        // employeeId: "1003",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4585,7 +4585,7 @@ async function main() {
         faculty: "Fakultas Ilmu Komputer",
         major: "SI",
         arrival_Year: "2020",
-        employeeId: "1003",
+        // employeeId: "1003",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4599,7 +4599,7 @@ async function main() {
         major: "IF",
         curriculum: kurikulum_informatika,
         arrival_Year: "2020",
-        employeeId: "1004",
+        // employeeId: "1004",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4613,7 +4613,7 @@ async function main() {
         major: "IF",
         curriculum: kurikulum_informatika,
         arrival_Year: "2020",
-        employeeId: "1002",
+        // employeeId: "1002",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4627,7 +4627,7 @@ async function main() {
         major: "IF",
         curriculum: kurikulum_informatika,
         arrival_Year: "2020",
-        employeeId: "1002",
+        // employeeId: "1002",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -4641,7 +4641,7 @@ async function main() {
         major: "IF",
         curriculum: kurikulum_informatika,
         arrival_Year: "2020",
-        employeeId: "1005",
+        // employeeId: "1005",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
