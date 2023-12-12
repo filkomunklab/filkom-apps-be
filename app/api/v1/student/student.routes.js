@@ -40,4 +40,9 @@ router.patch(
 
 router.get("/Student", studentController.getAllStudent);
 
+router.get(
+  "/students-without-supervisor",
+  studentController.getStudentHasNoSupervisorAndActive
+);
+
 module.exports = router;

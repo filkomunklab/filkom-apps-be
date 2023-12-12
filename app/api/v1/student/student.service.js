@@ -104,6 +104,17 @@ const viewAllStudent = async () => {
   }
 };
 
+const getStudentHasNoSupervisorAndActive = async () => {
+  try {
+    const student =
+      await studentRepository.selectStudentHasNoSupervisorAndActive();
+
+    return student;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
 module.exports = {
   createStudent,
   findStudentByNim,
@@ -114,4 +125,5 @@ module.exports = {
   viewStudentByMajor,
   viewStudentByArrivalYear,
   viewAllStudent,
+  getStudentHasNoSupervisorAndActive,
 };

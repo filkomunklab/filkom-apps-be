@@ -24,4 +24,19 @@ router.patch(
   employeeController.addStudentGuidance
 );
 
+router.get("/supervisor/nik/:nik", employeeController.getSupervisorByNik);
+router.get(
+  "/supervisor/has-student",
+  employeeController.getSupervisorHasStudent
+);
+router.get("/supervisor/no-student", employeeController.getSupervisorNoStudent);
+router.patch(
+  "/supervisor/:employeeNik/student",
+  employeeController.assignSupervisorToStudents
+);
+router.patch(
+  "/supervisor/:employeeNik/student/update",
+  employeeController.updateStudentSupervisor
+);
+
 module.exports = router;

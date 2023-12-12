@@ -235,6 +235,69 @@ const addStudentGuidanceForLecturer = async (payload) => {
   }
 };
 
+const selectAllSupervisor = async () => {
+  try {
+    const employee = await prisma.employee.findMany({
+      include: {
+        student: true,
+      },
+    });
+
+    return employee;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const updateStudentSupervisor = async (employeeNik, nims) => {
+  try {
+    const [nullRows, updatedRows] = await prisma.$transaction([
+      prisma.student.updateMany({
+        where: {
+          employeeNik,
+        },
+        data: {
+          employeeNik: null,
+        },
+      }),
+      prisma.student.updateMany({
+        where: {
+          nim: {
+            in: nims,
+          },
+        },
+        data: {
+          employeeNik,
+        },
+      }),
+    ]);
+
+    return {
+      nullRows,
+      updatedRows,
+    };
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const getSupervisorByNik = async (nik) => {
+  try {
+    const employee = await prisma.employee.findUnique({
+      where: {
+        nik,
+      },
+      include: {
+        student: true,
+      },
+    });
+    console.log("ini employe: ", employee);
+    return employee;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
 module.exports = {
   findEmployees,
   findEmployeeById,
@@ -250,4 +313,7 @@ module.exports = {
   selectKaprodi,
   selectKaprodiNameByMajor,
   addStudentGuidanceForLecturer,
+  selectAllSupervisor,
+  updateStudentSupervisor,
+  getSupervisorByNik,
 };

@@ -114,6 +114,18 @@ const getAllStudent = async (req, res) => {
   }
 };
 
+const getStudentHasNoSupervisorAndActive = async (req, res) => {
+  console.log("halo bang");
+  try {
+    const student = await studentService.getStudentHasNoSupervisorAndActive();
+    res.status(200).send({ status: "OK", data: student });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   createStudent,
   getStudentByNim,
@@ -127,4 +139,5 @@ module.exports = {
   // getStudentById,
   // updateStudentById,
   // deleteStudentById,
+  getStudentHasNoSupervisorAndActive,
 };
