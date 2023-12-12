@@ -90,7 +90,7 @@ model Student {
   MaritalStatus       String?
   studentEmail        String?               @unique
   curriculum          Curriculum?           @relation(fields: [curriculumId], references: [id])
-  curriculumId        String?               @unique
+  curriculumId        String?
   arrival_Year        String?
   highSchoolGrad      String?
   currentAddress      String?
@@ -593,7 +593,7 @@ model Curriculum {
   year      String            @db.VarChar(50)
   Subjects  Subject[]
   Pre_Regis PreRegistration[]
-  student   Student?
+  student   Student[]
 }
 
 model Subject {
