@@ -34,8 +34,6 @@ const studentGradesSubmission = async (payload, nim) => {
   }
 };
 
-const openAccesForInputGrades = async (nik) => {};
-
 module.exports = {
   crateActivityForStudent,
   viewDetailActivity,
