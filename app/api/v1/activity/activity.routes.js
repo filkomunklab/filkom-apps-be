@@ -8,7 +8,4 @@ router.post("/activity/:nim", activityController.crateActivity);
 //get detail activity information
 router.get("/activity/:activityId", activityController.detailActivity);
 
-//student post grades last semester
-router.post("/activity/grades/:nim", activityController.gradesSubmission);
-
 module.exports = router;
