@@ -735,7 +735,12 @@ const getProposalListSekretaris = async (req, res) => {
     });
   }
   try {
-    const group = await groupService.getProposalListSekretaris();
+    const userId = req.user.user.id;
+    const userRole = req.user.user.role;
+    const group = await groupService.getProposalListSekretaris(
+      userId,
+      userRole
+    );
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -757,7 +762,9 @@ const getSkripsiListSekretaris = async (req, res) => {
     });
   }
   try {
-    const group = await groupService.getSkripsiListSekretaris();
+    const userId = req.user.user.id;
+    const userRole = req.user.user.role;
+    const group = await groupService.getSkripsiListSekretaris(userId, userRole);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
