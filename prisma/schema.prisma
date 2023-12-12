@@ -69,6 +69,8 @@ model Employee {
   transactionCertificate Transaction_Certificate[]
   student                Student[]
   studentGrades          transaction_Grades[]
+  gradesAccess           grades_access[]
+  preRegisAccess         preRegis_access[]
 
   @@unique([firstName, lastName])
   @@index([email])
@@ -87,7 +89,8 @@ model Student {
   bloodType           String?
   MaritalStatus       String?
   studentEmail        String?               @unique
-  curriculum          String?
+  curriculum          Curriculum?           @relation(fields: [curriculumId], references: [id])
+  curriculumId        String?               @unique
   arrival_Year        String?
   highSchoolGrad      String?
   currentAddress      String?
@@ -590,6 +593,7 @@ model Curriculum {
   year      String            @db.VarChar(50)
   Subjects  Subject[]
   Pre_Regis PreRegistration[]
+  student   Student?
 }
 
 model Subject {
@@ -631,6 +635,53 @@ model transaction_Grades {
   gradesId     String?
 }
 
+model grades_access {
+  id              String    @id @default(uuid())
+  semester        String?
+  semester_period String?
+  major           Major
+  due_date        DateTime
+  isOpen          Boolean   @default(true)
+  Employee        Employee? @relation(fields: [employeeNik], references: [nik])
+  employeeNik     String?
+}
+
+model PreRegistration {
+  id           String             @id @default(uuid())
+  submitDate   DateTime           @default(now())
+  approveDate  DateTime?
+  status       status             @default(WAITING)
+  description  String
+  comments     String
+  history      History_Academic[]
+  Employee     Employee?          @relation(fields: [employeeId], references: [id])
+  employeeId   String?
+  Student      Student?           @relation(fields: [studentId], references: [id])
+  studentId    String?
+  Curriculum   Curriculum?        @relation(fields: [curriculumId], references: [id])
+  curriculumId String?
+  list         List_PreRegis[]
+}
+
+model List_PreRegis {
+  id                String           @id @default(uuid())
+  Subject           Subject?         @relation(fields: [subjectId], references: [id])
+  subjectId         String?
+  PreRegistration   PreRegistration? @relation(fields: [preRegistrationId], references: [id])
+  preRegistrationId String?
+}
+
+model preRegis_access {
+  id              String    @id @default(uuid())
+  semester        String?
+  semester_period String?
+  major           Major
+  due_date        DateTime
+  isOpen          Boolean   @default(true)
+  Employee        Employee? @relation(fields: [employeeId], references: [id])
+  employeeId      String?
+}
+
 model Academic_Consultation {
   id String @id @default(uuid())
 
@@ -667,31 +718,6 @@ model Message {
   createdAt   DateTime @default(now()) @db.Timestamptz(3)
 }
 
-model PreRegistration {
-  id           String             @id @default(uuid())
-  submitDate   DateTime           @default(now())
-  approveDate  DateTime?
-  status       status             @default(WAITING)
-  description  String
-  comments     String
-  history      History_Academic[]
-  Employee     Employee?          @relation(fields: [employeeId], references: [id])
-  employeeId   String?
-  Student      Student?           @relation(fields: [studentId], references: [id])
-  studentId    String?
-  Curriculum   Curriculum?        @relation(fields: [curriculumId], references: [id])
-  curriculumId String?
-  list         List_PreRegis[]
-}
-
-model List_PreRegis {
-  id                String           @id @default(uuid())
-  Subject           Subject?         @relation(fields: [subjectId], references: [id])
-  subjectId         String?
-  PreRegistration   PreRegistration? @relation(fields: [preRegistrationId], references: [id])
-  preRegistrationId String?
-}
-
 model Certificate {
   id              String                    @id @default(uuid())
   filename        String
@@ -710,16 +736,9 @@ model Activity {
   title       String
   description String
   date        DateTime
-  time        String
   isExpired   Boolean
   transaction Transaction_Activity[]
   history     History_Academic[]
-}
-
-model Open_Access {
-  id   String   @id @default(uuid())
-  name String?
-  Open Boolean?
 }
 
 model Transaction_Certificate {
