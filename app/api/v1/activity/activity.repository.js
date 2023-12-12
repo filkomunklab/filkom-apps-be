@@ -25,26 +25,6 @@ const addActivityForStudent = async (payload, nim) => {
   }
 };
 
-const openAccessStudentInputGrades = async (nik) => {
-  try {
-    const activity = await prisma.activity.update({
-      where: {
-        transaction: {
-          include: {
-            employeeId: nik,
-          },
-        },
-      },
-      data: {
-        grades_access: true,
-      },
-    });
-    return activity;
-  } catch (error) {
-    throw error;
-  }
-};
-
 //======================== Student Access ========================//
 const studentInsertGradeSubmission = async (payload, nim) => {
   const { grades, retrival_to, paralel, subjectId } = payload;
@@ -90,6 +70,5 @@ const findDetailActivity = async (activityId) => {
 module.exports = {
   addActivityForStudent,
   findDetailActivity,
-  openAccessStudentInputGrades,
   studentInsertGradeSubmission,
 };
