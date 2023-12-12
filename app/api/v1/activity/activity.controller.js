@@ -44,5 +44,4 @@ const gradesSubmission = async (req, res) => {
 module.exports = {
   crateActivity,
   detailActivity,
-  gradesSubmission,
 };
