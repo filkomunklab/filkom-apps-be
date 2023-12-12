@@ -220,6 +220,47 @@ const findAllStudent = async () => {
   }
 };
 
+const updateEmployeeNikStudentByNim = async (employeeNik, nims) => {
+  try {
+    const student = await prisma.student.updateMany({
+      where: {
+        nim: {
+          in: nims,
+        },
+      },
+      data: {
+        employeeNik,
+      },
+    });
+
+    return student;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const selectStudentHasNoSupervisorAndActive = async () => {
+  console.log("halo");
+  try {
+    const student = await prisma.student.findMany({
+      where: {
+        AND: [
+          {
+            employeeNik: null,
+          },
+          {
+            status: "ACTIVE",
+          },
+        ],
+      },
+    });
+
+    return student;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
 module.exports = {
   findStudentById,
   findStudentByNim,
@@ -233,4 +274,6 @@ module.exports = {
   findStudentByMajor,
   findStudentByArrivalYear,
   findAllStudent,
+  updateEmployeeNikStudentByNim,
+  selectStudentHasNoSupervisorAndActive,
 };

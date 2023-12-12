@@ -5,6 +5,7 @@ const employeeService = require("./employee.service");
 const { policyFor } = require("../policy");
 const { subject } = require("@casl/ability");
 const { message } = require("../../../database");
+const prisma = require("../../../database");
 
 const getAllEmployees = async (req, res) => {
   const policy = policyFor(req.user);
@@ -179,6 +180,88 @@ const addStudentGuidance = async (req, res) => {
   }
 };
 
+const getSupervisorHasStudent = async (req, res) => {
+  try {
+    const employee = await employeeService.getSupervisorHasStudent();
+    res.status(200).send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getSupervisorNoStudent = async (req, res) => {
+  try {
+    const employee = await employeeService.getSupervisorNoStudent();
+    res.status(200).send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const assignSupervisorToStudents = async (req, res) => {
+  const employeeNik = req.params.employeeNik;
+  const { nims } = req.body;
+
+  if (!employeeNik || !nims) {
+    return res.status(400).send({
+      status: "FAILED",
+      message: "Please include employeeNik and nim students!!",
+    });
+  }
+  try {
+    const updatedRows = await employeeService.assignSupervisorToStudents(
+      employeeNik,
+      nims
+    );
+    res.status(200).send({ status: "OK", data: updatedRows });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const updateStudentSupervisor = async (req, res) => {
+  console.log("halo bang");
+  const employeeNik = req.params.employeeNik;
+  const { nims } = req.body;
+
+  if (!employeeNik || !nims) {
+    return res.status(400).send({
+      status: "FAILED",
+      message: "Please include employeeNik and nim students!!",
+    });
+  }
+  try {
+    const updatedRows = await employeeService.updateStudentSupervisor(
+      employeeNik,
+      nims
+    );
+    res.status(200).send({ status: "OK", data: updatedRows });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getSupervisorByNik = async (req, res) => {
+  const nik = req.params.nik;
+  console.log("ini nik: ", nik);
+  try {
+    const employee = await employeeService.getSupervisorByNik(nik);
+    res.status(200).send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -190,4 +273,9 @@ module.exports = {
   viewDosenDetailProfile,
   getDekanAndKaprodiByMajor,
   addStudentGuidance,
+  getSupervisorHasStudent,
+  getSupervisorNoStudent,
+  assignSupervisorToStudents,
+  updateStudentSupervisor,
+  getSupervisorByNik,
 };

@@ -1,6 +1,7 @@
 //Layer untuk handle business logic
 
 const employeeRepository = require("./employee.repository");
+const studentRepository = require("../student/student.repository");
 const bcrypt = require("bcrypt");
 
 const getAllEmployees = async () => {
@@ -109,6 +110,74 @@ const assignStudentGuidance = async (payload) => {
   }
 };
 
+const getSupervisorHasStudent = async () => {
+  try {
+    const employee = await employeeRepository.selectAllSupervisor();
+
+    const employeeHasStudent = employee
+      .filter((item) => item.student.length > 0)
+      .map((item) => ({
+        numberOfStudent: item.student.length,
+        ...item,
+      }));
+    return employeeHasStudent;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const getSupervisorNoStudent = async () => {
+  try {
+    const employee = await employeeRepository.selectAllSupervisor();
+
+    const employeeNoStudent = employee
+      .filter((item) => item.student.length === 0)
+      .map((item) => {
+        const { student, ...itemWithoutStudent } = item;
+        return itemWithoutStudent;
+      });
+    return employeeNoStudent;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const assignSupervisorToStudents = async (employeeNik, nims) => {
+  try {
+    const updatedRows = await studentRepository.updateEmployeeNikStudentByNim(
+      employeeNik,
+      nims
+    );
+
+    return updatedRows;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const updateStudentSupervisor = async (employeeNik, nims) => {
+  try {
+    const updatedRows = await employeeRepository.updateStudentSupervisor(
+      employeeNik,
+      nims
+    );
+
+    return updatedRows;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const getSupervisorByNik = async (nik) => {
+  try {
+    const employee = await employeeRepository.getSupervisorByNik(nik);
+
+    return employee;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -119,4 +188,9 @@ module.exports = {
   getDosenDetailProfile,
   getDekanAndKaprodiByMajor,
   assignStudentGuidance,
+  getSupervisorHasStudent,
+  getSupervisorNoStudent,
+  assignSupervisorToStudents,
+  updateStudentSupervisor,
+  getSupervisorByNik,
 };
