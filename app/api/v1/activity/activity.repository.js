@@ -25,34 +25,6 @@ const addActivityForStudent = async (payload, nim) => {
   }
 };
 
-//======================== Student Access ========================//
-const studentInsertGradeSubmission = async (payload, nim) => {
-  const { grades, retrival_to, paralel, subjectId } = payload;
-  try {
-    const studentGrades = await prisma.grades.createMany({
-      data: {
-        grades,
-        paralel,
-        retrival_to,
-        subject: {
-          subjectId,
-        },
-        include: {
-          student: {
-            create: {
-              studentId: nim,
-            },
-          },
-        },
-      },
-    });
-
-    return studentGrades;
-  } catch (error) {
-    throw error;
-  }
-};
-
 //======================== General Access ========================//
 const findDetailActivity = async (activityId) => {
   try {
@@ -70,5 +42,4 @@ const findDetailActivity = async (activityId) => {
 module.exports = {
   addActivityForStudent,
   findDetailActivity,
-  studentInsertGradeSubmission,
 };
