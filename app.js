@@ -72,6 +72,7 @@ const preRegisRoutes = require("./app/api/v1/pre_regis/preRegis.routes");
 const academicConsultation = require("./app/api/v1/academic_consultation/academic_consultation.routes");
 const message = require("./app/api/v1/message/message.router");
 const openAccessRoutes = require("./app/api/v1/open_access/open_access.routes");
+const gradesSubmissionRoutes = require("./app/api/v1/transaction_Grades/transactionGrades.routes");
 const { url } = require("inspector");
 
 //--------------------------------------------------------
@@ -116,6 +117,8 @@ app.use(`${URL}`, preRegisRoutes);
 app.use(`${URL}`, academicConsultation);
 app.use(`${URL}`, message);
 app.use(`${URL}`, openAccessRoutes);
+app.use(`${URL}`, gradesSubmissionRoutes);
+
 //---------------------------------------------------
 
 app.use("/", (req, res) => {
