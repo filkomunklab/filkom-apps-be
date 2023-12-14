@@ -52,6 +52,17 @@ const insertEmployee = async (payload) => {
   return employee;
 };
 
+const insertManyEmployee = async (data) => {
+  try {
+    const employee = await prisma.employee.createMany({
+      data,
+    });
+    return employee;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
 const deleteEmployee = async (id) => {
   await prisma.employee.delete({
     where: {
@@ -316,4 +327,5 @@ module.exports = {
   selectAllSupervisor,
   updateStudentSupervisor,
   getSupervisorByNik,
+  insertManyEmployee,
 };

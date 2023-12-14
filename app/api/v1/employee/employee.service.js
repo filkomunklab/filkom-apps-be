@@ -28,6 +28,24 @@ const createEmployee = async (payload) => {
   return employee;
 };
 
+const createManyEmployee = async (data) => {
+  try {
+    let salt, password;
+    data = data.map((value) => {
+      salt = bcrypt.genSaltSync(10);
+      password = bcrypt.hashSync(value.password, salt);
+      return {
+        ...value,
+        password,
+      };
+    });
+    const employee = await employeeRepository.insertManyEmployee(data);
+    return employee;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
 const deleteEmployeeById = async (id) => {
   await getEmployeeById(id);
   await employeeRepository.deleteEmployee(id);
@@ -193,4 +211,5 @@ module.exports = {
   assignSupervisorToStudents,
   updateStudentSupervisor,
   getSupervisorByNik,
+  createManyEmployee,
 };

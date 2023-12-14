@@ -1,13 +1,64 @@
 //Layer untuk handle business logic
 
 const studentRepository = require("./student.repository");
+const curriculumRepository = require("../curriculum/curriculum.repository");
 const bcrypt = require("bcrypt");
 const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 const { storage } = require("../../../config/firebase");
+const { createHttpStatusError } = require("../../../utils");
 
 const createStudent = async (payload) => {
   const student = await studentRepository.insertStudent(payload);
   return student;
+};
+
+const createManyStudent = async (data) => {
+  try {
+    let curriculumId;
+
+    // ambil array object curriculum
+    let curriculum = await curriculumRepository.selectAllCurriculum();
+
+    // data ini berisi array object mahasiswa
+    data = data.map((itemData) => {
+      const salt = bcrypt.genSaltSync(10);
+      const password = bcrypt.hashSync(itemData.password, salt);
+
+      // mengganti data mahasiswa untuk curriculumMajor dan curriculumYear menjadi curriculumId
+      curriculum.forEach((itemCurriculum) => {
+        if (
+          itemCurriculum.major.toLocaleLowerCase() ===
+            itemData.curriculumMajor.toLocaleLowerCase() &&
+          itemCurriculum.year === itemData.curriculumYear
+        ) {
+          curriculumId = itemCurriculum.id;
+        }
+      });
+      if (curriculumId) {
+        let tmp = curriculumId;
+        curriculumId = "";
+        const { curriculumMajor, curriculumYear, ...itemWithoutMajorAndYear } =
+          itemData;
+        return {
+          ...itemWithoutMajorAndYear,
+          curriculumId: tmp,
+          password,
+        };
+      } else {
+        // jika pada satu mahasiswa tidak ada curriculum yang ditemukan
+        throw createHttpStatusError(
+          "curriculum data is missing! Please double check whether the student's curriculum data matches the curriculum data in the application.",
+          400
+        );
+      }
+    });
+
+    // data sudah benar langsung masukan ke tabel mahasiswa
+    const student = await studentRepository.insertManyStudent(data);
+    return student;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const findStudentByNim = async (nim) => {
@@ -126,4 +177,5 @@ module.exports = {
   viewStudentByArrivalYear,
   viewAllStudent,
   getStudentHasNoSupervisorAndActive,
+  createManyStudent,
 };

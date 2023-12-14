@@ -80,6 +80,19 @@ const insertStudent = async (payload) => {
   return student;
 };
 
+// create submission
+const insertManyStudent = async (data) => {
+  try {
+    const student = await prisma.student.createMany({
+      data,
+    });
+
+    return student;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
 const updateStudent = async (id, payload) => {
   const { nim, password, firstName, lastName, token } = payload;
   const employee = await prisma.student.update({
@@ -276,4 +289,5 @@ module.exports = {
   findAllStudent,
   updateEmployeeNikStudentByNim,
   selectStudentHasNoSupervisorAndActive,
+  insertManyStudent,
 };

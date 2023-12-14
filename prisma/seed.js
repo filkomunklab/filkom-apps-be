@@ -1811,6 +1811,7 @@ async function main() {
         degree: "MT, PhD",
         nik: "1003",
         nidn: "0916038101",
+        major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1875,6 +1876,7 @@ async function main() {
         lastName: "Moedjahedy ",
         degree: " SKom, MKom, MM",
         nik: "1005",
+        nidn: "0923128602",
         major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",

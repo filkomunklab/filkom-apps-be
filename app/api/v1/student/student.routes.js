@@ -45,4 +45,7 @@ router.get(
   studentController.getStudentHasNoSupervisorAndActive
 );
 
+//       create     - membuat many student baru
+router.post("/student-many", studentController.createManyStudent);
+
 module.exports = router;

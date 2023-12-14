@@ -53,6 +53,18 @@ const createEmployee = async (req, res) => {
   res.status(201).send({ status: "OK", data: employee });
 };
 
+const createManyEmployee = async (req, res) => {
+  try {
+    const data = req.body.data;
+    const employee = await employeeService.createManyEmployee(data);
+    res.status(201).send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 const deleteEmployeeById = async (req, res) => {
   const policy = policyFor(req.user);
   if (!policy.can("delete", "Employee")) {
@@ -278,4 +290,5 @@ module.exports = {
   assignSupervisorToStudents,
   updateStudentSupervisor,
   getSupervisorByNik,
+  createManyEmployee,
 };
