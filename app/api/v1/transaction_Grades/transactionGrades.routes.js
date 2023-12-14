@@ -7,4 +7,9 @@ router.post(
   trasactionController.postTransactionWithGrades
 );
 
+router.get(
+  "/transaction/list/:nik",
+  trasactionController.getListStudentGradeSubmission
+);
+
 module.exports = router;

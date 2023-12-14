@@ -33,6 +33,17 @@ const createStudentGradesSubmmission = async (payload, nim) => {
   }
 };
 
+const viewListStudentGradeSubmmission = async (nik) => {
+  try {
+    const transaction =
+      await transactionGradeRepository.findListGradeSubmmisionByNik(nik);
+    return transaction;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createStudentGradesSubmmission,
+  viewListStudentGradeSubmmission,
 };
