@@ -611,28 +611,30 @@ model Subject {
   curriculumId  String?
 }
 
-model Grades {
-  id            String               @id @default(uuid())
-  grades        String?
-  retrival_to   Int?
-  paralel       String?
-  submited_Date DateTime             @default(now())
-  Subject       Subject?             @relation(fields: [subjectId], references: [id])
-  subjectId     String?
-  transaction   transaction_Grades[]
-}
-
 model transaction_Grades {
   id           String    @id @default(uuid())
   submitedDate DateTime  @default(now())
-  comments     String
+  semester     String
+  comments     String?
   status       status    @default(WAITING)
   Employee     Employee? @relation(fields: [employeeNik], references: [nik])
-  employeeNik  String?
+  employeeNik  String
   Student      Student?  @relation(fields: [student_Nim], references: [nim])
-  student_Nim  String?
-  Grades       Grades?   @relation(fields: [gradesId], references: [id])
-  gradesId     String?
+  student_Nim  String
+  Grades       Grades[]
+}
+
+model Grades {
+  id                 String              @id @default(uuid())
+  grades             String?
+  retrival_to        Int?
+  paralel            String?
+  submited_Date      DateTime            @default(now())
+  Subject            Subject?            @relation(fields: [subjectId], references: [id])
+  subjectId          String?
+  subjectName        String?
+  transaction_Grades transaction_Grades? @relation(fields: [transactionId], references: [id])
+  transactionId      String?
 }
 
 model grades_access {
