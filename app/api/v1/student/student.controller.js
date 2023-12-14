@@ -10,6 +10,19 @@ const createStudent = async (req, res) => {
   res.status(201).send({ status: "OK", data: student });
 };
 
+const createManyStudent = async (req, res) => {
+  try {
+    const data = req.body.data;
+    const student = await studentService.createManyStudent(data);
+    res.status(200).send({ status: "OK", data: student });
+  } catch (error) {
+    console.log("error di controler: ", error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 const getStudentByNim = async (req, res) => {
   const { nim } = req.params;
   try {
@@ -140,4 +153,5 @@ module.exports = {
   // updateStudentById,
   // deleteStudentById,
   getStudentHasNoSupervisorAndActive,
+  createManyStudent,
 };

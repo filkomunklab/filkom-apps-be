@@ -14,6 +14,7 @@ router.get(
   employeeController.getDekanAndKaprodiByMajor
 );
 router.post("/employee", employeeController.createEmployee);
+router.post("/employees", employeeController.createManyEmployee);
 router.delete("/employee/:id", employeeController.deleteEmployeeById);
 router.patch("/employee/:id", employeeController.patchEmployeeById);
 router.put("/employee/:id", employeeController.updateEmployeeById);
