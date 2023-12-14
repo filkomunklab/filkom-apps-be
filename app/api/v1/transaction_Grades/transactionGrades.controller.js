@@ -16,6 +16,20 @@ const postTransactionWithGrades = async (req, res) => {
   }
 };
 
+const getListStudentGradeSubmission = async (req, res) => {
+  const { nik } = req.params;
+  try {
+    const transaction =
+      await transactionService.viewListStudentGradeSubmmission(nik);
+    res.status(200).send({ status: "OK", data: transaction });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   postTransactionWithGrades,
+  getListStudentGradeSubmission,
 };

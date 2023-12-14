@@ -16,6 +16,45 @@ const insertDataforGrades = async (payload, nim) => {
   }
 };
 
+const findListGradeSubmmisionByNik = async (nik) => {
+  try {
+    const transaction = await prisma.transaction_Grades.findMany({
+      where: {
+        employeeNik: nik,
+      },
+      // select: {
+      //   // submitedDate,
+      //   // status,
+      //   // semester,
+      // },
+      orderBy: {
+        submitedDate: "desc",
+      },
+      include: {
+        Student: {
+          select: {
+            nim: true,
+            firstName: true,
+            lastName: true,
+            major: true,
+            arrival_Year: true,
+          },
+        },
+        Employee: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    return transaction;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   insertDataforGrades,
+  findListGradeSubmmisionByNik,
 };
