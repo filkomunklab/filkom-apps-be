@@ -12,4 +12,19 @@ router.get(
   trasactionController.getListStudentGradeSubmission
 );
 
+router.get(
+  "/transaction/submissionDetail/:transactionId",
+  trasactionController.getStudentGradeSubmissionDetail
+);
+
+router.put(
+  "/transaction/comment/:transactionId",
+  trasactionController.putComment
+);
+
+router.patch(
+  "/transaction/grades/approval/:id",
+  trasactionController.patchStatusGradeSubmission
+);
+
 module.exports = router;
