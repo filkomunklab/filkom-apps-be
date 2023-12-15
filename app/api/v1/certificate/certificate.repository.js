@@ -137,12 +137,64 @@ const insertCertificate = async (payload, nim, path) => {
   }
 };
 
+//current Certificate Student
+const findCurrentCertificateStudent = async (nim) => {
+  try {
+    const certificate = await prisma.transaction_Certificate.findMany({
+      where: {
+        AND: [
+          {
+            studentNim: nim,
+          },
+          {
+            Certificate: {
+              approval_status: "WAITING",
+            },
+          },
+        ],
+      },
+      include: {
+        Certificate: {
+          select: {
+            title: true,
+          },
+        },
+        Student: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    return certificate;
+  } catch (error) {
+    return error;
+  }
+};
+
 //history submited certificate
 const findStudentCertificateHistory = async (nim) => {
   try {
     const certificate = await prisma.transaction_Certificate.findMany({
       where: {
-        studentNim: nim,
+        AND: [
+          {
+            studentNim: nim,
+          },
+          {
+            Certificate: {
+              OR: [
+                {
+                  approval_status: "APPROVED",
+                },
+                {
+                  approval_status: "REJECTED",
+                },
+              ],
+            },
+          },
+        ],
       },
       include: {
         Certificate: {
@@ -230,4 +282,5 @@ module.exports = {
   findStudentCertificateHistory,
   findAdvisorCertificateWaitingList,
   approvalStudentCertificate,
+  findCurrentCertificateStudent,
 };

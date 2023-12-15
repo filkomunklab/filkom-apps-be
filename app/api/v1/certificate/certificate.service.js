@@ -56,6 +56,16 @@ const uploadCertificate = async (payload, nim) => {
   }
 };
 
+const viewCurrentStudentCertificate = async (nim) => {
+  try {
+    const certificate =
+      await certificateRepository.findCurrentCertificateStudent(nim);
+    return certificate;
+  } catch (error) {
+    return error;
+  }
+};
+
 const studentHistoryCertificateView = async (nim) => {
   try {
     const certificate =
@@ -93,4 +103,5 @@ module.exports = {
   studentHistoryCertificateView,
   advisorWaitingListCertificateView,
   approveCertificate,
+  viewCurrentStudentCertificate,
 };
