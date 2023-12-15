@@ -27,8 +27,6 @@ const findCertificate = async (nik) => {
         Certificate: {
           select: {
             title: true,
-            category: true,
-            approval_status: true,
           },
         },
         Student: {
@@ -144,7 +142,7 @@ const findStudentCertificateHistory = async (nim) => {
   try {
     const certificate = await prisma.transaction_Certificate.findMany({
       where: {
-        studentId: nim,
+        studentNim: nim,
       },
       include: {
         Certificate: {
