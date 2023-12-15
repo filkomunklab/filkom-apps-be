@@ -60,6 +60,21 @@ const uploadCertificate = async (req, res) => {
   }
 };
 
+const getStudentCurrentCertificate = async (req, res) => {
+  const { nim } = req.params;
+  try {
+    const certificate = await certificateService.viewCurrentStudentCertificate(
+      nim
+    );
+    res.status(200).send({ status: "OK", data: certificate });
+  } catch (error) {
+    console.log("eror: ", error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 const studentCertificateHistory = async (req, res) => {
   const { nim } = req.params;
   try {
@@ -110,4 +125,5 @@ module.exports = {
   studentCertificateHistory,
   advisorCertificateWaitingList,
   patchStatusCertificate,
+  getStudentCurrentCertificate,
 };
