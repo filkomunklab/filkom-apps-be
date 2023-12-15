@@ -1,38 +1,49 @@
 const prisma = require("../../../database");
 
-//show all submited certificate
+//show list Approved/Rejected certificate
 const findCertificate = async (nik) => {
-  const certificate = await prisma.certificate.findMany({
-    where: {
-      transaction: {
-        some: {
-          employeeId: nik,
-        },
-      },
-    },
-    orderBy: {
-      submitDate: "desc",
-    },
-    include: {
-      transaction: {
-        include: {
-          Student: {
-            select: {
-              firstName: true,
-              lastName: true,
+  try {
+    const certificate = await prisma.transaction_Certificate.findMany({
+      where: {
+        AND: [
+          {
+            employeeNik: nik,
+          },
+          {
+            Certificate: {
+              OR: [
+                {
+                  approval_status: "APPROVED",
+                },
+                {
+                  approval_status: "REJECTED",
+                },
+              ],
             },
           },
-          Employee: {
-            select: {
-              firstName: true,
-              lastName: true,
-            },
+        ],
+      },
+      include: {
+        Certificate: {
+          select: {
+            title: true,
+            category: true,
+            approval_status: true,
+          },
+        },
+        Student: {
+          select: {
+            firstName: true,
+            lastName: true,
           },
         },
       },
-    },
-  });
-  return certificate;
+    });
+    return certificate;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 };
 
 //find detail certificate
@@ -76,7 +87,7 @@ const findCertificateByCategory = async (category, nik) => {
       where: {
         category,
         transaction: {
-          some: { employeeId: nik },
+          some: { employeeNik: nik },
         },
       },
       orderBy: {
@@ -155,20 +166,37 @@ const findStudentCertificateHistory = async (nim) => {
   }
 };
 
-//list certificate submited history
-const findAdvisorCertificateHistory = async (nik) => {
+//waiting list certificate
+const findAdvisorCertificateWaitingList = async (nik) => {
   try {
     const certificate = await prisma.transaction_Certificate.findMany({
       where: {
-        employeeId: nik,
+        AND: [
+          {
+            employeeNik: nik,
+          },
+          {
+            Certificate: {
+              approval_status: "WAITING",
+            },
+          },
+        ],
       },
       include: {
         Certificate: {
           select: {
             title: true,
+            category: true,
+            approval_status: true,
           },
         },
         Student: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+        Employee: {
           select: {
             firstName: true,
             lastName: true,
@@ -202,6 +230,6 @@ module.exports = {
   findOneCertificate,
   findCertificateByCategory,
   findStudentCertificateHistory,
-  findAdvisorCertificateHistory,
+  findAdvisorCertificateWaitingList,
   approvalStudentCertificate,
 };

@@ -66,10 +66,10 @@ const studentHistoryCertificateView = async (nim) => {
   }
 };
 
-const advisorHistoryCertificateView = async (nik) => {
+const advisorWaitingListCertificateView = async (nik) => {
   try {
     const certificate =
-      await certificateRepository.findAdvisorCertificateHistory(nik);
+      await certificateRepository.findAdvisorCertificateWaitingList(nik);
     return certificate;
   } catch (error) {
     console.log(error);
@@ -91,6 +91,6 @@ module.exports = {
   viewOneStudentCertificate,
   viewCertifiacateByCategory,
   studentHistoryCertificateView,
-  advisorHistoryCertificateView,
+  advisorWaitingListCertificateView,
   approveCertificate,
 };

@@ -75,12 +75,11 @@ const studentCertificateHistory = async (req, res) => {
   }
 };
 
-const advisorCertificateHistory = async (req, res) => {
+const advisorCertificateWaitingList = async (req, res) => {
   const { nik } = req.params;
   try {
-    const certificate = await certificateService.advisorHistoryCertificateView(
-      nik
-    );
+    const certificate =
+      await certificateService.advisorWaitingListCertificateView(nik);
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
@@ -109,6 +108,6 @@ module.exports = {
   viewStudentCertificate,
   viewCertificateCategory,
   studentCertificateHistory,
-  advisorCertificateHistory,
+  advisorCertificateWaitingList,
   patchStatusCertificate,
 };
