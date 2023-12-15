@@ -4,6 +4,7 @@ const postTransactionWithGrades = async (req, res) => {
   try {
     const payload = req.body;
     const { nim } = req.params;
+    console.log("ini ada req body: ", req.body);
     const transaction = await transactionService.createStudentGradesSubmmission(
       payload,
       nim
@@ -29,7 +30,60 @@ const getListStudentGradeSubmission = async (req, res) => {
   }
 };
 
+const getStudentGradeSubmissionDetail = async (req, res) => {
+  const { transactionId } = req.params;
+  try {
+    const transaction =
+      await transactionService.viewStudentGradeSubmissionDetail(transactionId);
+    res.status(200).send({ status: "OK", data: transaction });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const putComment = async (req, res) => {
+  const { transactionId } = req.params;
+  const payload = req.body;
+
+  console.log("ini transactionid: ", transactionId);
+  console.log("ini req body: ", req.body);
+  console.log("ini payload: ", payload);
+  try {
+    const transaction = await transactionService.giveComment(
+      transactionId,
+      payload
+    );
+    res.status(201).send({ status: "OK", data: transaction });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const patchStatusGradeSubmission = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const status = req.query.status;
+    const transaction = await transactionService.approveStudentGrades(
+      id,
+      status
+    );
+
+    res.status(201).send({ status: "OK", data: transaction });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   postTransactionWithGrades,
   getListStudentGradeSubmission,
+  getStudentGradeSubmissionDetail,
+  putComment,
+  patchStatusGradeSubmission,
 };

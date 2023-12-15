@@ -734,16 +734,6 @@ model Certificate {
   history         History_Academic[]
 }
 
-model Activity {
-  id          String                 @id @default(uuid())
-  title       String
-  description String
-  date        DateTime
-  isExpired   Boolean
-  transaction Transaction_Activity[]
-  history     History_Academic[]
-}
-
 model Transaction_Certificate {
   id            String       @id @default(uuid())
   Certificate   Certificate? @relation(fields: [certificateId], references: [id])
@@ -752,6 +742,16 @@ model Transaction_Certificate {
   studentNim    String?
   Employee      Employee?    @relation(fields: [employeeNik], references: [nik])
   employeeNik   String?
+}
+
+model Activity {
+  id          String                 @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  isExpired   Boolean
+  transaction Transaction_Activity[]
+  history     History_Academic[]
 }
 
 model Transaction_Activity {

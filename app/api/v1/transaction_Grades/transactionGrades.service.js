@@ -43,7 +43,42 @@ const viewListStudentGradeSubmmission = async (nik) => {
   }
 };
 
+const viewStudentGradeSubmissionDetail = async (transactionId) => {
+  try {
+    const transaction =
+      await transactionGradeRepository.findStudentGradeSubmissionById(
+        transactionId
+      );
+    return transaction;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const giveComment = async (transactionId, payload) => {
+  try {
+    const transaction = await transactionGradeRepository.addComments(
+      transactionId,
+      payload
+    );
+    return transaction;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const approveStudentGrades = async (id, status) => {
+  try {
+    return transactionGradeRepository.approvalGrades(id, status);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createStudentGradesSubmmission,
   viewListStudentGradeSubmmission,
+  viewStudentGradeSubmissionDetail,
+  giveComment,
+  approveStudentGrades,
 };

@@ -28,8 +28,8 @@ router.get(
 
 //view advisor history
 router.get(
-  "/certificate/history/dosen/:nik",
-  certificateController.advisorCertificateHistory
+  "/certificate/waitingList/dosen/:nik",
+  certificateController.advisorCertificateWaitingList
 );
 
 //approval certificate
