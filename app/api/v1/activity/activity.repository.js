@@ -1,8 +1,7 @@
 const prisma = require("../../../database");
 
-//======================== Employee access ========================//
-const addActivityForStudent = async (payload, nim) => {
-  const { title, description, date, time, employeeId } = payload;
+const addActivityForAllStudent = async (payload, nim) => {
+  const { title, description, date, time } = payload;
   try {
     const activity = await prisma.activity.create({
       data: {
@@ -12,8 +11,8 @@ const addActivityForStudent = async (payload, nim) => {
         time,
         transaction: {
           create: {
-            studentId: nim,
-            employeeId,
+            studentNim: nim,
+            employeeNik,
           },
         },
       },
@@ -25,7 +24,10 @@ const addActivityForStudent = async (payload, nim) => {
   }
 };
 
-//======================== General Access ========================//
+// const addActivityForChoossenStudent = async (payload, nik) => {
+//   //
+// };
+
 const findDetailActivity = async (activityId) => {
   try {
     const activity = await prisma.activity.findUnique({
@@ -40,6 +42,6 @@ const findDetailActivity = async (activityId) => {
 };
 
 module.exports = {
-  addActivityForStudent,
+  addActivityForAllStudent,
   findDetailActivity,
 };
