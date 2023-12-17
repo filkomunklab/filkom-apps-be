@@ -1,10 +1,13 @@
 const { certificate } = require("../../../database");
 const certificateService = require("./certificate.service");
 
-const viewAllStudentCertificate = async (req, res) => {
+//============================DospemAccess===========================//
+//DospemAccess
+const advisorCertificateWaitingList = async (req, res) => {
   const { nik } = req.params;
   try {
-    const certificate = await certificateService.findAllStudentCertificate(nik);
+    const certificate =
+      await certificateService.advisorWaitingListCertificateView(nik);
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
@@ -13,21 +16,7 @@ const viewAllStudentCertificate = async (req, res) => {
   }
 };
 
-const viewStudentCertificate = async (req, res) => {
-  const { certificateId } = req.params;
-  try {
-    const certificate = await certificateService.viewOneStudentCertificate(
-      certificateId
-    );
-    console.log("hello world", certificate);
-    res.status(200).send({ status: "OK", data: certificate });
-  } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
-  }
-};
-
+//DospemAccess
 const viewCertificateCategory = async (req, res) => {
   const { category } = req.body;
   const { nik } = req.params;
@@ -44,6 +33,53 @@ const viewCertificateCategory = async (req, res) => {
   }
 };
 
+//DospemAccess
+const viewAllStudentCertificate = async (req, res) => {
+  const { nik } = req.params;
+  try {
+    const certificate = await certificateService.findAllStudentCertificate(nik);
+    res.status(200).send({ status: "OK", data: certificate });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const putApprovalCertificate = async (req, res) => {
+  const { certificateId } = req.params;
+  const payload = req.body;
+  try {
+    const certificate = await certificateService.approvalCertificate(
+      certificateId,
+      payload
+    );
+    res.status(201).send({ status: "OK", data: certificate });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//============================GeneralAccess=========================//
+//GeneralAccess
+const viewStudentCertificate = async (req, res) => {
+  const { certificateId } = req.params;
+  try {
+    const certificate = await certificateService.viewOneStudentCertificate(
+      certificateId
+    );
+    res.status(200).send({ status: "OK", data: certificate });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//============================StudentAccess=========================//
+//studentAccess
 const uploadCertificate = async (req, res) => {
   const payload = req.body;
   const { nim } = req.params;
@@ -60,6 +96,7 @@ const uploadCertificate = async (req, res) => {
   }
 };
 
+//StudentAccess
 const getStudentCurrentCertificate = async (req, res) => {
   const { nim } = req.params;
   try {
@@ -75,6 +112,7 @@ const getStudentCurrentCertificate = async (req, res) => {
   }
 };
 
+//StudentAccess
 const studentCertificateHistory = async (req, res) => {
   const { nim } = req.params;
   try {
@@ -90,33 +128,6 @@ const studentCertificateHistory = async (req, res) => {
   }
 };
 
-const advisorCertificateWaitingList = async (req, res) => {
-  const { nik } = req.params;
-  try {
-    const certificate =
-      await certificateService.advisorWaitingListCertificateView(nik);
-    res.status(200).send({ status: "OK", data: certificate });
-  } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
-  }
-};
-
-const patchStatusCertificate = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const status = req.query.status;
-    const certificate = await certificateService.approveCertificate(id, status);
-
-    res.send({ status: "OK", data: certificate });
-  } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
-  }
-};
-
 module.exports = {
   uploadCertificate,
   viewAllStudentCertificate,
@@ -124,6 +135,6 @@ module.exports = {
   viewCertificateCategory,
   studentCertificateHistory,
   advisorCertificateWaitingList,
-  patchStatusCertificate,
   getStudentCurrentCertificate,
+  putApprovalCertificate,
 };

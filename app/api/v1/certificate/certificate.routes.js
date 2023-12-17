@@ -42,10 +42,10 @@ router.get(
   certificateController.advisorCertificateWaitingList
 );
 
-//approval certificate
-router.patch(
-  "/certificate/approval/:id",
-  certificateController.patchStatusCertificate
+//Approval Certificate
+router.put(
+  "/certificate/approval/status/:certificateId",
+  certificateController.putApprovalCertificate
 );
 
 module.exports = router;
