@@ -103,10 +103,35 @@ const approvalGrades = async (id, status) => {
   }
 };
 
+const findListSemesterGrades = async (nim) => {
+  try {
+    const transaction = await prisma.transaction_Grades.findMany({
+      where: {
+        AND: [
+          {
+            student_Nim: nim,
+          },
+          {
+            status: "APPROVED",
+          },
+        ],
+      },
+      select: {
+        semester: true,
+      },
+    });
+    return transaction;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 module.exports = {
   insertDataforGrades,
   findListGradeSubmmisionByNik,
   findStudentGradeSubmissionById,
   addComments,
   approvalGrades,
+  findListSemesterGrades,
 };

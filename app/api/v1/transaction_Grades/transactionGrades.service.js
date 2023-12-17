@@ -1,5 +1,5 @@
 const transactionGradeRepository = require("./transactionGrades.repository");
-const gradeSubmmisionRepository = require("../gradeSubmmision/gradeSubmmision.repository");
+const gradesRepository = require("../Grades/grades.repository");
 
 const createStudentGradesSubmmission = async (payload, nim) => {
   try {
@@ -23,8 +23,7 @@ const createStudentGradesSubmmission = async (payload, nim) => {
       };
     });
 
-    console.log("data grade: ", gradesSubmission);
-    const grades = await gradeSubmmisionRepository.studentInsertGradeSubmission(
+    const grades = await gradesRepository.studentInsertGradeSubmission(
       gradesSubmission
     );
     return transaction;
@@ -75,10 +74,20 @@ const approveStudentGrades = async (id, status) => {
   }
 };
 
+const viewListSemesterGrades = async (nim) => {
+  try {
+    const transaction = transactionGradeRepository.findListSemesterGrades(nim);
+    return transaction;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createStudentGradesSubmmission,
   viewListStudentGradeSubmmission,
   viewStudentGradeSubmissionDetail,
   giveComment,
   approveStudentGrades,
+  viewListSemesterGrades,
 };

@@ -4,7 +4,6 @@ const postTransactionWithGrades = async (req, res) => {
   try {
     const payload = req.body;
     const { nim } = req.params;
-    console.log("ini ada req body: ", req.body);
     const transaction = await transactionService.createStudentGradesSubmmission(
       payload,
       nim
@@ -46,10 +45,6 @@ const getStudentGradeSubmissionDetail = async (req, res) => {
 const putComment = async (req, res) => {
   const { transactionId } = req.params;
   const payload = req.body;
-
-  console.log("ini transactionid: ", transactionId);
-  console.log("ini req body: ", req.body);
-  console.log("ini payload: ", payload);
   try {
     const transaction = await transactionService.giveComment(
       transactionId,
@@ -80,10 +75,23 @@ const patchStatusGradeSubmission = async (req, res) => {
   }
 };
 
+const getListSemesterGrades = async (req, res) => {
+  const { nim } = req.params;
+  try {
+    const transaction = await transactionService.viewListSemesterGrades(nim);
+    res.status(200).send({ status: "OK", data: transaction });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   postTransactionWithGrades,
   getListStudentGradeSubmission,
   getStudentGradeSubmissionDetail,
   putComment,
   patchStatusGradeSubmission,
+  getListSemesterGrades,
 };

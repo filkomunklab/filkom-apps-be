@@ -1,30 +1,35 @@
 const express = require("express");
 const router = express.Router();
-const trasactionController = require("./transactionGrades.controller");
+const transactionController = require("./transactionGrades.controller");
 
 router.post(
   "/transaction/grades/:nim",
-  trasactionController.postTransactionWithGrades
+  transactionController.postTransactionWithGrades
 );
 
 router.get(
   "/transaction/list/:nik",
-  trasactionController.getListStudentGradeSubmission
+  transactionController.getListStudentGradeSubmission
 );
 
 router.get(
   "/transaction/submissionDetail/:transactionId",
-  trasactionController.getStudentGradeSubmissionDetail
+  transactionController.getStudentGradeSubmissionDetail
 );
 
 router.put(
   "/transaction/comment/:transactionId",
-  trasactionController.putComment
+  transactionController.putComment
 );
 
 router.patch(
   "/transaction/grades/approval/:id",
-  trasactionController.patchStatusGradeSubmission
+  transactionController.patchStatusGradeSubmission
+);
+
+router.get(
+  "/transaction/semesterList/:nim",
+  transactionController.getListSemesterGrades
 );
 
 module.exports = router;
