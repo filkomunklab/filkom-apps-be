@@ -3,27 +3,20 @@ const { insertAdmin } = require("../admin/admin.repository");
 const certificateRepository = require("./certificate.repository");
 const { storage } = require("../../../config/firebase");
 
-const findAllStudentCertificate = async (nik) => {
+//===================================DospemAccess=======================//
+//DospemAccess
+const advisorWaitingListCertificateView = async (nik) => {
   try {
-    const certificate = await certificateRepository.findCertificate(nik);
+    const certificate =
+      await certificateRepository.findAdvisorCertificateWaitingList(nik);
     return certificate;
   } catch (error) {
-    console.log("Ini error: ", error);
+    console.log(error);
     return error;
   }
 };
 
-const viewOneStudentCertificate = async (certificateId) => {
-  try {
-    const certificate = await certificateRepository.findOneCertificate(
-      certificateId
-    );
-    return certificate;
-  } catch (error) {
-    return error;
-  }
-};
-
+//DospemAccess
 const viewCertifiacateByCategory = async (category, nik) => {
   try {
     const certificate = await certificateRepository.findCertificateByCategory(
@@ -36,6 +29,44 @@ const viewCertifiacateByCategory = async (category, nik) => {
   }
 };
 
+//DospemAccess
+const findAllStudentCertificate = async (nik) => {
+  try {
+    const certificate = await certificateRepository.findCertificate(nik);
+    return certificate;
+  } catch (error) {
+    console.log("Ini error: ", error);
+    return error;
+  }
+};
+
+//dospemAccess
+const approvalCertificate = async (certificateId, payload) => {
+  try {
+    return certificateRepository.approvalCertificateStudent(
+      certificateId,
+      payload
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+//==============================GeneralAccess=========================//
+//GeneralAccess
+const viewOneStudentCertificate = async (certificateId) => {
+  try {
+    const certificate = await certificateRepository.findOneCertificate(
+      certificateId
+    );
+    return certificate;
+  } catch (error) {
+    return error;
+  }
+};
+
+//===============================StudentAccess========================//
+//StudentAccess
 const uploadCertificate = async (payload, nim) => {
   const storageRef = ref(
     storage,
@@ -56,6 +87,7 @@ const uploadCertificate = async (payload, nim) => {
   }
 };
 
+//StudentAccess
 const viewCurrentStudentCertificate = async (nim) => {
   try {
     const certificate =
@@ -66,6 +98,7 @@ const viewCurrentStudentCertificate = async (nim) => {
   }
 };
 
+//StudentAccess
 const studentHistoryCertificateView = async (nim) => {
   try {
     const certificate =
@@ -76,25 +109,6 @@ const studentHistoryCertificateView = async (nim) => {
   }
 };
 
-const advisorWaitingListCertificateView = async (nik) => {
-  try {
-    const certificate =
-      await certificateRepository.findAdvisorCertificateWaitingList(nik);
-    return certificate;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-};
-
-const approveCertificate = async (id, status) => {
-  try {
-    return certificateRepository.approvalStudentCertificate(id, status);
-  } catch (error) {
-    throw error;
-  }
-};
-
 module.exports = {
   uploadCertificate,
   findAllStudentCertificate,
@@ -102,6 +116,6 @@ module.exports = {
   viewCertifiacateByCategory,
   studentHistoryCertificateView,
   advisorWaitingListCertificateView,
-  approveCertificate,
   viewCurrentStudentCertificate,
+  approvalCertificate,
 };
