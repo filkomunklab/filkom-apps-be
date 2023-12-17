@@ -1,8 +1,8 @@
 const activityRepository = require("./activity.repository");
 
-const crateActivityForStudent = async (payload, nim) => {
+const crateActivityForAllStudent = async (payload, nim) => {
   try {
-    const activity = await activityRepository.addActivityForStudent(
+    const activity = await activityRepository.addActivityForAllStudent(
       payload,
       nim
     );
@@ -23,6 +23,6 @@ const viewDetailActivity = async (activityId) => {
 };
 
 module.exports = {
-  crateActivityForStudent,
+  crateActivityForAllStudent,
   viewDetailActivity,
 };
