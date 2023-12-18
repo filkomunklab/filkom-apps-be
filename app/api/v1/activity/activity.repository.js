@@ -1,7 +1,9 @@
 const prisma = require("../../../database");
 
+//==========================Dospem Access============================//
+//CREATE ACTIVITY FOR STUDENT
 const addActivityForAllStudent = async (payload, nim) => {
-  const { title, description, date, time } = payload;
+  const { title, description, date, time, openAbsen, employeeNik } = payload;
   try {
     const activity = await prisma.activity.create({
       data: {
@@ -9,6 +11,7 @@ const addActivityForAllStudent = async (payload, nim) => {
         description,
         date,
         time,
+        openAbsen,
         transaction: {
           create: {
             studentNim: nim,
@@ -28,6 +31,12 @@ const addActivityForAllStudent = async (payload, nim) => {
 //   //
 // };
 
+//=============================Student Access=========================//
+// const findActivityFromDospem = async (nik) => {
+//   const activity = await prisma.activity.findMany({});
+// };
+
+//==============================General Access========================//
 const findDetailActivity = async (activityId) => {
   try {
     const activity = await prisma.activity.findUnique({

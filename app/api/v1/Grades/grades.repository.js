@@ -13,13 +13,17 @@ const studentInsertGradeSubmission = async (payload) => {
 
 const findDetailSemesterGrades = async (transactionId) => {
   try {
-    const grades = await prisma.grades.findMany({
+    const grades = await prisma.grades.findUnique({
       where: {
         transaction_Grades: {
           id: transactionId,
         },
       },
-      include: {
+      select: {
+        subjectName: true,
+        paralel: true,
+        grades: true,
+        retrival_to: true,
         transaction_Grades: {
           select: {
             semester: true,
