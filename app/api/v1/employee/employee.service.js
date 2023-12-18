@@ -3,6 +3,7 @@
 const employeeRepository = require("./employee.repository");
 const studentRepository = require("../student/student.repository");
 const bcrypt = require("bcrypt");
+const { status } = require("@prisma/client");
 
 const getAllEmployees = async () => {
   const employee = await employeeRepository.findEmployees();
@@ -196,6 +197,14 @@ const getSupervisorByNik = async (nik) => {
   }
 };
 
+const changeStudentStatus = async (nim, payload) => {
+  try {
+    return await employeeRepository.setStudentStatus(nim, payload);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -212,4 +221,5 @@ module.exports = {
   updateStudentSupervisor,
   getSupervisorByNik,
   createManyEmployee,
+  changeStudentStatus,
 };

@@ -274,6 +274,19 @@ const getSupervisorByNik = async (req, res) => {
   }
 };
 
+const patchStudentStatus = async (req, res) => {
+  const { nim } = req.params;
+  const payload = req.body;
+  try {
+    const employee = await employeeService.changeStudentStatus(nim, payload);
+    res.status(201).send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -291,4 +304,5 @@ module.exports = {
   updateStudentSupervisor,
   getSupervisorByNik,
   createManyEmployee,
+  patchStudentStatus,
 };

@@ -40,4 +40,9 @@ router.patch(
   employeeController.updateStudentSupervisor
 );
 
+router.patch(
+  "/employee/biodataStudent/status/:nim",
+  employeeController.patchStudentStatus
+);
+
 module.exports = router;
