@@ -1,31 +1,28 @@
 const prisma = require("../../../database");
 
-const insertDataforGrades = async (payload, nim) => {
-  try {
-    const { semester, employeeNik } = payload;
-    const transaction = await prisma.transaction_Grades.create({
-      data: {
-        semester,
-        employeeNik,
-        student_Nim: nim,
-      },
-    });
-    return transaction;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const findListGradeSubmmisionByNik = async (nik) => {
+//============================Kaprodi Access==========================//
+//Waiting List
+const findWaitingListGradeSubmission = async (major) => {
   try {
     const transaction = await prisma.transaction_Grades.findMany({
       where: {
-        employeeNik: nik,
+        AND: [
+          {
+            Student: {
+              major,
+            },
+          },
+          {
+            status: "WAITING",
+          },
+        ],
       },
       orderBy: {
         submitedDate: "desc",
       },
-      include: {
+      select: {
+        status: true,
+        semester: true,
         Student: {
           select: {
             nim: true,
@@ -49,60 +46,154 @@ const findListGradeSubmmisionByNik = async (nik) => {
   }
 };
 
-const findStudentGradeSubmissionById = async (transactionId) => {
+//List History Approval Submission Grades
+const findListHistoryApprovalGrades = async (major) => {
   try {
-    const transaction = await prisma.transaction_Grades.findUnique({
+    const transaction = await prisma.transaction_Grades.findMany({
       where: {
-        id: transactionId,
+        AND: [
+          {
+            Student: {
+              major,
+            },
+          },
+          {
+            OR: [
+              {
+                status: "APPROVED",
+              },
+              {
+                status: "REJECTED",
+              },
+            ],
+          },
+        ],
       },
-      include: {
-        Grades: {
+      select: {
+        semester: true,
+        approveDate: true,
+        Student: {
           select: {
-            grades: true,
-            retrival_to: true,
-            paralel: true,
-            subjectName: true,
+            firstName: true,
+            lastName: true,
           },
         },
       },
     });
     return transaction;
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 };
 
-const addComments = async (transactionId, payload) => {
-  const { comments } = payload;
+//Approval grades
+const approvalStudentGrades = async (transactionId, payload) => {
+  const { status, comments } = payload;
   try {
-    console.log("ini comments: ", payload.comments);
     const transaction = await prisma.transaction_Grades.update({
       where: {
         id: transactionId,
       },
       data: {
+        status,
+        approveDate: new Date(),
         comments,
       },
     });
     return transaction;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
 
-const approvalGrades = async (id, status) => {
+//===========================Student Access==========================//
+//INPUT GRADES
+const insertDataforGrades = async (payload, nim) => {
   try {
-    return await prisma.transaction_Grades.update({
-      where: { id },
+    const { semester, employeeNik } = payload;
+    const transaction = await prisma.transaction_Grades.create({
       data: {
-        status: status,
+        semester,
+        employeeNik,
+        student_Nim: nim,
       },
     });
+    return transaction;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
 
+//Current Grades Submission
+const findCurrentGradeSubmission = async (nim) => {
+  try {
+    const transaction = await prisma.transaction_Grades.findMany({
+      where: {
+        AND: [
+          {
+            student_Nim: nim,
+          },
+          {
+            status: "WAITING",
+          },
+        ],
+      },
+      select: {
+        semester: true,
+        submitedDate: true,
+        Student: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    return transaction;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//HISTORY GRADE SUBMISSION
+const findListStudentHistoryGradeSubmission = async (nim) => {
+  try {
+    const transaction = await prisma.transaction_Grades.findMany({
+      where: {
+        AND: [
+          {
+            student_Nim: nim,
+          },
+          {
+            OR: [
+              {
+                status: "APPROVED",
+              },
+              {
+                status: "REJECTED",
+              },
+            ],
+          },
+        ],
+      },
+      select: {
+        semester: true,
+        approveDate: true,
+        Student: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    return transaction;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//LIST SEMESTER
 const findListSemesterGrades = async (nim) => {
   try {
     const transaction = await prisma.transaction_Grades.findMany({
@@ -127,11 +218,52 @@ const findListSemesterGrades = async (nim) => {
   }
 };
 
+//===========================General Access==========================//
+//generalAccess
+const findStudentGradeSubmissionById = async (transactionId) => {
+  try {
+    const transaction = await prisma.transaction_Grades.findUnique({
+      where: {
+        id: transactionId,
+      },
+      select: {
+        Student: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+        Employee: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+        semester: true,
+        status: true,
+        submitedDate: true,
+        approveDate: true,
+        Grades: {
+          select: {
+            grades: true,
+            retrival_to: true,
+            paralel: true,
+            subjectName: true,
+          },
+        },
+      },
+    });
+    return transaction;
+  } catch (error) {}
+};
+
 module.exports = {
   insertDataforGrades,
-  findListGradeSubmmisionByNik,
+  findWaitingListGradeSubmission,
   findStudentGradeSubmissionById,
-  addComments,
-  approvalGrades,
   findListSemesterGrades,
+  approvalStudentGrades,
+  findListHistoryApprovalGrades,
+  findCurrentGradeSubmission,
+  findListStudentHistoryGradeSubmission,
 };
