@@ -1,5 +1,6 @@
 const activityRepository = require("./activity.repository");
 
+//===============================Dosen Accesss=======================//
 const crateActivityForAllStudent = async (payload, nim) => {
   try {
     const activity = await activityRepository.addActivityForAllStudent(
@@ -13,6 +14,9 @@ const crateActivityForAllStudent = async (payload, nim) => {
   }
 };
 
+//=============================STUDENT ACCESS========================//
+
+//============================GENERAL ACCESS=========================//
 const viewDetailActivity = async (activityId) => {
   try {
     const activity = await activityRepository.findDetailActivity(activityId);

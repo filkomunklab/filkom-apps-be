@@ -1,5 +1,6 @@
 const activityService = require("./activity.service");
 
+//==========================DOSEN ACCESS=============================//
 const postActivityForAllStudent = async (req, res) => {
   const payload = req.body;
   const { nim } = req.params;
@@ -16,6 +17,9 @@ const postActivityForAllStudent = async (req, res) => {
   }
 };
 
+//==========================Student Access===========================//
+
+//==============================GENERAL ACCESS=======================//
 const detailActivity = async (req, res) => {
   const { activityId } = req.params;
   try {
