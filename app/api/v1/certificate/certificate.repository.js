@@ -1,4 +1,3 @@
-const { now } = require("moment");
 const prisma = require("../../../database");
 
 //================================Dosen Pembimbing=====================//
@@ -88,6 +87,102 @@ const findAdvisorCertificateWaitingList = async (nik) => {
         AND: [
           {
             employeeNik: nik,
+          },
+          {
+            Certificate: {
+              approval_status: "WAITING",
+            },
+          },
+        ],
+      },
+      include: {
+        Certificate: {
+          select: {
+            title: true,
+            category: true,
+            approval_status: true,
+            submitDate: true,
+          },
+        },
+        Student: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+        Employee: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    return certificate;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+//WAITING LIST BY MAJOR
+const findWaitingListbyMajor = async (major) => {
+  try {
+    const certificate = await prisma.transaction_Certificate.findMany({
+      where: {
+        AND: [
+          {
+            Student: {
+              major,
+            },
+          },
+          {
+            Certificate: {
+              approval_status: "WAITING",
+            },
+          },
+        ],
+      },
+      include: {
+        Certificate: {
+          select: {
+            title: true,
+            category: true,
+            approval_status: true,
+            submitDate: true,
+          },
+        },
+        Student: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+        Employee: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    return certificate;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+//WAITING LIST BY ARRIVAL YEAR
+const findWaitingListbyArrivalYear = async (year) => {
+  try {
+    const certificate = await prisma.transaction_Certificate.findMany({
+      where: {
+        AND: [
+          {
+            Student: {
+              arrival_Year: year,
+            },
           },
           {
             Certificate: {
@@ -300,4 +395,6 @@ module.exports = {
   findAdvisorCertificateWaitingList,
   findCurrentCertificateStudent,
   approvalCertificateStudent,
+  findWaitingListbyMajor,
+  findWaitingListbyArrivalYear,
 };

@@ -2,7 +2,7 @@ const { certificate } = require("../../../database");
 const certificateService = require("./certificate.service");
 
 //============================DospemAccess===========================//
-//DospemAccess
+//Waiting List
 const advisorCertificateWaitingList = async (req, res) => {
   const { nik } = req.params;
   try {
@@ -16,7 +16,7 @@ const advisorCertificateWaitingList = async (req, res) => {
   }
 };
 
-//DospemAccess
+//find by category
 const viewCertificateCategory = async (req, res) => {
   const { category } = req.body;
   const { nik } = req.params;
@@ -33,7 +33,7 @@ const viewCertificateCategory = async (req, res) => {
   }
 };
 
-//DospemAccess
+//History Approval
 const viewAllStudentCertificate = async (req, res) => {
   const { nik } = req.params;
   try {
@@ -46,6 +46,7 @@ const viewAllStudentCertificate = async (req, res) => {
   }
 };
 
+//Approval certificate
 const putApprovalCertificate = async (req, res) => {
   const { certificateId } = req.params;
   const payload = req.body;
@@ -55,6 +56,30 @@ const putApprovalCertificate = async (req, res) => {
       payload
     );
     res.status(201).send({ status: "OK", data: certificate });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getWaitingListbyMajor = async (req, res) => {
+  const { major } = req.params;
+  try {
+    const certificate = await certificateService.waitingListbyMajor(major);
+    res.status(200).send({ status: "OK", data: certificate });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getWaitingListbyArrivalYear = async (req, res) => {
+  const { year } = req.params;
+  try {
+    const certificate = await certificateService.waitingListbyArrivalYear(year);
+    res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -137,4 +162,6 @@ module.exports = {
   advisorCertificateWaitingList,
   getStudentCurrentCertificate,
   putApprovalCertificate,
+  getWaitingListbyMajor,
+  getWaitingListbyArrivalYear,
 };

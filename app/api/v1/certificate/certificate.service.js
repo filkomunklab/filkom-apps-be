@@ -4,7 +4,7 @@ const certificateRepository = require("./certificate.repository");
 const { storage } = require("../../../config/firebase");
 
 //===================================DospemAccess=======================//
-//DospemAccess
+//Waiting List
 const advisorWaitingListCertificateView = async (nik) => {
   try {
     const certificate =
@@ -16,7 +16,7 @@ const advisorWaitingListCertificateView = async (nik) => {
   }
 };
 
-//DospemAccess
+//Find certificate by category
 const viewCertifiacateByCategory = async (category, nik) => {
   try {
     const certificate = await certificateRepository.findCertificateByCategory(
@@ -29,7 +29,7 @@ const viewCertifiacateByCategory = async (category, nik) => {
   }
 };
 
-//DospemAccess
+//show list Approved/Rejected certificate
 const findAllStudentCertificate = async (nik) => {
   try {
     const certificate = await certificateRepository.findCertificate(nik);
@@ -40,7 +40,7 @@ const findAllStudentCertificate = async (nik) => {
   }
 };
 
-//dospemAccess
+//Approval Certificate
 const approvalCertificate = async (certificateId, payload) => {
   try {
     return certificateRepository.approvalCertificateStudent(
@@ -52,8 +52,33 @@ const approvalCertificate = async (certificateId, payload) => {
   }
 };
 
+//Waiting List by major
+const waitingListbyMajor = async (major) => {
+  try {
+    const certificate = await certificateRepository.findWaitingListbyMajor(
+      major
+    );
+    return certificate;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+//Waiting List by Arrival Year
+const waitingListbyArrivalYear = async (year) => {
+  try {
+    const certificate =
+      await certificateRepository.findWaitingListbyArrivalYear(year);
+    return certificate;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
 //==============================GeneralAccess=========================//
-//GeneralAccess
+//Detail Certificate
 const viewOneStudentCertificate = async (certificateId) => {
   try {
     const certificate = await certificateRepository.findOneCertificate(
@@ -118,4 +143,6 @@ module.exports = {
   advisorWaitingListCertificateView,
   viewCurrentStudentCertificate,
   approvalCertificate,
+  waitingListbyArrivalYear,
+  waitingListbyMajor,
 };

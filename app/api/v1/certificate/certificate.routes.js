@@ -42,6 +42,16 @@ router.get(
   certificateController.advisorCertificateWaitingList
 );
 
+//Waiting List by major
+router.get(
+  "/certificate/waitingList/major/:major",
+  certificateController.getWaitingListbyMajor
+);
+
+//Waiting List by Arrival Year
+router.get("/certificate/waitingList/:year"),
+  certificateController.getWaitingListbyArrivalYear;
+
 //Approval Certificate
 router.put(
   "/certificate/approval/status/:certificateId",
