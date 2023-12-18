@@ -309,6 +309,24 @@ const getSupervisorByNik = async (nik) => {
   }
 };
 
+const setStudentStatus = async (nim, payload) => {
+  const { status } = payload;
+  try {
+    const employee = await prisma.student.update({
+      where: {
+        nim,
+      },
+      data: {
+        status,
+      },
+    });
+    return employee;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 module.exports = {
   findEmployees,
   findEmployeeById,
@@ -328,4 +346,5 @@ module.exports = {
   updateStudentSupervisor,
   getSupervisorByNik,
   insertManyEmployee,
+  setStudentStatus,
 };
