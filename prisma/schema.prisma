@@ -136,6 +136,7 @@ model Student {
   employeeNik            String?
   Tracer_Study           Tracer_Study[]
   studentGrade           transaction_Grades[]
+  activityAbsent         Activity_Absence[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
@@ -615,7 +616,8 @@ model Subject {
 
 model transaction_Grades {
   id           String    @id @default(uuid())
-  submitedDate DateTime  @default(now())
+  submitedDate DateTime  @default(now()) @db.Date
+  approveDate  DateTime? @db.Date
   semester     String
   comments     String?
   status       status    @default(WAITING)
@@ -758,17 +760,29 @@ model Activity {
   description String
   date        DateTime               @db.Date
   time        DateTime               @db.Time(0)
+  openAbsen   Boolean
   transaction Transaction_Activity[]
 }
 
 model Transaction_Activity {
-  id          String    @id @default(uuid())
-  Employee    Employee? @relation(fields: [employeeNik], references: [nik])
+  id          String             @id @default(uuid())
+  Employee    Employee?          @relation(fields: [employeeNik], references: [nik])
   employeeNik String?
-  Student     Student?  @relation(fields: [studentNim], references: [nim])
+  Student     Student?           @relation(fields: [studentNim], references: [nim])
   studentNim  String?
-  Activity    Activity? @relation(fields: [activityId], references: [id])
+  Activity    Activity?          @relation(fields: [activityId], references: [id])
   activityId  String?
+  absence     Activity_Absence[]
+}
+
+model Activity_Absence {
+  id                     String                @id @default(uuid())
+  presence               Boolean
+  Student                Student?              @relation(fields: [studentNim], references: [nim])
+  studentNim             String?
+  studentName            String?
+  Transaction_Activity   Transaction_Activity? @relation(fields: [transaction_ActivityId], references: [id])
+  transaction_ActivityId String?
 }
 
 enum Major {
