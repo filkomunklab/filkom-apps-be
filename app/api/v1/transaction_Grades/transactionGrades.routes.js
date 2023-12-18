@@ -2,34 +2,51 @@ const express = require("express");
 const router = express.Router();
 const transactionController = require("./transactionGrades.controller");
 
+//STUDENT POST SEMESTER GRADES
 router.post(
   "/transaction/grades/:nim",
   transactionController.postTransactionWithGrades
 );
 
+//WAITING LIST GRADES
 router.get(
-  "/transaction/list/:nik",
-  transactionController.getListStudentGradeSubmission
+  "/transaction/list/:major",
+  transactionController.getWaitingListStudentGradeSubmission
 );
 
+//DETAIL GRADES SUBMISSION
 router.get(
   "/transaction/submissionDetail/:transactionId",
   transactionController.getStudentGradeSubmissionDetail
 );
 
-router.put(
-  "/transaction/comment/:transactionId",
-  transactionController.putComment
-);
-
-router.patch(
-  "/transaction/grades/approval/:id",
-  transactionController.patchStatusGradeSubmission
-);
-
+//STUDENT APPROVED SEMESTER LIST
 router.get(
   "/transaction/semesterList/:nim",
   transactionController.getListSemesterGrades
+);
+
+//GRADES APPROVAL
+router.put(
+  "/transaction/grades/approval/:transactionId",
+  transactionController.putApprovalGrades
+);
+
+//LIST HISTORY APPROVAL GRADES (KAPRODI)
+router.get(
+  "/transaction/hisotry/kaprodi/:major",
+  transactionController.getHistoryApprovalGrades
+);
+
+//CURRENT GRADES SUBMISSION
+router.get(
+  "/transaction/student/currentGrades/:nim",
+  transactionController.getCurrentGradeSubmission
+);
+
+router.get(
+  "/transaction/student/history/:nim",
+  transactionController.getStudentHistoryGradeSubmission
 );
 
 module.exports = router;

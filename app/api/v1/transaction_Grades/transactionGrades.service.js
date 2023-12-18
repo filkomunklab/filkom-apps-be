@@ -1,6 +1,49 @@
 const transactionGradeRepository = require("./transactionGrades.repository");
 const gradesRepository = require("../Grades/grades.repository");
 
+//============================Kaprodi Access=========================//
+//KaprodiAccess
+const WaitingListStudentGradeSubmmission = async (major) => {
+  try {
+    const transaction =
+      await transactionGradeRepository.findWaitingListGradeSubmission(major);
+    return transaction;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const historyListStudentGradesSubmission = async (major) => {
+  try {
+    return transactionGradeRepository.findListHistoryApprovalGrades(major);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const ApprovalGrades = async (transactionId, payload) => {
+  try {
+    return transactionGradeRepository.approvalStudentGrades(
+      transactionId,
+      payload
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+//===========================Student Access=========================//
+//APPROVED SEMESTER LIST
+const viewListSemesterGrades = async (nim) => {
+  try {
+    const transaction = transactionGradeRepository.findListSemesterGrades(nim);
+    return transaction;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//GRADES SUBMMISSION
 const createStudentGradesSubmmission = async (payload, nim) => {
   try {
     const transaction = await transactionGradeRepository.insertDataforGrades(
@@ -32,16 +75,28 @@ const createStudentGradesSubmmission = async (payload, nim) => {
   }
 };
 
-const viewListStudentGradeSubmmission = async (nik) => {
+//CURRENT GRADES SUBMISSION
+const viewCurrentGradeSubmission = async (nim) => {
   try {
-    const transaction =
-      await transactionGradeRepository.findListGradeSubmmisionByNik(nik);
-    return transaction;
+    return await transactionGradeRepository.findCurrentGradeSubmission(nim);
   } catch (error) {
     throw error;
   }
 };
 
+//HISTORY LIST STUDENT
+const viewStudentHistorytGradeSubmission = async (nim) => {
+  try {
+    return await transactionGradeRepository.findListStudentHistoryGradeSubmission(
+      nim
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+//===========================General Access========================//
+//GeneralAccess
 const viewStudentGradeSubmissionDetail = async (transactionId) => {
   try {
     const transaction =
@@ -54,40 +109,13 @@ const viewStudentGradeSubmissionDetail = async (transactionId) => {
   }
 };
 
-const giveComment = async (transactionId, payload) => {
-  try {
-    const transaction = await transactionGradeRepository.addComments(
-      transactionId,
-      payload
-    );
-    return transaction;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const approveStudentGrades = async (id, status) => {
-  try {
-    return transactionGradeRepository.approvalGrades(id, status);
-  } catch (error) {
-    throw error;
-  }
-};
-
-const viewListSemesterGrades = async (nim) => {
-  try {
-    const transaction = transactionGradeRepository.findListSemesterGrades(nim);
-    return transaction;
-  } catch (error) {
-    throw error;
-  }
-};
-
 module.exports = {
   createStudentGradesSubmmission,
-  viewListStudentGradeSubmmission,
+  WaitingListStudentGradeSubmmission,
   viewStudentGradeSubmissionDetail,
-  giveComment,
-  approveStudentGrades,
   viewListSemesterGrades,
+  ApprovalGrades,
+  historyListStudentGradesSubmission,
+  viewCurrentGradeSubmission,
+  viewStudentHistorytGradeSubmission,
 };
