@@ -1,17 +1,15 @@
 const activityRepository = require("./activity.repository");
+const { CreateActivitySchema, AttendanceSchema } = require("./activity.schema");
 
 //===============================Dosen Accesss=======================//
-const crateActivityForAllStudent = async (payload, nim) => {
-  try {
-    const activity = await activityRepository.addActivityForAllStudent(
-      payload,
-      nim
-    );
-    return activity;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
+const createActivity = async (payload) => {
+  await CreateActivitySchema.validate(payload);
+  return await activityRepository.createActivity(payload);
+};
+
+const takeAttendance = async (payload) => {
+  await AttendanceSchema.validate(payload);
+  return await activityRepository.takeAttendance(payload);
 };
 
 //=============================STUDENT ACCESS========================//
@@ -27,6 +25,7 @@ const viewDetailActivity = async (activityId) => {
 };
 
 module.exports = {
-  crateActivityForAllStudent,
+  createActivity,
   viewDetailActivity,
+  takeAttendance,
 };

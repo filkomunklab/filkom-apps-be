@@ -755,7 +755,7 @@ model Activity {
 }
 
 model ActivityAbsence {
-  presence   Boolean  @default(false)
+  presence   Boolean?
   activity   Activity @relation(fields: [activityId], references: [id])
   activityId String
   student    Student  @relation(fields: [studentNim], references: [nim])
