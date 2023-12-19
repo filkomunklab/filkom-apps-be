@@ -92,7 +92,7 @@ model Student {
   studentEmail           String?               @unique
   curriculum             Curriculum?           @relation(fields: [curriculumId], references: [id])
   curriculumId           String?
-  arrival_Year           String?
+  arrivalYear            String?
   highSchoolGrad         String?
   address                String?
   currentAddress         String?
