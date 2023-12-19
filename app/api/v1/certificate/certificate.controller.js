@@ -75,10 +75,13 @@ const getWaitingListbyMajor = async (req, res) => {
   }
 };
 
-const getWaitingListbyArrivalYear = async (req, res) => {
-  const { year } = req.params;
+//waiting list by arrival year pt
+const getWaitingListByArrYear = async (req, res) => {
+  const { arrivalYear } = req.params;
   try {
-    const certificate = await certificateService.waitingListbyArrivalYear(year);
+    const certificate = await certificateService.viewWaitingListByArrYear(
+      arrivalYear
+    );
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
@@ -163,5 +166,5 @@ module.exports = {
   getStudentCurrentCertificate,
   putApprovalCertificate,
   getWaitingListbyMajor,
-  getWaitingListbyArrivalYear,
+  getWaitingListByArrYear,
 };

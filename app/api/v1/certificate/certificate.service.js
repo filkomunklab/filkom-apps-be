@@ -66,29 +66,26 @@ const waitingListbyMajor = async (major) => {
   }
 };
 
-//Waiting List by Arrival Year
-const waitingListbyArrivalYear = async (year) => {
+//Waiting list arrival year pt2
+const viewWaitingListByArrYear = async (arrivalYear) => {
   try {
-    let certificate = await certificateRepository.findWaitingListbyArrivalYear(
-      year
+    let certificate = await certificateRepository.filterWaitingListByArrYear(
+      arrivalYear
     );
 
     certificate = certificate.map((item) => {
       return {
         ...item,
-        Certificate: {
-          title: item.Certificate.title,
-          submitDate: item.Certificate.submitDate.toString(),
-          category: item.Certificate.category,
-          approval_status: item.Certificate.approval_status,
-        },
+        title: item.title,
+        submitDate: item.submitDate.toString(),
+        category: item.category,
+        approval_status: item.approval_status,
       };
     });
 
     return certificate;
   } catch (error) {
-    console.log(error);
-    return error;
+    throw error;
   }
 };
 
@@ -237,6 +234,6 @@ module.exports = {
   advisorWaitingListCertificateView,
   viewCurrentStudentCertificate,
   approvalCertificate,
-  waitingListbyArrivalYear,
   waitingListbyMajor,
+  viewWaitingListByArrYear,
 };
