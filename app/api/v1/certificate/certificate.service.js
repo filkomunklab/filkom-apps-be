@@ -29,6 +29,8 @@ const advisorWaitingListCertificateView = async (nik) => {
         Certificate: {
           title: item.Certificate.title,
           submitDate: item.Certificate.submitDate.toString(),
+          category: item.Certificate.category,
+          approval_status: item.Certificate.approval_status,
         },
       };
     });
@@ -51,6 +53,8 @@ const waitingListbyMajor = async (major) => {
         Certificate: {
           title: item.Certificate.title,
           submitDate: item.Certificate.submitDate.toString(),
+          category: item.Certificate.category,
+          approval_status: item.Certificate.approval_status,
         },
       };
     });
@@ -75,6 +79,8 @@ const waitingListbyArrivalYear = async (year) => {
         Certificate: {
           title: item.Certificate.title,
           submitDate: item.Certificate.submitDate.toString(),
+          category: item.Certificate.category,
+          approval_status: item.Certificate.approval_status,
         },
       };
     });
