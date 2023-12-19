@@ -24,6 +24,11 @@ const findCertificate = async (nik) => {
           },
         ],
       },
+      orderBy: {
+        Certificate: {
+          approvalDate: "desc",
+        },
+      },
       include: {
         Certificate: {
           select: {
@@ -95,6 +100,11 @@ const findAdvisorCertificateWaitingList = async (nik) => {
           },
         ],
       },
+      orderBy: {
+        Certificate: {
+          submitDate: "desc",
+        },
+      },
       include: {
         Certificate: {
           select: {
@@ -143,6 +153,11 @@ const findWaitingListbyMajor = async (major) => {
           },
         ],
       },
+      orderBy: {
+        Certificate: {
+          submitDate: "desc",
+        },
+      },
       include: {
         Certificate: {
           select: {
@@ -190,6 +205,11 @@ const findWaitingListbyArrivalYear = async (year) => {
             },
           },
         ],
+      },
+      orderBy: {
+        Certificate: {
+          submitDate: "desc",
+        },
       },
       include: {
         Certificate: {
@@ -301,6 +321,11 @@ const findStudentCertificateHistory = async (nim) => {
           },
         ],
       },
+      orderBy: {
+        Certificate: {
+          approvalDate: "desc",
+        },
+      },
       include: {
         Certificate: {
           select: {
@@ -337,6 +362,11 @@ const findCurrentCertificateStudent = async (nim) => {
             },
           },
         ],
+      },
+      orderBy: {
+        Certificate: {
+          submitDate: "desc",
+        },
       },
       include: {
         Certificate: {
