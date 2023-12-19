@@ -738,8 +738,8 @@ model Certificate {
   category        String
   description     String
   comments        String?
-  approvalDate    DateTime?                 @db.Date
-  submitDate      DateTime                  @default(now()) @db.Date
+  approvalDate    DateTime?                 @db.Timestamptz(3)
+  submitDate      DateTime                  @default(now()) @db.Timestamptz(3)
   approval_status status                    @default(WAITING)
   transaction     Transaction_Certificate[]
 }
