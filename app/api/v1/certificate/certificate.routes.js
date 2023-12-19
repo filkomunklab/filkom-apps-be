@@ -48,9 +48,11 @@ router.get(
   certificateController.getWaitingListbyMajor
 );
 
-//Waiting List by Arrival Year
-router.get("/certificate/waitingList/:year"),
-  certificateController.getWaitingListbyArrivalYear;
+//waiting list by arrival year pt 2
+router.get(
+  "/certificate/list/waiting/arrYear/:arrivalYear",
+  certificateController.getWaitingListByArrYear
+);
 
 //Approval Certificate
 router.put(

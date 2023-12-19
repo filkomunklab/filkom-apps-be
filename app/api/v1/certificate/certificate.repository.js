@@ -188,56 +188,55 @@ const findWaitingListbyMajor = async (major) => {
   }
 };
 
-//WAITING LIST BY ARRIVAL YEAR
-const findWaitingListbyArrivalYear = async (year) => {
+//Waiting list by arrival year
+const filterWaitingListByArrYear = async (arrivalYear) => {
   try {
-    const certificate = await prisma.transaction_Certificate.findMany({
+    const certificate = await prisma.certificate.findMany({
       where: {
         AND: [
           {
-            Student: {
-              arrival_Year: year,
+            transaction: {
+              some: {
+                Student: {
+                  arrivalYear,
+                },
+              },
             },
           },
           {
-            Certificate: {
-              approval_status: "WAITING",
-            },
+            approval_status: "WAITING",
           },
         ],
       },
       orderBy: {
-        Certificate: {
-          submitDate: "desc",
-        },
+        submitDate: "desc",
       },
-      include: {
-        Certificate: {
+      select: {
+        title: true,
+        category: true,
+        approval_status: true,
+        submitDate: true,
+        transaction: {
           select: {
-            title: true,
-            category: true,
-            approval_status: true,
-            submitDate: true,
-          },
-        },
-        Student: {
-          select: {
-            firstName: true,
-            lastName: true,
-          },
-        },
-        Employee: {
-          select: {
-            firstName: true,
-            lastName: true,
+            Student: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+            Employee: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
           },
         },
       },
     });
     return certificate;
   } catch (error) {
-    console.log(error);
-    return error;
+    throw error;
   }
 };
 
@@ -426,5 +425,5 @@ module.exports = {
   findCurrentCertificateStudent,
   approvalCertificateStudent,
   findWaitingListbyMajor,
-  findWaitingListbyArrivalYear,
+  filterWaitingListByArrYear,
 };
