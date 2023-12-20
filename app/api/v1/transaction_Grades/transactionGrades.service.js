@@ -50,7 +50,19 @@ const viewWaitingListStudentGradeSubmmissionbySemester = async (semester) => {
 //History Approval (Dospem)
 const historyListStudentGradesSubmission = async (major) => {
   try {
-    return transactionGradeRepository.findListHistoryApprovalGrades(major);
+    let transaction =
+      await transactionGradeRepository.findListHistoryApprovalGrades(major);
+
+    transaction = transaction.map((item) => {
+      return {
+        ...item,
+        status: item.status,
+        semester: item.semester,
+        approveDate: item.approveDate.toString(),
+      };
+    });
+
+    return transaction;
   } catch (error) {
     throw error;
   }
