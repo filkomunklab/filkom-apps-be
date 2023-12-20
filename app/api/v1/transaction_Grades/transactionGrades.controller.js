@@ -1,12 +1,28 @@
 const transactionService = require("./transactionGrades.service");
 
 //===========================Kaprodi Access==========================//
-//WAITING LIST GRADE SUBMISSION
+//WAITING LIST GRADE SUBMISSION (sort by major)
 const getWaitingListStudentGradeSubmission = async (req, res) => {
   const { major } = req.params;
   try {
     const transaction =
       await transactionService.WaitingListStudentGradeSubmmission(major);
+    res.status(200).send({ status: "OK", data: transaction });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//WAITING LIST GRADE SUBMISSION (sort by semester)
+const getWaitingListBySemester = async (req, res) => {
+  const semester = req.query.params;
+  try {
+    const transaction =
+      await transactionService.viewWaitingListStudentGradeSubmmissionbySemester(
+        semester
+      );
     res.status(200).send({ status: "OK", data: transaction });
   } catch (error) {
     res
@@ -77,6 +93,7 @@ const postTransactionWithGrades = async (req, res) => {
   }
 };
 
+//Waiting Grades Approval
 const getCurrentGradeSubmission = async (req, res) => {
   const { nim } = req.params;
   try {
@@ -91,6 +108,7 @@ const getCurrentGradeSubmission = async (req, res) => {
   }
 };
 
+//Approval Grades History
 const getStudentHistoryGradeSubmission = async (req, res) => {
   const { nim } = req.params;
   try {
@@ -128,4 +146,5 @@ module.exports = {
   getHistoryApprovalGrades,
   getCurrentGradeSubmission,
   getStudentHistoryGradeSubmission,
+  getWaitingListBySemester,
 };

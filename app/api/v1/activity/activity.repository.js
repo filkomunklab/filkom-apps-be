@@ -2,29 +2,48 @@ const prisma = require("../../../database");
 
 //==========================Dospem Access============================//
 //CREATE ACTIVITY FOR STUDENT
-const addActivityForAllStudent = async (payload, nim) => {
-  const { title, description, date, time, openAbsen, employeeNik } = payload;
-  try {
-    const activity = await prisma.activity.create({
-      data: {
-        title,
-        description,
-        date,
-        time,
-        openAbsen,
-        transaction: {
-          create: {
-            studentNim: nim,
-            employeeNik,
-          },
+const createActivity = async (payload) => {
+  const { members, ...res } = payload;
+  console.log(...members);
+  return await prisma.activity.create({
+    data: {
+      ...res,
+      activityAbsent: {
+        createMany: {
+          data: [...members],
         },
       },
+    },
+  });
+};
+
+const takeAttendance = async (payload) => {
+  const { activityId, members } = payload;
+  return await prisma.$transaction(async (prisma) => {
+    await prisma.activityAbsence.updateMany({
+      where: {
+        studentNim: {
+          in: members,
+        },
+        activityId: activityId,
+      },
+      data: {
+        presence: true,
+      },
     });
-    return activity;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
+
+    await prisma.activityAbsence.updateMany({
+      where: {
+        studentNim: {
+          notIn: members,
+        },
+        activityId: activityId,
+      },
+      data: {
+        presence: false,
+      },
+    });
+  });
 };
 
 // const addActivityForChoossenStudent = async (payload, nik) => {
@@ -51,6 +70,7 @@ const findDetailActivity = async (activityId) => {
 };
 
 module.exports = {
-  addActivityForAllStudent,
+  createActivity,
   findDetailActivity,
+  takeAttendance,
 };

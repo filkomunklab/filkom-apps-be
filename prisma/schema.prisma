@@ -66,12 +66,10 @@ model Employee {
   transaction_preRegis   transaction_preRegis[]
   academic_consultations Academic_Consultation[]
   preRegis               PreRegistration[]
-  transactionActivity    Transaction_Activity[]
-  transactionCertificate Transaction_Certificate[]
-  student                Student[]
   studentGrades          transaction_Grades[]
   gradesAccess           grades_access[]
   preRegisAccess         preRegis_access[]
+  GuidanceClass          GuidanceClass[]
 
   @@unique([firstName, lastName])
   @@index([email])
@@ -128,15 +126,13 @@ model Student {
   skripsi_assessment     Skripsi_Assessment[]  @relation("Student")
   FormSPT                FormSPT[]
 
-  transaction_preRegis   transaction_preRegis[]
-  academic_Consultation  Academic_Consultation[]
-  transactionActivity    Transaction_Activity[]
-  transactionCertivicate Transaction_Certificate[]
-  Employee               Employee?                 @relation(fields: [employeeNik], references: [nik])
-  employeeNik            String?
-  Tracer_Study           Tracer_Study[]
-  studentGrade           transaction_Grades[]
-  activityAbsent         Activity_Absence[]
+  transaction_preRegis  transaction_preRegis[]
+  academic_Consultation Academic_Consultation[]
+  Tracer_Study          Tracer_Study[]
+  studentGrade          transaction_Grades[]
+  activityAbsent        ActivityAbsence[]
+  GuidanceClassMember   GuidanceClassMember?
+  Certificate           Certificate[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
@@ -616,8 +612,8 @@ model Subject {
 
 model transaction_Grades {
   id           String    @id @default(uuid())
-  submitedDate DateTime  @default(now()) @db.Date
-  approveDate  DateTime? @db.Date
+  submitedDate DateTime  @default(now()) @db.Timestamptz(3)
+  approveDate  DateTime? @db.Timestamptz(3)
   semester     String
   comments     String?
   status       status    @default(WAITING)
@@ -731,58 +727,60 @@ model Message {
 }
 
 model Certificate {
-  id              String                    @id @default(uuid())
+  id              String    @id @default(uuid())
   filename        String
   path            String
   title           String
   category        String
   description     String
   comments        String?
-  approvalDate    DateTime?                 @db.Timestamptz(3)
-  submitDate      DateTime                  @default(now()) @db.Timestamptz(3)
-  approval_status status                    @default(WAITING)
-  transaction     Transaction_Certificate[]
-}
-
-model Transaction_Certificate {
-  id            String       @id @default(uuid())
-  Certificate   Certificate? @relation(fields: [certificateId], references: [id])
-  certificateId String?
-  Student       Student?     @relation(fields: [studentNim], references: [nim])
-  studentNim    String?
-  Employee      Employee?    @relation(fields: [employeeNik], references: [nik])
-  employeeNik   String?
+  approvalDate    DateTime? @db.Timestamptz(3)
+  submitDate      DateTime  @default(now()) @db.Timestamptz(3)
+  approval_status status    @default(WAITING)
+  student         Student   @relation(fields: [studentNim], references: [nim])
+  studentNim      String
 }
 
 model Activity {
-  id          String                 @id @default(uuid())
-  title       String
-  description String
-  date        DateTime               @db.Date
-  time        DateTime               @db.Time(0)
-  openAbsen   Boolean
-  transaction Transaction_Activity[]
+  id              String            @id @default(uuid())
+  title           String
+  description     String
+  dueDate         DateTime
+  isAttendance    Boolean
+  guidanceClass   GuidanceClass     @relation(fields: [guidanceClassId], references: [id])
+  guidanceClassId String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  activityAbsent  ActivityAbsence[]
 }
 
-model Transaction_Activity {
-  id          String             @id @default(uuid())
-  Employee    Employee?          @relation(fields: [employeeNik], references: [nik])
-  employeeNik String?
-  Student     Student?           @relation(fields: [studentNim], references: [nim])
-  studentNim  String?
-  Activity    Activity?          @relation(fields: [activityId], references: [id])
-  activityId  String?
-  absence     Activity_Absence[]
+model ActivityAbsence {
+  presence   Boolean?
+  activity   Activity @relation(fields: [activityId], references: [id])
+  activityId String
+  student    Student  @relation(fields: [studentNim], references: [nim])
+  studentNim String
+
+  @@unique([activityId, studentNim])
 }
 
-model Activity_Absence {
-  id                     String                @id @default(uuid())
-  presence               Boolean
-  Student                Student?              @relation(fields: [studentNim], references: [nim])
-  studentNim             String?
-  studentName            String?
-  Transaction_Activity   Transaction_Activity? @relation(fields: [transaction_ActivityId], references: [id])
-  transaction_ActivityId String?
+model GuidanceClass {
+  id                  String                @id @default(uuid())
+  teacher             Employee              @relation(fields: [teacherId], references: [nik])
+  teacherId           String                @unique
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  Activity            Activity[]
+  GuidanceClassMember GuidanceClassMember[]
+}
+
+model GuidanceClassMember {
+  student         Student       @relation(fields: [studentNim], references: [nim])
+  studentNim      String        @unique
+  gudianceClass   GuidanceClass @relation(fields: [guidanceClassId], references: [id])
+  guidanceClassId String
+
+  @@unique([studentNim, guidanceClassId])
 }
 
 enum Major {

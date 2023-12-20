@@ -1,18 +1,53 @@
 const transactionGradeRepository = require("./transactionGrades.repository");
 const gradesRepository = require("../Grades/grades.repository");
+const moment = require("moment-timezone");
 
 //============================Kaprodi Access=========================//
-//KaprodiAccess
+//Waiting List Grades Submission (sort by major)
 const WaitingListStudentGradeSubmmission = async (major) => {
   try {
-    const transaction =
+    let transaction =
       await transactionGradeRepository.findWaitingListGradeSubmission(major);
+
+    transaction = transaction.map((item) => {
+      return {
+        ...item,
+        status: item.status,
+        semester: item.semester,
+        submitedDate: item.submitedDate.toString(),
+      };
+    });
+
     return transaction;
   } catch (error) {
     throw error;
   }
 };
 
+//Waiting list Grades Submission (sort by semester)
+const viewWaitingListStudentGradeSubmmissionbySemester = async (semester) => {
+  try {
+    let transaction =
+      await transactionGradeRepository.findWaitingListGradeSubmissionBySemester(
+        semester
+      );
+
+    transaction = transaction.map((item) => {
+      return {
+        ...item,
+        status: item.status,
+        semester: item.semester,
+        submitedDate: item.submitedDate.toString(),
+      };
+    });
+
+    return transaction;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//History Approval (Dospem)
 const historyListStudentGradesSubmission = async (major) => {
   try {
     return transactionGradeRepository.findListHistoryApprovalGrades(major);
@@ -21,27 +56,25 @@ const historyListStudentGradesSubmission = async (major) => {
   }
 };
 
+//Approval Grades Submission
 const ApprovalGrades = async (transactionId, payload) => {
   try {
-    return transactionGradeRepository.approvalStudentGrades(
+    const transaction = transactionGradeRepository.approvalStudentGrades(
       transactionId,
       payload
     );
+    return {
+      ...transaction,
+      approveDate: `${moment((await transaction).approveDate).tz(
+        "Asia/Makassar"
+      )}`,
+    };
   } catch (error) {
     throw error;
   }
 };
 
 //===========================Student Access=========================//
-//APPROVED SEMESTER LIST
-const viewListSemesterGrades = async (nim) => {
-  try {
-    const transaction = transactionGradeRepository.findListSemesterGrades(nim);
-    return transaction;
-  } catch (error) {
-    throw error;
-  }
-};
 
 //GRADES SUBMMISSION
 const createStudentGradesSubmmission = async (payload, nim) => {
@@ -69,8 +102,12 @@ const createStudentGradesSubmmission = async (payload, nim) => {
     const grades = await gradesRepository.studentInsertGradeSubmission(
       gradesSubmission
     );
-    return transaction;
+    return {
+      ...transaction,
+      submitedDate: `${moment(transaction.submitedDate).tz("Asia/Makassar")}`,
+    };
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -78,7 +115,18 @@ const createStudentGradesSubmmission = async (payload, nim) => {
 //CURRENT GRADES SUBMISSION
 const viewCurrentGradeSubmission = async (nim) => {
   try {
-    return await transactionGradeRepository.findCurrentGradeSubmission(nim);
+    let transaction =
+      await transactionGradeRepository.findCurrentGradeSubmission(nim);
+
+    transaction = transaction.map((item) => {
+      return {
+        ...item,
+        semester: item.semester,
+        submitedDate: item.submitedDate.toString(),
+      };
+    });
+
+    return transaction;
   } catch (error) {
     throw error;
   }
@@ -87,23 +135,52 @@ const viewCurrentGradeSubmission = async (nim) => {
 //HISTORY LIST STUDENT
 const viewStudentHistorytGradeSubmission = async (nim) => {
   try {
-    return await transactionGradeRepository.findListStudentHistoryGradeSubmission(
-      nim
-    );
+    let transaction =
+      await transactionGradeRepository.findListStudentHistoryGradeSubmission(
+        nim
+      );
+
+    transaction = transaction.map((item) => {
+      return {
+        ...item,
+        semester: item.semester,
+        approveDate: item.approveDate.toString(),
+      };
+    });
+
+    return transaction;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//APPROVED SEMESTER LIST
+const viewListSemesterGrades = async (nim) => {
+  try {
+    const transaction = transactionGradeRepository.findListSemesterGrades(nim);
+    return transaction;
   } catch (error) {
     throw error;
   }
 };
 
 //===========================General Access========================//
-//GeneralAccess
+
+//Detail Submission
 const viewStudentGradeSubmissionDetail = async (transactionId) => {
   try {
-    const transaction =
+    let transaction =
       await transactionGradeRepository.findStudentGradeSubmissionById(
         transactionId
       );
-    return transaction;
+
+    return {
+      ...transaction,
+      approveDate: transaction.approveDate
+        ? transaction.approveDate.toString()
+        : null,
+      submitedDate: transaction.submitedDate.toString(),
+    };
   } catch (error) {
     throw error;
   }
@@ -118,4 +195,5 @@ module.exports = {
   historyListStudentGradesSubmission,
   viewCurrentGradeSubmission,
   viewStudentHistorytGradeSubmission,
+  viewWaitingListStudentGradeSubmmissionbySemester,
 };

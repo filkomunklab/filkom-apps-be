@@ -8,10 +8,16 @@ router.post(
   transactionController.postTransactionWithGrades
 );
 
-//WAITING LIST GRADES
+//WAITING LIST GRADES (major)
 router.get(
   "/transaction/list/:major",
   transactionController.getWaitingListStudentGradeSubmission
+);
+
+//WAITING LIST GRADES (semester)
+router.get(
+  "/transaction/semester/waitingList",
+  transactionController.getWaitingListBySemester
 );
 
 //DETAIL GRADES SUBMISSION
@@ -44,6 +50,7 @@ router.get(
   transactionController.getCurrentGradeSubmission
 );
 
+//Student History
 router.get(
   "/transaction/student/history/:nim",
   transactionController.getStudentHistoryGradeSubmission
