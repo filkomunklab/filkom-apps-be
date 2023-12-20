@@ -4,3 +4,4 @@ node_modules/
 .wwebjs_auth/
 .wwebjs_cache/
 prisma/migrations/*_to_local_darell
+prisma/migrations
