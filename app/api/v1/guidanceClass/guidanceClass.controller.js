@@ -10,10 +10,16 @@ const createGuidanceClass = async (req, res) => {
     );
     res.status(201).send({ status: "OK", data: guidanceClass });
   } catch (error) {
-    if (error?.code === "P2002") {
-      return res
-        .status(409)
-        .send({ status: "FAILED", data: { error: "Data already exist" } });
+    switch (error?.code) {
+      case "P2002":
+        return res
+          .status(409)
+          .send({ status: "FAILED", data: { error: "Data already exist" } });
+      case "P2003":
+        return res.status(404).send({
+          status: "FAILED",
+          data: { error: "Teacher or student hasn't created yet" },
+        });
     }
     res
       .status(error?.status || 500)
@@ -31,7 +37,6 @@ const addStudentToGuidanceClass = async (req, res) => {
     );
     res.status(201).send({ status: "OK", data: guidanceClass });
   } catch (error) {
-    console.log(error);
     if (error?.code === "P2002") {
       return res
         .status(409)

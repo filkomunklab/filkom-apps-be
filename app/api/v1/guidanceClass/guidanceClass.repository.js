@@ -9,6 +9,11 @@ const getAllUnassignedStudent = async () => {
       nim: true,
       firstName: true,
       lastName: true,
+      MajorGlobal: {
+        select: {
+          name: true,
+        },
+      },
     },
   });
 };
@@ -35,7 +40,6 @@ const addStudentToGuidanceClass = async (payload, guidanceClassId) => {
       guidanceClassId: guidanceClassId,
     };
   });
-  console.log(normalized);
   return await prisma.guidanceClassMember.createMany({
     data: normalized,
   });

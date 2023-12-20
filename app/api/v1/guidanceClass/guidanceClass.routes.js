@@ -3,22 +3,22 @@ const guidanceClassController = require("./guidanceClass.controller");
 const router = express.Router();
 
 router.get(
-  "/guidanceClass/getAllUnassignedStudent",
+  "/guidance-class/get-all-unassigned-student",
   guidanceClassController.getAllUnassignedStudent
 );
 
 router.post(
-  "/guidanceClass/createNew/:teacherId",
+  "/guidance-class/create-new/:teacherId",
   guidanceClassController.createGuidanceClass
 );
 
 router.post(
-  "/guidanceClass/addStudent/:guidanceClassId",
+  "/guidance-class/add-student/:guidanceClassId",
   guidanceClassController.addStudentToGuidanceClass
 );
 
 router.delete(
-  "/guidanceClass/deleteStudent",
+  "/guidance-class/delete-student",
   guidanceClassController.deleteStudentFromGuidanceClass
 );
 
