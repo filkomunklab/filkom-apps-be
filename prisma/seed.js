@@ -5032,7 +5032,6 @@ async function main() {
         major: "IF",
         curriculumId: kurikulum_informatika,
         arrivalYear: "2020",
-        employeeNik: "1002",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -5046,7 +5045,6 @@ async function main() {
         major: "IF",
         curriculumId: kurikulum_informatika,
         arrivalYear: "2020",
-        employeeNik: "1002",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
