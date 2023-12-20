@@ -1,7 +1,7 @@
 const prisma = require("../../../database");
 
 //============================Kaprodi Access==========================//
-//Waiting List
+//Waiting List Grade submmision (sort by major)
 const findWaitingListGradeSubmission = async (major) => {
   try {
     const transaction = await prisma.transaction_Grades.findMany({
@@ -23,13 +23,14 @@ const findWaitingListGradeSubmission = async (major) => {
       select: {
         status: true,
         semester: true,
+        submitedDate: true,
         Student: {
           select: {
             nim: true,
             firstName: true,
             lastName: true,
             major: true,
-            arrival_Year: true,
+            arrivalYear: true,
           },
         },
         Employee: {
@@ -42,6 +43,52 @@ const findWaitingListGradeSubmission = async (major) => {
     });
     return transaction;
   } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+//Waiting List grade submission (sort by semester)
+const findWaitingListGradeSubmissionBySemester = async (semester) => {
+  try {
+    const transaction = await prisma.transaction_Grades.findMany({
+      where: {
+        AND: [
+          {
+            semester,
+          },
+          {
+            status: "WAITING",
+          },
+        ],
+      },
+      orderBy: {
+        submitedDate: "desc",
+      },
+      select: {
+        status: true,
+        semester: true,
+        submitedDate: true,
+        Student: {
+          select: {
+            nim: true,
+            firstName: true,
+            lastName: true,
+            major: true,
+            arrivalYear: true,
+          },
+        },
+        Employee: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    return transaction;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -193,7 +240,7 @@ const findListStudentHistoryGradeSubmission = async (nim) => {
   }
 };
 
-//LIST SEMESTER
+//LIST Approved Grades/semester (student acccess)
 const findListSemesterGrades = async (nim) => {
   try {
     const transaction = await prisma.transaction_Grades.findMany({
@@ -219,7 +266,7 @@ const findListSemesterGrades = async (nim) => {
 };
 
 //===========================General Access==========================//
-//generalAccess
+//detail submission
 const findStudentGradeSubmissionById = async (transactionId) => {
   try {
     const transaction = await prisma.transaction_Grades.findUnique({
@@ -266,4 +313,5 @@ module.exports = {
   findListHistoryApprovalGrades,
   findCurrentGradeSubmission,
   findListStudentHistoryGradeSubmission,
+  findWaitingListGradeSubmissionBySemester,
 };
