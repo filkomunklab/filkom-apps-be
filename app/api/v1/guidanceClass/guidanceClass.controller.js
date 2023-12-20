@@ -68,8 +68,11 @@ const deleteStudentFromGuidanceClass = async (req, res) => {
 };
 
 const getAllUnassignedStudent = async (req, res) => {
+  const query = req.query;
   try {
-    const studentList = await guidanceClassService.getAllUnassignedStudent();
+    const studentList = await guidanceClassService.getAllUnassignedStudent(
+      query
+    );
     res.status(200).send({ status: "OK", data: studentList });
   } catch (error) {
     res

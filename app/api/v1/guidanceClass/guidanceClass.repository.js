@@ -1,9 +1,11 @@
 const prisma = require("../../../database");
 
-const getAllUnassignedStudent = async () => {
+const getAllUnassignedStudent = async (payload) => {
+  const { major } = payload;
   return await prisma.student.findMany({
     where: {
       GuidanceClassMember: null,
+      major: major ? major : undefined,
     },
     select: {
       nim: true,

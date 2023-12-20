@@ -21,8 +21,13 @@ const DeleteStudentSchema = Yup.object().shape({
   studentList: Yup.array().of(Yup.string().required("NIM is required")),
 });
 
+const GetUnassignedSchema = Yup.object().shape({
+  major: Yup.string().oneOf(["DKV", "IF", "SI"]).nonNullable(),
+});
+
 module.exports = {
   CreateGuidanceClassSchema,
   AddStudentSchema,
   DeleteStudentSchema,
+  GetUnassignedSchema,
 };
