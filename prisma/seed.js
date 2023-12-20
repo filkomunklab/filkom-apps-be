@@ -5088,10 +5088,6 @@ async function main() {
         major: "IF",
         curriculumId: kurikulum_informatika,
         arrivalYear: "2020",
-<<<<<<< HEAD
-        employeeNik: "1005",
-=======
->>>>>>> 957bb45f5848799768f60312c372e07188f9fd20
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
