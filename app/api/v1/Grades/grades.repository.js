@@ -13,7 +13,7 @@ const studentInsertGradeSubmission = async (payload) => {
 
 const findDetailSemesterGrades = async (transactionId) => {
   try {
-    const grades = await prisma.grades.findUnique({
+    const grades = await prisma.grades.findMany({
       where: {
         transaction_Grades: {
           id: transactionId,
@@ -33,6 +33,7 @@ const findDetailSemesterGrades = async (transactionId) => {
     });
     return grades;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
