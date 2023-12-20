@@ -616,8 +616,8 @@ model Subject {
 
 model transaction_Grades {
   id           String    @id @default(uuid())
-  submitedDate DateTime  @default(now()) @db.Date
-  approveDate  DateTime? @db.Date
+  submitedDate DateTime  @default(now()) @db.Timestamptz(3)
+  approveDate  DateTime? @db.Timestamptz(3)
   semester     String
   comments     String?
   status       status    @default(WAITING)
