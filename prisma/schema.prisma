@@ -122,8 +122,10 @@ model Student {
   proposal_student       Proposal_Student[]    @relation("ProposalStudent")
   skripsi_student        Skripsi_Student[]     @relation("SkripsiStudent")
   group_student          Group_Student[]       @relation("StudentMember")
-  proposal_assessment    Proposal_Assessment[] @relation("Student")
-  skripsi_assessment     Skripsi_Assessment[]  @relation("Student")
+  proposal_assessment       Proposal_Assessment[] @relation("Student")
+  proposal_conclusion_value Proposal_Conclusion[] @relation("Student")
+  skripsi_assessment        Skripsi_Assessment[]  @relation("Student")
+  skripsi_conclusion_value  Skripsi_Conclusion[]  @relation("Student")
   FormSPT                FormSPT[]
 
   transaction_preRegis  transaction_preRegis[]
@@ -326,6 +328,7 @@ model Group {
   group_student       Group_Student[]       @relation("Group")
   thesis_consultation Thesis_Consultation[] @relation("ThesisConsultation")
   History             Thesis_History[]      @relation("History")
+  Link                Thesis_Link[]         @relation("Link")
 }
 
 model Academic_Calendar {
@@ -417,7 +420,6 @@ model Proposal {
   advisor_report_approve_date              DateTime?
   exam_conclution                          Exam_Conclution?
   changes_conclusion                       Changes_Conclusion?
-  assessment_conclution                    String?
   is_pass                                  Pass?
   report_date                              String?
   file_name_revision                       String?
@@ -430,10 +432,16 @@ model Proposal {
   panelist_chairman_revision_approve_date  DateTime?
   panelist_member_revision_approve_date    DateTime?
   advisor_revision_approve_date            DateTime?
+  panelist_chairman_revision_comment       String?
+  panelist_member_revision_comment         String?
+  advisor_revision_comment                 String?
+  submission_dateline                      DateTime?
+  completed_status                         Boolean?
   approve_date                             DateTime?
   group                                    Group?                @relation("Proposal")
   assessment                               Proposal_Assessment[] @relation("Assessment")
   changes                                  Proposal_Changes[]    @relation("Changes")
+  conclusion_value                         Proposal_Conclusion[] @relation("Conclusion_Value")
 }
 
 model Skripsi {
@@ -483,7 +491,6 @@ model Skripsi {
   advisor_report_approve_date              DateTime?
   exam_conclution                          Exam_Conclution?
   changes_conclusion                       Changes_Conclusion?
-  assessment_conclution                    String?
   is_pass                                  Pass?
   report_date                              String?
   file_name_revision                       String?
@@ -496,6 +503,11 @@ model Skripsi {
   panelist_chairman_revision_approve_date  DateTime?
   panelist_member_revision_approve_date    DateTime?
   advisor_revision_approve_date            DateTime?
+  panelist_chairman_revision_comment       String?
+  panelist_member_revision_comment         String?
+  advisor_revision_comment                 String?
+  submission_dateline                      DateTime?
+  completed_status                         Boolean?
   approve_date                             DateTime?
   file_name_hki                            String?
   file_name_journal                        String?
@@ -514,6 +526,7 @@ model Skripsi {
   group                                    Group?               @relation("Skripsi")
   assessment                               Skripsi_Assessment[] @relation("Assessment")
   changes                                  Skripsi_Changes[]    @relation("Changes")
+  conclusion_value                         Skripsi_Conclusion[] @relation("Conclusion_Value")
 }
 
 model Proposal_Assessment {
@@ -544,7 +557,11 @@ model Proposal_Changes {
   proposal_id String
   dosen       Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id    String
-  changes     String?
+  judul       String?
+  bab1        String?
+  bab2        String?
+  bab3        String?
+  other       String?
 }
 
 model Skripsi_Changes {
@@ -554,16 +571,42 @@ model Skripsi_Changes {
   dosen      Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id   String
   changes    String?
+  abstrak    String?
+  bab1       String?
+  bab2       String?
+  bab3       String?
+  bab4       String?
+  bab5       String?
+  other      String?
+}
+
+model Proposal_Conclusion {
+  id                    String   @id @default(uuid())
+  proposal              Proposal @relation("Conclusion_Value", fields: [proposal_id], references: [id])
+  proposal_id           String
+  student               Student  @relation("Student", fields: [student_id], references: [id])
+  student_id            String
+  assessment_conclution String?
+}
+
+model Skripsi_Conclusion {
+  id                    String  @id @default(uuid())
+  skripsi               Skripsi @relation("Conclusion_Value", fields: [skripsi_id], references: [id])
+  skripsi_id            String
+  student               Student @relation("Student", fields: [student_id], references: [id])
+  student_id            String
+  assessment_conclution String?
 }
 
 model Thesis_Consultation {
-  id          String   @id @default(uuid())
-  group       Group    @relation("ThesisConsultation", fields: [group_id], references: [id])
-  group_id    String
-  description String
-  date        DateTime
-  dosen       Employee @relation("ThesisConsultation", fields: [dosen_id], references: [id])
-  dosen_id    String
+  id                  String              @id @default(uuid())
+  group               Group               @relation("ThesisConsultation", fields: [group_id], references: [id])
+  group_id            String
+  description         String
+  date                DateTime
+  dosen               Employee            @relation("ThesisConsultation", fields: [dosen_id], references: [id])
+  dosen_id            String
+  consultation_status Consultation_Status
 }
 
 model Thesis_History {
@@ -573,6 +616,15 @@ model Thesis_History {
   date        DateTime
   group       Group    @relation("History", fields: [group_id], references: [id])
   group_id    String
+}
+
+model Thesis_Link {
+  id       String   @id @default(uuid())
+  group    Group    @relation("Link", fields: [group_id], references: [id])
+  group_id String
+  name     String
+  link     String
+  date     DateTime
 }
 
 //-------------------Bimbingan Akademik-------------------/
@@ -828,6 +880,11 @@ enum Progress {
   Proposal
   Skripsi
   Finished
+}
+
+enum Consultation_Status {
+  Proposal
+  Skripsi
 }
 
 enum status {

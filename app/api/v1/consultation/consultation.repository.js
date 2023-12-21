@@ -5,14 +5,15 @@ const prisma = require("../../../database");
 // @description     Create consultation
 // @route           POST /consultation
 // @access          DOSEN
-const insertConsultation = async (payload, userId) => {
+const insertConsultation = async (payload, userId, consultation_status) => {
   const { group_id, description, date } = payload;
   const consultation = await prisma.thesis_Consultation.create({
     data: {
       group_id,
       description,
-      date,
+      date: new Date(date),
       dosen_id: userId,
+      consultation_status,
     },
   });
 

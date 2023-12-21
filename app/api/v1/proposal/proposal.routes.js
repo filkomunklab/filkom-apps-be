@@ -225,6 +225,24 @@ router.get(
 );
 
 //===================================================================
+// @description     Get conclusion value
+// @access          DOSEN
+router.put(
+  "/proposal/proposal-report/conclusion-value/:id",
+  auth,
+  proposalController.updateProposalConclusionValueById
+);
+
+//===================================================================
+// @description     Get conclusion value
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+router.get(
+  "/proposal/proposal-report/conclusion-value/:id",
+  auth,
+  proposalController.getProposalConclusionValueById
+);
+
+//===================================================================
 // @description     Upload/Update dokumen revisi proposal
 // @access          MAHASISWA
 router.put(
@@ -267,6 +285,24 @@ router.put(
   "/proposal/proposal-revision-document/reject/:id",
   auth,
   proposalController.rejectProposalRevisionDocumentById
+);
+
+//===================================================================
+// @description     Update submission dateline
+// @access          DOSEN
+router.put(
+  "/proposal/submission-dateline/:id",
+  auth,
+  proposalController.updateProposalSubmissonDatelineById
+);
+
+//===================================================================
+// @description     Get submission dateline
+// @access          DOSEN
+router.get(
+  "/proposal/submission-dateline/:id",
+  auth,
+  proposalController.getProposalSubmissonDatelineById
 );
 
 module.exports = router;

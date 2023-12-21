@@ -18,6 +18,7 @@ const skripsiChangesRepository = require("../skripsi_changes/skripsi_changes.rep
 const classroomRepository = require("../classroom/classroom.repository");
 const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
 const userManagementRepository = require("../user_management/user_namagement.repository");
+const skripsiConclusionRepository = require("../skripsi_conclusion/skripsi_conclusion.repository");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get skripsi by id
@@ -331,7 +332,7 @@ const approveSkripsiDocumentById = async (userId, id) => {
     }
   }
   if (co_advisor2) {
-    if (co_advisor2.is_skripsi_approve_by_co_advisor1 === "Approve") {
+    if (co_advisor2.is_skripsi_approve_by_co_advisor2 === "Approve") {
       throw {
         status: 400,
         message: `File has been approved`,
@@ -738,106 +739,115 @@ const getAllSkripsiSchedule = async () => {
   if (!skripsis) {
     return scheduleBySemester;
   }
-  // Dapatkan semua skripsi_id di sini
-  const skripsiIds = skripsis.map((skripsi) => skripsi.id);
-
-  // Dapatkan grup berdasarkan skripsiIds
-  const groups = await groupRepository.findManyGroupsBySkripsiIds(skripsiIds);
 
   // Menggabungkan data skripsi dengan data grup
   await Promise.all(
     skripsis.map(async (skripsi) => {
       // memproses pengambilan jadwal skripsi yang belum mulai sidang
-      if (skripsi.is_report_open !== true) {
-        for (const group of groups) {
-          // memproses jika menemukan group yang progress di "SKRIPSI"
-          if (group && group.progress === "Skripsi") {
-            const studentIds =
-              await groupStudentRepository.findGroupStudentByGroupId(group.id);
+      if (skripsi.is_pass === null || skripsi.is_pass === "Repeat") {
+        // Dapatkan grup berdasarkan skripsiIds
+        const group = await groupRepository.findGroupBySkripsiId(skripsi.id);
+        // memproses jika menemukan group yang progress di "SKRIPSI"
+        if (group && group.progress === "Skripsi") {
+          const studentIds =
+            await groupStudentRepository.findGroupStudentByGroupId(group.id);
 
-            const students = [];
-            for (const entry of studentIds) {
-              const student = await studentRepository.findStudentById(entry);
-              let name = student.firstName;
-              if (student.lastName) {
-                name += ` ${student.lastName}`;
-              }
-              const studentData = {
-                id: student.id,
-                fullName: name,
-                nim: student.nim,
-              };
-              students.push(studentData);
+          const students = [];
+          for (const entry of studentIds) {
+            const student = await studentRepository.findStudentById(entry);
+            let name = student.firstName;
+            if (student.lastName) {
+              name += ` ${student.lastName}`;
             }
-
-            // Menggabungkan firstName dan lastName menjadi fullName
-            const getEmployeeNameAndDegree = async (
-              firstName,
-              lastName,
-              degree
-            ) => {
-              let name = firstName;
-
-              if (lastName) {
-                name += ` ${lastName}`;
-              }
-
-              if (degree) {
-                name += `, ${degree}`;
-              }
-
-              return name;
+            const studentData = {
+              id: student.id,
+              fullName: name,
+              nim: student.nim,
             };
-            const advisorName = await getEmployeeNameAndDegree(
-              skripsi.advisor.firstName,
-              skripsi.advisor.lastName,
-              skripsi.advisor.degree
-            );
-            const panelistChairmanName = await getEmployeeNameAndDegree(
-              skripsi.panelist_chairman?.firstName,
-              skripsi.panelist_chairman?.lastName,
-              skripsi.panelist_chairman?.degree
-            );
-            const panelistMemberName = await getEmployeeNameAndDegree(
-              skripsi.panelist_member?.firstName,
-              skripsi.panelist_member?.lastName,
-              skripsi.panelist_member?.degree
-            );
+            students.push(studentData);
+          }
 
-            // get classroom
-            if (group && skripsi.classroom_id) {
-              const classroom = await classroomRepository.findClassroomById(
-                skripsi.classroom_id
-              );
+          // Menggabungkan firstName dan lastName menjadi fullName
+          const getEmployeeNameAndDegree = async (
+            firstName,
+            lastName,
+            degree
+          ) => {
+            let name = firstName;
 
-              const data = {
-                group_id: group.id,
-                skripsi_id: skripsi.id,
-                title: group.title,
-                students,
-                advisor_id: proposal.advisor.id,
-                advisor: advisorName,
-                panelist_chairman_id: proposal.panelist_chairman?.id || null,
-                panelist_chairman: panelistChairmanName || null,
-                panelist_member_id: proposal.panelist_member?.id || null,
-                panelist_member: panelistMemberName || null,
-                start_defence: skripsi.start_defence,
-                end_defence: skripsi.end_defence,
-                defence_room: skripsi.defence_room,
-                defence_date: skripsi.defence_date,
-              };
-              // Create a semester key based on the Academic_Calendar data
-              const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
-
-              if (!scheduleBySemester[semesterKey]) {
-                scheduleBySemester[semesterKey] = {
-                  semester: semesterKey,
-                  schedules: [],
-                };
-              }
-
-              scheduleBySemester[semesterKey].schedules.push(data);
+            if (lastName) {
+              name += ` ${lastName}`;
             }
+
+            if (degree) {
+              name += `, ${degree}`;
+            }
+
+            return name;
+          };
+          const advisorName = await getEmployeeNameAndDegree(
+            skripsi.advisor.firstName,
+            skripsi.advisor.lastName,
+            skripsi.advisor.degree
+          );
+          const coAdvisor1Name = await getEmployeeNameAndDegree(
+            skripsi.co_advisor1?.firstName,
+            skripsi.co_advisor1?.lastName,
+            skripsi.co_advisor1?.degree
+          );
+          const coAdvisor2Name = await getEmployeeNameAndDegree(
+            skripsi.co_advisor2?.firstName,
+            skripsi.co_advisor2?.lastName,
+            skripsi.co_advisor2?.degree
+          );
+          const panelistChairmanName = await getEmployeeNameAndDegree(
+            skripsi.panelist_chairman?.firstName,
+            skripsi.panelist_chairman?.lastName,
+            skripsi.panelist_chairman?.degree
+          );
+          const panelistMemberName = await getEmployeeNameAndDegree(
+            skripsi.panelist_member?.firstName,
+            skripsi.panelist_member?.lastName,
+            skripsi.panelist_member?.degree
+          );
+
+          // get classroom
+          if (group && skripsi.classroom_id) {
+            const classroom = await classroomRepository.findClassroomById(
+              skripsi.classroom_id
+            );
+
+            const data = {
+              group_id: group.id,
+              skripsi_id: skripsi.id,
+              title: group.title,
+              students,
+              advisor_id: skripsi.advisor.id,
+              advisor: advisorName,
+              co_advisor1_id: skripsi.co_advisor1?.id || null,
+              co_advisor1_name: coAdvisor1Name,
+              co_advisor2_id: skripsi.co_advisor2?.id || null,
+              co_advisor2_name: coAdvisor2Name,
+              panelist_chairman_id: skripsi.panelist_chairman?.id || null,
+              panelist_chairman: panelistChairmanName || null,
+              panelist_member_id: skripsi.panelist_member?.id || null,
+              panelist_member: panelistMemberName || null,
+              start_defence: skripsi.start_defence,
+              end_defence: skripsi.end_defence,
+              defence_room: skripsi.defence_room,
+              defence_date: skripsi.defence_date,
+            };
+            // Create a semester key based on the Academic_Calendar data
+            const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+            if (!scheduleBySemester[semesterKey]) {
+              scheduleBySemester[semesterKey] = {
+                semester: semesterKey,
+                schedules: [],
+              };
+            }
+
+            scheduleBySemester[semesterKey].schedules.push(data);
           }
         }
       }
@@ -892,7 +902,11 @@ const updateSkripsiScheduleById = async (id, userId, payload) => {
   const group = await groupRepository.findGroupBySkripsiId(id);
 
   // check if has defence
-  if (skripsi.is_pass) {
+  if (
+    skripsi.is_pass === "Pass" ||
+    skripsi.is_pass === "Fail" ||
+    skripsi.is_report_open === true
+  ) {
     throw {
       status: 400,
       message: `Can't perform this action`,
@@ -967,6 +981,10 @@ const getSkripsiScheduleById = async (id) => {
     })
   );
   const formatNameWithDegree = (employee) => {
+    if (!employee) {
+      return ""; // Mengembalikan string kosong jika employee bernilai null atau undefined
+    }
+
     const { firstName, lastName, degree } = employee;
     let name = firstName;
     if (lastName) {
@@ -981,6 +999,14 @@ const getSkripsiScheduleById = async (id) => {
   const panelistChairman = formatNameWithDegree(skripsi.panelist_chairman);
   const panelistMember = formatNameWithDegree(skripsi.panelist_member);
   const advisor = formatNameWithDegree(skripsi.advisor);
+  let coAdvisor1;
+  let coAdvisor2;
+  if (skripsi.co_advisor1) {
+    coAdvisor1 = formatNameWithDegree(skripsi.co_advisor1);
+  }
+  if (skripsi.co_advisor2) {
+    coAdvisor2 = formatNameWithDegree(skripsi.co_advisor2);
+  }
   const scheduleData = {
     id: skripsi.id,
     title: group.title,
@@ -988,10 +1014,14 @@ const getSkripsiScheduleById = async (id) => {
     panelist_chairman: panelistChairman,
     panelist_member: panelistMember,
     advisor: advisor,
+    co_advisor1: coAdvisor1 || null,
+    co_advisor2: coAdvisor2 || null,
     start_defence: skripsi.start_defence,
     end_defence: skripsi.end_defence,
     defence_room: skripsi.defence_room,
     defence_date: skripsi.defence_date,
+    is_report_open: skripsi.is_report_open,
+    is_pass: skripsi.is_pass,
   };
   return scheduleData;
 };
@@ -1048,6 +1078,9 @@ const openAccessSkripsiReportById = async (id, userId) => {
           student,
           skripsi.advisor_id
         );
+
+        // create nilai kesimpulan perstudent
+        await skripsiConclusionRepository.createConclusion(skripsi.id, student);
       }
       // create empty change for chairman
       await skripsiChangesRepository.insertEmptySkripsiChanges(
@@ -1140,15 +1173,6 @@ const updateSkripsiAssessmentById = async (id, userId, payload) => {
       payload.value
     );
 
-  // ambil informasi group untuk thesis history
-  const group = await groupRepository.findGroupBySkripsiId(id);
-
-  // // history INPUT/UPDATE ASSESSMENT SKRIPSI by ID
-  // await thesisHistoryRepository.createThesisHistory(
-  //   userId,
-  //   "INPUT/UPDATE ASSESSMENT SKRIPSI by ID",
-  //   group.id
-  // );
   return updateAssessment;
 };
 
@@ -1202,6 +1226,12 @@ const getAllSkripsiAssessmentById = async (id) => {
       (assessment) => assessment.dosen_id === skripsi.advisor_id
     );
 
+    // get nilai kesimpulan
+    const conclusionValue = await skripsiConclusionRepository.findConclusion(
+      skripsi.id,
+      studentId
+    );
+
     const studentData = {
       skripsi_id: skripsi.id,
       student_id: student.id,
@@ -1211,6 +1241,7 @@ const getAllSkripsiAssessmentById = async (id) => {
       value_by_chairman: chairmanValue ? chairmanValue.value : null,
       value_by_member: memberValue ? memberValue.value : null,
       value_by_advisor: advisorValue ? advisorValue.value : null,
+      value_conclusion: conclusionValue.assessment_conclution,
     };
 
     result.push(studentData);
@@ -1239,18 +1270,9 @@ const updateSkripsiChangesById = async (id, userId, payload) => {
   // update change
   const updateChange = await skripsiChangesRepository.updateSkripsiChangeById(
     change.id,
-    payload.changes
+    payload
   );
 
-  // ambil informasi group untuk thesis history
-  const group = await groupRepository.findGroupBySkripsiId(id);
-
-  // // history INPUT/UPDATE CHANGE SKRIPSI by ID
-  // await thesisHistoryRepository.createThesisHistory(
-  //   userId,
-  //   "INPUT/UPDATE CHANGE SKRIPSI by ID",
-  //   group.id
-  // );
   return updateChange;
 };
 
@@ -1294,14 +1316,70 @@ const getAllSkripsiChangesById = async (id) => {
   const changesData = {
     skripsi_id: skripsi.id,
     is_report_open: skripsi.is_report_open,
-    changes_by_chairman: chairmanChanges ? chairmanChanges.changes : null,
-    changes_by_member: memberChanges ? memberChanges.changes : null,
-    changes_by_advisor: advisorChanges ? advisorChanges.changes : null,
-    changes_by_co_advisor1: coAdvisor1Changes
-      ? coAdvisor1Changes.changes
+    changes_by_chairman_abstrak: chairmanChanges
+      ? chairmanChanges.abstrak
       : null,
-    changes_by_co_advisor2: coAdvisor2Changes
-      ? coAdvisor2Changes.changes
+    changes_by_chairman_bab1: chairmanChanges ? chairmanChanges.bab1 : null,
+    changes_by_chairman_bab2: chairmanChanges ? chairmanChanges.bab2 : null,
+    changes_by_chairman_bab3: chairmanChanges ? chairmanChanges.bab3 : null,
+    changes_by_chairman_bab4: chairmanChanges ? chairmanChanges.bab4 : null,
+    changes_by_chairman_bab5: chairmanChanges ? chairmanChanges.bab5 : null,
+    changes_by_chairman_other: chairmanChanges ? chairmanChanges.other : null,
+    changes_by_member_abstrak: memberChanges ? memberChanges.abstrak : null,
+    changes_by_member_bab1: memberChanges ? memberChanges.bab1 : null,
+    changes_by_member_bab2: memberChanges ? memberChanges.bab2 : null,
+    changes_by_member_bab3: memberChanges ? memberChanges.bab3 : null,
+    changes_by_member_bab4: memberChanges ? memberChanges.bab4 : null,
+    changes_by_member_bab5: memberChanges ? memberChanges.bab5 : null,
+    changes_by_member_other: memberChanges ? memberChanges.other : null,
+    changes_by_advisor_abstrak: advisorChanges ? advisorChanges.abstrak : null,
+    changes_by_advisor_bab1: advisorChanges ? advisorChanges.bab1 : null,
+    changes_by_advisor_bab2: advisorChanges ? advisorChanges.bab2 : null,
+    changes_by_advisor_bab3: advisorChanges ? advisorChanges.bab3 : null,
+    changes_by_advisor_bab4: advisorChanges ? advisorChanges.bab4 : null,
+    changes_by_advisor_bab5: advisorChanges ? advisorChanges.bab5 : null,
+    changes_by_advisor_other: advisorChanges ? advisorChanges.other : null,
+    changes_by_co_advisor1_abstrak: coAdvisor1Changes
+      ? coAdvisor1Changes.abstrak
+      : null,
+    changes_by_co_advisor1_bab1: coAdvisor1Changes
+      ? coAdvisor1Changes.bab1
+      : null,
+    changes_by_co_advisor1_bab2: coAdvisor1Changes
+      ? coAdvisor1Changes.bab2
+      : null,
+    changes_by_co_advisor1_bab3: coAdvisor1Changes
+      ? coAdvisor1Changes.bab3
+      : null,
+    changes_by_co_advisor1_bab4: coAdvisor1Changes
+      ? coAdvisor1Changes.bab4
+      : null,
+    changes_by_co_advisor1_bab5: coAdvisor1Changes
+      ? coAdvisor1Changes.bab5
+      : null,
+    changes_by_co_advisor1_other: coAdvisor1Changes
+      ? coAdvisor1Changes.other
+      : null,
+    changes_by_co_advisor2_abstrak: coAdvisor2Changes
+      ? coAdvisor2Changes.abstrak
+      : null,
+    changes_by_co_advisor2_bab1: coAdvisor2Changes
+      ? coAdvisor2Changes.bab1
+      : null,
+    changes_by_co_advisor2_bab2: coAdvisor2Changes
+      ? coAdvisor2Changes.bab2
+      : null,
+    changes_by_co_advisor2_bab3: coAdvisor2Changes
+      ? coAdvisor2Changes.bab3
+      : null,
+    changes_by_co_advisor2_bab4: coAdvisor2Changes
+      ? coAdvisor2Changes.bab4
+      : null,
+    changes_by_co_advisor2_bab5: coAdvisor2Changes
+      ? coAdvisor2Changes.bab5
+      : null,
+    changes_by_co_advisor2_other: coAdvisor2Changes
+      ? coAdvisor2Changes.other
       : null,
   };
 
@@ -1345,9 +1423,9 @@ const signSkripsiReportById = async (id, userId) => {
       await skripsiRepository.signChairmanSkripsiReportById(id);
 
     if (dekan) {
-      const updatedProposal2 =
+      const updatedSkripsi2 =
         await skripsiRepository.signDekanSkripsiReportById(id);
-      return updatedProposal2;
+      return updatedSkripsi2;
     }
 
     // // history SIGN REPORT SKRIPSI by ID
@@ -1363,9 +1441,9 @@ const signSkripsiReportById = async (id, userId) => {
     );
 
     if (dekan) {
-      const updatedProposal2 =
+      const updatedSkripsi2 =
         await skripsiRepository.signDekanSkripsiReportById(id);
-      return updatedProposal2;
+      return updatedSkripsi2;
     }
     // await thesisHistoryRepository.createThesisHistory(
     //   userId,
@@ -1379,9 +1457,9 @@ const signSkripsiReportById = async (id, userId) => {
     );
 
     if (dekan) {
-      const updatedProposal2 =
+      const updatedSkripsi2 =
         await skripsiRepository.signDekanSkripsiReportById(id);
-      return updatedProposal2;
+      return updatedSkripsi2;
     }
     // await thesisHistoryRepository.createThesisHistory(
     //   userId,
@@ -1479,7 +1557,6 @@ const updateSkripsiConclusionById = async (id, userId, payload) => {
     memberChanges &&
     advisorChanges
   ) {
-    console.log("sudah terisi");
     if (skripsi.panelist_chairman_id === userId) {
       if (
         skripsi.is_report_approve_by_panelist_chairman &&
@@ -1490,6 +1567,11 @@ const updateSkripsiConclusionById = async (id, userId, payload) => {
           await skripsiRepository.updateSkripsiConclusionById(id, payload);
 
         if (updatedSkripsi) {
+          // jika mengulang maka reset buka berita acara ke null
+          if (payload.is_pass === "Repeat") {
+            await skripsiRepository.resetOpenReprtById(updatedSkripsi.id);
+          }
+
           // history FILL REPORT CONCLUSION SKRIPSI by ID
           await thesisHistoryRepository.createThesisHistory(
             userId,
@@ -1532,6 +1614,87 @@ const getSkripsiConclusionById = async (id) => {
     };
   }
   return skripsi;
+};
+
+//===================================================================
+// @description     Update conclusion value
+// @route           PUT /skripsi/skripsi-report/conclusion-value/:id
+// @access          DOSEN
+const updateSkripsiConclusionValueById = async (id, userId, payload) => {
+  // check if user is chairman
+  const chairman =
+    await skripsiRepository.findChairmanInSkripsiByIdAndChairmanId(id, userId);
+  if (!chairman) {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
+  }
+
+  const skripsi = await skripsiRepository.findSkripsiById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+
+  // check existing conclusion value
+  const existConclusionValue = await skripsiConclusionRepository.findConclusion(
+    id,
+    payload.student_id
+  );
+  if (!existConclusionValue) {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+
+  const updateConclusionValule =
+    await skripsiConclusionRepository.updateConclusion(
+      existConclusionValue.id,
+      payload.assessment_conclution
+    );
+
+  return updateConclusionValule;
+};
+
+//===================================================================
+// @description     Get conclusion value
+// @route           GET /skripsi/skripsi-report/conclusion-value/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getSkripsiConclusionValueById = async (id) => {
+  const result = [];
+  const skripsi = await skripsiRepository.findSkripsiById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  const conclusionValue =
+    await skripsiConclusionRepository.findAllConclusionById(id);
+
+  for (const entry of conclusionValue) {
+    const student = await studentRepository.findStudentById(entry.student_id);
+    let fullName = student.firstName;
+    if (student.lastName) {
+      fullName += ` ${student.lastName}`;
+    }
+
+    const data = {
+      id: entry.id,
+      skripsi_id: entry.skripsi_id,
+      student_id: entry.student_id,
+      fullName,
+      assessment_conclution: entry.assessment_conclution,
+    };
+
+    result.push(data);
+  }
+
+  return result;
 };
 
 //===================================================================
@@ -1654,6 +1817,10 @@ const getSkripsiRevisionDocumentById = async (id) => {
     is_revision_approve_by_panelist_member:
       skripsi.is_revision_approve_by_panelist_member,
     is_revision_approve_by_advisor: skripsi.is_revision_approve_by_advisor,
+    panelist_chairman_revision_comment:
+      skripsi.panelist_chairman_revision_comment,
+    panelist_member_revision_comment: skripsi.panelist_member_revision_comment,
+    advisor_revision_comment: skripsi.advisor_revision_comment,
   };
   return Data;
 };
@@ -1779,8 +1946,10 @@ const approveSkripsiRevisionDocumentById = async (id, userId) => {
         UpdatedSkripsi.is_revision_approve_by_panelist_member === "Approve" &&
         UpdatedSkripsi.is_revision_approve_by_advisor === "Approve"
       ) {
-        // update progress in group to "Skripsi"
+        // update progress in group to "Finished"
         await groupRepository.updateGroupProgressBySkripsiId(UpdatedSkripsi.id);
+        // update approve date of skripsi
+        await skripsiRepository.updateSkripsiApproveDate(UpdatedSkripsi.id);
       }
       const Data = {
         is_revision_approve_by_panelist_chairman:
@@ -1818,8 +1987,10 @@ const approveSkripsiRevisionDocumentById = async (id, userId) => {
         UpdatedSkripsi.is_revision_approve_by_panelist_member === "Approve" &&
         UpdatedSkripsi.is_revision_approve_by_advisor === "Approve"
       ) {
-        // update progress in group to "Skripsi"
+        // update progress in group to "Finished"
         await groupRepository.updateGroupProgressBySkripsiId(UpdatedSkripsi.id);
+        // update approve date of skripsi
+        await skripsiRepository.updateSkripsiApproveDate(UpdatedSkripsi.id);
       }
       const Data = {
         is_revision_approve_by_panelist_member:
@@ -1856,8 +2027,10 @@ const approveSkripsiRevisionDocumentById = async (id, userId) => {
         UpdatedSkripsi.is_revision_approve_by_panelist_member === "Approve" &&
         UpdatedSkripsi.is_revision_approve_by_advisor === "Approve"
       ) {
-        // update progress in group to "Skripsi"
+        // update progress in group to "Finished"
         await groupRepository.updateGroupProgressBySkripsiId(UpdatedSkripsi.id);
+        // update approve date of skripsi
+        await skripsiRepository.updateSkripsiApproveDate(UpdatedSkripsi.id);
       }
       const Data = {
         is_revision_approve_by_advisor:
@@ -1883,7 +2056,7 @@ const approveSkripsiRevisionDocumentById = async (id, userId) => {
 // @description     Reject dokumen revisi skripsi
 // @route           PUT /skripsi/skripsi-revision-document/reject/:id
 // @access          DOSEN
-const rejectSkripsiRevisionDocumentById = async (id, userId) => {
+const rejectSkripsiRevisionDocumentById = async (id, userId, payload) => {
   // check skripsi
   const skripsi = await getSkripsiById(id);
 
@@ -1930,7 +2103,10 @@ const rejectSkripsiRevisionDocumentById = async (id, userId) => {
     } else {
       // reject revisi
       const UpdatedSkripsi =
-        await skripsiRepository.rejectSkripsiRevisionDocumentByChairmanById(id);
+        await skripsiRepository.rejectSkripsiRevisionDocumentByChairmanById(
+          id,
+          payload
+        );
       const Data = {
         is_revision_approve_by_panelist_chairman:
           UpdatedSkripsi.is_revision_approve_by_panelist_chairman,
@@ -1963,7 +2139,10 @@ const rejectSkripsiRevisionDocumentById = async (id, userId) => {
     } else {
       // reject revisi
       const UpdatedSkripsi =
-        await skripsiRepository.rejectSkripsiRevisionDocumentByMemberById(id);
+        await skripsiRepository.rejectSkripsiRevisionDocumentByMemberById(
+          id,
+          payload
+        );
       const Data = {
         is_revision_approve_by_panelist_member:
           UpdatedSkripsi.is_revision_approve_by_panelist_member,
@@ -1995,7 +2174,10 @@ const rejectSkripsiRevisionDocumentById = async (id, userId) => {
     } else {
       // reject revisi
       const UpdatedSkripsi =
-        await skripsiRepository.rejectSkripsiRevisionDocumentByAdvisorById(id);
+        await skripsiRepository.rejectSkripsiRevisionDocumentByAdvisorById(
+          id,
+          payload
+        );
       const Data = {
         is_revision_approve_by_advisor:
           UpdatedSkripsi.is_revision_approve_by_advisor,
@@ -2267,7 +2449,7 @@ const updateSourceCodeById = async (id, userId, payload) => {
     `skripsi/${group.id}/${payload.source_code_file.file_name_sourcecode}`
   );
   const metadata = {
-    contentType: "application/zip",
+    contentType: ["application/zip", "application/x-zip-compressed"],
   };
   const binaryString = atob(payload.source_code_file.buffer);
   const byteArray = new Uint8Array(binaryString.length);
@@ -2416,6 +2598,64 @@ const deleteLinkSourceCodeById = async (id, userId) => {
   }
 };
 
+//===================================================================
+// @description     Update submission dateline
+// @route           PUT /skripsi/submission-dateline/:id
+// @access          DOSEN
+const updateSkripsiSubmissonDatelineById = async (id, userId, payload) => {
+  // check if user is chairman
+  const chairman =
+    await skripsiRepository.findChairmanInSkripsiByIdAndChairmanId(id, userId);
+  if (!chairman) {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
+  }
+
+  const skripsi = await skripsiRepository.findSkripsiById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Skripsi not found`,
+    };
+  }
+
+  const updatedSkripsi =
+    await skripsiRepository.updateSkripsiSubmissonDatelineById(
+      id,
+      payload.submission_dateline
+    );
+
+  const data = {
+    id: updatedSkripsi.id,
+    submission_dateline: updatedSkripsi.submission_dateline,
+  };
+
+  return data;
+};
+
+//===================================================================
+// @description     Get submission dateline
+// @route           GET /skripsi/submission-dateline/:id
+// @access          DOSEN
+const getSkripsiSubmissonDatelineById = async (id) => {
+  const skripsi = await skripsiRepository.findSkripsiById(id);
+  if (!skripsi) {
+    throw {
+      status: 400,
+      message: `Skripsi not found`,
+    };
+  }
+
+  const data = {
+    skripsi_id: skripsi.id,
+    submission_dateline: skripsi.submission_dateline,
+  };
+
+  return data;
+};
+
 module.exports = {
   updateSkripsiDocumentById,
   getSkripsiDocumentById,
@@ -2445,6 +2685,8 @@ module.exports = {
   signSkripsiReportById,
   updateSkripsiConclusionById,
   getSkripsiConclusionById,
+  updateSkripsiConclusionValueById,
+  getSkripsiConclusionValueById,
 
   updateSkripsiRevisionDocumentById,
   getSkripsiRevisionDocumentById,
@@ -2464,4 +2706,7 @@ module.exports = {
   updateLinkSourceCodeById,
   getLinkSourceCodeById,
   deleteLinkSourceCodeById,
+
+  updateSkripsiSubmissonDatelineById,
+  getSkripsiSubmissonDatelineById,
 };

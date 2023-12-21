@@ -319,45 +319,46 @@ const findTitleById = async (id) => {
   return group;
 };
 
-// // get kelompok mahasiswa
-// const findGroupStudentById = async (id) => {
-//     const group_student = await prisma.group_Student.findUnique({
-//         where: {
-//             id,
-//         },
-//     });
-//     return group_student;
-// };
+//===================================================================
+// @description     Put metadata
+// @route           PUT /group/metadata/:id
+// @access          MAHASISWA
+const updateMetadataById = async (id, payload) => {
+  const { keywords, abstrak, reference } = payload;
+  const group = await prisma.group.update({
+    where: {
+      id,
+    },
+    data: {
+      keywords,
+      abstrak,
+      reference,
+    },
+    select: {
+      id: true,
+      keywords: true,
+      abstrak: true,
+      reference: true,
+    },
+  });
+  return group;
+};
 
-// // mengisi/memberbarui metadata
-// const updateMetadata = async (id, payload) => {
-//     const {
-//         keywords,
-//         abstrak,
-//         reference,
-//     } = payload;
-//     const group = await prisma.group.update({
-//         where: {
-//             id,
-//         },
-//         data: {
-//             keywords,
-//             abstrak,
-//             reference,
-//         },
-//     });
-//     return group;
-// };
-
-// // get metadata
-// const findMetadataById = async (id) => {
-//     const group = await prisma.group.findUnique({
-//         where: {
-//             id,
-//         },
-//     });
-//     return group;
-// };
+//===================================================================
+// @description     Get all complete skripsi
+// @route           GET /group/skripsi-filkom
+// @access          All
+const findAllCompleteSkripsi = async () => {
+  const group = prisma.group.findMany({
+    where: {
+      progress: "Finished",
+    },
+    select: {
+      title: true,
+    },
+  });
+  return group;
+};
 
 module.exports = {
   findGroupBySubmissionId,
@@ -377,7 +378,6 @@ module.exports = {
 
   findSubmissionListById,
   findSubmissionDetailsById,
-  // findGroupStudentById,
-  // updateMetadata,
-  // findMetadataById,
+  updateMetadataById,
+  findAllCompleteSkripsi,
 };

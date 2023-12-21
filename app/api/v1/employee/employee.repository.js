@@ -1,6 +1,9 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all employee
+// @used            getAllDosenSkripsi
 const findEmployees = async () => {
   const employee = await prisma.employee.findMany();
   return employee;
@@ -90,7 +93,7 @@ const updateEmployee = async (id, payload) => {
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get employee by nik
-// @used            Group
+// @used            Group, getAllDosenSkripsi
 const findEmployeeByNIK = async (nik) => {
   const employee = await prisma.employee.findUnique({
     where: {

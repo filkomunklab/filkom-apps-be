@@ -735,7 +735,12 @@ const getProposalListSekretaris = async (req, res) => {
     });
   }
   try {
-    const group = await groupService.getProposalListSekretaris();
+    const userId = req.user.user.id;
+    const userRole = req.user.user.role;
+    const group = await groupService.getProposalListSekretaris(
+      userId,
+      userRole
+    );
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -757,7 +762,9 @@ const getSkripsiListSekretaris = async (req, res) => {
     });
   }
   try {
-    const group = await groupService.getSkripsiListSekretaris();
+    const userId = req.user.user.id;
+    const userRole = req.user.user.role;
+    const group = await groupService.getSkripsiListSekretaris(userId, userRole);
     res.send({ status: "OK", data: group });
   } catch (error) {
     res
@@ -766,57 +773,245 @@ const getSkripsiListSekretaris = async (req, res) => {
   }
 };
 
-// const getGroupStudentById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const group_student = await groupService.getGroupStudentById(id);
-//         res.send({ status: "OK", data: group_student });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+//===================================================================
+// @description     Get proposal history list operator fakultas/filkom
+// @route           GET /group/proposal-history-list-sekretaris
+// @access          OPERATOR_FAKULTAS
+const getProposalHistoryListSekretaris = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "proposal_history_list_sekretaris")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const group = await groupService.getProposalHistoryListSekretaris();
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
 
-// const updateMetadataById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const payload = req.body;
+//===================================================================
+// @description     Get skripsi history list operator fakultas/filkom
+// @route           GET /group/skripsi-history-list-sekretaris
+// @access          OPERATOR_FAKULTAS
+const getSkripsiHistoryListSekretaris = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "skripsi_history_list_sekretaris")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const group = await groupService.getSkripsiHistoryListSekretaris();
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
 
-//         if (
-//             !(
-//                 payload.keywords  &&
-//                 payload.abstrak  &&
-//                 payload.reference
-//             )
-//         ) {
-//             return res
-//             .status(400)
-//             .send({ status: "FAILED", data: { error: "some field is missing" } });
-//         }
-//         const group = await groupService.updateMetadataById(
-//             id,
-//             payload
-//         );
-//         res.send({ status: "OK", data: group });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+//===================================================================
+// @description     Put metadata
+// @route           PUT /group/metadata/:id
+// @access          MAHASISWA
+const updateMetadataById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "metadata")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const payload = req.body;
+    if (!(payload.keywords && payload.abstrak && payload.reference)) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const group = await groupService.updateMetadataById(id, payload);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
 
-// const getMetadataById = async (req, res) => {
-//     try {
-//         const id = req.params.id;
-//         const group = await groupService.getMetadataById(id);
-//         res.send({ status: "OK", data: group });
-//     } catch (error) {
-//         res
-//             .status(error?.status || 500)
-//             .send({ status: "FAILED", data: { error: error?.message || error } });
-//     }
-// };
+//===================================================================
+// @description     Get metadata
+// @route           GET /group/metadata/:id
+// @access          MAHASISWA
+const getMetadataById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "metadata")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const group = await groupService.getMetadataById(id);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get all value history
+// @route           GET /group/value-history
+// @access          DOSEN
+const getAllValueHistory = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "value_history")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const group = await groupService.getAllValueHistory(userId);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get all complete skripsi
+// @route           GET /group/skripsi-filkom
+// @access          All
+const getAllCompleteSkripsi = async (req, res) => {
+  try {
+    const group = await groupService.getAllCompleteSkripsi();
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Create link
+// @route           POST /group/skripsi/link
+// @access          MAHASISWA
+const createLink = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("create", "link")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const userId = req.user.user.id;
+    const payload = req.body;
+    if (!payload.name && !payload.link) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const group = await groupService.createLink(userId, payload);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Update link
+// @route           PUT /group/skripsi/link/:id
+// @access          MAHASISWA
+const updateLinkByLinkId = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "link")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const payload = req.body;
+    if (!payload.name && !payload.link) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const group = await groupService.updateLinkByLinkId(id, userId, payload);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Delete link
+// @route           DELETE /group/skripsi/link/:id
+// @access          MAHASISWA
+const deleteLinkByLinkId = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("delete", "link")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    await groupService.deleteLinkByLinkId(id, userId);
+    res.status(200).send({ status: "OK" });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get link all link
+// @route           GET /group/skripsi/all-link/:id
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN
+const getAllLinkById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "link")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const group = await groupService.getAllLinkById(id);
+    res.send({ status: "OK", data: group });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
 
 module.exports = {
   getThesisList,
@@ -855,4 +1050,15 @@ module.exports = {
   getHistoryListMember,
   getHistoryListKaprodi,
   getHistoryListDekan,
+
+  updateMetadataById,
+  getMetadataById,
+  getAllValueHistory,
+  getProposalHistoryListSekretaris,
+  getSkripsiHistoryListSekretaris,
+  getAllCompleteSkripsi,
+  createLink,
+  updateLinkByLinkId,
+  deleteLinkByLinkId,
+  getAllLinkById,
 };

@@ -287,6 +287,103 @@ const patchStudentStatus = async (req, res) => {
   }
 };
 
+//--------------------skripsi app-------------------------
+
+//===================================================================
+// @description     all dosen skripsi
+// @route           GET /employee/dosen-skripsi
+// @access          OPERATOR_FILKOM
+const getAllDosenSkripsi = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "dosen_mk")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const employee = await employeeService.getAllDosenSkripsi();
+    res.send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get all dosen not dosen skripsi
+// @route           GET /employee/dosen
+// @access          OPERATOR_FILKOM
+const getAllDosen = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "dosen")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const employee = await employeeService.getAllDosen();
+    res.send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Create dosen skripsi
+// @route           POST /employee/dosen-skripsi
+// @access          OPERATOR_FILKOM
+const createDosenSkripsi = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("create", "dosen_mk")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const payload = req.body;
+    if (!payload.employee_id) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const employee = await employeeService.createDosenSkripsi(payload);
+    res.send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Delete dosen skripsi by id
+// @route           DELETE /employee/dosen-skripsi/:id
+// @access          OPERATOR_FILKOM
+const deleteDosenSkripsiById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("delete", "dosen_mk")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    await employeeService.deleteDosenSkripsiById(id);
+    res.status(200).send({ status: "OK" });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -305,4 +402,9 @@ module.exports = {
   getSupervisorByNik,
   createManyEmployee,
   patchStudentStatus,
+  // ---------skripsi app------------
+  getAllDosenSkripsi,
+  getAllDosen,
+  createDosenSkripsi,
+  deleteDosenSkripsiById,
 };

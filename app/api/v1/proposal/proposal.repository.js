@@ -535,6 +535,8 @@ const findAllProposalSchedule = async () => {
     select: {
       id: true,
       advisor: true,
+      co_advisor1: true,
+      co_advisor2: true,
       panelist_chairman: true,
       panelist_member: true,
       start_defence: true,
@@ -542,7 +544,7 @@ const findAllProposalSchedule = async () => {
       defence_room: true,
       defence_date: true,
       classroom_id: true,
-      is_report_open: true,
+      is_pass: true,
     },
   });
 
@@ -623,10 +625,14 @@ const findProposalScheduleById = async (id) => {
       panelist_chairman: true,
       panelist_member: true,
       advisor: true,
+      co_advisor1: true,
+      co_advisor2: true,
       start_defence: true,
       end_defence: true,
       defence_room: true,
       defence_date: true,
+      is_report_open: true,
+      is_pass: true,
     },
   });
   return proposal;
@@ -769,12 +775,7 @@ const signDekanProposalReportById = async (id) => {
 // @route           PUT /proposal/proposal-report/conclusion/:id
 // @access          DOSEN
 const updateProposalConclusionById = async (id, payload) => {
-  const {
-    exam_conclution,
-    changes_conclusion,
-    assessment_conclution,
-    is_pass,
-  } = payload;
+  const { exam_conclution, changes_conclusion, is_pass } = payload;
   const proposal = await prisma.proposal.update({
     where: {
       id,
@@ -782,7 +783,6 @@ const updateProposalConclusionById = async (id, payload) => {
     data: {
       exam_conclution,
       changes_conclusion,
-      assessment_conclution,
       is_pass,
       is_report_open: false,
     },
@@ -790,7 +790,6 @@ const updateProposalConclusionById = async (id, payload) => {
       id: true,
       exam_conclution: true,
       changes_conclusion: true,
-      assessment_conclution: true,
       is_pass: true,
       report_date: true,
       is_report_open: true,
@@ -812,7 +811,6 @@ const findProposalConclusionById = async (id) => {
       id: true,
       exam_conclution: true,
       changes_conclusion: true,
-      assessment_conclution: true,
       is_pass: true,
       report_date: true,
     },
@@ -922,6 +920,9 @@ const findProposalRevisionDocumentById = async (id) => {
       is_revision_approve_by_panelist_chairman: true,
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
+      panelist_chairman_revision_comment: true,
+      panelist_member_revision_comment: true,
+      advisor_revision_comment: true,
     },
   });
   return proposal;
@@ -1039,6 +1040,7 @@ const approveProposalRevisionDocumentByChairmanById = async (id) => {
     data: {
       is_revision_approve_by_panelist_chairman: "Approve",
       panelist_chairman_revision_approve_date: new Date(),
+      panelist_chairman_revision_comment: null,
     },
     select: {
       id: true,
@@ -1046,6 +1048,7 @@ const approveProposalRevisionDocumentByChairmanById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       panelist_chairman_revision_approve_date: true,
+      panelist_chairman_revision_comment: true,
     },
   });
   return proposal;
@@ -1063,6 +1066,7 @@ const approveProposalRevisionDocumentByMemberById = async (id) => {
     data: {
       is_revision_approve_by_panelist_member: "Approve",
       panelist_member_revision_approve_date: new Date(),
+      panelist_member_revision_comment: null,
     },
     select: {
       id: true,
@@ -1070,6 +1074,7 @@ const approveProposalRevisionDocumentByMemberById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       panelist_member_revision_approve_date: true,
+      panelist_member_revision_comment: true,
     },
   });
   return proposal;
@@ -1087,6 +1092,7 @@ const approveProposalRevisionDocumentByAdvisorById = async (id) => {
     data: {
       is_revision_approve_by_advisor: "Approve",
       advisor_revision_approve_date: new Date(),
+      advisor_revision_comment: null,
     },
     select: {
       id: true,
@@ -1094,6 +1100,7 @@ const approveProposalRevisionDocumentByAdvisorById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       advisor_revision_approve_date: true,
+      advisor_revision_comment: true,
     },
   });
   return proposal;
@@ -1103,7 +1110,8 @@ const approveProposalRevisionDocumentByAdvisorById = async (id) => {
 // @description     Reject dokumen revisi proposal by chairman
 // @route           PUT /proposal/proposal-revision-document/reject/:id
 // @access          DOSEN
-const rejectProposalRevisionDocumentByChairmanById = async (id) => {
+const rejectProposalRevisionDocumentByChairmanById = async (id, payload) => {
+  const { comment } = payload;
   const proposal = await prisma.proposal.update({
     where: {
       id,
@@ -1111,6 +1119,7 @@ const rejectProposalRevisionDocumentByChairmanById = async (id) => {
     data: {
       is_revision_approve_by_panelist_chairman: "Rejected",
       panelist_chairman_revision_approve_date: new Date(),
+      panelist_chairman_revision_comment: comment,
     },
     select: {
       id: true,
@@ -1118,6 +1127,7 @@ const rejectProposalRevisionDocumentByChairmanById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       panelist_chairman_revision_approve_date: true,
+      panelist_chairman_revision_comment: true,
     },
   });
   return proposal;
@@ -1127,7 +1137,8 @@ const rejectProposalRevisionDocumentByChairmanById = async (id) => {
 // @description     Reject dokumen revisi proposal by member
 // @route           PUT /proposal/proposal-revision-document/reject/:id
 // @access          DOSEN
-const rejectProposalRevisionDocumentByMemberById = async (id) => {
+const rejectProposalRevisionDocumentByMemberById = async (id, payload) => {
+  const { comment } = payload;
   const proposal = await prisma.proposal.update({
     where: {
       id,
@@ -1135,6 +1146,7 @@ const rejectProposalRevisionDocumentByMemberById = async (id) => {
     data: {
       is_revision_approve_by_panelist_member: "Rejected",
       panelist_member_revision_approve_date: new Date(),
+      panelist_member_revision_comment: comment,
     },
     select: {
       id: true,
@@ -1142,6 +1154,7 @@ const rejectProposalRevisionDocumentByMemberById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       panelist_member_revision_approve_date: true,
+      panelist_member_revision_comment: true,
     },
   });
   return proposal;
@@ -1151,7 +1164,8 @@ const rejectProposalRevisionDocumentByMemberById = async (id) => {
 // @description     Reject dokumen revisi proposal by member
 // @route           PUT /proposal/proposal-revision-document/reject/:id
 // @access          DOSEN
-const rejectProposalRevisionDocumentByAdvisorById = async (id) => {
+const rejectProposalRevisionDocumentByAdvisorById = async (id, payload) => {
+  const { comment } = payload;
   const proposal = await prisma.proposal.update({
     where: {
       id,
@@ -1159,6 +1173,7 @@ const rejectProposalRevisionDocumentByAdvisorById = async (id) => {
     data: {
       is_revision_approve_by_advisor: "Rejected",
       advisor_revision_approve_date: new Date(),
+      advisor_revision_comment: comment,
     },
     select: {
       id: true,
@@ -1166,6 +1181,7 @@ const rejectProposalRevisionDocumentByAdvisorById = async (id) => {
       is_revision_approve_by_panelist_member: true,
       is_revision_approve_by_advisor: true,
       advisor_revision_approve_date: true,
+      advisor_revision_comment: true,
     },
   });
   return proposal;
@@ -1178,6 +1194,24 @@ const findAllProposalByAdvisorId = async (userId) => {
   const proposal = await prisma.proposal.findMany({
     where: {
       advisor_id: userId,
+    },
+  });
+  return proposal;
+};
+
+// @description     Update approve data by id
+// @used            approveProposalRevisionDocumentById
+const updateProposalApproveDate = async (id) => {
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      approve_date: new Date(),
+    },
+    select: {
+      id: true,
+      approve_date: true,
     },
   });
   return proposal;
@@ -1246,6 +1280,37 @@ const findAllProposal = async () => {
   return proposal;
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update is_report_open by id
+// @used            updateProposalConclusionById,
+const resetOpenReprtById = async (id) => {
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      is_report_open: null,
+    },
+  });
+  return proposal;
+};
+
+//===================================================================
+// @description     Update submission dateline
+// @route           PUT /proposal/submission-dateline/:id
+// @access          DOSEN
+const updateProposalSubmissonDatelineById = async (id, submission_dateline) => {
+  const proposal = await prisma.proposal.update({
+    where: {
+      id,
+    },
+    data: {
+      submission_dateline: new Date(submission_dateline),
+    },
+  });
+  return proposal;
+};
+
 module.exports = {
   insertProposal,
   findProposalById,
@@ -1302,6 +1367,7 @@ module.exports = {
   approveProposalRevisionDocumentByChairmanById,
   approveProposalRevisionDocumentByMemberById,
   approveProposalRevisionDocumentByAdvisorById,
+  updateProposalApproveDate,
   rejectProposalRevisionDocumentByChairmanById,
   rejectProposalRevisionDocumentByMemberById,
   rejectProposalRevisionDocumentByAdvisorById,
@@ -1312,4 +1378,7 @@ module.exports = {
   findAllProposalByMember,
   findAllProposalByClassroomId,
   findAllProposal,
+
+  resetOpenReprtById,
+  updateProposalSubmissonDatelineById,
 };

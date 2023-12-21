@@ -528,7 +528,13 @@ const updateProposalChangesById = async (req, res) => {
     const id = req.params.id;
     const userId = req.user.user.id;
     const payload = req.body;
-    if (!payload.changes) {
+    if (
+      !payload.judul &&
+      !payload.bab1 &&
+      !payload.bab2 &&
+      !payload.bab3 &&
+      !payload.other
+    ) {
       return res
         .status(400)
         .send({ status: "FAILED", data: { error: "some field is missing" } });
@@ -636,7 +642,6 @@ const updateProposalConclusionById = async (req, res) => {
       !(
         payload.exam_conclution &&
         payload.changes_conclusion &&
-        payload.assessment_conclution &&
         payload.is_pass
       )
     ) {
@@ -672,6 +677,63 @@ const getProposalConclusionById = async (req, res) => {
   try {
     const id = req.params.id;
     const proposal = await proposalService.getProposalConclusionById(id);
+    res.send({ status: "OK", data: proposal });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Update conclusion value
+// @route           PUT /proposal/proposal-report/conclusion-value/:id
+// @access          DOSEN
+const updateProposalConclusionValueById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "proposal_report_conclusion")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const payload = req.body;
+    if (!(payload.student_id && payload.assessment_conclution)) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const proposal = await proposalService.updateProposalConclusionValueById(
+      id,
+      userId,
+      payload
+    );
+    res.send({ status: "OK", data: proposal });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get conclusion value
+// @route           GET /proposal/proposal-report/conclusion-value/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getProposalConclusionValueById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "proposal_report_conclusion")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const proposal = await proposalService.getProposalConclusionValueById(id);
     res.send({ status: "OK", data: proposal });
   } catch (error) {
     res
@@ -809,10 +871,74 @@ const rejectProposalRevisionDocumentById = async (req, res) => {
   try {
     const id = req.params.id;
     const userId = req.user.user.id;
+    const payload = req.body;
+    if (!payload.comment) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
     const proposal = await proposalService.rejectProposalRevisionDocumentById(
       id,
-      userId
+      userId,
+      payload
     );
+    res.send({ status: "OK", data: proposal });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Update submission dateline
+// @route           PUT /proposal/submission-dateline/:id
+// @access          DOSEN
+const updateProposalSubmissonDatelineById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "submission_dateline")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const userId = req.user.user.id;
+    const payload = req.body;
+    if (!payload.submission_dateline) {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: "some field is missing" } });
+    }
+    const proposal = await proposalService.updateProposalSubmissonDatelineById(
+      id,
+      userId,
+      payload
+    );
+    res.send({ status: "OK", data: proposal });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//===================================================================
+// @description     Get submission dateline
+// @route           GET /proposal/submission-dateline/:id
+// @access          DOSEN
+const getProposalSubmissonDatelineById = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "submission_dateline")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const id = req.params.id;
+    const proposal = await proposalService.getProposalSubmissonDatelineById(id);
     res.send({ status: "OK", data: proposal });
   } catch (error) {
     res
@@ -848,10 +974,15 @@ module.exports = {
   signProposalReportById,
   updateProposalConclusionById,
   getProposalConclusionById,
+  updateProposalConclusionValueById,
+  getProposalConclusionValueById,
 
   updateProposalRevisionDocumentById,
   getProposalRevisionDocumentById,
   deleteProposalRevisionDocumentById,
   approveProposalRevisionDocumentById,
   rejectProposalRevisionDocumentById,
+
+  updateProposalSubmissonDatelineById,
+  getProposalSubmissonDatelineById,
 };
