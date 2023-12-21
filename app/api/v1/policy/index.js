@@ -18,6 +18,19 @@ const policyFor = ({ user }) => {
 
   if (hasRole("OPERATOR_LPMI")) {
     // Do something for OPERATOR_LPMI
+    //action --> CREATE, READ, UPDATE, DELETE
+    //Read: dashboard
+    can("read", "dashboard");
+    //Read: alumni_list
+    can("read", "alumni_list");
+    //Read: calon_tamatan
+    can("read", "calon_tamatan_list"); //cek lagi
+    //send broadcast wa
+    can("broadcastWa", "alumni_list");
+    //send broadcast email
+    can("broadcastEmail", "alumni_list");
+    //EXPORT DATA TO EXCEL
+    can("export", "alumni_list");
   }
 
   if (hasRole("OPERATOR_FAKULTAS")) {
@@ -150,6 +163,16 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_revision_document");
     // Dekan view proposal list dekan
     can("read", "skripsi_list_dekan");
+
+    //====================KLABTBRIDGE============================
+    //view dashboard
+    can("read", "dashboard");
+    //view calon_tamatan list
+    can("read", "calon_tamatan_list");
+    //view alumni list
+    can("read", "alumni_list");
+    //update status SPT
+    can("update", "status_SPT");
     // Dekan view history list dekan
     can("read", "history_list_dekan");
     // Dekan view is_report_open in skripsi
@@ -215,6 +238,16 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_revision_document");
     // Kaprodi view skripsi list kaprodi
     can("read", "skripsi_list_kaprodi");
+
+    //====================KLABTBRIDGE============================
+    //view dashboard
+    can("read", "dashboard");
+    //view calon_tamatan list
+    can("read", "calon_tamatan_list");
+    //view alumni list
+    can("read", "alumni_list");
+    //update status SPT
+    can("update", "status_SPT");
     // Kaprodi view history list kaprodi
     can("read", "history_list_kaprodi");
     // Kaprodi view is_report_open in skripsi
@@ -503,14 +536,37 @@ const policyFor = ({ user }) => {
     can("update", "link_source_code");
     // Mahasiswa view link source code
     can("read", "link_source_code");
+
+    //==========================KLABATBRIDGE============================
+    //view dashboard
+    can("read", "dashboard");
+    //mengisi form SPT
+    can("create", "SPT");
+    //mengisi form TS
+    can("create", "TS");
   }
 
   if (hasRole("ALUMNI")) {
     // Do something for ALUMNI
+    //view dashboard
+    can("read", "dashboard");
+    //mengisi form TS
+    can("create", "TS");
+  }
+
+  if (hasRole("REGISTER")) {
+    // Do something for REGISTER
+    //view daftar calon tamatan
+    can("read", "calon_tamatan_list");
+    // console.log("njkihn");
+    //Update status mahasiswa
+    can("update", "status_mahasiswa");
+    //Approved SPT Mahasiswa
+    can("update", "status_SPT");
   }
 
   // Default access for other users
-  can("read", "all");
+  // can("read", "all");
 
   return build();
 };

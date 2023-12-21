@@ -68,7 +68,11 @@ const alumniTS = async (search_query) => {
         distinct: ["personal_email"],
       },
     },
+    orderBy: {
+      updatedAt: "asc",
+    },
   });
+
   const data = alumniList.map((item) => ({
     // ...item,
     firstName: item.firstName,
@@ -334,7 +338,7 @@ const findAlumniHasTracerStudyListPagination = async (
       orderBy: [
         {
           student: {
-            createdAt: "desc",
+            createdAt: "asc",
           },
         },
       ],
@@ -405,7 +409,7 @@ const findAlumniHasTracerStudyListPaginationFilterByGraduateYear = async (
       orderBy: [
         {
           student: {
-            createdAt: "desc",
+            createdAt: "asc",
           },
         },
       ],
@@ -476,7 +480,7 @@ const findAlumniHasTracerStudyListPaginationFilterByMajor = async (
       orderBy: [
         {
           student: {
-            createdAt: "desc",
+            createdAt: "asc",
           },
         },
       ],
@@ -665,7 +669,7 @@ const findAlumniListPagination = async (search_query, page, limit, offset) => {
       take: limit,
       orderBy: [
         {
-          createdAt: "desc",
+          createdAt: "asc",
         },
       ],
     });
@@ -728,7 +732,7 @@ const findAlumniListPaginationFilterByGraduateYear = async (
       take: limit,
       orderBy: [
         {
-          createdAt: "desc",
+          createdAt: "asc",
         },
       ],
     });
@@ -791,7 +795,7 @@ const findAlumniListPaginationFilterByMajor = async (
       take: limit,
       orderBy: [
         {
-          createdAt: "desc",
+          createdAt: "asc",
         },
       ],
     });

@@ -4,7 +4,7 @@ const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrCode = require("qrcode-terminal");
 const fs = require("fs");
 
-// //broadcast WA
+//broadcast WA
 // const client = new Client({
 //   authStrategy: new LocalAuth(),
 // });
@@ -51,35 +51,20 @@ const sendEmail = async (recipientEmails) => {
   });
 
   const mailOptions = {
-    from: "<no-reply>", // sender address
+    from: "TIM TRACER STUDY UNKLAB", // sender address
     to: personalEmails.join(", "),
-    subject: "Undangan Seminar Teknologi Terbaru #3", // Subject line
-    html: `Kepada Jerico Katong,
+    subject: "Pengisian Tracer Study Alumni Angkatan 89", // Subject line
+    html: `Halo Alumnus UNKLAB!.
+    Perkenalkan, Kami dari Surveyor Universitas Klabat (UNKLAB), ingin mengirimkan kuesioner untuk pelaksanaan Tracer Study Tahun 2023, dalam hal pemeringkatan kampus kami.
+    Jika berkenan dan kalau ada waktu kosong, kiranya dapat membantu kami untuk mengisi kuesioner yang akan kami kirimkan, paling lambat sebelum tanggal 14 September 2023. 
     
-    Salam Hormat,
+    Untuk pengisian kuesioner dapat mengakses link website Unklab dibawah ini:
+    https://www.unklab.ac.id/tracer-study/
     
-    Saya harap Anda dalam keadaan sehat dan sejahtera. Saya ingin mengundang Anda untuk menghadiri seminar teknologi terbaru yang akan diselenggarakan oleh Teknologi Maju, Inc. pada tanggal 15 November 2023 pukul 09:00 pagi di Hotel Teknologi Megah, Jalan Inovasi No. 123, Kota Inovasi.
-    
-    Seminar ini akan mencakup berbagai topik terkait teknologi terbaru, termasuk kecerdasan buatan, pemrosesan data besar, dan inovasi teknologi lainnya. Para pemimpin industri akan berbicara tentang tren terkini dan peluang di bidang teknologi.
-    
-    Agenda seminar:
-    
-    Pemrosesan Data Besar: Peluang dan Tantangan
-    Kecerdasan Buatan dalam Bisnis Modern
-    Masa Depan Teknologi: Prediksi dan Tren
-    Studi Kasus: Inovasi dalam Perusahaan Teknologi Maju
-    Peserta seminar akan mendapatkan wawasan berharga dan kesempatan untuk terlibat dalam diskusi yang bermanfaat. Kami sangat menghargai kontribusi dan pandangan Anda.
-    
-    Silakan konfirmasikan kehadiran Anda dengan membalas email ini. Jika Anda memiliki pertanyaan atau butuh informasi lebih lanjut, jangan ragu untuk menghubungi saya di michael.johnson@email.com atau +123-456-7890.
-    
-    Terima kasih atas perhatian Anda, dan kami berharap dapat bertemu dengan Anda di seminar tersebut.
-    
-    Salam Hormat,
-    John Smith
-    Direktur Pemasaran
-    Teknologi Maju, Inc.
-    +987-654-3210
-    john.smith@email.com'`,
+    Salam hangat,😊🙏
+    Tim Tracer Study
+    Alumni Universitas Klabat
+    Tahun 2023`,
   };
 
   try {
@@ -94,8 +79,8 @@ const sendEmail = async (recipientEmails) => {
 const sendBroadcastWA = async (pesan, phoneNums) => {
   try {
     // const phoneNumbers = await alumniRepository.phoneNumbers();
-
-    // // UNCOMENT THIS TO USE WA BROADCAST
+    // UNCOMENT THIS TO USE WA BROADCAST
+    // console.log(phoneNums)
     // const phoneNoTest = ["+6289612288774"];
     // const results = await Promise.all(
     //   phoneNums.map(async (phoneNo) => {
@@ -108,7 +93,6 @@ const sendBroadcastWA = async (pesan, phoneNums) => {
     //     } else {
     //       phoneNo = "62" + phoneNo + "@c.us";
     //     }
-
     //     const user = await client.isRegisteredUser(phoneNo);
     //     if (user) {
     //       await client.sendMessage(phoneNo, pesan);
@@ -124,8 +108,7 @@ const sendBroadcastWA = async (pesan, phoneNums) => {
     //     }
     //   })
     // );
-
-    return results;
+    // return results;
   } catch (error) {
     console.error(error);
     throw error;

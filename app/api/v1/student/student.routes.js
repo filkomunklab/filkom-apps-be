@@ -17,6 +17,35 @@ router.post("/student", studentController.createStudent);
 // router.put("/student/:id", studentController.updateStudentById);
 // //       delete     - hapus student
 // router.delete("/student/:id", studentController.deleteStudentById);
+
 router.get("/student/:nim", studentController.getStudentByNim);
+
+router.patch("/student/biodata/:nim", studentController.biodataStudent);
+
+router.get("/student/dosen/:nik", studentController.viewByEmployeeNik);
+
+router.get("/management/student", studentController.getAllStudentForManagement);
+
+router.get("/student/major/:major", studentController.getStudentbyMajor);
+
+router.get(
+  "/student/arrivalYear/:arrival_Year",
+  studentController.getStudentbyArrivalYear
+);
+
+router.patch(
+  "/management/student/:nim/password",
+  studentController.updateStudentPassword
+);
+
+router.get("/Student", studentController.getAllStudent);
+
+router.get(
+  "/students-without-supervisor",
+  studentController.getStudentHasNoSupervisorAndActive
+);
+
+//       create     - membuat many student baru
+router.post("/student-many", studentController.createManyStudent);
 
 module.exports = router;

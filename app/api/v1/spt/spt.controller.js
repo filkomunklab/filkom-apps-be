@@ -2,8 +2,17 @@
 //Biasanya juga handle validasi body
 
 const sptService = require("./spt.service");
+const { policyFor } = require("../policy");
 
 const getListSPT = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "calon_tamatan_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  // console.log("huruf A", policy.can("read", "calonTamatan_list"));
   try {
     const search_query = req.query.search_query || "";
 
@@ -14,7 +23,9 @@ const getListSPT = async (req, res) => {
       data: calonTamatan,
     });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -24,7 +35,9 @@ const getSPTById = async (req, res) => {
     const spt = await sptService.getSPTById(id);
     res.send({ status: "OK", data: spt });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -35,21 +48,40 @@ const getSPTByNIM = async (req, res) => {
     const spts = await sptService.getSPTByNIM(nim);
     res.send({ status: "OK", data: spts });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
 const submitSPT = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("create", "SPT")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const dataSPT = req.body;
     const spt = await sptService.createSPT(dataSPT);
+    console.log('success')
     res.status(201).send({ status: "Form SPT has been submitted", data: spt });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
 const patchStatusByFak = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "status_SPT")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const id = req.params.id;
     const status = req.query.status;
@@ -57,7 +89,9 @@ const patchStatusByFak = async (req, res) => {
 
     res.send({ status: "OK", data: updatedSPT });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -66,11 +100,20 @@ const listApprovedSPTbyFak = async (req, res) => {
     const approvedSPT = await sptService.sptApprovedbyFak();
     res.send({ status: "OK", data: approvedSPT });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
 const patchStatusByReg = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "status_SPT")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const id = req.params.id;
     const status = req.query.status;
@@ -78,7 +121,9 @@ const patchStatusByReg = async (req, res) => {
 
     res.send({ status: "OK", data: updatedSPT });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -87,7 +132,9 @@ const listApprovedSPTbyReg = async (req, res) => {
     const approvedSPT = await sptService.sptApprovedbyReg();
     res.send({ status: "OK", data: approvedSPT });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -102,7 +149,9 @@ const filterSPTBy = async (req, res) => {
     const filteredSPT = await sptService.filterSPT(filter);
     res.send({ status: "OK", data: filteredSPT });
   } catch (error) {
-    res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
 
@@ -118,6 +167,28 @@ const checkAvSPT = async (req, res) => {
   }
 };
 
+//change student status
+const changeStudentStatus = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "status_mahasiswa")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  try {
+    const nim = req.params.nim;
+    const status = req.query.status;
+    const updateStatus = await sptService.changeStudentStatus(nim, status);
+
+    res.send({ status: "OK", data: updateStatus });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getListSPT,
   getSPTById,
@@ -129,4 +200,5 @@ module.exports = {
   listApprovedSPTbyReg,
   filterSPTBy,
   checkAvSPT,
+  changeStudentStatus,
 };

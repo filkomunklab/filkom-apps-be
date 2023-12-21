@@ -1,5 +1,7 @@
 const { query } = require("express");
 const sptRepository = require("./spt.repository");
+const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
+const { storage } = require("../../../config/firebase");
 
 const getListSPT = async (search_query) => {
   try {
@@ -82,6 +84,11 @@ const checkFormSPT = async (studentId) => {
   }
 };
 
+//patch status mahasiswa
+const changeStudentStatus = async (nim, status) => {
+  return sptRepository.patchStudentStatus(nim, status);
+};
+
 module.exports = {
   createSPT,
   getListSPT,
@@ -93,4 +100,5 @@ module.exports = {
   sptApprovedbyReg,
   filterSPT,
   checkFormSPT,
+  changeStudentStatus,
 };

@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const { curriculum } = require("../app/database");
 const prisma = new PrismaClient();
 const {
   ref,
@@ -9,7 +10,1046 @@ const {
 } = require("firebase/storage");
 const { storage } = require("../app/config/firebase");
 
+let kurikulum_informatika;
+
 async function main() {
+  // CREATE MAJOR
+  await prisma.majorGlobal.createMany({
+    data: [
+      { id: "55201", shortName: "IF", name: "Informatika" },
+      { id: "57201", shortName: "SI", name: "Sistem Informasi" },
+    ],
+  });
+
+  // CREATE CURRICULUM
+  await prisma.curriculum
+    .create({
+      data: {
+        major: "Informatika",
+        year: "2020",
+      },
+    })
+    .then(async (curriculum) => {
+      kurikulum_informatika = curriculum.id;
+      try {
+        await prisma.subject.createMany({
+          data: [
+            {
+              curriculum_id: curriculum.id,
+              code: "MATH000",
+              name: "Matematika/ Mathematics",
+              credits: 2,
+              type: "Pre-requisite",
+              prerequisite: "",
+              semester: 0,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "COPS000",
+              name: "Keterampilan Komputer Dasar/ Basic Computer Skill",
+              credits: 3,
+              type: "Pre-requisite",
+              prerequisite: "",
+              semester: 0,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "WEDU001",
+              name: "Pendidikan Keterampilan/ Work Education",
+              credits: 1,
+              type: "Pre-requisite",
+              prerequisite: "",
+              semester: 0,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BIU000",
+              name: "Bahasa Inggris Pemula/ Basic English",
+              credits: 3,
+              type: "Pre-requisite",
+              prerequisite: "",
+              semester: 0,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "LMTR999",
+              name: "Mata Kuliah Pembatas/ Limiter Subject",
+              credits: 1,
+              type: "Pre-requisite",
+              prerequisite: "",
+              semester: 0,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "FILG181",
+              name: "Teladan Kehidupan I/ The Exemplary Living I",
+              credits: 2,
+              type: "General",
+              prerequisite: "",
+              semester: 1,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "GEN001",
+              name: "Bahasa Inggris Dasar I/ Elementary English I",
+              credits: 3,
+              type: "General",
+              prerequisite:
+                "- [LMTR999] Mata Kuliah Pembatas/ Limiter Subject - 1 credit(s)",
+              semester: 1,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF1111",
+              name: "Pengantar Komputer/ Introduction to Computing",
+              credits: 3,
+              type: "Basic",
+              prerequisite: "",
+              semester: 1,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS1113",
+              name: "Pemrograman Komputer/ Computer Programming",
+              credits: 6,
+              type: "Major",
+              prerequisite: "",
+              semester: 1,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF1112",
+              name: "Dasar Aljabar Linear/ Aljabar Linear Fundamental",
+              credits: 3,
+              type: "Basic",
+              prerequisite: "",
+              semester: 1,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BIU101",
+              name: "Bahasa Inggris Pra Dasar/ Pre-Elementary English",
+              credits: 3,
+              type: "General",
+              prerequisite:
+                "- [BIU000] Bahasa Inggris Pemula/ Basic English - 3 credit(s)",
+              semester: 1,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "FILG182",
+              name: "Teladan Kehidupan II/ The Exemplary Living II",
+              credits: 2,
+              type: "General",
+              prerequisite:
+                "- [FILG181] Teladan Kehidupan I/ The Exemplary Living I - 2 credit(s)",
+              semester: 2,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS1221",
+              name: "Matematika Diskrit/ Discrete Mathematics",
+              credits: 3,
+              type: "Basic",
+              prerequisite: "- [MATH000] Matematika/ Mathematics - 2 credit(s)",
+              semester: 2,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF1222",
+              name: "Kalkulus/ Calculus",
+              credits: 3,
+              type: "Basic",
+              prerequisite: "- [MATH000] Matematika/ Mathematics - 2 credit(s)",
+              semester: 2,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF1223",
+              name: "Logika Informatika/ Informatics Logic",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IF1111] Pengantar Komputer/ Introduction to Computing - 3 credit(s)",
+              semester: 2,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS1224",
+              name: "Struktur Data dan Algoritma/ Data Structure and Algorithms",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS1113] Pemrograman Komputer/ Computer Programming - 6 credit(s)",
+              semester: 2,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BIU102",
+              name: "Bahasa Inggris Dasar/ Elementary English",
+              credits: 3,
+              type: "General",
+              prerequisite:
+                "- [BIU101] Bahasa Inggris Pra Dasar/ Pre-Elementary English - 3 credit(s)",
+              semester: 2,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "EDU112",
+              name: "Filsafat Pendidikan Kristen/ Philosophy of Christian Education",
+              credits: 2,
+              type: "General",
+              prerequisite: "",
+              semester: 2,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "GEN101",
+              name: "Bahasa Inggris Pra Menengah I / Pre-Inter English I",
+              credits: 3,
+              type: "General",
+              prerequisite:
+                "- [GEN002] Bahasa Inggris Dasar II/ Elementary English II - 3 credit(s) \r\n- [LMTR999] Mata Kuliah Pembatas/ Limiter Subject - 1 credit(s)",
+              semester: 3,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "FILG283",
+              name: "Prinsip-Prinsip Nilai Kristiani/ The Principles of Christian Values",
+              credits: 2,
+              type: "General",
+              prerequisite:
+                "- [FILG182] Teladan Kehidupan II/ The Exemplary Living II - 2 credit(s)",
+              semester: 3,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "PPKN101",
+              name: "Pendidikan Kewarganegaraan/ Indonesian Civics",
+              credits: 3,
+              type: "General",
+              prerequisite: "",
+              semester: 3,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF2131",
+              name: "Organisasi dan Arsitektur Komputer/ Computer Organization and Architecture",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IF1223] Logika Informatika/ Informatics Logic - 3 credit(s) \r\n- [IF1111] Pengantar Komputer/ Introduction to Computing - 3 credit(s)",
+              semester: 3,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS2133",
+              name: "Pengantar Basisdata/ Introduction to Database",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IF1111] Pengantar Komputer/ Introduction to Computing - 3 credit(s)",
+              semester: 3,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS2134",
+              name: "Statistik dan Probabilitas/ Statistics and Probability",
+              credits: 3,
+              type: "Major",
+              prerequisite: "- [MATH000] Matematika/ Mathematics - 2 credit(s)",
+              semester: 3,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS2132",
+              name: "Perancangan Web/ Web Design",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS1224] Struktur Data dan Algoritma/ Data Structure and Algorithms - 3 credit(s)",
+              semester: 3,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BIU203",
+              name: "Bahasa Inggris Pra Menengah I / Pre-Intermediate English I",
+              credits: 3,
+              type: "General",
+              prerequisite:
+                "- [BIU102] Bahasa Inggris Dasar/ Elementary English - 3 credit(s)",
+              semester: 3,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BIU203",
+              name: "Bahasa Inggris Pra Menengah I / Pre-Intermediate English I",
+              credits: 3,
+              type: "General",
+              prerequisite:
+                "- [GEN002] Bahasa Inggris Dasar II/ Elementary English II - 3 credit(s)",
+              semester: 3,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "GEN102",
+              name: "Bahasa Inggris Pra Menengah II/ Pre-Inter English II",
+              credits: 3,
+              type: "General",
+              prerequisite:
+                "- [GEN101] Bahasa Inggris Pra Menengah I / Pre-Inter English I - 3 credit(s) \r\n- [LMTR999] Mata Kuliah Pembatas/ Limiter Subject - 1 credit(s)",
+              semester: 4,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "FILG284",
+              name: "Orang Muda dan Dunia/ Youth and the World",
+              credits: 2,
+              type: "General",
+              prerequisite:
+                "- [FILG283] Prinsip-Prinsip Nilai Kristiani/ The Principles of Christian Values - 2 credit(s)",
+              semester: 4,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF2243",
+              name: "Jaringan Komputer I/ Computer Network I",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IF2131] Organisasi dan Arsitektur Komputer/ Computer Organization and Architecture - 3 credit(s)",
+              semester: 4,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF2244",
+              name: "Sistem Cerdas/ Expert System",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [MATH000] Matematika/ Mathematics - 2 credit(s) \r\n- [IS1221] Matematika Diskrit/ Discrete Mathematics - 3 credit(s)",
+              semester: 4,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF2245",
+              name: "Teori Bahasa dan Automata/ Language and Automata Theory",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS1221] Matematika Diskrit/ Discrete Mathematics - 3 credit(s)",
+              semester: 4,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS2241",
+              name: "Sistem Manajemen Basisdata/ Database Management System",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS2133] Pengantar Basisdata/ Introduction to Database - 3 credit(s)",
+              semester: 4,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS2243",
+              name: "Pemrograman Berorientasi Objek/ Object Oriented Programming",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS1113] Pemrograman Komputer/ Computer Programming - 6 credit(s)",
+              semester: 4,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BIU204",
+              name: "Bahasa Inggris Pra Menengah II/ Pre-Intermediate English II",
+              credits: 3,
+              type: "General",
+              prerequisite:
+                "- [BIU203] Bahasa Inggris Pra Menengah I / Pre-Intermediate English I - 3 credit(s)",
+              semester: 4,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BIU204",
+              name: "Bahasa Inggris Pra Menengah II/ Pre-Intermediate English II",
+              credits: 3,
+              type: "General",
+              prerequisite:
+                "- [GEN101] Bahasa Inggris Pra Menengah I / Pre-Inter English I - 3 credit(s)",
+              semester: 4,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "FILG385",
+              name: "Kehidupan Keluarga / Family Living",
+              credits: 2,
+              type: "General",
+              prerequisite:
+                "- [FILG284] Orang Muda dan Dunia/ Youth and the World - 2 credit(s)",
+              semester: 5,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF3156",
+              name: "Jaringan Komputer II/ Computer Network II",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IF2243] Jaringan Komputer I/ Computer Network I - 3 credit(s)",
+              semester: 5,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF3155",
+              name: "Pemrograman Visual/ Visual Programming",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS2243] Pemrograman Berorientasi Objek/ Object Oriented Programming - 3 credit(s)",
+              semester: 5,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS3151",
+              name: "Pengembangan Web Front-End/ Front-End Web Development",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS2243] Pemrograman Berorientasi Objek/ Object Oriented Programming - 3 credit(s)",
+              semester: 5,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS3152",
+              name: "Analisis dan Perancangan Sistem/ System Analysis and Design",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS1113] Pemrograman Komputer/ Computer Programming - 6 credit(s)",
+              semester: 5,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF3153",
+              name: "Konsep Sistem Operasi/ Operating System Concept",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IF2131] Organisasi dan Arsitektur Komputer/ Computer Organization and Architecture - 3 credit(s)",
+              semester: 5,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS3262",
+              name: "Interaksi Manusia dan Komputer/ Human and Computer Interaction",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS2243] Pemrograman Berorientasi Objek/ Object Oriented Programming - 3 credit(s)",
+              semester: 5,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "FILG386",
+              name: "Kehidupan di Akhir Zaman/ End Time Living",
+              credits: 2,
+              type: "General",
+              prerequisite:
+                "- [FILG385] Kehidupan Keluarga / Family Living - 2 credit(s)",
+              semester: 6,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF3266",
+              name: "Grafika Komputer/ Computer Graphics",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS2243] Pemrograman Berorientasi Objek/ Object Oriented Programming - 3 credit(s)",
+              semester: 6,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF3262",
+              name: "Pengembangan Web Back-End/ Back-End Web Development",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS3151] Pengembangan Web Front-End/ Front-End Web Development - 3 credit(s)",
+              semester: 6,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF3263",
+              name: "Kecerdasan Buatan/ Artificial Intelligence",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IF2244] Sistem Cerdas/ Expert System - 3 credit(s)\r\n- [IS1224] Struktur Data dan Algoritma/ Data Structure and Algorithms - 3 credit(s)",
+              semester: 6,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF3264",
+              name: "Rekayasa Perangkat Lunak/ Software Engineering",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS3152] Analisis dan Perancangan Sistem/ System Analysis and Design - 3 credit(s) \r\n- [IS3262] Interaksi Manusia dan Komputer/ Human and Computer Interaction - 3 credit(s)",
+              semester: 6,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS3261",
+              name: "Pengembangan Perangkat Bergerak/ Mobile Application Development",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS3262] Interaksi Manusia dan Komputer/ Human and Computer Interaction - 3 credit(s)",
+              semester: 6,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS3265",
+              name: "Metodologi Penelitian/ Research Method",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS3152] Analisis dan Perancangan Sistem/ System Analysis and Design - 3 credit(s) \r\n- [IS2134] Statistik dan Probabilitas/ Statistics and Probability - 3 credit(s)",
+              semester: 6,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS4171",
+              name: "Skripsi I/ Research Project I",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS3265] Metodologi Penelitian/ Research Method - 3 credit(s) \r\n- [IF3264] Rekayasa Perangkat Lunak/ Software Engineering - 3 credit(s)",
+              semester: 7,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS2245",
+              name: "Penulisan Ilmiah/ Scientific Writing",
+              credits: 2,
+              type: "Major",
+              prerequisite:
+                "- [IS2133] Pengantar Basisdata/ Introduction to Database - 3 credit(s)",
+              semester: 7,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4172",
+              name: "Pengantar Pengembangan Game/ Introduction to Game Development",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IF3155] Pemrograman Visual/ Visual Programming - 3 credit(s)",
+              semester: 7,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4173",
+              name: "Pemrograman Sistem/ System Programming",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IF1223] Logika Informatika/ Informatics Logic - 3 credit(s) \r\n- [IF2131] Organisasi dan Arsitektur Komputer/ Computer Organization and Architecture - 3 credit(s)",
+              semester: 7,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS4281",
+              name: "Skripsi II/ Research Project II",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IS4171] Skripsi I/ Research Project I - 3 credit(s)",
+              semester: 8,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4282",
+              name: "Robotika/ Robotics",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IF2131] Organisasi dan Arsitektur Komputer/ Computer Organization and Architecture - 3 credit(s) \r\n- [IF1223] Logika Informatika/ Informatics Logic - 3 credit(s)",
+              semester: 8,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS2242",
+              name: "Kewirausahaan/ Entrepreneur - Project Capstone",
+              credits: 3,
+              type: "Major",
+              prerequisite:
+                "- [IF3264] Rekayasa Perangkat Lunak/ Software Engineering - 3 credit(s)",
+              semester: 8,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4174",
+              name: "Etika Komputer/ Computer Ethics",
+              credits: 2,
+              type: "Major",
+              prerequisite:
+                "- [IF1111] Pengantar Komputer/ Introduction to Computing - 3 credit(s) \r\n- [IF2244] Sistem Cerdas/ Expert System - 3 credit(s)",
+              semester: 8,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4291",
+              name: "Desain untuk Visualisasi dan Komputer/ Design for Visualization and Communication",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [IF4172] Pengantar Pengembangan Game/ Introduction to Game Development - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4292",
+              name: "Pemrograman Game/ Game Programming",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [IF4172] Pengantar Pengembangan Game/ Introduction to Game Development - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4191",
+              name: "Pengantar Animasi/ Introduction to Animation",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [IF3266] Grafika Komputer/ Computer Graphics - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4192",
+              name: "Prinsip-Prinsip Desain Kreatif/ Principles of Creative Design",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [IF3266] Grafika Komputer/ Computer Graphics - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4294",
+              name: "Pemrosesan Bahasa Alami/ Natural Language Processing",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [IS3154] Penambangan dan Pergudangan Data/ Data Mining and Warehousing - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IS3154",
+              name: "Penambangan dan Pergudangan Data/ Data Mining and Warehousing",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [IS2241] Sistem Manajemen Basisdata/ Database Management System - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4293",
+              name: "Pembelajaran Mesin/ Machine Learning",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [IF3263] Kecerdasan Buatan/ Artificial Intelligence - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4194",
+              name: "Pencarian Informasi/ Information Retrieval",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [IS3154] Penambangan dan Pergudangan Data/ Data Mining and Warehousing - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4195",
+              name: "Manajemen Proyek/ Project Management",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [IF3262] Pengembangan Web Back-End/ Back-End Web Development - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4196",
+              name: "Internet untuk Segala/ Internet of Things",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [IF3262] Pengembangan Web Back-End/ Back-End Web Development - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4295",
+              name: "Teknik Cloud/ Cloud Engineering",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [IF3262] Pengembangan Web Back-End/ Back-End Web Development - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "IF4296",
+              name: "Rekayasa DevOps/ DevOps Engineering",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [IF3262] Pengembangan Web Back-End/ Back-End Web Development - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "CNET402",
+              name: "Jaringan Nirkabel dan Perangkat Bergerak/ Wireless and Mobile Networks",
+              credits: 3,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BENG310",
+              name: "Bahasa Inggris Bisnis Membaca dan Kosakata/ Business English Reading and Vocabulary",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [GEN102] Bahasa Inggris Pra Menengah II/ Pre-Inter English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BENG330",
+              name: "Komunikasi Bisnis Bahasa Inggris/ Business English Communication",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [GEN102] Bahasa Inggris Pra Menengah II/ Pre-Inter English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BBEN320",
+              name: "Korespondensi Bisnis Bahasa Inggris/ Business English Correspondence",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [GEN102] Bahasa Inggris Pra Menengah II/ Pre-Inter English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "ELIT271",
+              name: "Studi Literatur I/ Literature Studies I",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [GEN102] Bahasa Inggris Pra Menengah II/ Pre-Inter English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BIU305",
+              name: "Bahasa Inggris Menengah I/ Intermediate English I",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [BIU204] Bahasa Inggris Pra Menengah II/ Pre-Intermediate English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BIU305",
+              name: "Bahasa Inggris Menengah I/ Intermediate English I",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [GEN102] Bahasa Inggris Pra Menengah II/ Pre-Inter English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BIU306",
+              name: "Bahasa Inggris Menengah II/ Intermediate English II",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [BIU204] Bahasa Inggris Pra Menengah II/ Pre-Intermediate English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "GEN306",
+              name: "Bahasa Inggris Menengah Atas II/ Upper-Inter English II",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [GEN102] Bahasa Inggris Pra Menengah II/ Pre-Inter English II - 3 credit(s) \r\n- [LMTR999] Mata Kuliah Pembatas/ Limiter Subject - 1 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "ESP401",
+              name: "Bahasa Inggris Bisnis Membaca dan Kosakata/ Business English Reading and Vocabulary",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [BIU204] Bahasa Inggris Pra Menengah II/ Pre-Intermediate English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "ESP401",
+              name: "Bahasa Inggris Bisnis Membaca dan Kosakata/ Business English Reading and Vocabulary",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [GEN102] Bahasa Inggris Pra Menengah II/ Pre-Inter English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "ESP402",
+              name: "Korespondensi Bisnis Bahasa Inggris/ Business English Correspondence",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [BIU204] Bahasa Inggris Pra Menengah II/ Pre-Intermediate English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "ESP402",
+              name: "Korespondensi Bisnis Bahasa Inggris/ Business English Correspondence",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [GEN102] Bahasa Inggris Pra Menengah II/ Pre-Inter English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "ESP403",
+              name: "Komunikasi Bisnis Bahasa Inggris/ Business English Communication",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [BIU204] Bahasa Inggris Pra Menengah II/ Pre-Intermediate English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "ESP403",
+              name: "Komunikasi Bisnis Bahasa Inggris/ Business English Communication",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [GEN102] Bahasa Inggris Pra Menengah II/ Pre-Inter English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "ENG433",
+              name: "Penulisan Akademik Bahasa Inggris III/ Academic English Writing III",
+              credits: 3,
+              type: "Elective",
+              prerequisite:
+                "- [BIU204] Bahasa Inggris Pra Menengah II/ Pre-Intermediate English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "BIU306",
+              name: "Bahasa Inggris Menengah II/ Intermediate English II",
+              credits: 3,
+              type: "General",
+              prerequisite:
+                "- [GEN102] Bahasa Inggris Pra Menengah II/ Pre-Inter English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "ENG433",
+              name: "Penulisan Akademik Bahasa Inggris III/ Academic English Writing III",
+              credits: 3,
+              type: "General",
+              prerequisite:
+                "- [GEN102] Bahasa Inggris Pra Menengah II/ Pre-Inter English II - 3 credit(s)",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "MG4191",
+              name: "Pengalaman Kerja di Industri Teknologi Informasi/ Industrial Experience in Information Technology",
+              credits: 8,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "MG4192",
+              name: "Pengalaman Praktek di Bidang Teknologi Informasi/ Information Technology Practice in Industrial Experience",
+              credits: 8,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "MG4193",
+              name: "Pengembangan profesional di Industri Teknologi InformasiDevelopment in Information Technology Industry/ Professional Development in Information Technology Industry",
+              credits: 4,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "SI42901",
+              name: "Mata Kuliah Pilihan untuk Studi Independen 1/ Elective Course for Specific Independent Study 1/",
+              credits: 8,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "SI42902",
+              name: "Mata Kuliah Pilihan untuk Studi Independen 2/ Elective Course for Specific Independent Study 2",
+              credits: 8,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "SI42903",
+              name: "Mata Kuliah Pilihan untuk Studi Independen 3/ Elective Course for Specific Independent Study 3",
+              credits: 4,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "SI42905",
+              name: "Mata Kuliah Pilihan untuk Studi Independen 5/ Elective Course for Specific Independent Study 5",
+              credits: 3,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "SI42904",
+              name: "Mata Kuliah Pilihan untuk Studi Independen 4/ Elective Course for Specific Independent Study 4",
+              credits: 4,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "SI42906",
+              name: "Mata Kuliah Pilihan untuk Studi Independen 6/ Elective Course for Specific Independent Study 6",
+              credits: 3,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "SI42907",
+              name: "Mata Kuliah Pilihan untuk Studi Independen 7/ Elective Course for Specific Independent Study 7",
+              credits: 3,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "SI42908",
+              name: "Mata Kuliah Pilihan untuk Studi Independen 8/ Elective Course for Specific Independent Study 8",
+              credits: 2,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "SI42909",
+              name: "Mata Kuliah Pilihan untuk Studi Independen 9/ Elective Course for Specific Independent Study 9",
+              credits: 2,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "SI42910",
+              name: "Mata Kuliah Pilihan untuk Studi Independen 10/ Elective Course for Specific Independent Study 10",
+              credits: 1,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "SI42911",
+              name: "Mata Kuliah Pilihan untuk Studi Independen 11/ Elective Course for Specific Independent Study 11",
+              credits: 1,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+            {
+              curriculum_id: curriculum.id,
+              code: "SI42912",
+              name: "Mata Kuliah Pilihan untuk Studi Independen 12/ Elective Course for Specific Independent Study 12",
+              credits: 20,
+              type: "Elective",
+              prerequisite: "",
+              semester: 9,
+            },
+          ],
+        });
+      } catch (error) {
+        console.log("ini eror: ", error);
+      }
+    });
+
+  // .then(async (student) => {
+  //   await prisma.userRole.create({
+  //     data: {
+  //       userId: student.nim,
+  //       role: "MAHASISWA",
+  //     },
+  //   });
+  // });
+
   // CREATE ADMIN
   await prisma.admin.create({
     data: {
@@ -63,231 +1103,6 @@ async function main() {
         },
       });
     });
-
-  await prisma.student.createMany({
-    data: [
-      {
-        nim: "10502201001",
-        studentEmail: "s2200001@student.unklab.ac.id",
-        firstName: "Irina",
-        lastName: "Matt",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201002",
-        studentEmail: "s2200002@student.unklab.ac.id",
-        firstName: "Dulcia",
-        lastName: "Wootton",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201003",
-        studentEmail: "s2200003@student.unklab.ac.id",
-        firstName: "Fielding",
-        lastName: "Coltherd",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201004",
-        studentEmail: "s2200004@student.unklab.ac.id",
-        firstName: "Aigneis",
-        lastName: "Chettoe",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201005",
-        studentEmail: "s2200005@student.unklab.ac.id",
-        firstName: "Marika",
-        lastName: "Connechy",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201006",
-        studentEmail: "s2200006@student.unklab.ac.id",
-        firstName: "Delphinia",
-        lastName: "Leggatt",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201007",
-        studentEmail: "s2200007@student.unklab.ac.id",
-        firstName: "Dannye",
-        lastName: "MacNeilage",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201008",
-        studentEmail: "s2200008@student.unklab.ac.id",
-        firstName: "Rozanna",
-        lastName: "Ilyin",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201009",
-        studentEmail: "s2200009@student.unklab.ac.id",
-        firstName: "Lars",
-        lastName: "Hulle",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201010",
-        studentEmail: "s2200010@student.unklab.ac.id",
-        firstName: "Dunn",
-        lastName: "Hillan",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201011",
-        studentEmail: "s2200011@student.unklab.ac.id",
-        firstName: "Arlyn",
-        lastName: "Schimoni",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201012",
-        studentEmail: "s2200012@student.unklab.ac.id",
-        firstName: "Cookie",
-        lastName: "Farlambe",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201013",
-        studentEmail: "s2200013@student.unklab.ac.id",
-        firstName: "Stacy",
-        lastName: "Bullivant",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201014",
-        studentEmail: "s2200014@student.unklab.ac.id",
-        firstName: "Oralia",
-        lastName: "Labadini",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201015",
-        studentEmail: "s2200015@student.unklab.ac.id",
-        firstName: "Bethina",
-        lastName: "MacKettrick",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201016",
-        studentEmail: "s2200016@student.unklab.ac.id",
-        firstName: "Arleyne",
-        lastName: "Simonds",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201017",
-        studentEmail: "s2200017@student.unklab.ac.id",
-        firstName: "Julianna",
-        lastName: "Extal",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201018",
-        studentEmail: "s2200018@student.unklab.ac.id",
-        firstName: "Dario",
-        lastName: "Blagbrough",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201019",
-        studentEmail: "s2200019@student.unklab.ac.id",
-        firstName: "Pietra",
-        lastName: "Di Biagi",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201020",
-        studentEmail: "s2200020@student.unklab.ac.id",
-        firstName: "Derril",
-        lastName: "O'Lochan",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    ],
-  });
 
   await prisma.userRole.createMany({
     data: [
@@ -421,7 +1236,7 @@ async function main() {
   //     });
   //   });
 
-  // // CREATE DEKAN
+  // CREATE DEKAN
   // await prisma.employee
   //   .create({
   //     data: {
@@ -620,8 +1435,8 @@ async function main() {
         id: angelId,
         gender: "FEMALE",
         firstName: "Angel",
-        lastName: "Martini",
-        studentEmail: "martini@mail.com",
+        lastName: "Mackenzie",
+        studentEmail: "mackenzie@mail.com",
         nim: "105021920003",
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
@@ -926,6 +1741,428 @@ async function main() {
       });
     });
 
+  // CREATE DOSEN SKRIPSI, KAPRODI IF
+  await prisma.employee
+    .create({
+      data: {
+        id: kaprodiTIId,
+        Address: "Manado",
+        email: "mandias@test.com",
+        phoneNum: "081234567890",
+        firstName: "Green",
+        lastName: "Mandias",
+        degree: "SKom, MCs",
+        nik: "1001",
+        nidn: "0904028101",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK", "KAPRODI"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN SKRIPSI, KAPRODI SI
+  await prisma.employee
+    .create({
+      data: {
+        id: kaprodiSIId,
+        Address: "Manado",
+        phoneNum: "081234567891",
+        email: "pungus@test.com",
+        firstName: "Stenly",
+        lastName: "Pungus",
+        degree: "MT, PhD",
+        nik: "1002",
+        nidn: "0922098101",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK", "KAPRODI"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DEKAN
+  await prisma.employee
+    .create({
+      data: {
+        id: dekanId,
+        Address: "Manado",
+        phoneNum: "081234567892",
+        email: "liem@test.com",
+        firstName: "Andrew Tanny",
+        lastName: "Liem",
+        degree: "MT, PhD",
+        nik: "1003",
+        nidn: "0916038101",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK", "DEKAN"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 1
+  await prisma.employee
+    .create({
+      data: {
+        id: dosen1Id,
+        Address: "Airmadidi",
+        phoneNum: "081234567893",
+        email: "adam@test.com",
+        firstName: "Stenly Ibrahim ",
+        lastName: "Adam",
+        degree: " SKom, MSc",
+        nik: "1004",
+        nidn: " 0915098707",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 2
+  await prisma.employee
+    .create({
+      data: {
+        id: dosen2Id,
+        Address: "Airmadidi",
+        phoneNum: "081234567894",
+        email: "moedjahedy@test.com",
+        firstName: "Jimmy Herawan",
+        lastName: "Moedjahedy ",
+        degree: " SKom, MKom, MM",
+        nik: "1005",
+        nidn: "0923128602",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 3
+  await prisma.employee
+    .create({
+      data: {
+        id: dosen3Id,
+        Address: "Airmadidi",
+        phoneNum: "081234567895",
+        email: "lengkong@test.com",
+        firstName: "Oktoverano Hendrik",
+        lastName: "Lengkong",
+        degree: " SKom, MDs, MM",
+        nik: "1006",
+        nidn: " 0912108301",
+        major: "DKV",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK", "KAPRODI"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 4
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Airmadidi",
+        phoneNum: "081234567801",
+        email: "greensandag@test.com",
+        firstName: "Green Arther",
+        lastName: "Sandag",
+        degree: " SKom, MDs, MM",
+        nik: "1007",
+        nidn: "0907129001",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 5
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Airmadidi",
+        phoneNum: "081234567802",
+        email: "debysondakh@test.com",
+        firstName: "Debby Erce",
+        lastName: "Sondakh",
+        degree: " SKom, MDs, MM",
+        nik: "1008",
+        nidn: "0926128001",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 6
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Airmadidi",
+        phoneNum: "081234567803",
+        email: "jacqulinewaworundeng@test.com",
+        firstName: "Jacquline",
+        lastName: "Waworundeng",
+        degree: " SKom, MDs, MM",
+        nik: "1009",
+        nidn: "0904118303",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 7
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Airmadidi",
+        phoneNum: "081234567804",
+        email: "edsonputra@test.com",
+        firstName: "Edson Yahuda",
+        lastName: "Putra",
+        degree: " SKom, MDs, MM",
+        nik: "1010",
+        nidn: " 0011106901",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 8
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Airmadidi",
+        phoneNum: "081234567805",
+        email: "marcheltombeng@test.com",
+        firstName: "Marchel Timothy",
+        lastName: "Tombeng",
+        degree: " SKom, MDs, MM",
+        nik: "1011",
+        nidn: "2330038801",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 9
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Airmadidi",
+        phoneNum: "081234567806",
+        email: "andriawahyudi@test.com",
+        firstName: "Andria Kusuma",
+        lastName: "Wahyudi",
+        degree: " SKom, MDs, MM",
+        nik: "1012",
+        nidn: "0916088901",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 10
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Airmadidi",
+        phoneNum: "081234567807",
+        email: "lidyalaoh@test.com",
+        firstName: "Lidya Chitra",
+        lastName: "Laoh",
+        degree: " SKom, MDs, MM",
+        nik: "1013",
+        nidn: "0929038001",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
   await prisma.student
     .create({
       data: {
@@ -970,7 +2207,7 @@ async function main() {
     })
     .then(async (employee) => {
       // Daftar peran yang akan Anda tambahkan pada dosen
-      const rolesToAdd = ["DOSEN", "DOSEN_MK", "KAPRODI"];
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
 
       // Membuat entri UserRole untuk setiap peran
       for (const role of rolesToAdd) {
@@ -983,19 +2220,18 @@ async function main() {
       }
     });
 
-  // CREATE DOSEN SKRIPSI, KAPRODI SI
+  // CREATE DOSEN 11
   await prisma.employee
     .create({
       data: {
-        id: kaprodiSIId,
-        Address: "Manado",
-        phoneNum: "081234567891",
-        email: "pungus@test.com",
-        firstName: "Stenly",
-        lastName: "Pungus",
-        degree: "MT, PhD",
-        nik: "1002",
-        nidn: "0767835678",
+        Address: "Airmadidi",
+        phoneNum: "081234567808",
+        email: "joemambu@test.com",
+        firstName: "Joe Yuan Yulian",
+        lastName: "Mambu",
+        degree: " SKom, MDs, MM",
+        nik: "1014",
+        nidn: "0927078306",
         major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1003,7 +2239,7 @@ async function main() {
     })
     .then(async (employee) => {
       // Daftar peran yang akan Anda tambahkan pada dosen
-      const rolesToAdd = ["DOSEN", "DOSEN_MK", "KAPRODI"];
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
 
       // Membuat entri UserRole untuk setiap peran
       for (const role of rolesToAdd) {
@@ -1016,122 +2252,26 @@ async function main() {
       }
     });
 
-  // CREATE DEKAN
+  // CREATE DOSEN 12
   await prisma.employee
     .create({
       data: {
-        id: dekanId,
-        Address: "Manado",
-        phoneNum: "081234567892",
-        email: "liem@test.com",
-        firstName: "Andrew",
-        lastName: "Liem",
-        degree: "MT, PhD",
-        nik: "1003",
-        nidn: "0787567897",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (employee) => {
-      // Daftar peran yang akan Anda tambahkan pada dosen
-      const rolesToAdd = ["DOSEN", "DOSEN_MK", "DEKAN"];
-
-      // Membuat entri UserRole untuk setiap peran
-      for (const role of rolesToAdd) {
-        await prisma.userRole.create({
-          data: {
-            userId: employee.nik,
-            role: role,
-          },
-        });
-      }
-    });
-
-  // CREATE DOSEN 1
-  await prisma.employee
-    .create({
-      data: {
-        id: dosen1Id,
         Address: "Airmadidi",
-        phoneNum: "081234567893",
-        email: "adam@test.com",
-        firstName: "Stenly",
-        lastName: "Adam",
-        degree: " SKom, MSc",
-        nik: "1004",
-        nidn: "0364758257",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (employee) => {
-      // Daftar peran yang akan Anda tambahkan pada dosen
-      const rolesToAdd = ["DOSEN"];
-
-      // Membuat entri UserRole untuk setiap peran
-      for (const role of rolesToAdd) {
-        await prisma.userRole.create({
-          data: {
-            userId: employee.nik,
-            role: role,
-          },
-        });
-      }
-    });
-
-  // CREATE DOSEN 2
-  await prisma.employee
-    .create({
-      data: {
-        id: dosen2Id,
-        Address: "Airmadidi",
-        phoneNum: "081234567894",
-        email: "medjahedy@test.com",
-        firstName: "Jimmy",
-        lastName: "Moedjahedy",
-        degree: " SKom, MKom, MM",
-        nik: "1005",
-        nidn: "0364723337",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (employee) => {
-      // Daftar peran yang akan Anda tambahkan pada dosen
-      const rolesToAdd = ["DOSEN"];
-
-      // Membuat entri UserRole untuk setiap peran
-      for (const role of rolesToAdd) {
-        await prisma.userRole.create({
-          data: {
-            userId: employee.nik,
-            role: role,
-          },
-        });
-      }
-    });
-
-  // CREATE DOSEN 3
-  await prisma.employee
-    .create({
-      data: {
-        id: dosen3Id,
-        Address: "Airmadidi",
-        phoneNum: "081234567895",
-        email: "lengkong@test.com",
-        firstName: "Oktoverano",
-        lastName: "Lengkong",
+        phoneNum: "081234567809",
+        email: "reynoldussahulata@test.com",
+        firstName: "Reynoldus Andrias",
+        lastName: "Sahulata",
         degree: " SKom, MDs, MM",
-        nik: "1006",
-        nidn: "0987898757",
+        nik: "1015",
+        nidn: "0311106605",
+        major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
     })
     .then(async (employee) => {
       // Daftar peran yang akan Anda tambahkan pada dosen
-      const rolesToAdd = ["DOSEN"];
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
 
       // Membuat entri UserRole untuk setiap peran
       for (const role of rolesToAdd) {
@@ -1144,6 +2284,135 @@ async function main() {
       }
     });
 
+  // CREATE DOSEN 13
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Airmadidi",
+        phoneNum: "081234567810",
+        email: "semmytaju@test.com",
+        firstName: "Semmy Wellem",
+        lastName: "Taju",
+        degree: " SKom, MDs, MM",
+        nik: "1016",
+        nidn: "1604098901",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 14
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Airmadidi",
+        phoneNum: "081234567811",
+        email: "rollylontaan@test.com",
+        firstName: "Rolly Junius",
+        lastName: "Lontaan",
+        degree: " SKom, MDs, MM",
+        nik: "1017",
+        nidn: "1626068101",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 15
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Airmadidi",
+        phoneNum: "081234567812",
+        email: "stevenlolong@test.com",
+        firstName: "Steven",
+        lastName: "Lolong",
+        degree: " SKom, MDs, MM",
+        nik: "1018",
+        nidn: "0922098001",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // CREATE DOSEN 16
+  await prisma.employee
+    .create({
+      data: {
+        Address: "Airmadidi",
+        phoneNum: "081234567813",
+        email: "jeinrewah@test.com",
+        firstName: "Jein",
+        lastName: "Rewah",
+        degree: " SKom, MDs, MM",
+        nik: "1019",
+        nidn: "0917018303",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (employee) => {
+      // Daftar peran yang akan Anda tambahkan pada dosen
+      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
+
+      // Membuat entri UserRole untuk setiap peran
+      for (const role of rolesToAdd) {
+        await prisma.userRole.create({
+          data: {
+            userId: employee.nik,
+            role: role,
+          },
+        });
+      }
+    });
+
+  // ===================================================================================
   // CREATE SEKRETARIS
   await prisma.employee
     .create({
@@ -1154,7 +2423,7 @@ async function main() {
         email: "kainde@test.com",
         firstName: "Wilma",
         lastName: "Kainde",
-        nik: "1007",
+        nik: "1020",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
@@ -1168,2856 +2437,257 @@ async function main() {
       });
     });
 
-  // CREATE SKRIPSI APP DATA
-  async function createSkripsiAppData() {
-    try {
-      // dosen1Id =
-      //          advisor_1
-      //          advisor_5
-      //          coAdvisor1_2
-      //          co_advisor2_3
-      //          chairman_4
-      // dosen2Id =
-      //          advisor_2
-      //          co_advisor1_3
-      //          co_advisor2_4
-      //          dosen2Id
-      //          chairman_1
-      // dosen3Id =
-      //          advisor_3
-      //          co_advisor1_4
-      //          member_1
-      //          chairman_2
-      // dekanId =
-      //          advisor_4
-      //          member_2
-      //          chairman_3
-      // kaprodiSIId =
-      //          member_3
-      //          member_4
-
-      // Informatika
-      // -finish
-      const student1_1 = angelId;
-      const title_1 = "Pengambangan Aplikasi Dinning";
-      const submissionFileName_1 = "Pengambangan Aplikasi Dinning.pdf";
-      const submissionFilePath_1 = "link_pengembangan_aplikasi_dinning";
-      const proposalFileName_1 = "Skripsi 1_Pengambangan Aplikasi Dinning.pdf";
-      const proposalPaymentFileName_1 = "Bukti Pembayaran Skripsi 1.pdf";
-      const proposalPlagiatFileName_1 =
-        "SKUHP-Uji 1_Angel_FILKOM_Skripsi 1_Pengambangan Aplikasi Dinning.pdf";
-      const proposalFilePath_1 = "link_Skripsi_1_Pengambangan_Aplikasi_Dinning";
-      const proposalPaymentPath_1 = "link_Bukti_Pembayaran_Skripsi_1";
-      const proposalPlagiatPath_1 =
-        "link_SKUHP_Uji_1_Angel_FILKOM_Skripsi_1_Pengambangan_Aplikasi_Dinning";
-      const proposalRevisiFileName_1 =
-        "Revisi Skripsi 1_Pengambangan Aplikasi Dinning.pdf";
-      const proposalRevisiFilePath_1 =
-        "link_Revisi_Skripsi_1_Pengambangan_Aplikasi_Dinning";
-      const proposalStart_1 = "08:30";
-      const proposalEnd_1 = "10:00";
-      const proposalRoom_1 = "GK3-TL - Teacher Lounge";
-      const proposalDate_1 = "24/11/2022";
-      const skripsiFileName_1 = "Skripsi 2_Pengambangan Aplikasi Dinning.Pdf";
-      const skripsiPaymentFileName_1 = "Bukti Pembayaran Skripsi 2.pdf";
-      const skripsiPlagiatFileName_1 =
-        "SKUHP-Uji 2_Angel_FILKOM_Skripsi 2_Pengambangan Aplikasi Dinning.pdf";
-      const skripsiFilePath_1 = "link_Skripsi_2_Pengambangan_Aplikasi_Dinning";
-      const skripsiPaymentPath_1 = "link_Bukti_Pembayaran_Skripsi_2";
-      const skripsiPlagiatPath_1 =
-        "link_SKUHP_Uji_2_Angel_FILKOM_Skripsi_2_Pengambangan_Aplikasi_Dinning";
-      const skripsiRevisiFileName_1 =
-        "Revisi Skripsi 2_Pengambangan Aplikasi Dinning.pdf";
-      const skripsiRevisiFilePath_1 =
-        "link_Revisi_Skripsi_2_Pengambangan_Aplikasi_Dinning";
-      const skripsiStart_1 = "08:30";
-      const skripsiEnd_1 = "10:00";
-      const skripsiRoom_1 = "GK3-TL - Teacher Lounge";
-      const skripsiDate_1 = "03/04/2023";
-      const advisor_1 = dosen1Id;
-      const chairman_1 = dosen2Id;
-      const member_1 = dosen3Id;
-      // -skripsi-empty - ada kelas skripsi
-      const student1_2 = cindyId;
-      const student2_2 = robbyId;
-      const title_2 = "Pengembangan Aplikasi Reservasi Hotel";
-      const submissionFileName_2 = "Pengembangan Aplikasi Reservasi Hotel.pdf";
-      const submissionFilePath_2 = "link_pengembangan_aplikasi_reservasi_hotel";
-      const proposalFileName_2 =
-        "Skripsi 1_Pengembangan Aplikasi Reservasi Hotel.pdf";
-      const proposalPaymentFileName_2 = "Bukti Pembayaran Skripsi 1.pdf";
-      const proposalPlagiatFileName_2 =
-        "SKUHP-Uji 1_Angel_FILKOM_Skripsi 1_Pengembangan Aplikasi Reservasi Hotel.pdf";
-      const proposalFilePath_2 =
-        "link_Skripsi_1_Pengembangan_Aplikasi_Reservasi_Hotel";
-      const proposalPaymentPath_2 = "link_Bukti_Pembayaran_Skripsi_1";
-      const proposalPlagiatPath_2 =
-        "link_SKUHP_Uji_1_Angel_FILKOM_Skripsi_1_Pengembangan_Aplikasi_Reservasi_Hotel";
-      const proposalRevisiFileName_2 =
-        "Revisi Skripsi 1_Pengembangan Aplikasi Reservasi Hotel.pdf";
-      const proposalRevisiFilePath_2 =
-        "link_Revisi_Skripsi_1_Pengembangan_Aplikasi_Reservasi_Hotel";
-      const proposalStart_2 = "09:00";
-      const proposalEnd_2 = "11:30";
-      const proposalRoom_2 = "GK4-TL - Teacher Lounge";
-      const proposalDate_2 = "24/11/2022";
-      const advisor_2 = dosen2Id;
-      const co_advisor1_2 = dosen1Id;
-      const chairman_2 = dosen3Id;
-      const member_2 = dekanId;
-      // Sistem Informasi
-      // -finish
-      const student1_3 = marcelId;
-      const title_3 = "Pengembangan Aplikasi E-commerce";
-      const submissionFileName_3 = "Pengembangan Aplikasi E-commerce.pdf";
-      const submissionFilePath_3 = "link_pengembangan_aplikasi_ecommerce";
-      const proposalFileName_3 =
-        "Skripsi 1_Pengembangan Aplikasi E-commerce.pdf";
-      const proposalPaymentFileName_3 = "Bukti Pembayaran Skripsi 1.pdf";
-      const proposalPlagiatFileName_3 =
-        "SKUHP-Uji 1_Angel_FILKOM_Skripsi 1_Pengembangan Aplikasi E-commerce.pdf";
-      const proposalFilePath_3 =
-        "link_Skripsi_1_Pengembangan_Aplikasi_Ecommerce";
-      const proposalPaymentPath_3 = "link_Bukti_Pembayaran_Skripsi_1";
-      const proposalPlagiatPath_3 =
-        "link_SKUHP_Uji_1_Angel_FILKOM_Skripsi_1_Pengembangan_Aplikasi_Ecommerce";
-      const proposalRevisiFileName_3 =
-        "Revisi Skripsi 1_Pengembangan Aplikasi E-commerce.pdf";
-      const proposalRevisiFilePath_3 =
-        "link_Revisi_Skripsi_1_Pengembangan_Aplikasi_Ecommerce";
-      const proposalStart_3 = "08:30";
-      const proposalEnd_3 = "10:00";
-      const proposalRoom_3 = "GK1-207";
-      const proposalDate_3 = "24/11/2022";
-      const skripsiFileName_3 =
-        "Skripsi 2_Pengembangan Aplikasi E-commerce.pdf";
-      const skripsiPaymentFileName_3 = "Bukti Pembayaran Skripsi 2.pdf";
-      const skripsiPlagiatFileName_3 =
-        "SKUHP-Uji 2_Angel_FILKOM_Skripsi 2_Pengembangan Aplikasi E-commerce.pdf";
-      const skripsiFilePath_3 =
-        "link_Skripsi_2_Pengembangan_Aplikasi_Ecommerce";
-      const skripsiPaymentPath_3 = "link_Bukti_Pembayaran_Skripsi_2";
-      const skripsiPlagiatPath_3 =
-        "link_SKUHP_Uji_2_Angel_FILKOM_Skripsi_2_Pengembangan_Aplikasi_Ecommerce";
-      const skripsiRevisiFileName_3 =
-        "Revisi Skripsi 2_Pengembangan Aplikasi E-commerce.pdf";
-      const skripsiRevisiFilePath_3 =
-        "link_Revisi_Skripsi_2_Pengembangan_Aplikasi_Ecommerce";
-      const skripsiStart_3 = "08:30";
-      const skripsiEnd_3 = "10:00";
-      const skripsiRoom_3 = "GK1-207";
-      const skripsiDate_3 = "03/04/2023";
-      const advisor_3 = dosen3Id;
-      const co_advisor1_3 = dosen2Id;
-      const co_advisor2_3 = dosen1Id;
-      const chairman_3 = dekanId;
-      const member_3 = kaprodiSIId;
-      // -skripsi-empty - ada kelas skripsi
-      const student1_4 = leaId;
-      const student2_4 = rizkyID;
-      const title_4 = "Pengembangan Aplikasi Sistem Informasi Keuangan";
-      const submissionFileName_4 =
-        "Pengembangan Aplikasi Sistem Informasi Keuangan.pdf";
-      const submissionFilePath_4 =
-        "link_pengembangan_aplikasi_sistem_informasi_keuangan";
-      const proposalFileName_4 =
-        "Skripsi 1_Pengembangan Aplikasi Sistem Informasi Keuangan.pdf";
-      const proposalPaymentFileName_4 = "Bukti Pembayaran Skripsi 1.pdf";
-      const proposalPlagiatFileName_4 =
-        "SKUHP-Uji 1_Angel_FILKOM_Skripsi 1_Pengembangan Aplikasi Sistem Informasi Keuangan.pdf";
-      const proposalFilePath_4 =
-        "link_Skripsi_1_Pengembangan_Aplikasi_Sistem_Informasi_Keuangan";
-      const proposalPaymentPath_4 = "link_Bukti_Pembayaran_Skripsi_1";
-      const proposalPlagiatPath_4 =
-        "link_SKUHP_Uji_1_Angel_FILKOM_Skripsi_1_Pengembangan_Aplikasi_Sistem_Informasi_Keuangan";
-      const proposalRevisiFileName_4 =
-        "Revisi Skripsi 1_Pengembangan Aplikasi Sistem Informasi Keuangan.pdf";
-      const proposalRevisiFilePath_4 =
-        "link_Revisi_Skripsi_1_Pengembangan_Aplikasi_Sistem_Informasi_Keuangan";
-      const proposalStart_4 = "11:00";
-      const proposalEnd_4 = "12:30";
-      const proposalRoom_4 = "GK6-TL - Teacher Lounge";
-      const proposalDate_4 = "24/11/2022";
-      const advisor_4 = dekanId;
-      const co_advisor1_4 = dosen3Id;
-      const co_advisor2_4 = dosen2Id;
-      const chairman_4 = dosen1Id;
-      const member_4 = kaprodiSIId;
-
-      // informatika
-      // - Proposal-empty - ada kelas proposal
-      const student1_5 = sitiID;
-      const student2_5 = wahyuID;
-      const student3_5 = nadiaID;
-      const title_5 = "Pengembangan Aplikasi Manajemen Proyek";
-      const submissionFileName_5 = "Pengembangan Aplikasi Manajemen Proyek.pdf";
-      const submissionFilePath_5 =
-        "link_pengembangan_aplikasi_manajemen_proyek";
-      const advisor_5 = dosen1Id;
-
-      // - Skripsi-empty- belum ada dikelas skripsi
-      const student1_6 = sintaID;
-      const title_6 = "Perancangan Robot Pengantar Orderan Makanan";
-      const submissionFileName_6 =
-        "Perancangan Robot Pengantar Orderan Makanan.pdf";
-      const submissionFilePath_6 =
-        "link_perancangan_robot_pengantar_orderan_makanan";
-      const proposalFileName_6 =
-        "Skripsi 1_Perancangan Robot Pengantar Orderan Makanan.pdf";
-      const proposalPaymentFileName_6 = "Bukti Pembayaran Skripsi 1.pdf";
-      const proposalPlagiatFileName_6 =
-        "SKUHP-Uji 1_Sinta_FILKOM_Skripsi 1_Perancangan Robot Pengantar Orderan Makanan.pdf";
-      const proposalFilePath_6 =
-        "link_Skripsi_1_Perancangan_Robot_Pengantar_Orderan_Makanan";
-      const proposalPaymentPath_6 = "link_Bukti_Pembayaran_Skripsi_1";
-      const proposalPlagiatPath_6 =
-        "link_SKUHP_Uji_1_Angel_FILKOM_Skripsi_1_Perancangan_Robot_Pengantar_Orderan_Makanan";
-      const proposalRevisiFileName_6 =
-        "Revisi Skripsi 1_Perancangan Robot Pengantar Orderan Makanan.pdf";
-      const proposalRevisiFilePath_6 =
-        "link_Revisi_Skripsi_1_Perancangan_Robot_Pengantar_Orderan_Makanan";
-      const proposalStart_6 = "11:00";
-      const proposalEnd_6 = "12:30";
-      const proposalRoom_6 = "GK1-203";
-      const proposalDate_6 = "24/11/2022";
-      const advisor_6 = dosen1Id;
-      const chairman_6 = dosen2Id;
-      const member_6 = dosen3Id;
-
-      // akademik 1
-      const academicCalendarGanjil = await prisma.academic_Calendar.create({
-        data: {
-          semester: "Ganjil",
-          year: "2021/2022",
-        },
-      });
-
-      const classroomProposalGanjil = await prisma.classroom.create({
-        data: {
-          dosen_mk_id: kaprodiTIId,
-          academic_id: academicCalendarGanjil.id,
-          name: "Proposal",
-        },
-      });
-
-      // Skripsi
-      const classroomSkripsiGanjilIF = await prisma.classroom.create({
-        data: {
-          dosen_mk_id: kaprodiTIId,
-          academic_id: academicCalendarGanjil.id,
-          name: "Skripsi",
-        },
-      });
-      const classroomSkripsiGanjilSI = await prisma.classroom.create({
-        data: {
-          dosen_mk_id: kaprodiSIId,
-          academic_id: academicCalendarGanjil.id,
-          name: "Skripsi",
-        },
-      });
-      // Proposal
-      if (classroomProposalGanjil) {
-        // student1_1
-        const proposalStudent1_1 = await prisma.proposal_Student.create({
-          data: {
-            student_id: student1_1,
-            classroom_id: classroomProposalGanjil.id,
-          },
-        });
-        await prisma.skripsi_Student.create({
-          data: {
-            student_id: student1_1,
-            classroom_id: classroomSkripsiGanjilIF.id,
-          },
-        });
-        // Group student1_1
-        const group_1 = await prisma.group.create({
-          data: {
-            title: title_1,
-            progress: "Finished",
-          },
-        });
-        await prisma.group_Student.create({
-          data: {
-            group_id: group_1.id,
-            student_id: proposalStudent1_1.student_id,
-          },
-        });
-        if (proposalStudent1_1) {
-          // Submission student1_1
-          const submission = await prisma.submission.create({
-            data: {
-              file_name: submissionFileName_1,
-              upload_date: new Date(),
-              file_size: "2.5 MB",
-              file_path: submissionFilePath_1,
-              is_consultation: true,
-              proposed_advisor_id: advisor_1,
-              is_approve: "Approve",
-              classroom_id: classroomProposalGanjil.id,
-            },
-          });
-
-          // Proposal student1_1
-          const proposal = await prisma.proposal.create({
-            data: {
-              file_name_proposal: proposalFileName_1,
-              file_name_payment: proposalPaymentFileName_1,
-              file_name_plagiarismcheck: proposalPlagiatFileName_1,
-              upload_date_proposal: new Date(),
-              upload_date_payment: new Date(),
-              upload_date_plagiarismcheck: new Date(),
-              file_size_proposal: "2.5 MB",
-              file_size_payment: "2.5 MB",
-              file_size_plagiarismcheck: "2.5 MB",
-              file_path_proposal: proposalFilePath_1,
-              file_path_payment: proposalPaymentPath_1,
-              file_path_plagiarismcheck: proposalPlagiatPath_1,
-              advisor_id: advisor_1,
-              classroom_id: classroomProposalGanjil.id,
-              is_proposal_approve_by_advisor: "Approve",
-              advisor_proposal_approved_date: new Date(),
-              panelist_chairman_id: chairman_1,
-              panelist_member_id: member_1,
-              start_defence: proposalStart_1,
-              end_defence: proposalEnd_1,
-              defence_room: proposalRoom_1,
-              defence_date: proposalDate_1,
-              is_report_open: false,
-              is_report_approve_by_dekan: true,
-              is_report_approve_by_panelist_chairman: true,
-              is_report_approve_by_panelist_member: true,
-              is_report_approve_by_advisor: true,
-              dekan_report_approve_date: new Date(),
-              panelist_chairman_report_approve_date: new Date(),
-              panelist_member_report_approve_date: new Date(),
-              advisor_report_approve_date: new Date(),
-              exam_conclution: "Approve",
-              changes_conclusion: "Minor",
-              assessment_conclution: "A-",
-              is_pass: "Pass",
-              report_date: proposalDate_1,
-              file_name_revision: proposalRevisiFileName_1,
-              upload_date_revision: new Date(),
-              file_size_revision: "2.5 MB",
-              file_path_revision: proposalRevisiFilePath_1,
-              is_revision_approve_by_panelist_chairman: "Approve",
-              is_revision_approve_by_panelist_member: "Approve",
-              is_revision_approve_by_advisor: "Approve",
-              panelist_chairman_revision_approve_date: new Date(),
-              panelist_member_revision_approve_date: new Date(),
-              advisor_revision_approve_date: new Date(),
-              approve_date: new Date(),
-            },
-          });
-          if (proposal) {
-            // konsultasi student1_1 - advisor (1)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_1.id,
-                description: "Konsultasi bab 1",
-                date: new Date(),
-                dosen_id: advisor_1,
-              },
-            });
-            // konsultasi student1_1 - advisor (2)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_1.id,
-                description: "Konsultasi bab 2",
-                date: new Date(),
-                dosen_id: advisor_1,
-              },
-            });
-            // konsultasi student1_1 - advisor (3)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_1.id,
-                description: "Konsultasi bab 3",
-                date: new Date(),
-                dosen_id: advisor_1,
-              },
-            });
-
-            // assessment student1_1 - student1 - ketua
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_1.student_id,
-                dosen_id: chairman_1,
-                value: "9",
-              },
-            });
-            // assessment student1_1 - student1 - anggota
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_1.student_id,
-                dosen_id: member_1,
-                value: "9",
-              },
-            });
-            // assessment student1_1 - student1 - advisor
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_1.student_id,
-                dosen_id: advisor_1,
-                value: "9",
-              },
-            });
-
-            // changes student1_1 - ketua
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: chairman_1,
-                changes: "Ubah Bab 1",
-              },
-            });
-            // changes student1_1 - anggota
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: member_1,
-                changes: "Ubah Bab 2",
-              },
-            });
-            // changes student1_1 - advisor
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: advisor_1,
-                changes: "Ubah Bab 3",
-              },
-            });
-          }
-          // Skripsi student1_1
-          const skripsi = await prisma.skripsi.create({
-            data: {
-              file_name_skripsi: skripsiFileName_1,
-              file_name_payment: skripsiPaymentFileName_1,
-              file_name_plagiarismcheck: skripsiPlagiatFileName_1,
-              upload_date_skripsi: new Date(),
-              upload_date_payment: new Date(),
-              upload_date_plagiarismcheck: new Date(),
-              file_size_skripsi: "2.5 MB",
-              file_size_payment: "2.5 MB",
-              file_size_plagiarismcheck: "2.5 MB",
-              file_path_skripsi: skripsiFilePath_1,
-              file_path_payment: skripsiPaymentPath_1,
-              file_path_plagiarismcheck: skripsiPlagiatPath_1,
-              advisor_id: advisor_1,
-              classroom_id: classroomSkripsiGanjilIF.id,
-              is_skripsi_approve_by_advisor: "Approve",
-              is_skripsi_approve_by_co_advisor1: "Approve",
-              is_skripsi_approve_by_co_advisor2: "Approve",
-              advisor_skripsi_approved_date: new Date(),
-              co_advisor1_skripsi_approved_date: new Date(),
-              co_advisor2_skripsi_approved_date: new Date(),
-              panelist_chairman_id: chairman_1,
-              panelist_member_id: member_1,
-              start_defence: skripsiStart_1,
-              end_defence: skripsiEnd_1,
-              defence_room: skripsiRoom_1,
-              defence_date: skripsiDate_1,
-              is_report_open: false,
-              is_report_approve_by_dekan: true,
-              is_report_approve_by_panelist_chairman: true,
-              is_report_approve_by_panelist_member: true,
-              is_report_approve_by_advisor: true,
-              dekan_report_approve_date: new Date(),
-              panelist_chairman_report_approve_date: new Date(),
-              panelist_member_report_approve_date: new Date(),
-              advisor_report_approve_date: new Date(),
-              exam_conclution: "Approve",
-              changes_conclusion: "Minor",
-              assessment_conclution: "A-",
-              is_pass: "Pass",
-              report_date: skripsiDate_1,
-              file_name_revision: skripsiRevisiFileName_1,
-              upload_date_revision: new Date(),
-              file_size_revision: "2.5 MB",
-              file_path_revision: skripsiRevisiFilePath_1,
-              is_revision_approve_by_panelist_chairman: "Approve",
-              is_revision_approve_by_panelist_member: "Approve",
-              is_revision_approve_by_advisor: "Approve",
-              panelist_chairman_revision_approve_date: new Date(),
-              panelist_member_revision_approve_date: new Date(),
-              advisor_revision_approve_date: new Date(),
-              file_name_hki: "HKI.pdf",
-              file_name_journal: "Journal",
-              file_name_sourcecode: "Source_Code.zip",
-              upload_date_hki: new Date(),
-              upload_date_journal: new Date(),
-              upload_date_sourcecode: new Date(),
-              file_size_hki: "2.5 MB",
-              file_size_journal: "2.5 MB",
-              file_size_sourcecode: "2.5 MB",
-              link_soucecode: "link_source_code",
-              upload_date_link_soucecode: new Date(),
-              file_path_hki: "link_hki",
-              file_path_journal: "link_journal",
-              file_path_sourcecode: "link_source_code",
-              approve_date: new Date(),
-            },
-          });
-          if (skripsi) {
-            // konsultasi student1_1 - advisor (1)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_1.id,
-                description: "Konsultasi bab 4",
-                date: new Date(),
-                dosen_id: advisor_1,
-              },
-            });
-            // konsultasi student1_1 - advisor (2)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_1.id,
-                description: "Konsultasi bab 5",
-                date: new Date(),
-                dosen_id: advisor_1,
-              },
-            });
-            // konsultasi student1_1 - advisor (3)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_1.id,
-                description: "Konsultasi penulisan",
-                date: new Date(),
-                dosen_id: advisor_1,
-              },
-            });
-
-            // assessment student1_1 - student1 - ketua
-            await prisma.skripsi_Assessment.create({
-              data: {
-                skripsi_id: skripsi.id,
-                student_id: proposalStudent1_1.student_id,
-                dosen_id: chairman_1,
-                value: "9",
-              },
-            });
-            // assessment student1_1 - student1 - anggota
-            await prisma.skripsi_Assessment.create({
-              data: {
-                skripsi_id: skripsi.id,
-                student_id: proposalStudent1_1.student_id,
-                dosen_id: member_1,
-                value: "9",
-              },
-            });
-            // assessment student1_1 - student1 - advisor
-            await prisma.skripsi_Assessment.create({
-              data: {
-                skripsi_id: skripsi.id,
-                student_id: proposalStudent1_1.student_id,
-                dosen_id: advisor_1,
-                value: "9",
-              },
-            });
-
-            // changes student1_1 - ketua
-            await prisma.skripsi_Changes.create({
-              data: {
-                skripsi_id: skripsi.id,
-                dosen_id: chairman_1,
-                changes: "Ubah Bab 4",
-              },
-            });
-
-            // changes student1_1 - anggota
-            await prisma.skripsi_Changes.create({
-              data: {
-                skripsi_id: skripsi.id,
-                dosen_id: member_1,
-                changes: "Ubah Bab 5",
-              },
-            });
-
-            // changes student1_1 - advisor
-            await prisma.skripsi_Changes.create({
-              data: {
-                skripsi_id: skripsi.id,
-                dosen_id: advisor_1,
-                changes: "Ubah Bab use case",
-              },
-            });
-
-            // Update group
-            await prisma.group.update({
-              where: {
-                id: group_1.id,
-              },
-              data: {
-                submission_id: submission.id,
-                proposal_id: proposal.id,
-                skripsi_id: skripsi.id,
-              },
-            });
-
-            // History Submission
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengajukan Judul",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengubah Pengajuan Judul",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: kaprodiTIId,
-                description: "Mengganti Pembimbing",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: kaprodiTIId,
-                description: "Menyetujui Pengajuan Judul",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengganti Judul Penelitian",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            // History Proposal
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengunggah Dokumen Proposal",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: advisor_1,
-                description: "Advisor Menyetujui Dokumen Proposal",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengunggah Bukti Pembayaran Proposal",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengunggah Bukti Pembayaran Proposal",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengunggah Hasil Cek Plagiat Proposal",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: sekretarisId,
-                description: "Menyusun Jadwal Sidang Proposal",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_1,
-                description: "Sidang Proposal di Mulai",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_1,
-                description: "Sidang Proposal Berakhir",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Menggungah Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_1,
-                description: "Ketua Panelis Menyetujui Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: member_1,
-                description:
-                  "Anggota Panelis Menyetujui Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: advisor_1,
-                description: "Advisor Menyetujui Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            // History Skripsi
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengunggah Dokumen Skripsi",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: advisor_1,
-                description: "Advisor Menyetujui Dokumen Skripsi",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengunggah Bukti Pembayaran Skripsi",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengunggah Bukti Pembayaran Skripsi",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengunggah Hasil Cek Plagiat Skripsi",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: sekretarisId,
-                description: "Menyusun Jadwal Sidang Skripsi",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_1,
-                description: "Sidang Skripsi di Mulai",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_1,
-                description: "Sidang Skripsi Berakhir",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Menggungah Dokumen Revisi Skripsi",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_1,
-                description: "Ketua Panelis Menyetujui Dokumen Revisi Skripsi",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: member_1,
-                description:
-                  "Anggota Panelis Menyetujui Dokumen Revisi Skripsi",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: advisor_1,
-                description: "Advisor Menyetujui Dokumen Revisi Skripsi",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengunggah HKI",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengunggah Jurnal",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengunggah Source Code",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Mengunggah Link Source Code",
-                date: new Date(),
-                group_id: group_1.id,
-              },
-            });
-          }
-        }
-
-        // =========================================================
-
-        // student1_2
-        const proposalStudent1_2 = await prisma.proposal_Student.create({
-          data: {
-            student_id: student1_2,
-            classroom_id: classroomProposalGanjil.id,
-          },
-        });
-        // student2_2
-        const proposalStudent2_2 = await prisma.proposal_Student.create({
-          data: {
-            student_id: student2_2,
-            classroom_id: classroomProposalGanjil.id,
-          },
-        });
-        await prisma.skripsi_Student.create({
-          data: {
-            student_id: student1_2,
-            classroom_id: classroomSkripsiGanjilIF.id,
-          },
-        });
-        await prisma.skripsi_Student.create({
-          data: {
-            student_id: student2_2,
-            classroom_id: classroomSkripsiGanjilIF.id,
-          },
-        });
-        // Group
-        const group_2 = await prisma.group.create({
-          data: {
-            title: title_2,
-            progress: "Skripsi",
-          },
-        });
-        await prisma.group_Student.create({
-          data: {
-            group_id: group_2.id,
-            student_id: proposalStudent1_2.student_id,
-          },
-        });
-        await prisma.group_Student.create({
-          data: {
-            group_id: group_2.id,
-            student_id: proposalStudent2_2.student_id,
-          },
-        });
-        if (proposalStudent1_2) {
-          // Submission
-          const submission = await prisma.submission.create({
-            data: {
-              file_name: submissionFileName_2,
-              upload_date: new Date(),
-              file_size: "2.5 MB",
-              file_path: submissionFilePath_2,
-              is_consultation: true,
-              proposed_advisor_id: advisor_2,
-              proposed_co_advisor1_id: co_advisor1_2,
-              is_approve: "Approve",
-              classroom_id: classroomProposalGanjil.id,
-            },
-          });
-          // Proposal
-          const proposal = await prisma.proposal.create({
-            data: {
-              file_name_proposal: proposalFileName_2,
-              file_name_payment: proposalPaymentFileName_2,
-              file_name_plagiarismcheck: proposalPlagiatFileName_2,
-              upload_date_proposal: new Date(),
-              upload_date_payment: new Date(),
-              upload_date_plagiarismcheck: new Date(),
-              file_size_proposal: "2.5 MB",
-              file_size_payment: "2.5 MB",
-              file_size_plagiarismcheck: "2.5 MB",
-              file_path_proposal: proposalFilePath_2,
-              file_path_payment: proposalPaymentPath_2,
-              file_path_plagiarismcheck: proposalPlagiatPath_2,
-              advisor_id: advisor_2,
-              co_advisor1_id: co_advisor1_2,
-              classroom_id: classroomProposalGanjil.id,
-              is_proposal_approve_by_advisor: "Approve",
-              is_proposal_approve_by_co_advisor1: "Approve",
-              advisor_proposal_approved_date: new Date(),
-              co_advisor1_proposal_approved_date: new Date(),
-              panelist_chairman_id: chairman_2,
-              panelist_member_id: member_2,
-              start_defence: proposalStart_2,
-              end_defence: proposalEnd_2,
-              defence_room: proposalRoom_2,
-              defence_date: proposalDate_2,
-              is_report_open: false,
-              is_report_approve_by_dekan: true,
-              is_report_approve_by_panelist_chairman: true,
-              is_report_approve_by_panelist_member: true,
-              is_report_approve_by_advisor: true,
-              dekan_report_approve_date: new Date(),
-              panelist_chairman_report_approve_date: new Date(),
-              panelist_member_report_approve_date: new Date(),
-              advisor_report_approve_date: new Date(),
-              exam_conclution: "Approve",
-              changes_conclusion: "Minor",
-              assessment_conclution: "A-",
-              is_pass: "Pass",
-              report_date: proposalDate_2,
-              file_name_revision: proposalRevisiFileName_2,
-              upload_date_revision: new Date(),
-              file_size_revision: "2.5 MB",
-              file_path_revision: proposalRevisiFilePath_2,
-              is_revision_approve_by_panelist_chairman: "Approve",
-              is_revision_approve_by_panelist_member: "Approve",
-              is_revision_approve_by_advisor: "Approve",
-              panelist_chairman_revision_approve_date: new Date(),
-              panelist_member_revision_approve_date: new Date(),
-              advisor_revision_approve_date: new Date(),
-              approve_date: new Date(),
-            },
-          });
-          if (proposal) {
-            // konsultasi - advisor (1)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_2.id,
-                description: "Konsultasi bab 1",
-                date: new Date(),
-                dosen_id: advisor_2,
-              },
-            });
-            // konsultasi - advisor (2)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_2.id,
-                description: "Konsultasi bab 2",
-                date: new Date(),
-                dosen_id: advisor_2,
-              },
-            });
-            // konsultasi - advisor (3)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_2.id,
-                description: "Konsultasi bab 3",
-                date: new Date(),
-                dosen_id: advisor_2,
-              },
-            });
-            // konsultasi - co-advisor1 (1)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_2.id,
-                description: "Konsultasi sistem",
-                date: new Date(),
-                dosen_id: co_advisor1_2,
-              },
-            });
-            // konsultasi - co-advisor1 (2)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_2.id,
-                description: "Konsultasi database",
-                date: new Date(),
-                dosen_id: co_advisor1_2,
-              },
-            });
-            // konsultasi - co-advisor1 (3)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_2.id,
-                description: "Konsultasi metode",
-                date: new Date(),
-                dosen_id: co_advisor1_2,
-              },
-            });
-
-            // assessment student1_2 - ketua
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_2.student_id,
-                dosen_id: chairman_2,
-                value: "9",
-              },
-            });
-            // assessment student1_2 - anggota
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_2.student_id,
-                dosen_id: member_2,
-                value: "9",
-              },
-            });
-            // assessment student1_2 - advisor
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_2.student_id,
-                dosen_id: advisor_2,
-                value: "9",
-              },
-            });
-            // assessment student2_2 - ketua
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent2_2.student_id,
-                dosen_id: chairman_2,
-                value: "9",
-              },
-            });
-            // assessment student2_2 - anggota
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent2_2.student_id,
-                dosen_id: member_2,
-                value: "9",
-              },
-            });
-            // assessment student2_2 - advisor
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent2_2.student_id,
-                dosen_id: advisor_2,
-                value: "9",
-              },
-            });
-
-            // changes - ketua
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: chairman_2,
-                changes: "Ubah Bab 1",
-              },
-            });
-            // changes - anggota
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: member_2,
-                changes: "Ubah Bab 2",
-              },
-            });
-            // changes - advisor
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: advisor_2,
-                changes: "Ubah Bab 3",
-              },
-            });
-            // changes - co-advisor1
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: co_advisor1_2,
-                changes: "Ubah Gambar",
-              },
-            });
-          }
-          // Skripsi
-          const skripsi = await prisma.skripsi.create({
-            data: {
-              advisor_id: advisor_2,
-              co_advisor1_id: co_advisor1_2,
-              classroom_id: classroomSkripsiGanjilIF.id,
-              panelist_chairman_id: chairman_2,
-              panelist_member_id: member_2,
-            },
-          });
-          if (skripsi) {
-            await prisma.group.update({
-              where: {
-                id: group_2.id,
-              },
-              data: {
-                submission_id: submission.id,
-                proposal_id: proposal.id,
-                skripsi_id: skripsi.id,
-              },
-            });
-
-            // History Submission
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_2,
-                description: "Mengajukan Judul",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_2,
-                description: "Mengubah Pengajuan Judul",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: kaprodiTIId,
-                description: "Mengganti Pembimbing",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: kaprodiTIId,
-                description: "Menyetujui Pengajuan Judul",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_2,
-                description: "Mengganti Judul Penelitian",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            // History Proposal
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_2,
-                description: "Mengunggah Dokumen Proposal",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: advisor_2,
-                description: "Advisor Menyetujui Dokumen Proposal",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: co_advisor1_2,
-                description: "Co-Advisor 1 Menyetujui Dokumen Proposal",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student2_2,
-                description: "Mengunggah Bukti Pembayaran Proposal",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student2_2,
-                description: "Mengunggah Bukti Pembayaran Proposal",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student2_2,
-                description: "Mengunggah Hasil Cek Plagiat Proposal",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: sekretarisId,
-                description: "Menyusun Jadwal Sidang Proposal",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_2,
-                description: "Sidang Proposal di Mulai",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_2,
-                description: "Sidang Proposal Berakhir",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_2,
-                description: "Menggungah Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_2,
-                description: "Ketua Panelis Menyetujui Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: member_2,
-                description:
-                  "Anggota Panelis Menyetujui Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: advisor_2,
-                description: "Advisor Menyetujui Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_2.id,
-              },
-            });
-          }
-        }
-
-        // =========================================================
-
-        // student1_3
-        const proposalStudent1_3 = await prisma.proposal_Student.create({
-          data: {
-            student_id: student1_3,
-            classroom_id: classroomProposalGanjil.id,
-          },
-        });
-        await prisma.skripsi_Student.create({
-          data: {
-            student_id: student1_3,
-            classroom_id: classroomSkripsiGanjilIF.id,
-          },
-        });
-        // Group student1_3
-        const group_3 = await prisma.group.create({
-          data: {
-            title: title_3,
-            progress: "Finished",
-          },
-        });
-        await prisma.group_Student.create({
-          data: {
-            group_id: group_3.id,
-            student_id: proposalStudent1_3.student_id,
-          },
-        });
-        if (proposalStudent1_3) {
-          // Submission
-          const submission = await prisma.submission.create({
-            data: {
-              file_name: submissionFileName_3,
-              upload_date: new Date(),
-              file_size: "2.5 MB",
-              file_path: submissionFilePath_3,
-              is_consultation: true,
-              proposed_advisor_id: advisor_3,
-              proposed_co_advisor1_id: co_advisor1_3,
-              proposed_co_advisor2_id: co_advisor2_3,
-              is_approve: "Approve",
-              classroom_id: classroomProposalGanjil.id,
-            },
-          });
-          // Proposal
-          const proposal = await prisma.proposal.create({
-            data: {
-              file_name_proposal: proposalFileName_3,
-              file_name_payment: proposalPaymentFileName_3,
-              file_name_plagiarismcheck: proposalPlagiatFileName_3,
-              upload_date_proposal: new Date(),
-              upload_date_payment: new Date(),
-              upload_date_plagiarismcheck: new Date(),
-              file_size_proposal: "2.5 MB",
-              file_size_payment: "2.5 MB",
-              file_size_plagiarismcheck: "2.5 MB",
-              file_path_proposal: proposalFilePath_3,
-              file_path_payment: proposalPaymentPath_3,
-              file_path_plagiarismcheck: proposalPlagiatPath_3,
-              advisor_id: advisor_3,
-              co_advisor1_id: co_advisor1_3,
-              co_advisor2_id: co_advisor2_3,
-              classroom_id: classroomProposalGanjil.id,
-              is_proposal_approve_by_advisor: "Approve",
-              is_proposal_approve_by_co_advisor1: "Approve",
-              is_proposal_approve_by_co_advisor2: "Approve",
-              advisor_proposal_approved_date: new Date(),
-              co_advisor1_proposal_approved_date: new Date(),
-              co_advisor2_proposal_approved_date: new Date(),
-              panelist_chairman_id: chairman_3,
-              panelist_member_id: member_3,
-              start_defence: proposalStart_3,
-              end_defence: proposalEnd_3,
-              defence_room: proposalRoom_3,
-              defence_date: proposalDate_3,
-              is_report_open: false,
-              is_report_approve_by_dekan: true,
-              is_report_approve_by_panelist_chairman: true,
-              is_report_approve_by_panelist_member: true,
-              is_report_approve_by_advisor: true,
-              dekan_report_approve_date: new Date(),
-              panelist_chairman_report_approve_date: new Date(),
-              panelist_member_report_approve_date: new Date(),
-              advisor_report_approve_date: new Date(),
-              exam_conclution: "Approve",
-              changes_conclusion: "Minor",
-              assessment_conclution: "A-",
-              is_pass: "Pass",
-              report_date: proposalDate_3,
-              file_name_revision: proposalRevisiFileName_3,
-              upload_date_revision: new Date(),
-              file_size_revision: "2.5 MB",
-              file_path_revision: proposalRevisiFilePath_3,
-              is_revision_approve_by_panelist_chairman: "Approve",
-              is_revision_approve_by_panelist_member: "Approve",
-              is_revision_approve_by_advisor: "Approve",
-              panelist_chairman_revision_approve_date: new Date(),
-              panelist_member_revision_approve_date: new Date(),
-              advisor_revision_approve_date: new Date(),
-              approve_date: new Date(),
-            },
-          });
-          if (proposal) {
-            // konsultasi - advisor (1)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_3.id,
-                description: "Konsultasi bab 1",
-                date: new Date(),
-                dosen_id: advisor_3,
-              },
-            });
-            // konsultasi - advisor (2)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_3.id,
-                description: "Konsultasi bab 2",
-                date: new Date(),
-                dosen_id: advisor_3,
-              },
-            });
-            // konsultasi - advisor (3)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_3.id,
-                description: "Konsultasi bab 3",
-                date: new Date(),
-                dosen_id: advisor_3,
-              },
-            });
-            // konsultasi - co-advisor1 (1)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_3.id,
-                description: "Konsultasi sistem",
-                date: new Date(),
-                dosen_id: co_advisor1_3,
-              },
-            });
-            // konsultasi - co-advisor1 (2)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_3.id,
-                description: "Konsultasi database",
-                date: new Date(),
-                dosen_id: co_advisor1_3,
-              },
-            });
-            // konsultasi - co-advisor1 (3)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_3.id,
-                description: "Konsultasi metode",
-                date: new Date(),
-                dosen_id: co_advisor1_3,
-              },
-            });
-
-            // assessment student1_3 - ketua
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_3.student_id,
-                dosen_id: chairman_3,
-                value: "9",
-              },
-            });
-            // assessment student1_3 - anggota
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_3.student_id,
-                dosen_id: member_1,
-                value: "9",
-              },
-            });
-            // assessment student1_3 - advisor
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_3.student_id,
-                dosen_id: advisor_3,
-                value: "9",
-              },
-            });
-
-            // changes - ketua
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: chairman_3,
-                changes: "Ubah Bab 1",
-              },
-            });
-            // changes - anggota
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: member_3,
-                changes: "Ubah Bab 2",
-              },
-            });
-            // changes - advisor
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: advisor_3,
-                changes: "Ubah Bab 3",
-              },
-            });
-            // changes - co-advisor1
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: co_advisor1_3,
-                changes: "Ubah Gambar 3",
-              },
-            });
-            // changes - co-advisor2
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: co_advisor2_3,
-                changes: "Ubah Fungsi 3",
-              },
-            });
-          }
-          // Skripsi
-          const skripsi = await prisma.skripsi.create({
-            data: {
-              file_name_skripsi: skripsiFileName_3,
-              file_name_payment: skripsiPaymentFileName_3,
-              file_name_plagiarismcheck: skripsiPlagiatFileName_3,
-              upload_date_skripsi: new Date(),
-              upload_date_payment: new Date(),
-              upload_date_plagiarismcheck: new Date(),
-              file_size_skripsi: "2.5 MB",
-              file_size_payment: "2.5 MB",
-              file_size_plagiarismcheck: "2.5 MB",
-              file_path_skripsi: skripsiFilePath_3,
-              file_path_payment: skripsiPaymentPath_3,
-              file_path_plagiarismcheck: skripsiPlagiatPath_3,
-              advisor_id: advisor_3,
-              co_advisor1_id: co_advisor1_3,
-              co_advisor2_id: co_advisor2_3,
-              classroom_id: classroomSkripsiGanjilSI.id,
-              is_skripsi_approve_by_advisor: "Approve",
-              is_skripsi_approve_by_co_advisor1: "Approve",
-              is_skripsi_approve_by_co_advisor2: "Approve",
-              advisor_skripsi_approved_date: new Date(),
-              co_advisor1_skripsi_approved_date: new Date(),
-              co_advisor2_skripsi_approved_date: new Date(),
-              panelist_chairman_id: chairman_3,
-              panelist_member_id: member_3,
-              start_defence: skripsiStart_3,
-              end_defence: skripsiEnd_3,
-              defence_room: skripsiRoom_3,
-              defence_date: skripsiDate_3,
-              is_report_open: false,
-              is_report_approve_by_dekan: true,
-              is_report_approve_by_panelist_chairman: true,
-              is_report_approve_by_panelist_member: true,
-              is_report_approve_by_advisor: true,
-              dekan_report_approve_date: new Date(),
-              panelist_chairman_report_approve_date: new Date(),
-              panelist_member_report_approve_date: new Date(),
-              advisor_report_approve_date: new Date(),
-              exam_conclution: "Approve",
-              changes_conclusion: "Minor",
-              assessment_conclution: "A-",
-              is_pass: "Pass",
-              report_date: skripsiDate_3,
-              file_name_revision: skripsiRevisiFileName_3,
-              upload_date_revision: new Date(),
-              file_size_revision: "2.5 MB",
-              file_path_revision: skripsiRevisiFilePath_3,
-              is_revision_approve_by_panelist_chairman: "Approve",
-              is_revision_approve_by_panelist_member: "Approve",
-              is_revision_approve_by_advisor: "Approve",
-              panelist_chairman_revision_approve_date: new Date(),
-              panelist_member_revision_approve_date: new Date(),
-              advisor_revision_approve_date: new Date(),
-              file_name_hki: "HKI.pdf",
-              file_name_journal: "Journal",
-              file_name_sourcecode: "Source_Code.zip",
-              upload_date_hki: new Date(),
-              upload_date_journal: new Date(),
-              upload_date_sourcecode: new Date(),
-              file_size_hki: "2.5 MB",
-              file_size_journal: "2.5 MB",
-              file_size_sourcecode: "2.5 MB",
-              link_soucecode: "link_source_code",
-              upload_date_link_soucecode: new Date(),
-              file_path_hki: "link_hki",
-              file_path_journal: "link_journal",
-              file_path_sourcecode: "link_source_code",
-              approve_date: new Date(),
-            },
-          });
-          if (skripsi) {
-            // konsultasi - advisor (1)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_3.id,
-                description: "Konsultasi bab 4",
-                date: new Date(),
-                dosen_id: advisor_3,
-              },
-            });
-            // konsultasi - advisor (2)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_3.id,
-                description: "Konsultasi bab 5",
-                date: new Date(),
-                dosen_id: advisor_3,
-              },
-            });
-            // konsultasi - advisor (3)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_3.id,
-                description: "Konsultasi penulisan",
-                date: new Date(),
-                dosen_id: advisor_3,
-              },
-            });
-
-            // assessment student1_3 - ketua
-            await prisma.skripsi_Assessment.create({
-              data: {
-                skripsi_id: skripsi.id,
-                student_id: proposalStudent1_1.student_id,
-                dosen_id: chairman_3,
-                value: "9",
-              },
-            });
-            // assessment student1_3 - anggota
-            await prisma.skripsi_Assessment.create({
-              data: {
-                skripsi_id: skripsi.id,
-                student_id: proposalStudent1_1.student_id,
-                dosen_id: member_3,
-                value: "9",
-              },
-            });
-            // assessment student1_3 - advisor
-            await prisma.skripsi_Assessment.create({
-              data: {
-                skripsi_id: skripsi.id,
-                student_id: proposalStudent1_1.student_id,
-                dosen_id: advisor_3,
-                value: "9",
-              },
-            });
-
-            // changes - ketua
-            await prisma.skripsi_Changes.create({
-              data: {
-                skripsi_id: skripsi.id,
-                dosen_id: chairman_1,
-                changes: "Ubah Bab 4",
-              },
-            });
-
-            // changes - anggota
-            await prisma.skripsi_Changes.create({
-              data: {
-                skripsi_id: skripsi.id,
-                dosen_id: member_1,
-                changes: "Ubah Bab 5",
-              },
-            });
-
-            // changes - advisor
-            await prisma.skripsi_Changes.create({
-              data: {
-                skripsi_id: skripsi.id,
-                dosen_id: advisor_1,
-                changes: "Ubah Bab use case",
-              },
-            });
-
-            // changes - co-advisor1
-            await prisma.skripsi_Changes.create({
-              data: {
-                skripsi_id: skripsi.id,
-                dosen_id: co_advisor1_3,
-                changes: "Ubah Bab use case 6",
-              },
-            });
-
-            // changes - co-advisor2
-            await prisma.skripsi_Changes.create({
-              data: {
-                skripsi_id: skripsi.id,
-                dosen_id: co_advisor2_3,
-                changes: "Ubah Bab use case 7",
-              },
-            });
-
-            // Update group
-            await prisma.group.update({
-              where: {
-                id: group_3.id,
-              },
-              data: {
-                submission_id: submission.id,
-                proposal_id: proposal.id,
-                skripsi_id: skripsi.id,
-              },
-            });
-
-            // History Submission
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengajukan Judul",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengubah Pengajuan Judul",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: kaprodiSIId,
-                description: "Mengganti Pembimbing",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: kaprodiSIId,
-                description: "Menyetujui Pengajuan Judul",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengganti Judul Penelitian",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            // History Proposal
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengunggah Dokumen Proposal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: advisor_3,
-                description: "Advisor Menyetujui Dokumen Proposal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: co_advisor1_3,
-                description: "Co-Advisor 1 Menyetujui Dokumen Proposal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: co_advisor2_3,
-                description: "Co-Advisor 2 Menyetujui Dokumen Proposal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengunggah Bukti Pembayaran Proposal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengunggah Bukti Pembayaran Proposal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengunggah Hasil Cek Plagiat Proposal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: sekretarisId,
-                description: "Menyusun Jadwal Sidang Proposal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_3,
-                description: "Sidang Proposal di Mulai",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_3,
-                description: "Sidang Proposal Berakhir",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_1,
-                description: "Menggungah Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_3,
-                description: "Ketua Panelis Menyetujui Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: member_3,
-                description:
-                  "Anggota Panelis Menyetujui Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: advisor_3,
-                description: "Advisor Menyetujui Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            // History Skripsi
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengunggah Dokumen Skripsi",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: advisor_3,
-                description: "Advisor Menyetujui Dokumen Skripsi",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengunggah Bukti Pembayaran Skripsi",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengunggah Bukti Pembayaran Skripsi",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengunggah Hasil Cek Plagiat Skripsi",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: sekretarisId,
-                description: "Menyusun Jadwal Sidang Skripsi",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_3,
-                description: "Sidang Skripsi di Mulai",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_3,
-                description: "Sidang Skripsi Berakhir",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Menggungah Dokumen Revisi Skripsi",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_3,
-                description: "Ketua Panelis Menyetujui Dokumen Revisi Skripsi",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: member_3,
-                description:
-                  "Anggota Panelis Menyetujui Dokumen Revisi Skripsi",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: advisor_3,
-                description: "Advisor Menyetujui Dokumen Revisi Skripsi",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengunggah HKI",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengunggah Jurnal",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengunggah Source Code",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_3,
-                description: "Mengunggah Link Source Code",
-                date: new Date(),
-                group_id: group_3.id,
-              },
-            });
-          }
-        }
-
-        // // =========================================================
-
-        // student1_4
-        const proposalStudent1_4 = await prisma.proposal_Student.create({
-          data: {
-            student_id: student1_4,
-            classroom_id: classroomProposalGanjil.id,
-          },
-        });
-        // student2_4
-        const proposalStudent2_4 = await prisma.proposal_Student.create({
-          data: {
-            student_id: student2_4,
-            classroom_id: classroomProposalGanjil.id,
-          },
-        });
-        await prisma.skripsi_Student.create({
-          data: {
-            student_id: student1_4,
-            classroom_id: classroomSkripsiGanjilSI.id,
-          },
-        });
-        await prisma.skripsi_Student.create({
-          data: {
-            student_id: student2_4,
-            classroom_id: classroomSkripsiGanjilSI.id,
-          },
-        });
-        // Group
-        const group_4 = await prisma.group.create({
-          data: {
-            title: title_4,
-            progress: "Skripsi",
-          },
-        });
-        await prisma.group_Student.create({
-          data: {
-            group_id: group_4.id,
-            student_id: proposalStudent1_4.student_id,
-          },
-        });
-        await prisma.group_Student.create({
-          data: {
-            group_id: group_4.id,
-            student_id: proposalStudent2_4.student_id,
-          },
-        });
-        if (proposalStudent1_4) {
-          // Submission
-          const submission = await prisma.submission.create({
-            data: {
-              file_name: submissionFileName_4,
-              upload_date: new Date(),
-              file_size: "2.5 MB",
-              file_path: submissionFilePath_4,
-              is_consultation: true,
-              proposed_advisor_id: advisor_4,
-              proposed_co_advisor1_id: co_advisor1_4,
-              proposed_co_advisor2_id: co_advisor2_4,
-              is_approve: "Approve",
-              classroom_id: classroomProposalGanjil.id,
-            },
-          });
-          // Proposal
-          const proposal = await prisma.proposal.create({
-            data: {
-              file_name_proposal: proposalFileName_4,
-              file_name_payment: proposalPaymentFileName_4,
-              file_name_plagiarismcheck: proposalPlagiatFileName_4,
-              upload_date_proposal: new Date(),
-              upload_date_payment: new Date(),
-              upload_date_plagiarismcheck: new Date(),
-              file_size_proposal: "2.5 MB",
-              file_size_payment: "2.5 MB",
-              file_size_plagiarismcheck: "2.5 MB",
-              file_path_proposal: proposalFilePath_4,
-              file_path_payment: proposalPaymentPath_4,
-              file_path_plagiarismcheck: proposalPlagiatPath_4,
-              advisor_id: advisor_4,
-              co_advisor1_id: co_advisor1_4,
-              co_advisor2_id: co_advisor2_4,
-              classroom_id: classroomProposalGanjil.id,
-              is_proposal_approve_by_advisor: "Approve",
-              is_proposal_approve_by_co_advisor1: "Approve",
-              is_proposal_approve_by_co_advisor2: "Approve",
-              advisor_proposal_approved_date: new Date(),
-              co_advisor1_proposal_approved_date: new Date(),
-              co_advisor2_proposal_approved_date: new Date(),
-              panelist_chairman_id: chairman_4,
-              panelist_member_id: member_4,
-              start_defence: proposalStart_4,
-              end_defence: proposalEnd_4,
-              defence_room: proposalRoom_4,
-              defence_date: proposalDate_4,
-              is_report_open: false,
-              is_report_approve_by_dekan: true,
-              is_report_approve_by_panelist_chairman: true,
-              is_report_approve_by_panelist_member: true,
-              is_report_approve_by_advisor: true,
-              dekan_report_approve_date: new Date(),
-              panelist_chairman_report_approve_date: new Date(),
-              panelist_member_report_approve_date: new Date(),
-              advisor_report_approve_date: new Date(),
-              exam_conclution: "Approve",
-              changes_conclusion: "Minor",
-              assessment_conclution: "A-",
-              is_pass: "Pass",
-              report_date: proposalDate_4,
-              file_name_revision: proposalRevisiFileName_4,
-              upload_date_revision: new Date(),
-              file_size_revision: "2.5 MB",
-              file_path_revision: proposalRevisiFilePath_4,
-              is_revision_approve_by_panelist_chairman: "Approve",
-              is_revision_approve_by_panelist_member: "Approve",
-              is_revision_approve_by_advisor: "Approve",
-              panelist_chairman_revision_approve_date: new Date(),
-              panelist_member_revision_approve_date: new Date(),
-              advisor_revision_approve_date: new Date(),
-              approve_date: new Date(),
-            },
-          });
-          if (proposal) {
-            // konsultasi - advisor (1)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_4.id,
-                description: "Konsultasi bab 1",
-                date: new Date(),
-                dosen_id: advisor_4,
-              },
-            });
-            // konsultasi - advisor (2)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_4.id,
-                description: "Konsultasi bab 2",
-                date: new Date(),
-                dosen_id: advisor_4,
-              },
-            });
-            // konsultasi - advisor (3)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_4.id,
-                description: "Konsultasi bab 3",
-                date: new Date(),
-                dosen_id: advisor_4,
-              },
-            });
-            // konsultasi - co-advisor1 (1)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_4.id,
-                description: "Konsultasi sistem",
-                date: new Date(),
-                dosen_id: co_advisor1_4,
-              },
-            });
-            // konsultasi - co-advisor1 (2)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_4.id,
-                description: "Konsultasi database",
-                date: new Date(),
-                dosen_id: co_advisor1_4,
-              },
-            });
-            // konsultasi - co-advisor1 (3)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_4.id,
-                description: "Konsultasi metode",
-                date: new Date(),
-                dosen_id: co_advisor1_4,
-              },
-            });
-            // konsultasi - co-advisor2 (1)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_4.id,
-                description: "Konsultasi UI",
-                date: new Date(),
-                dosen_id: co_advisor2_4,
-              },
-            });
-            // konsultasi - co-advisor2 (2)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_4.id,
-                description: "Konsultasi Warna",
-                date: new Date(),
-                dosen_id: co_advisor2_4,
-              },
-            });
-            // konsultasi - co-advisor2 (3)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_4.id,
-                description: "Konsultasi Konsep",
-                date: new Date(),
-                dosen_id: co_advisor2_4,
-              },
-            });
-
-            // assessment student1_4 - ketua
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_4.student_id,
-                dosen_id: chairman_4,
-                value: "9",
-              },
-            });
-            // assessment student1_4 - anggota
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_4.student_id,
-                dosen_id: member_4,
-                value: "9",
-              },
-            });
-            // assessment student1_4 - advisor
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_4.student_id,
-                dosen_id: advisor_4,
-                value: "9",
-              },
-            });
-            // assessment student2_4 - ketua
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent2_4.student_id,
-                dosen_id: chairman_4,
-                value: "9",
-              },
-            });
-            // assessment student2_4 - anggota
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent2_4.student_id,
-                dosen_id: member_4,
-                value: "9",
-              },
-            });
-            // assessment student2_4 - advisor
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent2_4.student_id,
-                dosen_id: advisor_4,
-                value: "9",
-              },
-            });
-
-            // changes - ketua
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: chairman_4,
-                changes: "Ubah Bab 1",
-              },
-            });
-            // changes - anggota
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: member_4,
-                changes: "Ubah Bab 2",
-              },
-            });
-            // changes - advisor
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: advisor_4,
-                changes: "Ubah Bab 3",
-              },
-            });
-            // changes - co-advisor1
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: co_advisor1_4,
-                changes: "Ubah Gambar",
-              },
-            });
-            // changes - co-advisor2
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: co_advisor2_4,
-                changes: "Ubah Tabel",
-              },
-            });
-          }
-          // Skripsi student1_2
-          const skripsi = await prisma.skripsi.create({
-            data: {
-              advisor_id: advisor_4,
-              co_advisor1_id: co_advisor1_4,
-              co_advisor2_id: co_advisor2_4,
-              classroom_id: classroomSkripsiGanjilSI.id,
-              panelist_chairman_id: chairman_4,
-              panelist_member_id: member_4,
-            },
-          });
-          if (skripsi) {
-            await prisma.group.update({
-              where: {
-                id: group_4.id,
-              },
-              data: {
-                submission_id: submission.id,
-                proposal_id: proposal.id,
-                skripsi_id: skripsi.id,
-              },
-            });
-
-            // History Submission
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_4,
-                description: "Mengajukan Judul",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_4,
-                description: "Mengubah Pengajuan Judul",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: kaprodiTIId,
-                description: "Mengganti Pembimbing",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: kaprodiTIId,
-                description: "Menyetujui Pengajuan Judul",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student2_4,
-                description: "Mengganti Judul Penelitian",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            // History Proposal
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student2_4,
-                description: "Mengunggah Dokumen Proposal",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: advisor_4,
-                description: "Advisor Menyetujui Dokumen Proposal",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: co_advisor1_4,
-                description: "Co-Advisor 1 Menyetujui Dokumen Proposal",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: co_advisor2_4,
-                description: "Co-Advisor 2 Menyetujui Dokumen Proposal",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student2_4,
-                description: "Mengunggah Bukti Pembayaran Proposal",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student2_4,
-                description: "Mengunggah Bukti Pembayaran Proposal",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student2_4,
-                description: "Mengunggah Hasil Cek Plagiat Proposal",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: sekretarisId,
-                description: "Menyusun Jadwal Sidang Proposal",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_4,
-                description: "Sidang Proposal di Mulai",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_4,
-                description: "Sidang Proposal Berakhir",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_4,
-                description: "Menggungah Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: chairman_4,
-                description: "Ketua Panelis Menyetujui Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: member_4,
-                description:
-                  "Anggota Panelis Menyetujui Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: advisor_4,
-                description: "Advisor Menyetujui Dokumen Revisi Proposal",
-                date: new Date(),
-                group_id: group_4.id,
-              },
-            });
-          }
-        }
-
-        // =========================================================
-
-        // student1_5
-        const proposalStudent1_5 = await prisma.proposal_Student.create({
-          data: {
-            student_id: student1_5,
-            classroom_id: classroomProposalGanjil.id,
-          },
-        });
-        // student2_5
-        const proposalStudent2_5 = await prisma.proposal_Student.create({
-          data: {
-            student_id: student2_5,
-            classroom_id: classroomProposalGanjil.id,
-          },
-        });
-        // student3_5
-        const proposalStudent3_5 = await prisma.proposal_Student.create({
-          data: {
-            student_id: student3_5,
-            classroom_id: classroomProposalGanjil.id,
-          },
-        });
-        // Group
-        const group_5 = await prisma.group.create({
-          data: {
-            title: title_5,
-            progress: "Proposal",
-          },
-        });
-        await prisma.group_Student.create({
-          data: {
-            group_id: group_5.id,
-            student_id: proposalStudent1_5.student_id,
-          },
-        });
-        await prisma.group_Student.create({
-          data: {
-            group_id: group_5.id,
-            student_id: proposalStudent2_5.student_id,
-          },
-        });
-        await prisma.group_Student.create({
-          data: {
-            group_id: group_5.id,
-            student_id: proposalStudent3_5.student_id,
-          },
-        });
-        if (proposalStudent1_5) {
-          // Submission
-          const submission = await prisma.submission.create({
-            data: {
-              file_name: submissionFileName_5,
-              upload_date: new Date(),
-              file_size: "2.5 MB",
-              file_path: submissionFilePath_5,
-              is_consultation: true,
-              proposed_advisor_id: advisor_5,
-              is_approve: "Approve",
-              classroom_id: classroomProposalGanjil.id,
-            },
-          });
-          // Proposal
-          const proposal = await prisma.proposal.create({
-            data: {
-              advisor_id: advisor_5,
-              classroom_id: classroomProposalGanjil.id,
-              is_proposal_approve_by_advisor: "Approve",
-              advisor_proposal_approved_date: new Date(),
-            },
-          });
-          // Skripsi student1_2
-          const skripsi = await prisma.skripsi.create({
-            data: {
-              advisor_id: advisor_5,
-            },
-          });
-          if (skripsi) {
-            await prisma.group.update({
-              where: {
-                id: group_5.id,
-              },
-              data: {
-                submission_id: submission.id,
-                proposal_id: proposal.id,
-                skripsi_id: skripsi.id,
-              },
-            });
-
-            // History Submission
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_5,
-                description: "Mengajukan Judul",
-                date: new Date(),
-                group_id: group_5.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_5,
-                description: "Mengubah Pengajuan Judul",
-                date: new Date(),
-                group_id: group_5.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: kaprodiTIId,
-                description: "Mengganti Pembimbing",
-                date: new Date(),
-                group_id: group_5.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: kaprodiTIId,
-                description: "Menyetujui Pengajuan Judul",
-                date: new Date(),
-                group_id: group_5.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student2_5,
-                description: "Mengganti Judul Penelitian",
-                date: new Date(),
-                group_id: group_5.id,
-              },
-            });
-          }
-        }
-
-        // =========================================================
-
-        // student1_6
-        const proposalStudent1_6 = await prisma.proposal_Student.create({
-          data: {
-            student_id: student1_6,
-            classroom_id: classroomProposalGanjil.id,
-          },
-        });
-        // Group
-        const group_6 = await prisma.group.create({
-          data: {
-            title: title_6,
-            progress: "Skripsi",
-          },
-        });
-        await prisma.group_Student.create({
-          data: {
-            group_id: group_6.id,
-            student_id: proposalStudent1_6.student_id,
-          },
-        });
-        if (proposalStudent1_6) {
-          // Submission
-          const submission = await prisma.submission.create({
-            data: {
-              file_name: submissionFileName_6,
-              upload_date: new Date(),
-              file_size: "2.5 MB",
-              file_path: submissionFilePath_6,
-              is_consultation: true,
-              proposed_advisor_id: advisor_6,
-              is_approve: "Approve",
-              classroom_id: classroomProposalGanjil.id,
-            },
-          });
-          // Proposal
-          const proposal = await prisma.proposal.create({
-            data: {
-              file_name_proposal: proposalFileName_6,
-              file_name_payment: proposalPaymentFileName_6,
-              file_name_plagiarismcheck: proposalPlagiatFileName_6,
-              upload_date_proposal: new Date(),
-              upload_date_payment: new Date(),
-              upload_date_plagiarismcheck: new Date(),
-              file_size_proposal: "2.5 MB",
-              file_size_payment: "2.5 MB",
-              file_size_plagiarismcheck: "2.5 MB",
-              file_path_proposal: proposalFilePath_6,
-              file_path_payment: proposalPaymentPath_6,
-              file_path_plagiarismcheck: proposalPlagiatPath_6,
-              advisor_id: advisor_6,
-              classroom_id: classroomProposalGanjil.id,
-              is_proposal_approve_by_advisor: "Approve",
-              advisor_proposal_approved_date: new Date(),
-              panelist_chairman_id: chairman_6,
-              panelist_member_id: member_6,
-              start_defence: proposalStart_6,
-              end_defence: proposalEnd_6,
-              defence_room: proposalRoom_6,
-              defence_date: proposalDate_6,
-              is_report_open: false,
-              is_report_approve_by_dekan: true,
-              is_report_approve_by_panelist_chairman: true,
-              is_report_approve_by_panelist_member: true,
-              is_report_approve_by_advisor: true,
-              dekan_report_approve_date: new Date(),
-              panelist_chairman_report_approve_date: new Date(),
-              panelist_member_report_approve_date: new Date(),
-              advisor_report_approve_date: new Date(),
-              exam_conclution: "Approve",
-              changes_conclusion: "Minor",
-              assessment_conclution: "A-",
-              is_pass: "Pass",
-              report_date: proposalDate_6,
-              file_name_revision: proposalRevisiFileName_6,
-              upload_date_revision: new Date(),
-              file_size_revision: "2.5 MB",
-              file_path_revision: proposalRevisiFilePath_6,
-              is_revision_approve_by_panelist_chairman: "Approve",
-              is_revision_approve_by_panelist_member: "Approve",
-              is_revision_approve_by_advisor: "Approve",
-              panelist_chairman_revision_approve_date: new Date(),
-              panelist_member_revision_approve_date: new Date(),
-              advisor_revision_approve_date: new Date(),
-              approve_date: new Date(),
-            },
-          });
-          if (proposal) {
-            // konsultasi student1_6 - advisor (1)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_6.id,
-                description: "Konsultasi bab 1",
-                date: new Date(),
-                dosen_id: advisor_6,
-              },
-            });
-            // konsultasi student1_6 - advisor (2)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_6.id,
-                description: "Konsultasi bab 2",
-                date: new Date(),
-                dosen_id: advisor_6,
-              },
-            });
-            // konsultasi student1_6 - advisor (3)
-            await prisma.thesis_Consultation.create({
-              data: {
-                group_id: group_6.id,
-                description: "Konsultasi bab 3",
-                date: new Date(),
-                dosen_id: advisor_6,
-              },
-            });
-
-            // assessment student1_6 - student1 - ketua
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_6.student_id,
-                dosen_id: chairman_6,
-                value: "9",
-              },
-            });
-            // assessment student1_6 - student1 - anggota
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_6.student_id,
-                dosen_id: member_6,
-                value: "9",
-              },
-            });
-            // assessment student1_6 - student1 - advisor
-            await prisma.proposal_Assessment.create({
-              data: {
-                proposal_id: proposal.id,
-                student_id: proposalStudent1_6.student_id,
-                dosen_id: advisor_6,
-                value: "9",
-              },
-            });
-
-            // changes student1_6 - ketua
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: chairman_6,
-                changes: "Ubah Bab 1",
-              },
-            });
-            // changes student1_6 - anggota
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: member_6,
-                changes: "Ubah Bab 2",
-              },
-            });
-            // changes student1_6 - advisor
-            await prisma.proposal_Changes.create({
-              data: {
-                proposal_id: proposal.id,
-                dosen_id: advisor_6,
-                changes: "Ubah Bab 3",
-              },
-            });
-          }
-
-          // Skripsi student1_6
-          const skripsi = await prisma.skripsi.create({
-            data: {
-              advisor_id: advisor_6,
-            },
-          });
-          if (skripsi) {
-            await prisma.group.update({
-              where: {
-                id: group_6.id,
-              },
-              data: {
-                submission_id: submission.id,
-                proposal_id: proposal.id,
-              },
-            });
-
-            // History Submission
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_6,
-                description: "Mengajukan Judul",
-                date: new Date(),
-                group_id: group_6.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_6,
-                description: "Mengubah Pengajuan Judul",
-                date: new Date(),
-                group_id: group_6.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: kaprodiTIId,
-                description: "Mengganti Pembimbing",
-                date: new Date(),
-                group_id: group_6.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: kaprodiTIId,
-                description: "Menyetujui Pengajuan Judul",
-                date: new Date(),
-                group_id: group_6.id,
-              },
-            });
-            await prisma.thesis_History.create({
-              data: {
-                user_id: student1_6,
-                description: "Mengganti Judul Penelitian",
-                date: new Date(),
-                group_id: group_6.id,
-              },
-            });
-          }
-        }
-      }
-    } catch (error) {
-      // Tangani kesalahan jika terjadi
-      console.error(error);
-    }
-  }
-
-  // Panggil fungsi untuk membuat entitas akademik
-  // createSkripsiAppData();
+  await prisma.student.createMany({
+    data: [
+      {
+        nim: "10502201001",
+        studentEmail: "s2200001@student.unklab.ac.id",
+        firstName: "Angel Triany",
+        lastName: "Pangkey",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "IF",
+        curriculumId: kurikulum_informatika,
+        arrivalYear: "2020",
+        employeeNik: "1005",
+        // majorGlobalId: 55201,
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201002",
+        studentEmail: "s2200002@student.unklab.ac.id",
+        firstName: "Brenda",
+        lastName: "Rambi",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "IF",
+        curriculumId: kurikulum_informatika,
+        arrivalYear: "2020",
+        employeeNik: "1005",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201003",
+        studentEmail: "s2200003@student.unklab.ac.id",
+        firstName: "Darel",
+        lastName: "Yuhu",
+        gender: "MALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "DKV",
+        arrivalYear: "2020",
+        employeeNik: "1001",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201004",
+        studentEmail: "s2200004@student.unklab.ac.id",
+        firstName: "Shyereal",
+        lastName: "Saerang",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "DKV",
+        arrivalYear: "2020",
+        employeeNik: "1001",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201005",
+        studentEmail: "s2200005@student.unklab.ac.id",
+        firstName: "Marika",
+        lastName: "Connechy",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        arrivalYear: "2020",
+        employeeNik: "1003",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201006",
+        studentEmail: "s2200006@student.unklab.ac.id",
+        firstName: "Delphinia",
+        lastName: "Leggatt",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        arrivalYear: "2020",
+        employeeNik: "1003",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201007",
+        studentEmail: "s2200007@student.unklab.ac.id",
+        firstName: "Dannye",
+        lastName: "MacNeilage",
+        gender: "MALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "IF",
+        curriculumId: kurikulum_informatika,
+        arrivalYear: "2020",
+        employeeNik: "1004",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201008",
+        studentEmail: "s2200008@student.unklab.ac.id",
+        firstName: "Rozanna",
+        lastName: "Ilyin",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "IF",
+        curriculumId: kurikulum_informatika,
+        arrivalYear: "2020",
+        employeeNik: "1002",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201009",
+        studentEmail: "s2200009@student.unklab.ac.id",
+        firstName: "Lars",
+        lastName: "Hulle",
+        gender: "MALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "IF",
+        curriculumId: kurikulum_informatika,
+        arrivalYear: "2020",
+        employeeNik: "1002",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201010",
+        studentEmail: "s2200010@student.unklab.ac.id",
+        firstName: "Dunn",
+        lastName: "Hillan",
+        gender: "MALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "IF",
+        curriculumId: kurikulum_informatika,
+        arrivalYear: "2020",
+        employeeNik: "1005",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201011",
+        studentEmail: "s2200011@student.unklab.ac.id",
+        firstName: "Arlyn",
+        lastName: "Schimoni",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201012",
+        studentEmail: "s2200012@student.unklab.ac.id",
+        firstName: "Cookie",
+        lastName: "Farlambe",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201013",
+        studentEmail: "s2200013@student.unklab.ac.id",
+        firstName: "Stacy",
+        lastName: "Bullivant",
+        gender: "MALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201014",
+        studentEmail: "s2200014@student.unklab.ac.id",
+        firstName: "Oralia",
+        lastName: "Labadini",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201015",
+        studentEmail: "s2200015@student.unklab.ac.id",
+        firstName: "Bethina",
+        lastName: "MacKettrick",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201016",
+        studentEmail: "s2200016@student.unklab.ac.id",
+        firstName: "Arleyne",
+        lastName: "Simonds",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201017",
+        studentEmail: "s2200017@student.unklab.ac.id",
+        firstName: "Julianna",
+        lastName: "Extal",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201018",
+        studentEmail: "s2200018@student.unklab.ac.id",
+        firstName: "Dario",
+        lastName: "Blagbrough",
+        gender: "MALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201019",
+        studentEmail: "s2200019@student.unklab.ac.id",
+        firstName: "Pietra",
+        lastName: "Di Biagi",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        nim: "10502201020",
+        studentEmail: "s2200020@student.unklab.ac.id",
+        firstName: "Derril",
+        lastName: "O'Lochan",
+        gender: "MALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    ],
+  });
 
   //--------------------------------------Klabat Bridge--------------------------------------------
   // Create Alumni
@@ -4371,1373 +3041,918 @@ async function main() {
     ],
   });
 
-  // CREATE Tracer Study
+  //CREATE Tracer Study
   await prisma.tracer_Study.createMany({
     data: [
       {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
+        kdptimsmh: "161002",
+        kdpstmsmh: "55201",
+        nimhsmsmh: "20502201001",
+        nmmhsmsmh: "Stirling Branchflower",
+        telpomsmh: "085298528966",
+        emailmsmh: "s2300001@student.unklab.ac.id",
+        tahun_lulus: "2022",
+        nik: "7171849398765456",
+        npwp: "123456788",
+        f8: "1",
+        f504: "1",
+        f502: "2",
+        f505: "8000000",
+        f506: "",
+        f5a1: "Sumatera Utara",
+        f5a2: "Medan",
+        f1101: "3",
+        f1102: "",
+        f5b: "PT Tekno Klabat",
+        f5c: "",
+        f5d: "Lokal/Wilayah/Wiraswasta/tidak berbadan hukum",
+        f18a: "",
+        f18b: "",
+        f18c: "",
+        f18d: "",
+        f1201: "1",
+        f1202: "",
+        f14: "2",
+        f15: "2",
+        f1761: "4",
+        f1762: "4",
+        f1763: "4",
+        f1764: "4",
+        f1765: "4",
+        f1766: "4",
+        f1767: "4",
+        f1768: "4",
+        f1769: "4",
+        f1770: "4",
+        f1771: "4",
+        f1772: "4",
+        f1773: "4",
+        f1774: "4",
+        f21: "2",
+        f22: "3",
+        f23: "3",
+        f24: "5",
+        f25: "3",
+        f26: "2",
+        f27: "3",
+        f301: "2",
+        f302: "",
+        f303: "1",
+        f401: "1",
+        f402: "0",
+        f403: "0",
+        f404: "0",
+        f405: "0",
+        f406: "0",
+        f407: "0",
+        f408: "0",
+        f409: "0",
+        f410: "0",
+        f411: "0",
+        f412: "0",
+        f413: "0",
+        f414: "0",
+        f415: "0",
+        f416: "",
+        f6: "3",
+        f7: "1",
+        f7a: "0",
+        f1001: "1",
+        f1002: "",
+        f1601: "1",
+        f1602: "0",
+        f1603: "0",
+        f1604: "0",
+        f1605: "0",
+        f1606: "0",
+        f1607: "0",
+        f1608: "0",
+        f1609: "0",
+        f1610: "0",
+        f1611: "0",
+        f1612: "0",
+        f1613: "0",
+        f1614: "",
         studentId: "20502201001",
       },
       {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
+        kdptimsmh: "161002",
+        kdpstmsmh: "55201",
+        nimhsmsmh: "20502201002",
+        nmmhsmsmh: "Julina Breton",
+        telpomsmh: "081234567890",
+        emailmsmh: "s2300003@student.unklab.ac.id",
+        tahun_lulus: "2022",
+        nik: "71718493987576545",
+        npwp: "0987654456789",
+        f8: "1",
+        f504: "1",
+        f502: "5",
+        f505: "5000000",
+        f506: "",
+        f5a1: "Sulawesi Utara",
+        f5a2: "Manado",
+        f1101: "1",
+        f1102: "",
+        f5b: "Dinas Pendidikan Kota Manado",
+        f5c: "",
+        f5d: "Nasional/Wiraswasta berbadan hukum",
+        f18a: "",
+        f18b: "",
+        f18c: "",
+        f18d: "",
+        f1201: "1",
+        f1202: "",
+        f14: "2",
+        f15: "2",
+        f1761: "5",
+        f1762: "4",
+        f1763: "4",
+        f1764: "3",
+        f1765: "5",
+        f1766: "4",
+        f1767: "4",
+        f1768: "2",
+        f1769: "3",
+        f1770: "3",
+        f1771: "4",
+        f1772: "4",
+        f1773: "5",
+        f1774: "4",
+        f21: "3",
+        f22: "4",
+        f23: "1",
+        f24: "1",
+        f25: "1",
+        f26: "2",
+        f27: "3",
+        f301: "2",
+        f302: "",
+        f303: "4",
+        f401: "0",
+        f402: "0",
+        f403: "0",
+        f404: "0",
+        f405: "0",
+        f406: "0",
+        f407: "0",
+        f408: "0",
+        f409: "0",
+        f410: "0",
+        f411: "1",
+        f412: "0",
+        f413: "0",
+        f414: "0",
+        f415: "0",
+        f416: "",
+        f6: "4",
+        f7: "2",
+        f7a: "1",
+        f1001: "3",
+        f1002: "",
+        f1601: "0",
+        f1602: "0",
+        f1603: "0",
+        f1604: "0",
+        f1605: "0",
+        f1606: "0",
+        f1607: "0",
+        f1608: "0",
+        f1609: "0",
+        f1610: "0",
+        f1611: "0",
+        f1612: "1",
+        f1613: "0",
+        f1614: "",
         studentId: "20502201002",
       },
       {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
-        studentId: "20502201003",
-      },
-      {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
+        kdptimsmh: "161002",
+        kdpstmsmh: "55201",
+        nimhsmsmh: "20502201004",
+        nmmhsmsmh: "Rad Beverstock",
+        telpomsmh: "098876543216",
+        emailmsmh: "s2300005@student.unklab.ac.id",
+        tahun_lulus: "2022",
+        nik: "14785258742146",
+        npwp: "7458557784523",
+        f8: "1",
+        f504: "1",
+        f502: "5",
+        f505: "9999999",
+        f506: "",
+        f5a1: "Sumatera Utara",
+        f5a2: "Pematangsiantar",
+        f1101: "3",
+        f1102: "",
+        f5b: "CV Maju Tak Gentar",
+        f5c: "",
+        f5d: "Lokal/Wilayah/Wiraswasta/tidak berbadan hukum",
+        f18a: "",
+        f18b: "",
+        f18c: "",
+        f18d: "",
+        f1201: "3",
+        f1202: "",
+        f14: "2",
+        f15: "2",
+        f1761: "5",
+        f1762: "4",
+        f1763: "5",
+        f1764: "4",
+        f1765: "5",
+        f1766: "4",
+        f1767: "5",
+        f1768: "4",
+        f1769: "5",
+        f1770: "4",
+        f1771: "5",
+        f1772: "4",
+        f1773: "5",
+        f1774: "4",
+        f21: "2",
+        f22: "4",
+        f23: "1",
+        f24: "3",
+        f25: "1",
+        f26: "3",
+        f27: "3",
+        f301: "2",
+        f302: "",
+        f303: "5",
+        f401: "0",
+        f402: "0",
+        f403: "1",
+        f404: "0",
+        f405: "0",
+        f406: "0",
+        f407: "0",
+        f408: "0",
+        f409: "0",
+        f410: "0",
+        f411: "0",
+        f412: "0",
+        f413: "0",
+        f414: "0",
+        f415: "0",
+        f416: "",
+        f6: "6",
+        f7: "4",
+        f7a: "2",
+        f1001: "3",
+        f1002: "",
+        f1601: "0",
+        f1602: "0",
+        f1603: "1",
+        f1604: "0",
+        f1605: "0",
+        f1606: "0",
+        f1607: "0",
+        f1608: "0",
+        f1609: "0",
+        f1610: "0",
+        f1611: "0",
+        f1612: "0",
+        f1613: "0",
+        f1614: "0",
         studentId: "20502201004",
       },
       {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
+        kdptimsmh: "161002",
+        kdpstmsmh: "55201",
+        nimhsmsmh: "20502201003",
+        nmmhsmsmh: "Koenraad Tolliday",
+        telpomsmh: "0874123698541",
+        emailmsmh: "s2300004@student.unklab.ac.id",
+        tahun_lulus: "2022",
+        nik: "765432345678765",
+        npwp: "74123658473",
+        f8: "1",
+        f504: "1",
+        f502: "7",
+        f505: "14999999",
+        f506: "",
+        f5a1: "DKI Jakarta",
+        f5a2: "Kota Administrasi Jakarta Selatan",
+        f1101: "4",
+        f1102: "",
+        f5b: "CV Abadi",
+        f5c: "",
+        f5d: "Nasional/Wiraswasta berbadan hukum",
+        f18a: "0",
+        f18b: "0",
+        f18c: "0",
+        f18d: "0",
+        f1201: "2",
+        f1202: "",
+        f14: "4",
+        f15: "3",
+        f1761: "5",
+        f1762: "3",
+        f1763: "4",
+        f1764: "2",
+        f1765: "5",
+        f1766: "4",
+        f1767: "3",
+        f1768: "2",
+        f1769: "5",
+        f1770: "5",
+        f1771: "4",
+        f1772: "4",
+        f1773: "4",
+        f1774: "3",
+        f21: "3",
+        f22: "3",
+        f23: "3",
+        f24: "3",
+        f25: "2",
+        f26: "2",
+        f27: "1",
+        f301: "1",
+        f302: "12",
+        f303: "",
+        f401: "0",
+        f402: "0",
+        f403: "0",
+        f404: "0",
+        f405: "0",
+        f406: "0",
+        f407: "0",
+        f408: "0",
+        f409: "0",
+        f410: "0",
+        f411: "0",
+        f412: "1",
+        f413: "0",
+        f414: "0",
+        f415: "0",
+        f416: "",
+        f6: "0",
+        f7: "0",
+        f7a: "0",
+        f1001: "1",
+        f1002: "0",
+        f1601: "0",
+        f1602: "0",
+        f1603: "0",
+        f1604: "0",
+        f1605: "0",
+        f1606: "0",
+        f1607: "0",
+        f1608: "1",
+        f1609: "0",
+        f1610: "0",
+        f1611: "0",
+        f1612: "0",
+        f1613: "0",
+        f1614: "0",
+        studentId: "20502201003",
+      },
+      {
+        kdptimsmh: "161002",
+        kdpstmsmh: "55201",
+        nimhsmsmh: "20502201005",
+        nmmhsmsmh: "Gene Trobe",
+        telpomsmh: "085412369871",
+        emailmsmh: "s2300005@student.unklab.ac.id",
+        tahun_lulus: "2022",
+        nik: "765432345678765",
+        npwp: "74123658473",
+        f8: "1",
+        f504: "1",
+        f502: "9",
+        f505: "2000000",
+        f506: "",
+        f5a1: "Sulawesi Utara",
+        f5a2: "Manado",
+        f1101: "6",
+        f1102: "",
+        f5b: "PT Makmur",
+        f5c: "",
+        f5d: "Lokal/Wilayah/Wiraswasta/tidak berbadan hukum",
+        f18a: "",
+        f18b: "",
+        f18c: "",
+        f18d: "",
+        f1201: "6",
+        f1202: "",
+        f14: "1",
+        f15: "4",
+        f1761: "2",
+        f1762: "4",
+        f1763: "4",
+        f1764: "3",
+        f1765: "3",
+        f1766: "2",
+        f1767: "4",
+        f1768: "5",
+        f1769: "5",
+        f1770: "2",
+        f1771: "5",
+        f1772: "4",
+        f1773: "4",
+        f1774: "4",
+        f21: "3",
+        f22: "5",
+        f23: "3",
+        f24: "2",
+        f25: "3",
+        f26: "2",
+        f27: "1",
+        f301: "2",
+        f302: "",
+        f303: "2",
+        f401: "1",
+        f402: "0",
+        f403: "0",
+        f404: "0",
+        f405: "0",
+        f406: "0",
+        f407: "0",
+        f408: "0",
+        f409: "0",
+        f410: "0",
+        f411: "0",
+        f412: "0",
+        f413: "0",
+        f414: "0",
+        f415: "0",
+        f416: "",
+        f6: "3",
+        f7: "2",
+        f7a: "2",
+        f1001: "1",
+        f1002: "",
+        f1601: "0",
+        f1602: "0",
+        f1603: "0",
+        f1604: "0",
+        f1605: "0",
+        f1606: "0",
+        f1607: "0",
+        f1608: "1",
+        f1609: "0",
+        f1610: "0",
+        f1611: "0",
+        f1612: "0",
+        f1613: "0",
+        f1614: "",
         studentId: "20502201005",
       },
       {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
+        kdptimsmh: "161002",
+        kdpstmsmh: "57201",
+        nimhsmsmh: "20502201006",
+        nmmhsmsmh: "Stewart Heasman",
+        telpomsmh: "081234567895",
+        emailmsmh: "s2300006@student.unklab.ac.id",
+        tahun_lulus: "2022",
+        nik: "71718273646573837",
+        npwp: "8765431122",
+        f8: "1",
+        f504: "1",
+        f502: "3",
+        f505: "2000000",
+        f506: "",
+        f5a1: "DKI Jakarta",
+        f5a2: "Kota Administrasi Jakarta Timur",
+        f1101: "6",
+        f1102: "",
+        f5b: "Maju Sejahtera",
+        f5c: "",
+        f5d: "Lokal/Wilayah/Wiraswasta/tidak berbadan hukum",
+        f18a: "",
+        f18b: "",
+        f18c: "",
+        f18d: "",
+        f1201: "1",
+        f1202: "",
+        f14: "2",
+        f15: "1",
+        f1761: "4",
+        f1762: "3",
+        f1763: "5",
+        f1764: "5",
+        f1765: "5",
+        f1766: "4",
+        f1767: "4",
+        f1768: "4",
+        f1769: "3",
+        f1770: "1",
+        f1771: "4",
+        f1772: "3",
+        f1773: "4",
+        f1774: "3",
+        f21: "3",
+        f22: "5",
+        f23: "1",
+        f24: "2",
+        f25: "2",
+        f26: "2",
+        f27: "1",
+        f301: "2",
+        f302: "",
+        f303: "5",
+        f401: "0",
+        f402: "0",
+        f403: "1",
+        f404: "0",
+        f405: "0",
+        f406: "0",
+        f407: "0",
+        f408: "0",
+        f409: "0",
+        f410: "0",
+        f411: "0",
+        f412: "0",
+        f413: "0",
+        f414: "0",
+        f415: "0",
+        f416: "",
+        f6: "5",
+        f7: "4",
+        f7a: "2",
+        f1001: "1",
+        f1002: "",
+        f1601: "0",
+        f1602: "0",
+        f1603: "1",
+        f1604: "0",
+        f1605: "0",
+        f1606: "0",
+        f1607: "0",
+        f1608: "0",
+        f1609: "0",
+        f1610: "0",
+        f1611: "0",
+        f1612: "0",
+        f1613: "0",
+        f1614: "",
         studentId: "20502201006",
       },
       {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
+        kdptimsmh: "161002",
+        kdpstmsmh: "57201",
+        nimhsmsmh: "20502201007",
+        nmmhsmsmh: "Maxim Holmes",
+        telpomsmh: "087412589632",
+        emailmsmh: "s2300007@student.unklab.ac.id",
+        tahun_lulus: "2022",
+        nik: "717109876432",
+        npwp: "22587413694",
+        f8: "1",
+        f504: "1",
+        f502: "1",
+        f505: "8000000",
+        f506: "",
+        f5a1: "Daerah Istimewa Yogyakarta",
+        f5a2: "Yogyakarta",
+        f1101: "6",
+        f1102: "",
+        f5b: "Hope",
+        f5c: "",
+        f5d: "Lokal/Wilayah/Wiraswasta/tidak berbadan hukum",
+        f18a: "",
+        f18b: "",
+        f18c: "",
+        f18d: "",
+        f1201: "1",
+        f1202: "",
+        f14: "4",
+        f15: "3",
+        f1761: "2",
+        f1762: "4",
+        f1763: "3",
+        f1764: "3",
+        f1765: "4",
+        f1766: "4",
+        f1767: "5",
+        f1768: "5",
+        f1769: "3",
+        f1770: "3",
+        f1771: "2",
+        f1772: "3",
+        f1773: "4",
+        f1774: "3",
+        f21: "3",
+        f22: "4",
+        f23: "1",
+        f24: "2",
+        f25: "4",
+        f26: "3",
+        f27: "2",
+        f301: "1",
+        f302: "1",
+        f303: "",
+        f401: "0",
+        f402: "1",
+        f403: "0",
+        f404: "0",
+        f405: "0",
+        f406: "0",
+        f407: "0",
+        f408: "0",
+        f409: "0",
+        f410: "0",
+        f411: "0",
+        f412: "0",
+        f413: "0",
+        f414: "0",
+        f415: "0",
+        f416: "",
+        f6: "0",
+        f7: "0",
+        f7a: "0",
+        f1001: "2",
+        f1002: "",
+        f1601: "1",
+        f1602: "0",
+        f1603: "0",
+        f1604: "0",
+        f1605: "0",
+        f1606: "0",
+        f1607: "0",
+        f1608: "0",
+        f1609: "0",
+        f1610: "0",
+        f1611: "0",
+        f1612: "0",
+        f1613: "0",
+        f1614: "",
         studentId: "20502201007",
       },
       {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
-        studentId: "20502201008",
-      },
-      {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
-        studentId: "20502201009",
-      },
-      {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
-        studentId: "20502201010",
-      },
-      {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
+        kdptimsmh: "161002",
+        kdpstmsmh: "55201",
+        nimhsmsmh: "20502201011",
+        nmmhsmsmh: "Tybalt Champneys",
+        telpomsmh: "089513578624",
+        emailmsmh: "s2300011@student.unklab.ac.id",
+        tahun_lulus: "2023",
+        nik: "71716253465746",
+        npwp: "87654321455",
+        f8: "1",
+        f504: "1",
+        f502: "5",
+        f505: "9000000",
+        f506: "",
+        f5a1: "DKI Jakarta",
+        f5a2: "Kota Administrasi Jakarta Barat",
+        f1101: "1",
+        f1102: "",
+        f5b: "Dinas Kebersihan",
+        f5c: "",
+        f5d: "Lokal/Wilayah/Wiraswasta/tidak berbadan hukum",
+        f18a: "",
+        f18b: "",
+        f18c: "",
+        f18d: "",
+        f1201: "4",
+        f1202: "",
+        f14: "5",
+        f15: "3",
+        f1761: "4",
+        f1762: "3",
+        f1763: "5",
+        f1764: "2",
+        f1765: "4",
+        f1766: "4",
+        f1767: "5",
+        f1768: "3",
+        f1769: "4",
+        f1770: "4",
+        f1771: "4",
+        f1772: "2",
+        f1773: "5",
+        f1774: "2",
+        f21: "3",
+        f22: "3",
+        f23: "2",
+        f24: "4",
+        f25: "3",
+        f26: "2",
+        f27: "2",
+        f301: "1",
+        f302: "4",
+        f303: "",
+        f401: "1",
+        f402: "0",
+        f403: "0",
+        f404: "0",
+        f405: "0",
+        f406: "0",
+        f407: "0",
+        f408: "0",
+        f409: "0",
+        f410: "0",
+        f411: "0",
+        f412: "0",
+        f413: "0",
+        f414: "0",
+        f415: "0",
+        f416: "",
+        f6: "4",
+        f7: "3",
+        f7a: "1",
+        f1001: "1",
+        f1002: "",
+        f1601: "0",
+        f1602: "0",
+        f1603: "1",
+        f1604: "0",
+        f1605: "0",
+        f1606: "0",
+        f1607: "0",
+        f1608: "0",
+        f1609: "0",
+        f1610: "0",
+        f1611: "0",
+        f1612: "0",
+        f1613: "0",
+        f1614: "",
         studentId: "20502201011",
       },
       {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
+        kdptimsmh: "161002",
+        kdpstmsmh: "57201",
+        nimhsmsmh: "20502201012",
+        nmmhsmsmh: "Egor Smaling",
+        telpomsmh: "08745136945",
+        emailmsmh: "s2300012@student.unklab.ac.id",
+        tahun_lulus: "2023",
+        nik: "717154545214548",
+        npwp: "78965412365487",
+        f8: "1",
+        f504: "1",
+        f502: "5",
+        f505: "8000000",
+        f506: "",
+        f5a1: "Banten",
+        f5a2: "Serang",
+        f1101: "6",
+        f1102: "",
+        f5b: "Ava Ia",
+        f5c: "",
+        f5d: "Lokal/Wilayah/Wiraswasta/tidak berbadan hukum",
+        f18a: "",
+        f18b: "",
+        f18c: "",
+        f18d: "",
+        f1201: "1",
+        f1202: "",
+        f14: "3",
+        f15: "2",
+        f1761: "3",
+        f1762: "4",
+        f1763: "4",
+        f1764: "2",
+        f1765: "3",
+        f1766: "4",
+        f1767: "2",
+        f1768: "3",
+        f1769: "4",
+        f1770: "5",
+        f1771: "3",
+        f1772: "4",
+        f1773: "2",
+        f1774: "1",
+        f21: "3",
+        f22: "3",
+        f23: "2",
+        f24: "4",
+        f25: "5",
+        f26: "2",
+        f27: "2",
+        f301: "1",
+        f302: "3",
+        f303: "",
+        f401: "1",
+        f402: "0",
+        f403: "0",
+        f404: "0",
+        f405: "0",
+        f406: "0",
+        f407: "0",
+        f408: "0",
+        f409: "0",
+        f410: "0",
+        f411: "0",
+        f412: "0",
+        f413: "0",
+        f414: "0",
+        f415: "0",
+        f416: "0",
+        f6: "5",
+        f7: "3",
+        f7a: "2",
+        f1001: "1",
+        f1002: "",
+        f1601: "0",
+        f1602: "1",
+        f1603: "0",
+        f1604: "0",
+        f1605: "0",
+        f1606: "0",
+        f1607: "0",
+        f1608: "0",
+        f1609: "0",
+        f1610: "0",
+        f1611: "0",
+        f1612: "0",
+        f1613: "0",
+        f1614: "",
         studentId: "20502201012",
       },
       {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
-        studentId: "20502201013",
-      },
-      {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
-        studentId: "20502201014",
-      },
-      {
-        kdptimsmh: "09oub",
-        kdpstmsmh: "bebiwbfhe",
-        nimhsmsmh: "jfbhwbeig",
-        nmmhsmsmh: "jdwbfijbf",
-        telpomsmh: "ejfnwjengj",
-        emailmsmh: "nfjwbgibier",
-        tahun_lulus: "jarbgbesirg",
-        nik: "nanjirbge",
-        npwp: "jbgebrrdjfn",
-        f8: "ndjgjarj",
-        f504: "nfngrf",
-        f502: "data.f502",
-        f505: "data.f505",
-        f506: "data.f506",
-        f5a1: "data.f5a1",
-        f5a2: "data.f5a2",
-        f1101: "data.f1101",
-        f1102: "data.f1102",
-        f5b: "data.f5b",
-        f5c: "data.f5c",
-        f5d: "data.f5d",
-        f18a: "data.f18a",
-        f18b: "data.f18b",
-        f18c: "data.f18c",
-        f18d: "data.f18d",
-        f1201: "data.f1201",
-        f1202: "data.f1202",
-        f14: "data.f14",
-        f15: "data.f15",
-        f1761: "data.f1761",
-        f1762: "data.f1762",
-        f1763: "data.f1763",
-        f1764: "data.f1764",
-        f1765: "data.f1765",
-        f1766: "data.f1766",
-        f1767: "data.f1767",
-        f1768: "data.f1768",
-        f1769: "data.f1769",
-        f1770: "data.f1770",
-        f1771: "data.f1771",
-        f1772: "data.f1772",
-        f1773: "data.f1773",
-        f1774: "data.f1774",
-        f21: "data.f21",
-        f22: "data.f22",
-        f23: "data.f23",
-        f24: "data.f24",
-        f25: "data.f25",
-        f26: "data.f26",
-        f27: "data.f27",
-        f301: "data.f301",
-        f302: "data.f302",
-        f303: "data.f303",
-        f401: "data.f401",
-        f402: "data.f402",
-        f403: "data.f403",
-        f404: "data.f404",
-        f405: "data.f405",
-        f406: "data.f406",
-        f407: "data.f407",
-        f408: "data.f408",
-        f409: "data.f409",
-        f410: "data.f410",
-        f411: "data.f411",
-        f412: "data.f412",
-        f413: "data.f413",
-        f414: "data.f414",
-        f415: "data.f415",
-        f416: "data.f416",
-        f6: "data.f6",
-        f7: "data.f7",
-        f7a: "data.f7a",
-        f1001: "data.f1001",
-        f1002: "data.f1002",
-        f1601: "data.f1601",
-        f1602: "data.f1602",
-        f1603: "data.f1603",
-        f1604: "data.f1604",
-        f1605: "data.f1605",
-        f1606: "data.f1606",
-        f1607: "data.f1607",
-        f1608: "data.f1608",
-        f1609: "data.f1609",
-        f1610: "data.f1610",
-        f1611: "data.f1611",
-        f1612: "data.f1612",
-        f1613: "data.f1613",
-        f1614: "data.f1614",
-        studentId: "20502201015",
+        kdptimsmh: "161002",
+        kdpstmsmh: "57201",
+        nimhsmsmh: "20502201016",
+        nmmhsmsmh: "Rowan Origin",
+        telpomsmh: "087451236589",
+        emailmsmh: "s2300016@student.unklab.ac.id",
+        tahun_lulus: "2023",
+        nik: "7845123658",
+        npwp: "7410258963025",
+        f8: "5",
+        f504: "",
+        f502: "",
+        f505: "",
+        f506: "",
+        f5a1: "",
+        f5a2: "",
+        f1101: "",
+        f1102: "",
+        f5b: "",
+        f5c: "",
+        f5d: "",
+        f18a: "",
+        f18b: "",
+        f18c: "",
+        f18d: "",
+        f1201: "",
+        f1202: "",
+        f14: "",
+        f15: "",
+        f1761: "",
+        f1762: "",
+        f1763: "",
+        f1764: "",
+        f1765: "",
+        f1766: "",
+        f1767: "",
+        f1768: "",
+        f1769: "",
+        f1770: "",
+        f1771: "",
+        f1772: "",
+        f1773: "",
+        f1774: "",
+        f21: "",
+        f22: "",
+        f23: "",
+        f24: "",
+        f25: "",
+        f26: "",
+        f27: "",
+        f301: "",
+        f302: "",
+        f303: "",
+        f401: "0",
+        f402: "0",
+        f403: "0",
+        f404: "0",
+        f405: "0",
+        f406: "0",
+        f407: "0",
+        f408: "0",
+        f409: "0",
+        f410: "0",
+        f411: "0",
+        f412: "0",
+        f413: "0",
+        f414: "0",
+        f415: "0",
+        f416: "",
+        f6: "",
+        f7: "",
+        f7a: "",
+        f1001: "",
+        f1002: "",
+        f1601: "0",
+        f1602: "0",
+        f1603: "0",
+        f1604: "0",
+        f1605: "0",
+        f1606: "0",
+        f1607: "0",
+        f1608: "0",
+        f1609: "0",
+        f1610: "0",
+        f1611: "0",
+        f1612: "0",
+        f1613: "0",
+        f1614: "",
+        studentId: "20502201016",
       },
     ],
   });
@@ -5745,456 +3960,55 @@ async function main() {
   await prisma.formSPT.createMany({
     data: [
       {
-        full_name: "Steward Heasman",
-        reg_num: "s1234567",
-        date_of_birth: "20 November 2000",
-        gender: "MALE",
-        nik: "78965412369842",
-        nim: "20502201006",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Sistem Informasi",
-        minor: "",
-        birth_mother: "Siti Nur Haliza",
-        phone_num: "089632178547",
-        personal_email: "steward@test.com",
-        graduate_plan: "Semester II 2021/2022",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201006",
-      },
-      {
-        full_name: "Maxim Holmes",
-        reg_num: "s1234567",
-        date_of_birth: "20 November 2000",
-        gender: "MALE",
-        nik: "543456789876",
-        nim: "20502201007",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Sistem Informasi",
-        minor: "",
-        birth_mother: "Siti Nur Haliza",
-        phone_num: "081236987451",
-        personal_email: "maxim@test.com",
-        graduate_plan: "Semester II 2021/2022",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201007",
-      },
-      {
-        full_name: "Jerrie Bushnell",
-        reg_num: "s7656784",
-        date_of_birth: "09 Oktober 2000",
+        full_name: "Brenda Rambi",
+        reg_num: "s2200002",
+        date_of_birth: "10-10-2002",
         gender: "FEMALE",
-        nik: "654345678",
-        nim: "20502201013",
+        nik: "71712345678910",
+        nim: "10502201002",
         faculty: "Fakultas Ilmu Komputer",
         major: "Informatika",
         minor: "",
-        birth_mother: "Mikha Saputri",
-        phone_num: "08965412365",
-        personal_email: "jerrie@test.com",
-        graduate_plan: "Semester I 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201013",
-      },
-      {
-        full_name: "Julina Breton",
-        reg_num: "s2345444",
-        date_of_birth: "09 Oktober 2000",
-        gender: "FEMALE",
-        nik: "654345678",
-        nim: "20502201002",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Informatika",
-        minor: "",
-        birth_mother: "Kayla Lea",
-        phone_num: "0854269845584",
-        personal_email: "julina@test.com",
-        graduate_plan: "Semester I 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201002",
-      },
-      {
-        full_name: "Gayle Wardhough",
-        reg_num: "s3454334",
-        date_of_birth: "09 Oktober 2000",
-        gender: "FEMALE",
-        nik: "654345678",
-        nim: "20502201020",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Sistem Informasi",
-        minor: "",
-        birth_mother: "Brenda Syherel",
-        phone_num: "0812345698789",
-        personal_email: "gayle@test.com",
-        graduate_plan: "Semester I 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201020",
-      },
-      {
-        full_name: "Rad Beverstock",
-        reg_num: "s987654",
-        date_of_birth: "09 Oktober 2000",
-        gender: "MALE",
-        nik: "654345678",
-        nim: "20502201004",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Informatika",
-        minor: "",
-        birth_mother: "Gretta Manohara",
-        phone_num: "081236547896",
-        personal_email: "rad@test.com",
-        graduate_plan: "Semester II 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201004",
-      },
-      {
-        full_name: "Calli Gallehawk",
-        reg_num: "s8765678",
-        date_of_birth: "09 Januari 2000",
-        gender: "FEMALE",
-        nik: "654345678",
-        nim: "20502201014",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Informatika",
-        minor: "",
-        birth_mother: "Hanna Syana",
-        phone_num: "087412398569",
-        personal_email: "calli@test.com",
-        graduate_plan: "Semester I 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201014",
-      },
-      {
-        full_name: "Sarina Fulmen",
-        reg_num: "s987654",
-        date_of_birth: "09 Desember 2000",
-        gender: "FEMALE",
-        nik: "654345678",
-        nim: "20502201018",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Sistem Informasi",
-        minor: "",
-        birth_mother: "Brenda Syherel",
-        phone_num: "087412369852",
-        personal_email: "sarina@test.com",
-        graduate_plan: "Semester II 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201018",
-      },
-      {
-        full_name: "Sheilakathryn Heppner",
-        reg_num: "s9876543",
-        date_of_birth: "09 Februari 2000",
-        gender: "FEMALE",
-        nik: "654345678",
-        nim: "20502201008",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Sistem Informasi",
-        minor: "",
-        birth_mother: "Brenda Syherel",
-        phone_num: "084512366974",
-        personal_email: "sheila@test.com",
-        graduate_plan: "Semester II 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201008",
-      },
-      {
-        full_name: "Norine Aubrun",
-        reg_num: "s9876543",
-        date_of_birth: "09 Februari 2000",
-        gender: "FEMALE",
-        nik: "87654634567",
-        nim: "20502201017",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Sistem Informasi",
-        minor: "",
-        birth_mother: "Brenda Syherel",
-        phone_num: "0874123698523",
-        personal_email: "norine@test.com",
-        graduate_plan: "Semester II 2021/2022",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201017",
-      },
-      {
-        full_name: "Stirling Branchflower",
-        reg_num: "s76543234",
-        date_of_birth: "09 Maret 2000",
-        gender: "FEMALE",
-        nik: "654345678",
-        nim: "20502201001",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Informatika",
-        minor: "",
-        birth_mother: "Brenda Syherel",
-        phone_num: "0854123698758",
-        personal_email: "stirling@test.com",
-        graduate_plan: "Semester I 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201001",
-      },
-      {
-        full_name: "Gene Trobe",
-        reg_num: "s9876543",
-        date_of_birth: "09 April 2000",
-        gender: "FEMALE",
-        nik: "76545678",
-        nim: "20502201005",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Informatika",
-        minor: "",
-        birth_mother: "Brenda Syherel",
-        phone_num: "084176898298",
-        personal_email: "gene@test.com",
-        graduate_plan: "Semester II 2022/2023",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201005",
-      },
-      {
-        full_name: "Estevan Kingswood",
-        reg_num: "s98765456",
-        date_of_birth: "09 Juni 2000",
-        gender: "MALE",
-        nik: "654345678765",
-        nim: "20502201010",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Sistem Informasi",
-        minor: "",
-        birth_mother: "Brenda Syherel",
-        phone_num: "0874123654785",
-        personal_email: "stevan@test.com",
-        graduate_plan: "Semester II 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201010",
-      },
-      {
-        full_name: "Lucilia Chittey",
-        reg_num: "s8765456",
-        date_of_birth: "09 Agustus 2000",
-        gender: "FEMALE",
-        nik: "654345678",
-        nim: "20502201015",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Informatika",
-        minor: "",
-        birth_mother: "Brenda Syherel",
-        phone_num: "0896125478963",
-        personal_email: "luci@test.com",
-        graduate_plan: "Semester I 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201015",
-      },
-      {
-        full_name: "Rowan Origin",
-        reg_num: "s9876543",
-        date_of_birth: "09 September 2000",
-        gender: "MALE",
-        nik: "987654345",
-        nim: "20502201016",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Sistem Informasi",
-        minor: "",
-        birth_mother: "Brenda Syherel",
-        phone_num: "089632145874512",
-        personal_email: "rowan@test.com",
-        graduate_plan: "Semester II 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201016",
-      },
-      {
-        full_name: "Rachele Skillett",
-        reg_num: "s234423",
-        date_of_birth: "15 Januari 2002",
-        gender: "FEMALE",
-        nik: "654345678",
-        nim: "20502201019",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Sistem Informasi",
-        minor: "",
-        birth_mother: "Angel Pangkey",
-        phone_num: "089612288774",
-        personal_email: "s2200049@student.unklab.ac.id",
-        graduate_plan: "Semester II 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201019",
-      },
-      {
-        full_name: "Tybalt Champneys",
-        reg_num: "s87654",
-        date_of_birth: "02 Juli 2004",
-        gender: "MALE",
-        nik: "987654",
-        nim: "20502201011",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Informatika",
-        minor: "",
-        birth_mother: "Brenda Rambi",
-        phone_num: "+6281776309038",
+        birth_mother: "Ariana Grande",
+        phone_num: "08177309038",
         personal_email: "brendarambi02@gmail.com",
         graduate_plan: "Semester II 2023/2024",
-        remaining_credits: "12",
+        remaining_credits: "6",
         remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
+          {
+            subject: "Research Project II",
+            sks: "3",
+            keterangan: "Semester I 2023/2024",
+          },
+          {
+            subject: "Introduction to Game Development",
+            sks: "3",
+            keterangan: "Semester I 2023/2024",
+          },
         ]),
         certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201011",
-      },
-      {
-        full_name: "Koenraad Tolliday",
-        reg_num: "s765456",
-        date_of_birth: "30 Desember 2005",
-        gender: "MALE",
-        nik: "9987654",
-        nim: "20502201003",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Informatika",
-        minor: "",
-        birth_mother: "Shyereal Saerang",
-        phone_num: "081244039980",
-        personal_email: "S2200131@student.unklab.ac.id",
-        graduate_plan: "Semester II 2023/2024",
-        remaining_credits: "12",
-        remaining_classes: JSON.stringify([
-          { subject: "IGD", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Entre", sks: "3", keterangan: "Semester II 2023/2024" },
-          { subject: "Web Design", sks: "3", keterangan: "Summer 2023" },
-          { subject: "Math", sks: "3", keterangan: "Semester II 2023/2024" },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2Fstudent%2FInternational.pdf?alt=media&token=cc6882df-9ebd-40c7-9d6f-537b92492b8a&_gl=1*17lumjy*_ga*MTQ3MDY1ODQxOC4xNjgyODc2MzQ4*_ga_CW55HF8NVT*MTY5OTQyMzkxMy4zLjEuMTY5OTQyNDM1Ny41NC4wLjA.",
-        studentId: "20502201003",
+          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2F10502201002%2Fjavascript_basic%20certificate.pdf?alt=media&token=8bae54df-8f5c-4a47-9834-73491fe6dcb3",
+        studentId: "10502201002",
       },
     ],
+  });
+
+  await prisma.student.updateMany({
+    where: {
+      major: "IF",
+    },
+    data: {
+      majorGlobalId: "55201",
+    },
+  });
+
+  await prisma.student.updateMany({
+    where: {
+      major: "SI",
+    },
+    data: {
+      majorGlobalId: "57201",
+    },
   });
 }
 

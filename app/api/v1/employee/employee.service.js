@@ -2,7 +2,9 @@
 
 const employeeRepository = require("./employee.repository");
 const userManagement = require("../user_management/user_namagement.repository");
+const studentRepository = require("../student/student.repository");
 const bcrypt = require("bcrypt");
+const { status } = require("@prisma/client");
 
 const getAllEmployees = async () => {
   const employee = await employeeRepository.findEmployees();
@@ -28,6 +30,24 @@ const createEmployee = async (payload) => {
   return employee;
 };
 
+const createManyEmployee = async (data) => {
+  try {
+    let salt, password;
+    data = data.map((value) => {
+      salt = bcrypt.genSaltSync(10);
+      password = bcrypt.hashSync(value.password, salt);
+      return {
+        ...value,
+        password,
+      };
+    });
+    const employee = await employeeRepository.insertManyEmployee(data);
+    return employee;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
 const deleteEmployeeById = async (id) => {
   await getEmployeeById(id);
   await employeeRepository.deleteEmployee(id);
@@ -45,6 +65,147 @@ const updateOrPatchEmployeeById = async (id, payload) => {
   return employee;
 };
 
+const getEmployeeByMajor = async (major) => {
+  try {
+    const employee = await employeeRepository.findEmployeeByMajor(major);
+    return employee;
+  } catch (error) {
+    return error;
+  }
+};
+
+const getDosenDetailProfile = async (nik) => {
+  try {
+    const employee = await employeeRepository.findDosenDetailProfile(nik);
+    return employee;
+  } catch (error) {
+    return error;
+  }
+};
+
+const getDekanAndKaprodiByMajor = async (major) => {
+  try {
+    // ambil nik
+    const dekan = await employeeRepository.selectDekan();
+    const kaprodi = await employeeRepository.selectKaprodi();
+
+    // ambil nama dekan berdasarkan nik kemudian tambah key role
+    let dekanName = await employeeRepository.selectDekanName(dekan);
+    dekanName = dekanName.map((value) => {
+      return {
+        ...value,
+        role: "dekan",
+      };
+    });
+
+    // ambil nama kaprodi berdasarkan nik dan major kemudian tambah key role
+    let kaprodiNameByMajor = await employeeRepository.selectKaprodiNameByMajor(
+      major,
+      kaprodi
+    );
+    kaprodiNameByMajor = kaprodiNameByMajor.map((value) => {
+      return {
+        ...value,
+        role: "kaprodi",
+      };
+    });
+
+    // gabung array dekan dan kaprodi jadi satu array
+    const employees = dekanName.concat(kaprodiNameByMajor);
+
+    return employees;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const assignStudentGuidance = async (payload) => {
+  try {
+    const employee = await employeeRepository.addStudentGuidanceForLecturer(
+      payload
+    );
+    return employee;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getSupervisorHasStudent = async () => {
+  try {
+    const employee = await employeeRepository.selectAllSupervisor();
+
+    const employeeHasStudent = employee
+      .filter((item) => item.student.length > 0)
+      .map((item) => ({
+        numberOfStudent: item.student.length,
+        ...item,
+      }));
+    return employeeHasStudent;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const getSupervisorNoStudent = async () => {
+  try {
+    const employee = await employeeRepository.selectAllSupervisor();
+
+    const employeeNoStudent = employee
+      .filter((item) => item.student.length === 0)
+      .map((item) => {
+        const { student, ...itemWithoutStudent } = item;
+        return itemWithoutStudent;
+      });
+    return employeeNoStudent;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const assignSupervisorToStudents = async (employeeNik, nims) => {
+  try {
+    const updatedRows = await studentRepository.updateEmployeeNikStudentByNim(
+      employeeNik,
+      nims
+    );
+
+    return updatedRows;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const updateStudentSupervisor = async (employeeNik, nims) => {
+  try {
+    const updatedRows = await employeeRepository.updateStudentSupervisor(
+      employeeNik,
+      nims
+    );
+
+    return updatedRows;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const getSupervisorByNik = async (nik) => {
+  try {
+    const employee = await employeeRepository.getSupervisorByNik(nik);
+
+    return employee;
+  } catch (error) {
+    throw error.message;
+  }
+};
+
+const changeStudentStatus = async (nim, payload) => {
+  try {
+    return await employeeRepository.setStudentStatus(nim, payload);
+  } catch (error) {
+    throw error;
+  }
+};
+  
 //--------------------skripsi app-------------------------
 
 //===================================================================
@@ -167,7 +328,17 @@ module.exports = {
   createEmployee,
   deleteEmployeeById,
   updateOrPatchEmployeeById,
-
+  getEmployeeByMajor,
+  getDosenDetailProfile,
+  getDekanAndKaprodiByMajor,
+  assignStudentGuidance,
+  getSupervisorHasStudent,
+  getSupervisorNoStudent,
+  assignSupervisorToStudents,
+  updateStudentSupervisor,
+  getSupervisorByNik,
+  createManyEmployee,
+  changeStudentStatus,
   //-----------skripsi app-----------
   getAllDosenSkripsi,
   getAllDosen,

@@ -61,72 +61,90 @@ model Employee {
   proposal_changes          Proposal_Changes[]    @relation("Dosen")
   skripsi_changes           Skripsi_Changes[]     @relation("Dosen")
 
-  supervisior Consultation[]    @relation("supervisior")
-  reciever    Consultation[]    @relation("consultationRecivier")
-  preRegis    PreRegistration[]
-  transaction Transaction[]
-  message     Message[]
-  student     Student[]
+  // supervisior            Academic_Consultation[]   @relation("supervisior")
+  // reciever               Academic_Consultation[]   @relation("consultationRecivier")
+  transaction_preRegis   transaction_preRegis[]
+  academic_consultations Academic_Consultation[]
+  preRegis               PreRegistration[]
+  studentGrades          transaction_Grades[]
+  gradesAccess           grades_access[]
+  preRegisAccess         preRegis_access[]
+  GuidanceClass          GuidanceClass[]
 
   @@unique([firstName, lastName])
   @@index([email])
 }
 
 model Student {
-  id                        String                @id @default(uuid())
-  reg_num                   String?               @unique
-  nim                       String                @unique
-  password                  String
-  firstName                 String
-  lastName                  String?
-  dateOfBirth               DateTime?
-  gender                    gender
-  religion                  String?
-  bloodType                 String?
-  marriageStatus            String?
-  studentEmail              String?               @unique
-  curriculum                String?
-  highSchoolGrad            String?
-  currentAdresss            String?
-  status                    StudentStatus         @default(ACTIVE)
-  personalEmail             String?               @unique
-  faculty                   String?
-  major                     Major?
-  graduate_year             String?
-  address                   String?
-  phoneNo                   String?
-  token                     String?               @unique
-  guardianName              String?
-  guardianEducation         String?
-  guardianReligion          String?
-  guardianStatus            String?
-  familyRelation            String?
-  guardianEmail             String?
-  guardianPhoneNo           String?
-  guardianAddress           String?
-  createdBy                 String?
-  updatedBy                 String?
-  createdAt                 DateTime              @default(now())
-  updatedAt                 DateTime?
-  proposal_student          Proposal_Student[]    @relation("ProposalStudent")
-  skripsi_student           Skripsi_Student[]     @relation("SkripsiStudent")
-  group_student             Group_Student[]       @relation("StudentMember")
+  id                     String                @id @default(uuid())
+  reg_num                String?               @unique
+  nim                    String                @unique
+  password               String
+  firstName              String
+  lastName               String?
+  dateOfBirth            DateTime?             @db.Date
+  gender                 gender
+  religion               String?
+  bloodType              String?
+  MaritalStatus          String?
+  studentEmail           String?               @unique
+  curriculum             Curriculum?           @relation(fields: [curriculumId], references: [id])
+  curriculumId           String?
+  arrivalYear            String?
+  highSchoolGrad         String?
+  address                String?
+  currentAddress         String?
+  currentResidenceStatus String?
+  status                 StudentStatus         @default(ACTIVE)
+  personalEmail          String?               @unique
+  faculty                String?
+  major                  Major?
+  MajorGlobal            MajorGlobal?          @relation(fields: [majorGlobalId], references: [id])
+  majorGlobalId          String?
+  graduate_year          String?
+  phoneNo                String?
+  AreaOfConcentration    String?
+  token                  String?               @unique
+  guardianName           String?
+  guardianEducation      String?
+  guardianReligion       String?
+  guardianStatus         String?
+  familyRelation         String?
+  guardianEmail          String?
+  guardianPhoneNo        String?
+  guardianAddress        String?
+  createdBy              String?
+  updatedBy              String?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime?
+  filename               String?
+  path                   String?
+  proposal_student       Proposal_Student[]    @relation("ProposalStudent")
+  skripsi_student        Skripsi_Student[]     @relation("SkripsiStudent")
+  group_student          Group_Student[]       @relation("StudentMember")
   proposal_assessment       Proposal_Assessment[] @relation("Student")
   proposal_conclusion_value Proposal_Conclusion[] @relation("Student")
   skripsi_assessment        Skripsi_Assessment[]  @relation("Student")
   skripsi_conclusion_value  Skripsi_Conclusion[]  @relation("Student")
-  FormSPT                   FormSPT[]
+  FormSPT                FormSPT[]
 
-  consultation Consultation[]
-  preRegis     PreRegistration[]
-  transaction  Transaction[]
-  message      Message[]
-  Employee     Employee?         @relation(fields: [employeeId], references: [id])
-  employeeId   String?
-  Tracer_Study Tracer_Study[]
+  transaction_preRegis  transaction_preRegis[]
+  academic_Consultation Academic_Consultation[]
+  Tracer_Study          Tracer_Study[]
+  studentGrade          transaction_Grades[]
+  activityAbsent        ActivityAbsence[]
+  GuidanceClassMember   GuidanceClassMember?
+  Certificate           Certificate[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
+}
+
+model MajorGlobal {
+  id        String    @id
+  shortName String
+  name      String
+  Student   Student[]
 }
 
 model UserRole {
@@ -610,109 +628,217 @@ model Thesis_Link {
 }
 
 //-------------------Bimbingan Akademik-------------------/
-model Subject {
-  id           String            @id @default(uuid())
-  sub_code     String
-  sub_name     String
-  grade        String
-  Type         String
-  preRequisite String
-  Status       String
-  preRegis     PreRegistration[]
+
+// model Paralel {
+//   id               String          @id @default(uuid())
+//   Paralel          String
+//   // Employee         Employee?       @relation(fields: [employee_Nik], references: [nik])
+//   // employee_Nik     String?
+//   student_Grades   student_Grades? @relation(fields: [student_GradesId], references: [id])
+//   student_GradesId String?
+// }
+
+model Curriculum {
+  id        String            @id @default(uuid())
+  major     String            @db.VarChar(100)
+  year      String            @db.VarChar(50)
+  Subjects  Subject[]
+  Pre_Regis PreRegistration[]
+  student   Student[]
 }
 
-model PreRegistration {
+model Subject {
+  id            String          @id @default(uuid())
+  curriculum_id String
+  code          String          @db.VarChar(100)
+  name          String
+  credits       Int
+  type          String          @db.VarChar(100)
+  prerequisite  String?
+  semester      Int
+  list          List_PreRegis[]
+  grade         Grades[]
+  Curriculum    Curriculum?     @relation(fields: [curriculumId], references: [id])
+  curriculumId  String?
+}
+
+model transaction_Grades {
+  id           String    @id @default(uuid())
+  submitedDate DateTime  @default(now()) @db.Timestamptz(3)
+  approveDate  DateTime? @db.Timestamptz(3)
+  semester     String
+  comments     String?
+  status       status    @default(WAITING)
+  Employee     Employee? @relation(fields: [employeeNik], references: [nik])
+  employeeNik  String
+  Student      Student?  @relation(fields: [student_Nim], references: [nim])
+  student_Nim  String
+  Grades       Grades[]
+}
+
+model Grades {
+  id                 String              @id @default(uuid())
+  grades             String?
+  retrival_to        Int?
+  paralel            String?
+  submited_Date      DateTime            @default(now())
+  Subject            Subject?            @relation(fields: [subjectId], references: [id])
+  subjectId          String?
+  subjectName        String?
+  transaction_Grades transaction_Grades? @relation(fields: [transactionId], references: [id])
+  transactionId      String?
+}
+
+model grades_access {
+  id              String    @id @default(uuid())
+  semester        String?
+  semester_period String?
+  major           Major
+  due_date        DateTime
+  isOpen          Boolean   @default(true)
+  Employee        Employee? @relation(fields: [employeeNik], references: [nik])
+  employeeNik     String?
+}
+
+model transaction_preRegis {
   id          String            @id @default(uuid())
   submitDate  DateTime          @default(now())
   approveDate DateTime?
-  status      String
+  status      status            @default(WAITING)
   description String
   comments    String
-  history     HistoryAcademic[]
-  Subject     Subject?          @relation(fields: [subjectId], references: [id])
-  subjectId   String?
+  preRegis    PreRegistration[]
   Employee    Employee?         @relation(fields: [employeeId], references: [id])
   employeeId  String?
   Student     Student?          @relation(fields: [studentId], references: [id])
   studentId   String?
 }
 
-model Consultation {
-  id         String            @id @default(uuid())
-  topic      String
-  submitDate DateTime
-  status     String
-  message    Message[]
-  history    HistoryAcademic[]
-  Dosen      Employee?         @relation("supervisior", fields: [DosenId], references: [id])
-  DosenId    String?
-  Employee   Employee?         @relation("consultationRecivier", fields: [employeeId], references: [id])
-  employeeId String?
-  Student    Student?          @relation(fields: [studentId], references: [id])
-  studentId  String?
+model PreRegistration {
+  id                     String                @id @default(uuid())
+  Curriculum             Curriculum?           @relation(fields: [curriculumId], references: [id])
+  curriculumId           String?
+  list                   List_PreRegis[]
+  transaction_preRegis   transaction_preRegis? @relation(fields: [transaction_preRegisId], references: [id])
+  transaction_preRegisId String?
+  Employee               Employee?             @relation(fields: [employeeId], references: [id])
+  employeeId             String?
+}
+
+model List_PreRegis {
+  id                String           @id @default(uuid())
+  Subject           Subject?         @relation(fields: [subjectId], references: [id])
+  subjectId         String?
+  PreRegistration   PreRegistration? @relation(fields: [preRegistrationId], references: [id])
+  preRegistrationId String?
+}
+
+model preRegis_access {
+  id              String    @id @default(uuid())
+  semester        String?
+  semester_period String?
+  major           Major
+  due_date        DateTime
+  isOpen          Boolean   @default(true)
+  Employee        Employee? @relation(fields: [employeeNik], references: [nik])
+  employeeNik     String?
+}
+
+model Academic_Consultation {
+  id String @id @default(uuid())
+
+  student     Student @relation(fields: [student_nim], references: [nim])
+  student_nim String
+
+  receiver     Employee @relation(fields: [receiver_nik], references: [nik])
+  receiver_nik String
+
+  receiver_name        String              @db.VarChar(255)
+  topic                String              @db.VarChar(50)
+  student_name         String              @db.VarChar(255)
+  supervisor_name      String              @db.VarChar(255)
+  student_major        String              @db.VarChar(50)
+  student_arrival_year String              @db.VarChar(50)
+  createdAt            DateTime            @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime            @default(now()) @db.Timestamptz(3)
+  status               Consultation_Status @default(Waiting)
+  description          String
+
+  messages Message[]
 }
 
 model Message {
-  id             String        @id @default(uuid())
-  Consultation   Consultation? @relation(fields: [consultationId], references: [id])
-  consultationId String?
-  sendTime       DateTime      @default(now())
-  Student        Student?      @relation(fields: [studentId], references: [id])
-  studentId      String?
-  Employee       Employee?     @relation(fields: [employeeId], references: [id])
-  employeeId     String?
+  id String @id @default(uuid())
+
+  academic_consultation    Academic_Consultation @relation(fields: [academic_consultation_id], references: [id])
+  academic_consultation_id String
+
+  sender_name String   @db.VarChar(255)
+  content     String
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
 }
 
 model Certificate {
-  id          String            @id @default(uuid())
-  filename    String
-  path        String
-  title       String
-  category    String
-  description String
-  submitDate  DateTime          @default(now())
-  status      status            @default(WAITING)
-  transaction Transaction[]
-  history     HistoryAcademic[]
+  id              String    @id @default(uuid())
+  filename        String
+  path            String
+  title           String
+  category        String
+  description     String
+  comments        String?
+  approvalDate    DateTime? @db.Timestamptz(3)
+  submitDate      DateTime  @default(now()) @db.Timestamptz(3)
+  approval_status status    @default(WAITING)
+  student         Student   @relation(fields: [studentNim], references: [nim])
+  studentNim      String
 }
 
 model Activity {
-  id          String            @id @default(uuid())
-  title       String
-  description String
-  date        DateTime
-  time        String
-  transaction Transaction[]
-  history     HistoryAcademic[]
+  id              String            @id @default(uuid())
+  title           String
+  description     String
+  dueDate         DateTime
+  isAttendance    Boolean
+  guidanceClass   GuidanceClass     @relation(fields: [guidanceClassId], references: [id])
+  guidanceClassId String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  activityAbsent  ActivityAbsence[]
 }
 
-model Transaction {
-  id            String       @id @default(uuid())
-  Certificate   Certificate? @relation(fields: [certificateId], references: [id])
-  certificateId String?
-  Activity      Activity?    @relation(fields: [activityId], references: [id])
-  activityId    String?
-  Student       Student?     @relation(fields: [studentId], references: [nim])
-  studentId     String?
-  Employee      Employee?    @relation(fields: [employeeId], references: [nik])
-  employeeId    String?
+model ActivityAbsence {
+  presence   Boolean?
+  activity   Activity @relation(fields: [activityId], references: [id])
+  activityId String
+  student    Student  @relation(fields: [studentNim], references: [nim])
+  studentNim String
+
+  @@unique([activityId, studentNim])
 }
 
-model HistoryAcademic {
-  id                String           @id @default(uuid())
-  PreRegistration   PreRegistration? @relation(fields: [preRegistrationId], references: [id])
-  preRegistrationId String?
-  Consultation      Consultation?    @relation(fields: [consultationId], references: [id])
-  consultationId    String?
-  Certificate       Certificate?     @relation(fields: [certificateId], references: [id])
-  certificateId     String?
-  Activity          Activity?        @relation(fields: [activityId], references: [id])
-  activityId        String?
+model GuidanceClass {
+  id                  String                @id @default(uuid())
+  teacher             Employee              @relation(fields: [teacherId], references: [nik])
+  teacherId           String                @unique
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  Activity            Activity[]
+  GuidanceClassMember GuidanceClassMember[]
+}
+
+model GuidanceClassMember {
+  student         Student       @relation(fields: [studentNim], references: [nim])
+  studentNim      String        @unique
+  gudianceClass   GuidanceClass @relation(fields: [guidanceClassId], references: [id])
+  guidanceClassId String
+
+  @@unique([studentNim, guidanceClassId])
 }
 
 enum Major {
   SI
   IF
+  DKV
 }
 
 enum StudentStatus {
@@ -803,4 +929,10 @@ enum Revision_Approve {
   Waiting
   Approve
   Rejected
+}
+
+enum Consultation_Status {
+  Waiting
+  OnProcess
+  Complete
 }
