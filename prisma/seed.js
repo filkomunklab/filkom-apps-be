@@ -14,20 +14,14 @@ async function main() {
   });
 
   // CREATE CURRICULUM
-  await prisma.curriculum
-    .create({
-      data: {
-        major: "Informatika",
-        year: "2020",
-      },
-    })
-    .then(async (curriculum) => {
-      kurikulum_informatika = curriculum.id;
-      try {
-        await prisma.subject.createMany({
+  await prisma.curriculum.create({
+    data: {
+      major: "Informatika",
+      year: "2020",
+      Subjects: {
+        createMany: {
           data: [
             {
-              curriculum_id: curriculum.id,
               code: "MATH000",
               name: "Matematika/ Mathematics",
               credits: 2,
@@ -36,7 +30,6 @@ async function main() {
               semester: 0,
             },
             {
-              curriculum_id: curriculum.id,
               code: "COPS000",
               name: "Keterampilan Komputer Dasar/ Basic Computer Skill",
               credits: 3,
@@ -45,7 +38,6 @@ async function main() {
               semester: 0,
             },
             {
-              curriculum_id: curriculum.id,
               code: "WEDU001",
               name: "Pendidikan Keterampilan/ Work Education",
               credits: 1,
@@ -54,7 +46,6 @@ async function main() {
               semester: 0,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BIU000",
               name: "Bahasa Inggris Pemula/ Basic English",
               credits: 3,
@@ -63,7 +54,6 @@ async function main() {
               semester: 0,
             },
             {
-              curriculum_id: curriculum.id,
               code: "LMTR999",
               name: "Mata Kuliah Pembatas/ Limiter Subject",
               credits: 1,
@@ -72,7 +62,6 @@ async function main() {
               semester: 0,
             },
             {
-              curriculum_id: curriculum.id,
               code: "FILG181",
               name: "Teladan Kehidupan I/ The Exemplary Living I",
               credits: 2,
@@ -81,7 +70,6 @@ async function main() {
               semester: 1,
             },
             {
-              curriculum_id: curriculum.id,
               code: "GEN001",
               name: "Bahasa Inggris Dasar I/ Elementary English I",
               credits: 3,
@@ -91,7 +79,6 @@ async function main() {
               semester: 1,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF1111",
               name: "Pengantar Komputer/ Introduction to Computing",
               credits: 3,
@@ -100,7 +87,6 @@ async function main() {
               semester: 1,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS1113",
               name: "Pemrograman Komputer/ Computer Programming",
               credits: 6,
@@ -109,7 +95,6 @@ async function main() {
               semester: 1,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF1112",
               name: "Dasar Aljabar Linear/ Aljabar Linear Fundamental",
               credits: 3,
@@ -118,7 +103,6 @@ async function main() {
               semester: 1,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BIU101",
               name: "Bahasa Inggris Pra Dasar/ Pre-Elementary English",
               credits: 3,
@@ -128,7 +112,6 @@ async function main() {
               semester: 1,
             },
             {
-              curriculum_id: curriculum.id,
               code: "FILG182",
               name: "Teladan Kehidupan II/ The Exemplary Living II",
               credits: 2,
@@ -138,7 +121,6 @@ async function main() {
               semester: 2,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS1221",
               name: "Matematika Diskrit/ Discrete Mathematics",
               credits: 3,
@@ -147,7 +129,6 @@ async function main() {
               semester: 2,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF1222",
               name: "Kalkulus/ Calculus",
               credits: 3,
@@ -156,7 +137,6 @@ async function main() {
               semester: 2,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF1223",
               name: "Logika Informatika/ Informatics Logic",
               credits: 3,
@@ -166,7 +146,6 @@ async function main() {
               semester: 2,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS1224",
               name: "Struktur Data dan Algoritma/ Data Structure and Algorithms",
               credits: 3,
@@ -176,7 +155,6 @@ async function main() {
               semester: 2,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BIU102",
               name: "Bahasa Inggris Dasar/ Elementary English",
               credits: 3,
@@ -186,7 +164,6 @@ async function main() {
               semester: 2,
             },
             {
-              curriculum_id: curriculum.id,
               code: "EDU112",
               name: "Filsafat Pendidikan Kristen/ Philosophy of Christian Education",
               credits: 2,
@@ -195,7 +172,6 @@ async function main() {
               semester: 2,
             },
             {
-              curriculum_id: curriculum.id,
               code: "GEN101",
               name: "Bahasa Inggris Pra Menengah I / Pre-Inter English I",
               credits: 3,
@@ -205,7 +181,6 @@ async function main() {
               semester: 3,
             },
             {
-              curriculum_id: curriculum.id,
               code: "FILG283",
               name: "Prinsip-Prinsip Nilai Kristiani/ The Principles of Christian Values",
               credits: 2,
@@ -215,7 +190,6 @@ async function main() {
               semester: 3,
             },
             {
-              curriculum_id: curriculum.id,
               code: "PPKN101",
               name: "Pendidikan Kewarganegaraan/ Indonesian Civics",
               credits: 3,
@@ -224,7 +198,6 @@ async function main() {
               semester: 3,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF2131",
               name: "Organisasi dan Arsitektur Komputer/ Computer Organization and Architecture",
               credits: 3,
@@ -234,7 +207,6 @@ async function main() {
               semester: 3,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS2133",
               name: "Pengantar Basisdata/ Introduction to Database",
               credits: 3,
@@ -244,7 +216,6 @@ async function main() {
               semester: 3,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS2134",
               name: "Statistik dan Probabilitas/ Statistics and Probability",
               credits: 3,
@@ -253,7 +224,6 @@ async function main() {
               semester: 3,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS2132",
               name: "Perancangan Web/ Web Design",
               credits: 3,
@@ -263,7 +233,6 @@ async function main() {
               semester: 3,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BIU203",
               name: "Bahasa Inggris Pra Menengah I / Pre-Intermediate English I",
               credits: 3,
@@ -273,7 +242,6 @@ async function main() {
               semester: 3,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BIU203",
               name: "Bahasa Inggris Pra Menengah I / Pre-Intermediate English I",
               credits: 3,
@@ -283,7 +251,6 @@ async function main() {
               semester: 3,
             },
             {
-              curriculum_id: curriculum.id,
               code: "GEN102",
               name: "Bahasa Inggris Pra Menengah II/ Pre-Inter English II",
               credits: 3,
@@ -293,7 +260,6 @@ async function main() {
               semester: 4,
             },
             {
-              curriculum_id: curriculum.id,
               code: "FILG284",
               name: "Orang Muda dan Dunia/ Youth and the World",
               credits: 2,
@@ -303,7 +269,6 @@ async function main() {
               semester: 4,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF2243",
               name: "Jaringan Komputer I/ Computer Network I",
               credits: 3,
@@ -313,7 +278,6 @@ async function main() {
               semester: 4,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF2244",
               name: "Sistem Cerdas/ Expert System",
               credits: 3,
@@ -323,7 +287,6 @@ async function main() {
               semester: 4,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF2245",
               name: "Teori Bahasa dan Automata/ Language and Automata Theory",
               credits: 3,
@@ -333,7 +296,6 @@ async function main() {
               semester: 4,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS2241",
               name: "Sistem Manajemen Basisdata/ Database Management System",
               credits: 3,
@@ -343,7 +305,6 @@ async function main() {
               semester: 4,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS2243",
               name: "Pemrograman Berorientasi Objek/ Object Oriented Programming",
               credits: 3,
@@ -353,7 +314,6 @@ async function main() {
               semester: 4,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BIU204",
               name: "Bahasa Inggris Pra Menengah II/ Pre-Intermediate English II",
               credits: 3,
@@ -363,7 +323,6 @@ async function main() {
               semester: 4,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BIU204",
               name: "Bahasa Inggris Pra Menengah II/ Pre-Intermediate English II",
               credits: 3,
@@ -373,7 +332,6 @@ async function main() {
               semester: 4,
             },
             {
-              curriculum_id: curriculum.id,
               code: "FILG385",
               name: "Kehidupan Keluarga / Family Living",
               credits: 2,
@@ -383,7 +341,6 @@ async function main() {
               semester: 5,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF3156",
               name: "Jaringan Komputer II/ Computer Network II",
               credits: 3,
@@ -393,7 +350,6 @@ async function main() {
               semester: 5,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF3155",
               name: "Pemrograman Visual/ Visual Programming",
               credits: 3,
@@ -403,7 +359,6 @@ async function main() {
               semester: 5,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS3151",
               name: "Pengembangan Web Front-End/ Front-End Web Development",
               credits: 3,
@@ -413,7 +368,6 @@ async function main() {
               semester: 5,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS3152",
               name: "Analisis dan Perancangan Sistem/ System Analysis and Design",
               credits: 3,
@@ -423,7 +377,6 @@ async function main() {
               semester: 5,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF3153",
               name: "Konsep Sistem Operasi/ Operating System Concept",
               credits: 3,
@@ -433,7 +386,6 @@ async function main() {
               semester: 5,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS3262",
               name: "Interaksi Manusia dan Komputer/ Human and Computer Interaction",
               credits: 3,
@@ -443,7 +395,6 @@ async function main() {
               semester: 5,
             },
             {
-              curriculum_id: curriculum.id,
               code: "FILG386",
               name: "Kehidupan di Akhir Zaman/ End Time Living",
               credits: 2,
@@ -453,7 +404,6 @@ async function main() {
               semester: 6,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF3266",
               name: "Grafika Komputer/ Computer Graphics",
               credits: 3,
@@ -463,7 +413,6 @@ async function main() {
               semester: 6,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF3262",
               name: "Pengembangan Web Back-End/ Back-End Web Development",
               credits: 3,
@@ -473,7 +422,6 @@ async function main() {
               semester: 6,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF3263",
               name: "Kecerdasan Buatan/ Artificial Intelligence",
               credits: 3,
@@ -483,7 +431,6 @@ async function main() {
               semester: 6,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF3264",
               name: "Rekayasa Perangkat Lunak/ Software Engineering",
               credits: 3,
@@ -493,7 +440,6 @@ async function main() {
               semester: 6,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS3261",
               name: "Pengembangan Perangkat Bergerak/ Mobile Application Development",
               credits: 3,
@@ -503,7 +449,6 @@ async function main() {
               semester: 6,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS3265",
               name: "Metodologi Penelitian/ Research Method",
               credits: 3,
@@ -513,7 +458,6 @@ async function main() {
               semester: 6,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS4171",
               name: "Skripsi I/ Research Project I",
               credits: 3,
@@ -523,7 +467,6 @@ async function main() {
               semester: 7,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS2245",
               name: "Penulisan Ilmiah/ Scientific Writing",
               credits: 2,
@@ -533,7 +476,6 @@ async function main() {
               semester: 7,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4172",
               name: "Pengantar Pengembangan Game/ Introduction to Game Development",
               credits: 3,
@@ -543,7 +485,6 @@ async function main() {
               semester: 7,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4173",
               name: "Pemrograman Sistem/ System Programming",
               credits: 3,
@@ -553,7 +494,6 @@ async function main() {
               semester: 7,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS4281",
               name: "Skripsi II/ Research Project II",
               credits: 3,
@@ -563,7 +503,6 @@ async function main() {
               semester: 8,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4282",
               name: "Robotika/ Robotics",
               credits: 3,
@@ -573,7 +512,6 @@ async function main() {
               semester: 8,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS2242",
               name: "Kewirausahaan/ Entrepreneur - Project Capstone",
               credits: 3,
@@ -583,7 +521,6 @@ async function main() {
               semester: 8,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4174",
               name: "Etika Komputer/ Computer Ethics",
               credits: 2,
@@ -593,7 +530,6 @@ async function main() {
               semester: 8,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4291",
               name: "Desain untuk Visualisasi dan Komputer/ Design for Visualization and Communication",
               credits: 3,
@@ -603,7 +539,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4292",
               name: "Pemrograman Game/ Game Programming",
               credits: 3,
@@ -613,7 +548,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4191",
               name: "Pengantar Animasi/ Introduction to Animation",
               credits: 3,
@@ -623,7 +557,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4192",
               name: "Prinsip-Prinsip Desain Kreatif/ Principles of Creative Design",
               credits: 3,
@@ -633,7 +566,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4294",
               name: "Pemrosesan Bahasa Alami/ Natural Language Processing",
               credits: 3,
@@ -643,7 +575,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IS3154",
               name: "Penambangan dan Pergudangan Data/ Data Mining and Warehousing",
               credits: 3,
@@ -653,7 +584,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4293",
               name: "Pembelajaran Mesin/ Machine Learning",
               credits: 3,
@@ -663,7 +593,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4194",
               name: "Pencarian Informasi/ Information Retrieval",
               credits: 3,
@@ -673,7 +602,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4195",
               name: "Manajemen Proyek/ Project Management",
               credits: 3,
@@ -683,7 +611,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4196",
               name: "Internet untuk Segala/ Internet of Things",
               credits: 3,
@@ -693,7 +620,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4295",
               name: "Teknik Cloud/ Cloud Engineering",
               credits: 3,
@@ -703,7 +629,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "IF4296",
               name: "Rekayasa DevOps/ DevOps Engineering",
               credits: 3,
@@ -713,7 +638,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "CNET402",
               name: "Jaringan Nirkabel dan Perangkat Bergerak/ Wireless and Mobile Networks",
               credits: 3,
@@ -722,7 +646,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BENG310",
               name: "Bahasa Inggris Bisnis Membaca dan Kosakata/ Business English Reading and Vocabulary",
               credits: 3,
@@ -732,7 +655,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BENG330",
               name: "Komunikasi Bisnis Bahasa Inggris/ Business English Communication",
               credits: 3,
@@ -742,7 +664,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BBEN320",
               name: "Korespondensi Bisnis Bahasa Inggris/ Business English Correspondence",
               credits: 3,
@@ -752,7 +673,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "ELIT271",
               name: "Studi Literatur I/ Literature Studies I",
               credits: 3,
@@ -762,7 +682,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BIU305",
               name: "Bahasa Inggris Menengah I/ Intermediate English I",
               credits: 3,
@@ -772,7 +691,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BIU305",
               name: "Bahasa Inggris Menengah I/ Intermediate English I",
               credits: 3,
@@ -782,7 +700,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BIU306",
               name: "Bahasa Inggris Menengah II/ Intermediate English II",
               credits: 3,
@@ -792,7 +709,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "GEN306",
               name: "Bahasa Inggris Menengah Atas II/ Upper-Inter English II",
               credits: 3,
@@ -802,7 +718,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "ESP401",
               name: "Bahasa Inggris Bisnis Membaca dan Kosakata/ Business English Reading and Vocabulary",
               credits: 3,
@@ -812,7 +727,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "ESP401",
               name: "Bahasa Inggris Bisnis Membaca dan Kosakata/ Business English Reading and Vocabulary",
               credits: 3,
@@ -822,7 +736,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "ESP402",
               name: "Korespondensi Bisnis Bahasa Inggris/ Business English Correspondence",
               credits: 3,
@@ -832,7 +745,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "ESP402",
               name: "Korespondensi Bisnis Bahasa Inggris/ Business English Correspondence",
               credits: 3,
@@ -842,7 +754,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "ESP403",
               name: "Komunikasi Bisnis Bahasa Inggris/ Business English Communication",
               credits: 3,
@@ -852,7 +763,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "ESP403",
               name: "Komunikasi Bisnis Bahasa Inggris/ Business English Communication",
               credits: 3,
@@ -862,7 +772,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "ENG433",
               name: "Penulisan Akademik Bahasa Inggris III/ Academic English Writing III",
               credits: 3,
@@ -872,7 +781,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "BIU306",
               name: "Bahasa Inggris Menengah II/ Intermediate English II",
               credits: 3,
@@ -882,7 +790,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "ENG433",
               name: "Penulisan Akademik Bahasa Inggris III/ Academic English Writing III",
               credits: 3,
@@ -892,7 +799,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "MG4191",
               name: "Pengalaman Kerja di Industri Teknologi Informasi/ Industrial Experience in Information Technology",
               credits: 8,
@@ -901,7 +807,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "MG4192",
               name: "Pengalaman Praktek di Bidang Teknologi Informasi/ Information Technology Practice in Industrial Experience",
               credits: 8,
@@ -910,7 +815,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "MG4193",
               name: "Pengembangan profesional di Industri Teknologi InformasiDevelopment in Information Technology Industry/ Professional Development in Information Technology Industry",
               credits: 4,
@@ -919,7 +823,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "SI42901",
               name: "Mata Kuliah Pilihan untuk Studi Independen 1/ Elective Course for Specific Independent Study 1/",
               credits: 8,
@@ -928,7 +831,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "SI42902",
               name: "Mata Kuliah Pilihan untuk Studi Independen 2/ Elective Course for Specific Independent Study 2",
               credits: 8,
@@ -937,7 +839,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "SI42903",
               name: "Mata Kuliah Pilihan untuk Studi Independen 3/ Elective Course for Specific Independent Study 3",
               credits: 4,
@@ -946,7 +847,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "SI42905",
               name: "Mata Kuliah Pilihan untuk Studi Independen 5/ Elective Course for Specific Independent Study 5",
               credits: 3,
@@ -955,7 +855,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "SI42904",
               name: "Mata Kuliah Pilihan untuk Studi Independen 4/ Elective Course for Specific Independent Study 4",
               credits: 4,
@@ -964,7 +863,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "SI42906",
               name: "Mata Kuliah Pilihan untuk Studi Independen 6/ Elective Course for Specific Independent Study 6",
               credits: 3,
@@ -973,7 +871,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "SI42907",
               name: "Mata Kuliah Pilihan untuk Studi Independen 7/ Elective Course for Specific Independent Study 7",
               credits: 3,
@@ -982,7 +879,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "SI42908",
               name: "Mata Kuliah Pilihan untuk Studi Independen 8/ Elective Course for Specific Independent Study 8",
               credits: 2,
@@ -991,7 +887,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "SI42909",
               name: "Mata Kuliah Pilihan untuk Studi Independen 9/ Elective Course for Specific Independent Study 9",
               credits: 2,
@@ -1000,7 +895,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "SI42910",
               name: "Mata Kuliah Pilihan untuk Studi Independen 10/ Elective Course for Specific Independent Study 10",
               credits: 1,
@@ -1009,7 +903,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "SI42911",
               name: "Mata Kuliah Pilihan untuk Studi Independen 11/ Elective Course for Specific Independent Study 11",
               credits: 1,
@@ -1018,7 +911,6 @@ async function main() {
               semester: 9,
             },
             {
-              curriculum_id: curriculum.id,
               code: "SI42912",
               name: "Mata Kuliah Pilihan untuk Studi Independen 12/ Elective Course for Specific Independent Study 12",
               credits: 20,
@@ -1027,11 +919,10 @@ async function main() {
               semester: 9,
             },
           ],
-        });
-      } catch (error) {
-        console.log("ini eror: ", error);
-      }
-    });
+        },
+      },
+    },
+  });
 
   // .then(async (student) => {
   //   await prisma.userRole.create({

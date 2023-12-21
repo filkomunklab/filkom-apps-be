@@ -63,13 +63,12 @@ model Employee {
 
   // supervisior            Academic_Consultation[]   @relation("supervisior")
   // reciever               Academic_Consultation[]   @relation("consultationRecivier")
-  transaction_preRegis   transaction_preRegis[]
   academic_consultations Academic_Consultation[]
   preRegis               PreRegistration[]
   studentGrades          transaction_Grades[]
   gradesAccess           grades_access[]
-  preRegisAccess         preRegis_access[]
   GuidanceClass          GuidanceClass[]
+  PreRegistrationData    PreRegistrationData[]
 
   @@unique([firstName, lastName])
   @@index([email])
@@ -126,13 +125,13 @@ model Student {
   skripsi_assessment     Skripsi_Assessment[]  @relation("Student")
   FormSPT                FormSPT[]
 
-  transaction_preRegis  transaction_preRegis[]
   academic_Consultation Academic_Consultation[]
   Tracer_Study          Tracer_Study[]
   studentGrade          transaction_Grades[]
   activityAbsent        ActivityAbsence[]
   GuidanceClassMember   GuidanceClassMember?
   Certificate           Certificate[]
+  PreRegistrationData   PreRegistrationData[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
@@ -597,17 +596,16 @@ model Curriculum {
 
 model Subject {
   id            String          @id @default(uuid())
-  curriculum_id String
   code          String          @db.VarChar(100)
   name          String
   credits       Int
   type          String          @db.VarChar(100)
   prerequisite  String?
   semester      Int
-  list          List_PreRegis[]
   grade         Grades[]
   Curriculum    Curriculum?     @relation(fields: [curriculumId], references: [id])
   curriculumId  String?
+  ListOfRequest ListOfRequest[]
 }
 
 model transaction_Grades {
@@ -649,48 +647,42 @@ model grades_access {
   employeeNik     String?
 }
 
-model transaction_preRegis {
-  id          String            @id @default(uuid())
-  submitDate  DateTime          @default(now())
-  approveDate DateTime?
-  status      status            @default(WAITING)
-  description String
-  comments    String
-  preRegis    PreRegistration[]
-  Employee    Employee?         @relation(fields: [employeeId], references: [id])
-  employeeId  String?
-  Student     Student?          @relation(fields: [studentId], references: [id])
-  studentId   String?
-}
-
 model PreRegistration {
-  id                     String                @id @default(uuid())
-  Curriculum             Curriculum?           @relation(fields: [curriculumId], references: [id])
-  curriculumId           String?
-  list                   List_PreRegis[]
-  transaction_preRegis   transaction_preRegis? @relation(fields: [transaction_preRegisId], references: [id])
-  transaction_preRegisId String?
-  Employee               Employee?             @relation(fields: [employeeId], references: [id])
-  employeeId             String?
+  id             String      @id @default(uuid())
+  semester       Semester
+  semesterPeriod String
+  major          Major
+  dueDate        DateTime
+  isOpen         Boolean     @default(true)
+  Employee       Employee    @relation(fields: [employeeNik], references: [nik])
+  employeeNik    String
+  Curriculum     Curriculum? @relation(fields: [curriculumId], references: [id])
+  curriculumId   String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 }
 
-model List_PreRegis {
-  id                String           @id @default(uuid())
-  Subject           Subject?         @relation(fields: [subjectId], references: [id])
-  subjectId         String?
-  PreRegistration   PreRegistration? @relation(fields: [preRegistrationId], references: [id])
-  preRegistrationId String?
+model PreRegistrationData {
+  id            String          @id @default(uuid())
+  Student       Student         @relation(fields: [studentId], references: [nim])
+  studentId     String
+  Employee      Employee        @relation(fields: [employeeId], references: [nik])
+  employeeId    String
+  status        status?         @default(WAITING)
+  description   String?
+  comments      String?
+  submitDate    DateTime        @default(now())
+  approveDate   DateTime?
+  ListOfRequest ListOfRequest[]
 }
 
-model preRegis_access {
-  id              String    @id @default(uuid())
-  semester        String?
-  semester_period String?
-  major           Major
-  due_date        DateTime
-  isOpen          Boolean   @default(true)
-  Employee        Employee? @relation(fields: [employeeNik], references: [nik])
-  employeeNik     String?
+model ListOfRequest {
+  PreRegistrationData   PreRegistrationData @relation(fields: [preRegistrationDataId], references: [id])
+  preRegistrationDataId String
+  subject               Subject             @relation(fields: [subjectId], references: [id])
+  subjectId             String
+
+  @@unique([preRegistrationDataId, subjectId])
 }
 
 model Academic_Consultation {
