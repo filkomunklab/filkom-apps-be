@@ -596,7 +596,6 @@ model Curriculum {
 
 model Subject {
   id            String          @id @default(uuid())
-  curriculum_id String
   code          String          @db.VarChar(100)
   name          String
   credits       Int

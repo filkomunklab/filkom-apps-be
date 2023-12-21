@@ -1,13 +1,11 @@
 const prisma = require("../../../database");
 
-const findSubjectForPreRegis = async (major, year) => {
+const findSubjectForPreRegis = async (payload) => {
+  const { id } = payload;
   try {
-    const preRegis = await prisma.curriculum.findFirst({
+    const preRegis = await prisma.curriculum.findUnique({
       where: {
-        AND: {
-          major,
-          year,
-        },
+        id: id ?? undefined,
       },
       include: {
         Subjects: {

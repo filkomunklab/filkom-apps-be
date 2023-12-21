@@ -1,9 +1,9 @@
 const preRegisService = require("./preRegis.service");
 
 const preRegisMenu = async (req, res) => {
-  const { major, year } = req.body;
+  const payload = req.query;
   try {
-    const preRegis = await preRegisService.viewPreRegisMenu(major, year);
+    const preRegis = await preRegisService.viewPreRegisMenu(payload);
     res.status(201).send({ status: "OK", data: preRegis });
   } catch (error) {
     res
