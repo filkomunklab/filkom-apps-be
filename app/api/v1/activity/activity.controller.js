@@ -4,8 +4,8 @@ const activityService = require("./activity.service");
 const createActivity = async (req, res) => {
   const payload = req.body;
   try {
-    await activityService.createActivity(payload);
-    res.status(201);
+    const activity = await activityService.createActivity(payload);
+    res.status(201).send({ status: "OK", data: activity });
   } catch (error) {
     if (error.name === "ValidationError") {
       return res
