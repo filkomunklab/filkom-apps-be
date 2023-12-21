@@ -4,6 +4,10 @@ const LatestPreRegistSchema = Yup.object().shape({
   major: Yup.string().oneOf(["SI", "IF", "DKV"]).required("Major is required"),
 });
 
+const GetCurriculumSchema = Yup.object().shape({
+  id: Yup.string().required("ID is required"),
+});
+
 const CreatePreRegistSchema = Yup.object().shape({
   semester: Yup.string()
     .oneOf(["Ganjil", "Genap", "Padat"])
@@ -33,7 +37,7 @@ const SubmitPreRegistSchema = Yup.object().shape({
       excludeEmptyString: true,
     })
     .required("Employee ID is required"),
-  description: Yup.string().required("Comment is required"),
+  description: Yup.string(),
   listOfSubject: Yup.array()
     .of(
       Yup.object().shape({
@@ -63,4 +67,5 @@ module.exports = {
   CreatePreRegistSchema,
   SubmitPreRegistSchema,
   ApprovalSchema,
+  GetCurriculumSchema,
 };

@@ -4,18 +4,12 @@ const {
   LatestPreRegistSchema,
   SubmitPreRegistSchema,
   ApprovalSchema,
+  GetCurriculumSchema,
 } = require("./preRegis.schema");
 
-const viewPreRegisMenu = async (major, year) => {
-  try {
-    const preRegis = await preRegisRepository.findSubjectForPreRegis(
-      major,
-      year
-    );
-    return preRegis;
-  } catch (error) {
-    return error;
-  }
+const viewPreRegisMenu = async (payload) => {
+  await GetCurriculumSchema.validate(payload);
+  return await preRegisRepository.findSubjectForPreRegis(payload);
 };
 
 const checkPreRegistAccess = async (payload) => {
