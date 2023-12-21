@@ -643,6 +643,7 @@ model grades_access {
   semester_period String?
   major           Major
   due_date        DateTime
+  createdAt       DateTime  @default(now())
   isOpen          Boolean   @default(true)
   Employee        Employee? @relation(fields: [employeeNik], references: [nik])
   employeeNik     String?
