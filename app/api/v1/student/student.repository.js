@@ -27,7 +27,7 @@ const findStudentByEmployeeNik = async (nik) => {
   try {
     const student = await prisma.student.findMany({
       where: {
-        employeeId: nik,
+        employeeNik: nik,
       },
     });
     return student;

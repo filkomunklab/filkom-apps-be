@@ -6,13 +6,5 @@ const router = express.Router();
 router.post("/access/open/grades", accessController.openGradeAccess);
 router.patch("/access/close/:id", accessController.closeGradesAccess);
 router.get("/access/list/gradeAccess", accessController.getlistGradeAccess);
-
-//=========================== PRE-REGIS ACCESS ===============================//
-router.post("/access/open/preRegis", accessController.openPreRegisAccess);
-router.patch(
-  "/access/preRegis/close/:id",
-  accessController.closePreRegisAccess
-);
-router.get("/access/list/preRegis", accessController.getListPreRegisAccess);
-
+router.get("/access/isOpen/:major", accessController.checkingOpenGradeAccess);
 module.exports = router;

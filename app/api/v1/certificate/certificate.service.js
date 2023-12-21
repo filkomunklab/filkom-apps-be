@@ -7,10 +7,21 @@ const moment = require("moment-timezone");
 //Find certificate by category
 const viewCertifiacateByCategory = async (category, nik) => {
   try {
-    const certificate = await certificateRepository.findCertificateByCategory(
+    let certificate = await certificateRepository.findCertificateByCategory(
       category,
       nik
     );
+
+    certificate = certificate.map((item) => {
+      return {
+        ...item,
+        Certificate: {
+          title: item.Certificate.title,
+          approvalDate: item.Certificate.approvalDate.toString(),
+        },
+      };
+    });
+
     return certificate;
   } catch (error) {
     return error;
@@ -43,19 +54,20 @@ const advisorWaitingListCertificateView = async (nik) => {
 };
 
 //Waiting List by major
-const waitingListbyMajor = async (major) => {
+const waitingListbyMajor = async (major, nik) => {
   try {
-    let certificate = await certificateRepository.findWaitingListbyMajor(major);
+    let certificate = await certificateRepository.findWaitingListbyMajor(
+      major,
+      nik
+    );
 
     certificate = certificate.map((item) => {
       return {
         ...item,
-        Certificate: {
-          title: item.Certificate.title,
-          submitDate: item.Certificate.submitDate.toString(),
-          category: item.Certificate.category,
-          approval_status: item.Certificate.approval_status,
-        },
+        title: item.title,
+        submitDate: item.submitDate.toString(),
+        category: item.category,
+        approval_status: item.approval_status,
       };
     });
 
@@ -67,10 +79,11 @@ const waitingListbyMajor = async (major) => {
 };
 
 //Waiting list arrival year pt2
-const viewWaitingListByArrYear = async (arrivalYear) => {
+const viewWaitingListByArrYear = async (arrivalYear, nik) => {
   try {
     let certificate = await certificateRepository.filterWaitingListByArrYear(
-      arrivalYear
+      arrivalYear,
+      nik
     );
 
     certificate = certificate.map((item) => {
@@ -190,8 +203,8 @@ const viewCurrentStudentCertificate = async (nim) => {
       return {
         ...item,
         Certificate: {
-          title: item.Certificate.title,
-          submitDate: item.Certificate.submitDate.toString(),
+          title: item.title,
+          submitDate: item.submitDate.toString(),
         },
       };
     });
@@ -212,10 +225,8 @@ const studentHistoryCertificateView = async (nim) => {
     certificate = certificate.map((item) => {
       return {
         ...item,
-        Certificate: {
-          title: item.Certificate.title,
-          approvalDate: item.Certificate.approvalDate.toString(),
-        },
+        title: item.title,
+        approvalDate: item.approvalDate.toString(),
       };
     });
 

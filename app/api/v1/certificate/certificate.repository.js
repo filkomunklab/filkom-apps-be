@@ -4,39 +4,37 @@ const prisma = require("../../../database");
 //show list Approved/Rejected certificate
 const findCertificate = async (nik) => {
   try {
-    const certificate = await prisma.transaction_Certificate.findMany({
+    const certificate = await prisma.certificate.findMany({
       where: {
         AND: [
           {
-            employeeNik: nik,
+            student: {
+              GuidanceClassMember: {
+                gudianceClass: {
+                  teacherId: nik,
+                },
+              },
+            },
           },
           {
-            Certificate: {
-              OR: [
-                {
-                  approval_status: "APPROVED",
-                },
-                {
-                  approval_status: "REJECTED",
-                },
-              ],
-            },
+            OR: [
+              {
+                approval_status: "APPROVED",
+              },
+              {
+                approval_status: "REJECTED",
+              },
+            ],
           },
         ],
       },
       orderBy: {
-        Certificate: {
-          approvalDate: "desc",
-        },
+        approvalDate: "desc",
       },
-      include: {
-        Certificate: {
-          select: {
-            title: true,
-            approvalDate: true,
-          },
-        },
-        Student: {
+      select: {
+        title: true,
+        approvalDate: true,
+        student: {
           select: {
             firstName: true,
             lastName: true,
@@ -53,27 +51,33 @@ const findCertificate = async (nik) => {
 
 // find Certificate by category (dosepem)
 const findCertificateByCategory = async (category, nik) => {
-  console.log("object");
   try {
     const certificate = await prisma.certificate.findMany({
       where: {
-        category,
-        transaction: {
-          some: { employeeNik: nik },
-        },
+        AND: [
+          {
+            approval_status: "WAITING",
+            category,
+            student: {
+              GuidanceClassMember: {
+                gudianceClass: {
+                  teacherId: nik,
+                },
+              },
+            },
+          },
+        ],
       },
       orderBy: {
         submitDate: "desc",
       },
-      include: {
-        transaction: {
+      select: {
+        title: true,
+        approvalDate: true,
+        student: {
           select: {
-            Student: {
-              select: {
-                firstName: true,
-                lastName: true,
-              },
-            },
+            firstName: true,
+            lastName: true,
           },
         },
       },
@@ -87,43 +91,43 @@ const findCertificateByCategory = async (category, nik) => {
 //waiting list certificate (dospem)
 const findAdvisorCertificateWaitingList = async (nik) => {
   try {
-    const certificate = await prisma.transaction_Certificate.findMany({
+    const certificate = await prisma.certificate.findMany({
       where: {
-        AND: [
-          {
-            employeeNik: nik,
-          },
-          {
-            Certificate: {
-              approval_status: "WAITING",
+        student: {
+          GuidanceClassMember: {
+            gudianceClass: {
+              teacherId: nik,
             },
           },
-        ],
+        },
+        approval_status: "WAITING",
       },
       orderBy: {
-        Certificate: {
-          submitDate: "desc",
-        },
+        submitDate: "desc",
       },
-      include: {
-        Certificate: {
-          select: {
-            title: true,
-            category: true,
-            approval_status: true,
-            submitDate: true,
-          },
-        },
-        Student: {
+      select: {
+        title: true,
+        category: true,
+        approval_status: true,
+        submitDate: true,
+        student: {
           select: {
             firstName: true,
             lastName: true,
-          },
-        },
-        Employee: {
-          select: {
-            firstName: true,
-            lastName: true,
+            GuidanceClassMember: {
+              select: {
+                gudianceClass: {
+                  select: {
+                    teacher: {
+                      select: {
+                        firstName: true,
+                        lastName: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -136,47 +140,54 @@ const findAdvisorCertificateWaitingList = async (nik) => {
 };
 
 //WAITING LIST BY MAJOR
-const findWaitingListbyMajor = async (major) => {
+const findWaitingListbyMajor = async (major, nik) => {
   try {
-    const certificate = await prisma.transaction_Certificate.findMany({
+    const certificate = await prisma.certificate.findMany({
       where: {
+        approval_status: "WAITING",
         AND: [
           {
-            Student: {
-              major,
+            student: {
+              GuidanceClassMember: {
+                gudianceClass: {
+                  teacherId: nik,
+                },
+              },
             },
           },
           {
-            Certificate: {
-              approval_status: "WAITING",
+            student: {
+              major,
             },
           },
         ],
       },
       orderBy: {
-        Certificate: {
-          submitDate: "desc",
-        },
+        submitDate: "desc",
       },
-      include: {
-        Certificate: {
-          select: {
-            title: true,
-            category: true,
-            approval_status: true,
-            submitDate: true,
-          },
-        },
-        Student: {
+      select: {
+        title: true,
+        category: true,
+        approval_status: true,
+        submitDate: true,
+        student: {
           select: {
             firstName: true,
             lastName: true,
-          },
-        },
-        Employee: {
-          select: {
-            firstName: true,
-            lastName: true,
+            GuidanceClassMember: {
+              select: {
+                gudianceClass: {
+                  select: {
+                    teacher: {
+                      select: {
+                        firstName: true,
+                        lastName: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -189,22 +200,25 @@ const findWaitingListbyMajor = async (major) => {
 };
 
 //Waiting list by arrival year
-const filterWaitingListByArrYear = async (arrivalYear) => {
+const filterWaitingListByArrYear = async (arrivalYear, nik) => {
   try {
     const certificate = await prisma.certificate.findMany({
       where: {
+        approval_status: "WAITING",
         AND: [
           {
-            transaction: {
-              some: {
-                Student: {
-                  arrivalYear,
+            student: {
+              GuidanceClassMember: {
+                gudianceClass: {
+                  teacherId: nik,
                 },
               },
             },
           },
           {
-            approval_status: "WAITING",
+            student: {
+              arrivalYear,
+            },
           },
         ],
       },
@@ -216,18 +230,22 @@ const filterWaitingListByArrYear = async (arrivalYear) => {
         category: true,
         approval_status: true,
         submitDate: true,
-        transaction: {
+        student: {
           select: {
-            Student: {
+            firstName: true,
+            lastName: true,
+            GuidanceClassMember: {
               select: {
-                firstName: true,
-                lastName: true,
-              },
-            },
-            Employee: {
-              select: {
-                firstName: true,
-                lastName: true,
+                gudianceClass: {
+                  select: {
+                    teacher: {
+                      select: {
+                        firstName: true,
+                        lastName: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
@@ -270,19 +288,29 @@ const findOneCertificate = async (certificateId) => {
       where: {
         id: certificateId,
       },
-      include: {
-        transaction: {
-          include: {
-            Student: {
+      select: {
+        title: true,
+        submitDate: true,
+        approvalDate: true,
+        category: true,
+        approval_status: true,
+        description: true,
+        student: {
+          select: {
+            firstName: true,
+            lastName: true,
+            GuidanceClassMember: {
               select: {
-                firstName: true,
-                lastName: true,
-              },
-            },
-            Employee: {
-              select: {
-                firstName: true,
-                lastName: true,
+                gudianceClass: {
+                  select: {
+                    teacher: {
+                      select: {
+                        firstName: true,
+                        lastName: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
@@ -299,40 +327,23 @@ const findOneCertificate = async (certificateId) => {
 //===============================Student Access=========================//
 //history submited certificate (student)
 const findStudentCertificateHistory = async (nim) => {
+  console.log("ini Nim student: ", nim);
   try {
-    const certificate = await prisma.transaction_Certificate.findMany({
+    const certificate = await prisma.certificate.findMany({
       where: {
-        AND: [
-          {
-            studentNim: nim,
-          },
-          {
-            Certificate: {
-              OR: [
-                {
-                  approval_status: "APPROVED",
-                },
-                {
-                  approval_status: "REJECTED",
-                },
-              ],
-            },
-          },
-        ],
+        studentNim: nim,
+        approval_status: {
+          not: "WAITING",
+        },
       },
       orderBy: {
-        Certificate: {
-          approvalDate: "desc",
-        },
+        approvalDate: "desc",
       },
-      include: {
-        Certificate: {
-          select: {
-            title: true,
-            approvalDate: true,
-          },
-        },
-        Student: {
+      select: {
+        id: true,
+        title: true,
+        approvalDate: true,
+        student: {
           select: {
             firstName: true,
             lastName: true,
@@ -342,6 +353,7 @@ const findStudentCertificateHistory = async (nim) => {
     });
     return certificate;
   } catch (error) {
+    console.log(error);
     return error;
   }
 };
@@ -349,32 +361,19 @@ const findStudentCertificateHistory = async (nim) => {
 //current Certificate Student (student)
 const findCurrentCertificateStudent = async (nim) => {
   try {
-    const certificate = await prisma.transaction_Certificate.findMany({
+    const certificate = await prisma.certificate.findMany({
       where: {
-        AND: [
-          {
-            studentNim: nim,
-          },
-          {
-            Certificate: {
-              approval_status: "WAITING",
-            },
-          },
-        ],
+        studentNim: nim,
+        approval_status: "WAITING",
       },
       orderBy: {
-        Certificate: {
-          submitDate: "desc",
-        },
+        submitDate: "desc",
       },
-      include: {
-        Certificate: {
-          select: {
-            title: true,
-            submitDate: true,
-          },
-        },
-        Student: {
+      select: {
+        id: true,
+        title: true,
+        submitDate: true,
+        student: {
           select: {
             firstName: true,
             lastName: true,
@@ -399,13 +398,8 @@ const insertCertificate = async (payload, nim, path) => {
         category,
         description,
         filename,
+        studentNim: nim,
         path,
-        transaction: {
-          create: {
-            studentNim: nim,
-            employeeNik,
-          },
-        },
       },
     });
     return certificate;
