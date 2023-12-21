@@ -36,35 +36,11 @@ const closeGradesAccess = async (req, res) => {
   }
 };
 
-/*============================= PRE-REGIS ACCESS =============================*/
-const openPreRegisAccess = async (req, res) => {
-  const payload = req.body;
+const checkingOpenGradeAccess = async (req, res) => {
+  const { major } = req.params;
   try {
-    const openAccess = await accessService.createOpenPreRegisAccess(payload);
-    res.status(201).send({ status: "OK", data: openAccess });
-  } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
-  }
-};
-
-const getListPreRegisAccess = async (req, res) => {
-  try {
-    const openAccess = await accessService.viewListPreRegisAccess();
+    const openAccess = await accessService.viewToCheckOpenGradeAccess(major);
     res.status(200).send({ status: "OK", data: openAccess });
-  } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
-  }
-};
-
-const closePreRegisAccess = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const openAccess = await accessService.setClosePreRegisAccess(id);
-    res.status(201).send({ status: "OK", data: openAccess });
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -77,9 +53,5 @@ module.exports = {
   openGradeAccess,
   closeGradesAccess,
   getlistGradeAccess,
-
-  //PRE-REGIS ACCESS
-  openPreRegisAccess,
-  closePreRegisAccess,
-  getListPreRegisAccess,
+  checkingOpenGradeAccess,
 };

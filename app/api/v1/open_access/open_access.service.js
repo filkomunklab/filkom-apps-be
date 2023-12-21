@@ -28,42 +28,17 @@ const viewlistGradeAccess = async () => {
   }
 };
 
-/*============================= PRE-REGIS ACCESS =============================*/
-const createOpenPreRegisAccess = async (payload) => {
+const viewToCheckOpenGradeAccess = async (major) => {
   try {
-    const openAccess = await accessRepository.addOpenPreRegisAccess(payload);
-    return openAccess;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const setClosePreRegisAccess = async (id) => {
-  try {
-    const openAccess = await accessRepository.setClosePreRegisAccess(id);
-    return openAccess;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const viewListPreRegisAccess = async () => {
-  try {
-    const openAccess = await accessRepository.findListPreRegisAccess();
-    return openAccess;
+    return await accessRepository.findToCheckOpenGradesAccess(major);
   } catch (error) {
     throw error;
   }
 };
 
 module.exports = {
-  //GRADE ACCESS
   createOpenGradAccess,
   setGradesAccessClose,
   viewlistGradeAccess,
-
-  //PRE-REGIS ACCESS
-  createOpenPreRegisAccess,
-  setClosePreRegisAccess,
-  viewListPreRegisAccess,
+  viewToCheckOpenGradeAccess,
 };
