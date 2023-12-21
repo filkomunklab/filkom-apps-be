@@ -1741,6 +1741,30 @@ async function main() {
       });
     });
 
+  await prisma.student
+    .create({
+      data: {
+        id: sintaID,
+        gender: "FEMALE",
+        firstName: "Sinta",
+        lastName: "Lily",
+        studentEmail: "lily@mail.com",
+        nim: "105021920016",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (student) => {
+      await prisma.userRole.create({
+        data: {
+          userId: student.nim,
+          role: "MAHASISWA",
+        },
+      });
+    });
+
   // CREATE DOSEN SKRIPSI, KAPRODI IF
   await prisma.employee
     .create({
@@ -2163,63 +2187,6 @@ async function main() {
       }
     });
 
-  await prisma.student
-    .create({
-      data: {
-        id: sintaID,
-        gender: "FEMALE",
-        firstName: "Sinta",
-        lastName: "Lily",
-        studentEmail: "lily@mail.com",
-        nim: "105021920016",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (student) => {
-      await prisma.userRole.create({
-        data: {
-          userId: student.nim,
-          role: "MAHASISWA",
-        },
-      });
-    });
-
-  // CREATE DOSEN SKRIPSI, KAPRODI IF
-  await prisma.employee
-    .create({
-      data: {
-        id: kaprodiTIId,
-        Address: "Manado",
-        email: "mandias@test.com",
-        phoneNum: "081234567890",
-        firstName: "Greeen",
-        lastName: "Mandias",
-        degree: "SKom, MCs",
-        nik: "1001",
-        nidn: "0345676789",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (employee) => {
-      // Daftar peran yang akan Anda tambahkan pada dosen
-      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
-
-      // Membuat entri UserRole untuk setiap peran
-      for (const role of rolesToAdd) {
-        await prisma.userRole.create({
-          data: {
-            userId: employee.nik,
-            role: role,
-          },
-        });
-      }
-    });
-
   // CREATE DOSEN 11
   await prisma.employee
     .create({
@@ -2436,258 +2403,6 @@ async function main() {
         },
       });
     });
-
-  await prisma.student.createMany({
-    data: [
-      {
-        nim: "10502201001",
-        studentEmail: "s2200001@student.unklab.ac.id",
-        firstName: "Angel Triany",
-        lastName: "Pangkey",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        curriculumId: kurikulum_informatika,
-        arrivalYear: "2020",
-        employeeNik: "1005",
-        // majorGlobalId: 55201,
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201002",
-        studentEmail: "s2200002@student.unklab.ac.id",
-        firstName: "Brenda",
-        lastName: "Rambi",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        curriculumId: kurikulum_informatika,
-        arrivalYear: "2020",
-        employeeNik: "1005",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201003",
-        studentEmail: "s2200003@student.unklab.ac.id",
-        firstName: "Darel",
-        lastName: "Yuhu",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "DKV",
-        arrivalYear: "2020",
-        employeeNik: "1001",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201004",
-        studentEmail: "s2200004@student.unklab.ac.id",
-        firstName: "Shyereal",
-        lastName: "Saerang",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "DKV",
-        arrivalYear: "2020",
-        employeeNik: "1001",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201005",
-        studentEmail: "s2200005@student.unklab.ac.id",
-        firstName: "Marika",
-        lastName: "Connechy",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        arrivalYear: "2020",
-        employeeNik: "1003",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201006",
-        studentEmail: "s2200006@student.unklab.ac.id",
-        firstName: "Delphinia",
-        lastName: "Leggatt",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        arrivalYear: "2020",
-        employeeNik: "1003",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201007",
-        studentEmail: "s2200007@student.unklab.ac.id",
-        firstName: "Dannye",
-        lastName: "MacNeilage",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        curriculumId: kurikulum_informatika,
-        arrivalYear: "2020",
-        employeeNik: "1004",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201008",
-        studentEmail: "s2200008@student.unklab.ac.id",
-        firstName: "Rozanna",
-        lastName: "Ilyin",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        curriculumId: kurikulum_informatika,
-        arrivalYear: "2020",
-        employeeNik: "1002",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201009",
-        studentEmail: "s2200009@student.unklab.ac.id",
-        firstName: "Lars",
-        lastName: "Hulle",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        curriculumId: kurikulum_informatika,
-        arrivalYear: "2020",
-        employeeNik: "1002",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201010",
-        studentEmail: "s2200010@student.unklab.ac.id",
-        firstName: "Dunn",
-        lastName: "Hillan",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        curriculumId: kurikulum_informatika,
-        arrivalYear: "2020",
-        employeeNik: "1005",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201011",
-        studentEmail: "s2200011@student.unklab.ac.id",
-        firstName: "Arlyn",
-        lastName: "Schimoni",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201012",
-        studentEmail: "s2200012@student.unklab.ac.id",
-        firstName: "Cookie",
-        lastName: "Farlambe",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201013",
-        studentEmail: "s2200013@student.unklab.ac.id",
-        firstName: "Stacy",
-        lastName: "Bullivant",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201014",
-        studentEmail: "s2200014@student.unklab.ac.id",
-        firstName: "Oralia",
-        lastName: "Labadini",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201015",
-        studentEmail: "s2200015@student.unklab.ac.id",
-        firstName: "Bethina",
-        lastName: "MacKettrick",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201016",
-        studentEmail: "s2200016@student.unklab.ac.id",
-        firstName: "Arleyne",
-        lastName: "Simonds",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201017",
-        studentEmail: "s2200017@student.unklab.ac.id",
-        firstName: "Julianna",
-        lastName: "Extal",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201018",
-        studentEmail: "s2200018@student.unklab.ac.id",
-        firstName: "Dario",
-        lastName: "Blagbrough",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201019",
-        studentEmail: "s2200019@student.unklab.ac.id",
-        firstName: "Pietra",
-        lastName: "Di Biagi",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        nim: "10502201020",
-        studentEmail: "s2200020@student.unklab.ac.id",
-        firstName: "Derril",
-        lastName: "O'Lochan",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    ],
-  });
 
   //--------------------------------------Klabat Bridge--------------------------------------------
   // Create Alumni
@@ -3953,42 +3668,6 @@ async function main() {
         f1613: "0",
         f1614: "",
         studentId: "20502201016",
-      },
-    ],
-  });
-
-  await prisma.formSPT.createMany({
-    data: [
-      {
-        full_name: "Brenda Rambi",
-        reg_num: "s2200002",
-        date_of_birth: "10-10-2002",
-        gender: "FEMALE",
-        nik: "71712345678910",
-        nim: "10502201002",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "Informatika",
-        minor: "",
-        birth_mother: "Ariana Grande",
-        phone_num: "08177309038",
-        personal_email: "brendarambi02@gmail.com",
-        graduate_plan: "Semester II 2023/2024",
-        remaining_credits: "6",
-        remaining_classes: JSON.stringify([
-          {
-            subject: "Research Project II",
-            sks: "3",
-            keterangan: "Semester I 2023/2024",
-          },
-          {
-            subject: "Introduction to Game Development",
-            sks: "3",
-            keterangan: "Semester I 2023/2024",
-          },
-        ]),
-        certificateURL:
-          "https://firebasestorage.googleapis.com/v0/b/filkom-apps-project.appspot.com/o/certificate%2F10502201002%2Fjavascript_basic%20certificate.pdf?alt=media&token=8bae54df-8f5c-4a47-9834-73491fe6dcb3",
-        studentId: "10502201002",
       },
     ],
   });
