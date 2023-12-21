@@ -62,6 +62,9 @@ const findDetailActivity = async (activityId) => {
       where: {
         id: activityId,
       },
+      include: {
+        activityAbsent: true,
+      },
     });
     return activity;
   } catch (error) {
