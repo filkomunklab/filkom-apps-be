@@ -4,6 +4,24 @@ const dashboardController = require("./dashboard_ba.controller");
 
 //======================Dosen Pembimbing Statistic===================//
 
+//total Active & InActive Student
+router.get(
+  "/dashboard/statistic/studentGuidance",
+  dashboardController.getTotalStudentGuidance
+);
+
+//total Active Student
+router.get(
+  "/dashboard/statistic/studentGuidance/Active",
+  dashboardController.getTotalActiveStudentGuidance
+);
+
+//total InActive Student
+router.get(
+  "/dashboard/statistic/studentGuidance/inActive",
+  dashboardController.getTotalInActiveStudentGuidance
+);
+
 //========================Kaprodi Statistic==========================//
 
 //Get All Major Student
