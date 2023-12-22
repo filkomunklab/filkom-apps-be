@@ -9,8 +9,11 @@ const getAllUnassignedStudent = async (payload) => {
     },
     select: {
       nim: true,
-      firstName: true,
+      major: true,
+      status: true,
       lastName: true,
+      firstName: true,
+      arrivalYear: true,
       MajorGlobal: {
         select: {
           name: true,
@@ -32,7 +35,9 @@ const getAllUnassignetTeacher = async () => {
       nik: true,
       nidn: true,
       email: true,
+      major: true,
       Address: true,
+      phoneNum: true,
       lastName: true,
       firstName: true,
     },
