@@ -872,10 +872,10 @@ enum Progress {
   Finished
 }
 
-enum Consultation_Status {
-  Proposal
-  Skripsi
-}
+// enum Consultation_Status {
+//   Proposal
+//   Skripsi
+// }
 
 enum status {
   WAITING
