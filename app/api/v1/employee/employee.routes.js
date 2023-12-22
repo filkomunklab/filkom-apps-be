@@ -6,7 +6,7 @@ const router = express.Router();
 const employeeController = require("./employee.controller");
 const { auth } = require("../../../middleware/auth");
 
-router.get("/employee", employeeController.getAllEmployees);
+router.get("/employee", auth, employeeController.getAllEmployees);
 router.get("/employee/:id", employeeController.getEmployeeById);
 router.get("/employee/:id", employeeController.getEmployeeById);
 router.get(
@@ -15,8 +15,8 @@ router.get(
 );
 router.post("/employee", employeeController.createEmployee);
 router.post("/employees", employeeController.createManyEmployee);
-router.delete("/employee/:id", employeeController.deleteEmployeeById);
-router.patch("/employee/:id", employeeController.patchEmployeeById);
+router.delete("/employee/:id", auth, employeeController.deleteEmployeeById);
+router.patch("/employee/:id", auth, employeeController.patchEmployeeById);
 router.put("/employee/:id", employeeController.updateEmployeeById);
 router.get("/employee/dosen/:major", employeeController.viewDosenByMajor);
 router.get("/employee/profile/:nik", employeeController.viewDosenDetailProfile);
@@ -38,6 +38,11 @@ router.patch(
 router.patch(
   "/supervisor/:employeeNik/student/update",
   employeeController.updateStudentSupervisor
+);
+
+router.patch(
+  "/management/employee/:nik/password",
+  employeeController.updateEmployeePassword
 );
 
 module.exports = router;

@@ -694,15 +694,15 @@ model Academic_Consultation {
   receiver     Employee @relation(fields: [receiver_nik], references: [nik])
   receiver_nik String
 
-  receiver_name        String              @db.VarChar(255)
-  topic                String              @db.VarChar(50)
-  student_name         String              @db.VarChar(255)
-  supervisor_name      String              @db.VarChar(255)
-  student_major        String              @db.VarChar(50)
-  student_arrival_year String              @db.VarChar(50)
-  createdAt            DateTime            @default(now()) @db.Timestamptz(3)
-  updatedAt            DateTime            @default(now()) @db.Timestamptz(3)
-  status               Consultation_Status @default(Waiting)
+  receiver_name        String                       @db.VarChar(255)
+  topic                String                       @db.VarChar(50)
+  student_name         String                       @db.VarChar(255)
+  supervisor_name      String                       @db.VarChar(255)
+  student_major        String                       @db.VarChar(50)
+  student_arrival_year String                       @db.VarChar(50)
+  createdAt            DateTime                     @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime                     @default(now()) @db.Timestamptz(3)
+  status               Academic_Consultation_Status @default(Waiting)
   description          String
 
   messages Message[]
@@ -780,6 +780,7 @@ enum Major {
   SI
   IF
   DKV
+  NONE
 }
 
 enum StudentStatus {
@@ -867,7 +868,7 @@ enum Revision_Approve {
   Rejected
 }
 
-enum Consultation_Status {
+enum Academic_Consultation_Status {
   Waiting
   OnProcess
   Complete

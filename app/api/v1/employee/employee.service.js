@@ -2,15 +2,36 @@
 
 const employeeRepository = require("./employee.repository");
 const studentRepository = require("../student/student.repository");
+const userRoleRepository = require("../user_management/user_namagement.repository");
 const bcrypt = require("bcrypt");
+const prisma = require("../../../database");
 
 const getAllEmployees = async () => {
-  const employee = await employeeRepository.findEmployees();
-  return employee;
+  try {
+    let employees = await employeeRepository.findEmployees();
+
+    // Gunakan Promise.all untuk menunggu semua promise selesai
+    employees = await Promise.all(
+      employees.map(async (employee) => {
+        try {
+          // Dapatkan role untuk setiap employee
+          let role = await userRoleRepository.FindUserRoleByUserId(
+            employee.nik
+          );
+          return { ...employee, role };
+        } catch (error) {
+          throw error;
+        }
+      })
+    );
+    return employees;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const getEmployeeById = async (id) => {
-  const employee = await employeeRepository.findEmployeeById(id);
+  const employee = await employeeRepository.findEmployeeById(prisma, id);
   if (!employee) {
     throw {
       status: 400,
@@ -31,24 +52,61 @@ const createEmployee = async (payload) => {
 const createManyEmployee = async (data) => {
   try {
     let salt, password;
-    data = data.map((value) => {
+    let userRole = [];
+
+    // push user role untuk keperluan pembuatan create many role
+    // role tidak ada di tabel employee jadi di pisahkan untuk keperluan crate many employee
+    data = data.map((itemEmployee) => {
+      itemEmployee.role.forEach((itemRole) => {
+        userRole.push({
+          userId: itemEmployee.nik,
+          role: itemRole,
+        });
+      });
+
       salt = bcrypt.genSaltSync(10);
-      password = bcrypt.hashSync(value.password, salt);
+      password = bcrypt.hashSync(itemEmployee.password, salt);
+
+      const { role, ...itemEmployeeWithoutRole } = itemEmployee;
       return {
-        ...value,
+        ...itemEmployeeWithoutRole,
         password,
       };
     });
-    const employee = await employeeRepository.insertManyEmployee(data);
-    return employee;
+
+    // menggunakan primsa transaction untuk make sure semua proses berhasil baru commit
+    // jika ada yang gagal maka akan rollback sehingga consistency data dijaga
+    const result = await prisma.$transaction(async (prisma) => {
+      try {
+        const employee = await employeeRepository.insertManyEmployee(
+          prisma,
+          data
+        );
+        await userRoleRepository.CreateManyRole(prisma, userRole);
+
+        return employee;
+      } catch (error) {
+        throw error;
+      }
+    });
+
+    return result;
   } catch (error) {
     throw error.message;
   }
 };
 
 const deleteEmployeeById = async (id) => {
-  await getEmployeeById(id);
-  await employeeRepository.deleteEmployee(id);
+  try {
+    await prisma.$transaction(async (prisma) => {
+      const employee = await employeeRepository.findEmployeeById(prisma, id);
+      await employeeRepository.deleteEmployee(prisma, id);
+      await userRoleRepository.deleteEmployeeRoles(prisma, employee.nik);
+      return;
+    });
+  } catch (error) {
+    throw error;
+  }
 };
 
 const updateOrPatchEmployeeById = async (id, payload) => {
@@ -196,6 +254,24 @@ const getSupervisorByNik = async (nik) => {
   }
 };
 
+const updateEmployeePassword = async (nik, payload) => {
+  try {
+    if (payload.newPassword !== payload.confirmPassword) {
+      throw {
+        status: 400,
+        message: "Password not match",
+      };
+    }
+    const hashedPassword = await bcrypt.hash(payload.newPassword, 10);
+    const data = {
+      password: hashedPassword,
+    };
+    await employeeRepository.updateEmployeeByNik(nik, data);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -212,4 +288,5 @@ module.exports = {
   updateStudentSupervisor,
   getSupervisorByNik,
   createManyEmployee,
+  updateEmployeePassword,
 };

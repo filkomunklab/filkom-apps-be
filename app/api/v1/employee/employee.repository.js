@@ -2,13 +2,17 @@
 const prisma = require("../../../database");
 
 const findEmployees = async () => {
-  const employee = await prisma.employee.findMany();
-  return employee;
+  try {
+    const employee = await prisma.employee.findMany();
+    return employee;
+  } catch (error) {
+    throw error;
+  }
 };
 
 // @description     Get employee by id
 // @used            Submission, Proposal
-const findEmployeeById = async (id) => {
+const findEmployeeById = async (prisma, id) => {
   const employee = await prisma.employee.findUnique({
     where: {
       id,
@@ -52,7 +56,7 @@ const insertEmployee = async (payload) => {
   return employee;
 };
 
-const insertManyEmployee = async (data) => {
+const insertManyEmployee = async (prisma, data) => {
   try {
     const employee = await prisma.employee.createMany({
       data,
@@ -63,27 +67,34 @@ const insertManyEmployee = async (data) => {
   }
 };
 
-const deleteEmployee = async (id) => {
-  await prisma.employee.delete({
-    where: {
-      id,
-    },
-  });
+const deleteEmployee = async (prisma, id) => {
+  try {
+    await prisma.employee.delete({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
 };
 
 const updateEmployee = async (id, payload) => {
-  const { nik, password, firstName, lastName, token } = payload;
   const employee = await prisma.employee.update({
     where: {
       id,
     },
-    data: {
+    data: payload,
+  });
+  return employee;
+};
+
+const updateEmployeeByNik = async (nik, payload) => {
+  const employee = await prisma.employee.update({
+    where: {
       nik,
-      password,
-      firstName,
-      lastName,
-      token,
     },
+    data: payload,
   });
   return employee;
 };
@@ -328,4 +339,5 @@ module.exports = {
   updateStudentSupervisor,
   getSupervisorByNik,
   insertManyEmployee,
+  updateEmployeeByNik,
 };
