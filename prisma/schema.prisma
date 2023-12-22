@@ -829,6 +829,7 @@ enum Major {
   SI
   IF
   DKV
+  NONE
 }
 
 enum StudentStatus {
