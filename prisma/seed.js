@@ -2078,39 +2078,6 @@ async function main() {
       });
     });
 
-  // CREATE DOSEN SKRIPSI, KAPRODI IF
-  await prisma.employee
-    .create({
-      data: {
-        id: kaprodiTIId,
-        Address: "Manado",
-        email: "mandias@test.com",
-        phoneNum: "081234567890",
-        firstName: "Greeen",
-        lastName: "Mandias",
-        degree: "SKom, MCs",
-        nik: "1001",
-        nidn: "0345676789",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (employee) => {
-      // Daftar peran yang akan Anda tambahkan pada dosen
-      const rolesToAdd = ["DOSEN", "DOSEN_MK"];
-
-      // Membuat entri UserRole untuk setiap peran
-      for (const role of rolesToAdd) {
-        await prisma.userRole.create({
-          data: {
-            userId: employee.nik,
-            role: role,
-          },
-        });
-      }
-    });
-
   // CREATE DOSEN 11
   await prisma.employee
     .create({
