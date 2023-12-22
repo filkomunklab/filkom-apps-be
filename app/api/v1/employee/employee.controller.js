@@ -20,13 +20,13 @@ const getAllEmployees = async (req, res) => {
 };
 
 const getEmployeeById = async (req, res) => {
-  const policy = policyFor(req.user);
-  if (!policy.can("read", "Employee")) {
-    return res.status(401).send({
-      status: "FAILED",
-      data: { error: "You don't have permission to perform this action" },
-    });
-  }
+  // const policy = policyFor(req.user);
+  // if (!policy.can("read", "Employee")) {
+  //   return res.status(401).send({
+  //     status: "FAILED",
+  //     data: { error: "You don't have permission to perform this action" },
+  //   });
+  // }
   try {
     const id = req.params.id;
     const employee = await employeeService.getEmployeeById(id);
@@ -78,9 +78,11 @@ const deleteEmployeeById = async (req, res) => {
     await employeeService.deleteEmployeeById(id);
     res.status(200).send({ status: "OK" });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    console.log("ini error di controler: ", error);
+    res.status(error?.status || 500).send({
+      status: "FAILED",
+      data: { error: error?.message || error || error.Error },
+    });
   }
 };
 
@@ -274,6 +276,19 @@ const getSupervisorByNik = async (req, res) => {
   }
 };
 
+const updateEmployeePassword = async (req, res) => {
+  try {
+    const { nik } = req.params;
+    const payload = req.body;
+    await employeeService.updateEmployeePassword(nik, payload);
+    res.status(200).send({ status: "OK", data: "Password updated" });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 const patchStudentStatus = async (req, res) => {
   const { nim } = req.params;
   const payload = req.body;
@@ -401,6 +416,7 @@ module.exports = {
   updateStudentSupervisor,
   getSupervisorByNik,
   createManyEmployee,
+  updateEmployeePassword,
   patchStudentStatus,
   // ---------skripsi app------------
   getAllDosenSkripsi,

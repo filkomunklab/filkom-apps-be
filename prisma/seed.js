@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const { curriculum } = require("../app/database");
 const prisma = new PrismaClient();
 const {
   ref,
