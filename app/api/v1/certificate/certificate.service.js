@@ -1,11 +1,122 @@
 const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
-const { insertAdmin } = require("../admin/admin.repository");
 const certificateRepository = require("./certificate.repository");
 const { storage } = require("../../../config/firebase");
+const moment = require("moment-timezone");
 
+//===================================DospemAccess=======================//
+//Find certificate by category
+const viewCertifiacateByCategory = async (category, nik) => {
+  try {
+    let certificate = await certificateRepository.findCertificateByCategory(
+      category,
+      nik
+    );
+
+    certificate = certificate.map((item) => {
+      return {
+        ...item,
+        Certificate: {
+          title: item.Certificate.title,
+          approvalDate: item.Certificate.approvalDate.toString(),
+        },
+      };
+    });
+
+    return certificate;
+  } catch (error) {
+    return error;
+  }
+};
+
+//Waiting List
+const advisorWaitingListCertificateView = async (nik) => {
+  try {
+    let certificate =
+      await certificateRepository.findAdvisorCertificateWaitingList(nik);
+
+    certificate = certificate.map((item) => {
+      return {
+        ...item,
+        Certificate: {
+          title: item.Certificate.title,
+          submitDate: item.Certificate.submitDate.toString(),
+          category: item.Certificate.category,
+          approval_status: item.Certificate.approval_status,
+        },
+      };
+    });
+
+    return certificate;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+//Waiting List by major
+const waitingListbyMajor = async (major, nik) => {
+  try {
+    let certificate = await certificateRepository.findWaitingListbyMajor(
+      major,
+      nik
+    );
+
+    certificate = certificate.map((item) => {
+      return {
+        ...item,
+        title: item.title,
+        submitDate: item.submitDate.toString(),
+        category: item.category,
+        approval_status: item.approval_status,
+      };
+    });
+
+    return certificate;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+//Waiting list arrival year pt2
+const viewWaitingListByArrYear = async (arrivalYear, nik) => {
+  try {
+    let certificate = await certificateRepository.filterWaitingListByArrYear(
+      arrivalYear,
+      nik
+    );
+
+    certificate = certificate.map((item) => {
+      return {
+        ...item,
+        title: item.title,
+        submitDate: item.submitDate.toString(),
+        category: item.category,
+        approval_status: item.approval_status,
+      };
+    });
+
+    return certificate;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//show list Approved/Rejected certificate
 const findAllStudentCertificate = async (nik) => {
   try {
-    const certificate = await certificateRepository.findCertificate(nik);
+    let certificate = await certificateRepository.findCertificate(nik);
+
+    certificate = certificate.map((item) => {
+      return {
+        ...item,
+        Certificate: {
+          title: item.Certificate.title,
+          approvalDate: item.Certificate.approvalDate.toString(),
+        },
+      };
+    });
+
     return certificate;
   } catch (error) {
     console.log("Ini error: ", error);
@@ -13,29 +124,46 @@ const findAllStudentCertificate = async (nik) => {
   }
 };
 
+//Approval Certificate
+const approvalCertificate = async (certificateId, payload) => {
+  try {
+    const certificate = certificateRepository.approvalCertificateStudent(
+      certificateId,
+      payload
+    );
+    return {
+      ...certificate,
+      approveDate: `${moment((await certificate).approvalDate).tz(
+        "Asia/Makassar"
+      )}`,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+//==============================GeneralAccess=========================//
+//Detail Certificate
 const viewOneStudentCertificate = async (certificateId) => {
   try {
-    const certificate = await certificateRepository.findOneCertificate(
+    let certificate = await certificateRepository.findOneCertificate(
       certificateId
     );
-    return certificate;
+
+    return {
+      ...certificate,
+      approvalDate: certificate.approvalDate
+        ? certificate.approvalDate.toString()
+        : null,
+      submitDate: certificate.submitDate.toString(),
+    };
   } catch (error) {
     return error;
   }
 };
 
-const viewCertifiacateByCategory = async (category, nik) => {
-  try {
-    const certificate = await certificateRepository.findCertificateByCategory(
-      category,
-      nik
-    );
-    return certificate;
-  } catch (error) {
-    return error;
-  }
-};
-
+//===============================StudentAccess========================//
+//StudentAccess
 const uploadCertificate = async (payload, nim) => {
   const storageRef = ref(
     storage,
@@ -50,38 +178,61 @@ const uploadCertificate = async (payload, nim) => {
     }
     await uploadBytes(storageRef, byteArray, metadata);
     const path = await getDownloadURL(storageRef);
-    return await certificateRepository.insertCertificate(payload, nim, path);
+    const certificate = await certificateRepository.insertCertificate(
+      payload,
+      nim,
+      path
+    );
+    return {
+      ...certificate,
+      submitDate: `${moment(certificate.submitDate).tz("Asia/Makassar")}`,
+    };
   } catch (error) {
     throw error;
   }
 };
 
+//Current Certificate (Status Waiting)
+const viewCurrentStudentCertificate = async (nim) => {
+  try {
+    let certificate = await certificateRepository.findCurrentCertificateStudent(
+      nim
+    );
+
+    certificate = certificate.map((item) => {
+      return {
+        ...item,
+        Certificate: {
+          title: item.title,
+          submitDate: item.submitDate.toString(),
+        },
+      };
+    });
+
+    return certificate;
+  } catch (error) {
+    return error;
+  }
+};
+
+//History Certificate
 const studentHistoryCertificateView = async (nim) => {
   try {
-    const certificate =
-      await certificateRepository.findStudentCertificateHistory(nim);
+    let certificate = await certificateRepository.findStudentCertificateHistory(
+      nim
+    );
+
+    certificate = certificate.map((item) => {
+      return {
+        ...item,
+        title: item.title,
+        approvalDate: item.approvalDate.toString(),
+      };
+    });
+
     return certificate;
   } catch (error) {
     return error;
-  }
-};
-
-const advisorHistoryCertificateView = async (nik) => {
-  try {
-    const certificate =
-      await certificateRepository.findAdvisorCertificateHistory(nik);
-    return certificate;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-};
-
-const approveCertificate = async (id, status) => {
-  try {
-    return certificateRepository.approvalStudentCertificate(id, status);
-  } catch (error) {
-    throw error;
   }
 };
 
@@ -91,6 +242,9 @@ module.exports = {
   viewOneStudentCertificate,
   viewCertifiacateByCategory,
   studentHistoryCertificateView,
-  advisorHistoryCertificateView,
-  approveCertificate,
+  advisorWaitingListCertificateView,
+  viewCurrentStudentCertificate,
+  approvalCertificate,
+  waitingListbyMajor,
+  viewWaitingListByArrYear,
 };

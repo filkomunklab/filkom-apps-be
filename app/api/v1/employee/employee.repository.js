@@ -1,6 +1,9 @@
 //Layer untuk komunikasi dengan database
 const prisma = require("../../../database");
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all employee
+// @used            getAllDosenSkripsi
 const findEmployees = async () => {
   try {
     const employee = await prisma.employee.findMany();
@@ -101,7 +104,7 @@ const updateEmployeeByNik = async (nik, payload) => {
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get employee by nik
-// @used            Group
+// @used            Group, getAllDosenSkripsi
 const findEmployeeByNIK = async (nik) => {
   const employee = await prisma.employee.findUnique({
     where: {
@@ -320,6 +323,24 @@ const getSupervisorByNik = async (nik) => {
   }
 };
 
+const setStudentStatus = async (nim, payload) => {
+  const { status } = payload;
+  try {
+    const employee = await prisma.student.update({
+      where: {
+        nim,
+      },
+      data: {
+        status,
+      },
+    });
+    return employee;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 module.exports = {
   findEmployees,
   findEmployeeById,
@@ -340,4 +361,5 @@ module.exports = {
   getSupervisorByNik,
   insertManyEmployee,
   updateEmployeeByNik,
+  setStudentStatus,
 };

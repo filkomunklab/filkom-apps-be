@@ -2,10 +2,13 @@ const express = require("express");
 const activityController = require("./activity.controller");
 const router = express.Router();
 
-//create activity for student
-router.post("/activity/:nim", activityController.crateActivity);
+router.post("/activity", activityController.createActivity);
 
-//get detail activity information
-router.get("/activity/:activityId", activityController.detailActivity);
+router.get("/activity/detail/:activityId", activityController.detailActivity);
+
+router.patch(
+  "/activity/take-attendance/:activityId",
+  activityController.takeAttendance
+);
 
 module.exports = router;

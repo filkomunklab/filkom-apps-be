@@ -34,13 +34,20 @@ const findSkripsiChangesBySkripsiIdAndDosenId = async (
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Update skripsi change by id
 // @used            Skripsi,
-const updateSkripsiChangeById = async (id, changes) => {
+const updateSkripsiChangeById = async (id, payload) => {
+  const { abstrak, bab1, bab2, bab3, bab4, bab5, other } = payload;
   const skripsiChanges = await prisma.skripsi_Changes.update({
     where: {
       id,
     },
     data: {
-      changes,
+      abstrak,
+      bab1,
+      bab2,
+      bab3,
+      bab4,
+      bab5,
+      other,
     },
   });
 

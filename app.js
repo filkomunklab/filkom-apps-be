@@ -73,6 +73,9 @@ const academicConsultation = require("./app/api/v1/academic_consultation/academi
 const message = require("./app/api/v1/message/message.router");
 const openAccessRoutes = require("./app/api/v1/open_access/open_access.routes");
 const gradesSubmissionRoutes = require("./app/api/v1/transaction_Grades/transactionGrades.routes");
+const gradesRoutes = require("./app/api/v1/Grades/grades.routes");
+const guidanceClass = require("./app/api/v1/guidanceClass/guidanceClass.routes");
+const dashboardBA = require("./app/api/v1/dashboard_bimAkad/dashboard_ba.routes");
 const { url } = require("inspector");
 
 //--------------------------------------------------------
@@ -118,7 +121,9 @@ app.use(`${URL}`, academicConsultation);
 app.use(`${URL}`, message);
 app.use(`${URL}`, openAccessRoutes);
 app.use(`${URL}`, gradesSubmissionRoutes);
-
+app.use(`${URL}`, gradesRoutes);
+app.use(`${URL}`, guidanceClass);
+app.use(`${URL}`, dashboardBA);
 //---------------------------------------------------
 
 app.use("/", (req, res) => {

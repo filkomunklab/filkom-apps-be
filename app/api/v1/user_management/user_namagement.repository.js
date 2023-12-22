@@ -16,7 +16,7 @@ const findAllUserByRole = async (role) => {
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get user with userId & role
-// @used            Group
+// @used            Group, Employee
 const findUserByNIKAndRole = async (userId, role) => {
   const userRole = await prisma.userRole.findFirst({
     where: {
@@ -72,6 +72,54 @@ const deleteEmployeeRoles = async (prisma, nik) => {
     throw error;
   }
 };
+// @description     Get all user with userId & role
+// @used            Employee
+const findAllUserByNIKAndRole = async (userId, role) => {
+  const userRole = await prisma.userRole.findMany({
+    where: {
+      userId,
+      role,
+    },
+  });
+  return userRole;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Create role by nik and role
+// @used            Employee
+const inputRoleByNIK = async (userId, role) => {
+  const userRole = await prisma.userRole.create({
+    data: {
+      userId,
+      role,
+    },
+  });
+  return userRole;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Delete role by id
+// @used            Employee
+const deleteRoleById = async (id) => {
+  const userRole = await prisma.userRole.delete({
+    where: {
+      id,
+    },
+  });
+  return userRole;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get user by role
+// @used            Group
+const findUserByRole = async (role) => {
+  const userRole = await prisma.userRole.findFirst({
+    where: {
+      role,
+    },
+  });
+  return userRole;
+};
 
 module.exports = {
   findAllUserByRole,
@@ -79,4 +127,8 @@ module.exports = {
   CreateManyRole,
   FindUserRoleByUserId,
   deleteEmployeeRoles,
+  findAllUserByNIKAndRole,
+  inputRoleByNIK,
+  deleteRoleById,
+  findUserByRole,
 };

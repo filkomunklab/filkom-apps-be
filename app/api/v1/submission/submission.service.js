@@ -415,6 +415,11 @@ const updateSubmissionById = async (id, userId, payload) => {
     payload
   );
 
+  // check approve
+  if (updatedSubmission && updatedSubmission.is_approve !== "Approve") {
+    await submissionRepository.updateSubmissionApproveById(id);
+  }
+
   const Data = {
     id: group.submission_id,
     title: group.title,

@@ -1,36 +1,69 @@
 const prisma = require("../../../database");
 
-//======================== Employee access ========================//
-const addActivityForStudent = async (payload, nim) => {
-  const { title, description, date, time, employeeId } = payload;
-  try {
-    const activity = await prisma.activity.create({
-      data: {
-        title,
-        description,
-        date,
-        time,
-        transaction: {
-          create: {
-            studentId: nim,
-            employeeId,
-          },
+//==========================Dospem Access============================//
+//CREATE ACTIVITY FOR STUDENT
+const createActivity = async (payload) => {
+  const { members, ...res } = payload;
+  console.log(...members);
+  return await prisma.activity.create({
+    data: {
+      ...res,
+      activityAbsent: {
+        createMany: {
+          data: [...members],
         },
       },
-    });
-    return activity;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
+    },
+  });
 };
 
-//======================== General Access ========================//
+const takeAttendance = async (payload) => {
+  const { activityId, members } = payload;
+  return await prisma.$transaction(async (prisma) => {
+    await prisma.activityAbsence.updateMany({
+      where: {
+        studentNim: {
+          in: members,
+        },
+        activityId: activityId,
+      },
+      data: {
+        presence: true,
+      },
+    });
+
+    await prisma.activityAbsence.updateMany({
+      where: {
+        studentNim: {
+          notIn: members,
+        },
+        activityId: activityId,
+      },
+      data: {
+        presence: false,
+      },
+    });
+  });
+};
+
+// const addActivityForChoossenStudent = async (payload, nik) => {
+//   //
+// };
+
+//=============================Student Access=========================//
+// const findActivityFromDospem = async (nik) => {
+//   const activity = await prisma.activity.findMany({});
+// };
+
+//==============================General Access========================//
 const findDetailActivity = async (activityId) => {
   try {
     const activity = await prisma.activity.findUnique({
       where: {
         id: activityId,
+      },
+      include: {
+        activityAbsent: true,
       },
     });
     return activity;
@@ -40,6 +73,7 @@ const findDetailActivity = async (activityId) => {
 };
 
 module.exports = {
-  addActivityForStudent,
+  createActivity,
   findDetailActivity,
+  takeAttendance,
 };

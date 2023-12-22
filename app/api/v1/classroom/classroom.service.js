@@ -252,6 +252,12 @@ const getExistingClassroomById = async (id) => {
 const inputStudents = async (payload) => {
   // check classroom if exist
   const classroom = await getExistingClassroomById(payload.classroom_id);
+  if (!classroom) {
+    throw {
+      status: 400,
+      message: `Classroom not found`,
+    };
+  }
 
   // mahasiswa yang berhasil diinput
   const insertedStudents = { classroom_id: classroom.id, students: [] };
@@ -273,7 +279,7 @@ const inputStudents = async (payload) => {
         if (existProposalStudent) {
           throw {
             status: 400,
-            message: `Student are already in classroom`,
+            message: `Student are already in proposal classroom`,
           };
         } else {
           const proposalStudent =
@@ -289,15 +295,15 @@ const inputStudents = async (payload) => {
       }
       if (classroom.name === "Skripsi") {
         // check exist student in skripsi_student
-        const existProposalStudent =
+        const existSkripsiStudent =
           await skripsiStudentRepository.findSkripsiStudentByStudentId(
             existStudent.id,
             classroom.id
           );
-        if (existProposalStudent) {
+        if (existSkripsiStudent) {
           throw {
             status: 400,
-            message: `Student are already in classroom`,
+            message: `Student are already in skripsi classroom`,
           };
         } else {
           // get group_student by student id (many)
@@ -334,12 +340,13 @@ const inputStudents = async (payload) => {
                   );
                 }
               }
+            } else {
+              throw {
+                status: 400,
+                message: `Student haven't completed proposal`,
+              };
             }
           }
-          throw {
-            status: 400,
-            message: `Student haven't completed proposal`,
-          };
         }
       }
     } else {

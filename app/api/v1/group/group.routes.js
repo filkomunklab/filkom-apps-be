@@ -281,12 +281,70 @@ router.get(
   groupController.getSkripsiListSekretaris
 );
 
-// //       melihat kelompok mahasiswa
-// router.get("/group_student/:id", groupController.getGroupStudentById);
+//===================================================================
+// @description     Get proposal history list operator fakultas/filkom
+// @access          OPERATOR_FAKULTAS
+router.get(
+  "/group/proposal-history-list-sekretaris",
+  auth,
+  groupController.getProposalHistoryListSekretaris
+);
 
-// //       mengisi/update metadata
-// router.put("/group/metadata/:id", groupController.updateMetadataById);
-// //       melihat metadata
-// router.get("/group/metadata/:id", groupController.getMetadataById);
+//===================================================================
+// @description     Get skripsi history list operator fakultas/filkom
+// @access          OPERATOR_FAKULTAS
+router.get(
+  "/group/skripsi-history-list-sekretaris",
+  auth,
+  groupController.getSkripsiHistoryListSekretaris
+);
+
+//===================================================================
+// @description     Put metadata
+// @access          MAHASISWA
+router.put("/group/metadata/:id", auth, groupController.updateMetadataById);
+
+//===================================================================
+// @description     Get metadata
+// @access          MAHASISWA
+router.get("/group/metadata/:id", auth, groupController.getMetadataById);
+
+//===================================================================
+// @description     Get all value history
+// @access          DOSEN
+router.get("/group/value-history", auth, groupController.getAllValueHistory);
+
+//===================================================================
+// @description     Get all complete skripsi
+// @access          All
+router.get(
+  "/group/skripsi-filkom",
+  // auth,
+  groupController.getAllCompleteSkripsi
+);
+
+//===================================================================
+// @description     Create link
+// @access          MAHASISWA
+router.post("/group/skripsi/link", auth, groupController.createLink);
+
+//===================================================================
+// @description     Update link
+// @access          MAHASISWA
+router.put("/group/skripsi/link/:id", auth, groupController.updateLinkByLinkId);
+
+//===================================================================
+// @description     Delete link
+// @access          MAHASISWA
+router.delete(
+  "/group/skripsi/link/:id",
+  auth,
+  groupController.deleteLinkByLinkId
+);
+
+//===================================================================
+// @description     Get all link
+// @access          MAHASISWA, DOSEN, DOSEN_MK, KAPRODI, DEKAN
+router.get("/group/skripsi/all-link/:id", auth, groupController.getAllLinkById);
 
 module.exports = router;

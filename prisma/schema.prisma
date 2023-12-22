@@ -65,12 +65,10 @@ model Employee {
   // reciever               Academic_Consultation[]   @relation("consultationRecivier")
   academic_consultations Academic_Consultation[]
   preRegis               PreRegistration[]
-  transactionActivity    Transaction_Activity[]
-  transactionCertificate Transaction_Certificate[]
-  student                Student[]
   studentGrades          transaction_Grades[]
   gradesAccess           grades_access[]
-  preRegisAccess         preRegis_access[]
+  GuidanceClass          GuidanceClass[]
+  PreRegistrationData    PreRegistrationData[]
 
   @@unique([firstName, lastName])
   @@index([email])
@@ -91,7 +89,7 @@ model Student {
   studentEmail           String?               @unique
   curriculum             Curriculum?           @relation(fields: [curriculumId], references: [id])
   curriculumId           String?
-  arrival_Year           String?
+  arrivalYear            String?
   highSchoolGrad         String?
   address                String?
   currentAddress         String?
@@ -123,18 +121,19 @@ model Student {
   proposal_student       Proposal_Student[]    @relation("ProposalStudent")
   skripsi_student        Skripsi_Student[]     @relation("SkripsiStudent")
   group_student          Group_Student[]       @relation("StudentMember")
-  proposal_assessment    Proposal_Assessment[] @relation("Student")
-  skripsi_assessment     Skripsi_Assessment[]  @relation("Student")
+  proposal_assessment       Proposal_Assessment[] @relation("Student")
+  proposal_conclusion_value Proposal_Conclusion[] @relation("Student")
+  skripsi_assessment        Skripsi_Assessment[]  @relation("Student")
+  skripsi_conclusion_value  Skripsi_Conclusion[]  @relation("Student")
   FormSPT                FormSPT[]
 
-  academic_Consultation  Academic_Consultation[]
-  preRegis               PreRegistration[]
-  transactionActivity    Transaction_Activity[]
-  transactionCertivicate Transaction_Certificate[]
-  Employee               Employee?                 @relation(fields: [employeeNik], references: [nik])
-  employeeNik            String?
-  Tracer_Study           Tracer_Study[]
-  studentGrade           transaction_Grades[]
+  academic_Consultation Academic_Consultation[]
+  Tracer_Study          Tracer_Study[]
+  studentGrade          transaction_Grades[]
+  activityAbsent        ActivityAbsence[]
+  GuidanceClassMember   GuidanceClassMember?
+  Certificate           Certificate[]
+  PreRegistrationData   PreRegistrationData[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
@@ -328,6 +327,7 @@ model Group {
   group_student       Group_Student[]       @relation("Group")
   thesis_consultation Thesis_Consultation[] @relation("ThesisConsultation")
   History             Thesis_History[]      @relation("History")
+  Link                Thesis_Link[]         @relation("Link")
 }
 
 model Academic_Calendar {
@@ -419,7 +419,6 @@ model Proposal {
   advisor_report_approve_date              DateTime?
   exam_conclution                          Exam_Conclution?
   changes_conclusion                       Changes_Conclusion?
-  assessment_conclution                    String?
   is_pass                                  Pass?
   report_date                              String?
   file_name_revision                       String?
@@ -432,10 +431,16 @@ model Proposal {
   panelist_chairman_revision_approve_date  DateTime?
   panelist_member_revision_approve_date    DateTime?
   advisor_revision_approve_date            DateTime?
+  panelist_chairman_revision_comment       String?
+  panelist_member_revision_comment         String?
+  advisor_revision_comment                 String?
+  submission_dateline                      DateTime?
+  completed_status                         Boolean?
   approve_date                             DateTime?
   group                                    Group?                @relation("Proposal")
   assessment                               Proposal_Assessment[] @relation("Assessment")
   changes                                  Proposal_Changes[]    @relation("Changes")
+  conclusion_value                         Proposal_Conclusion[] @relation("Conclusion_Value")
 }
 
 model Skripsi {
@@ -485,7 +490,6 @@ model Skripsi {
   advisor_report_approve_date              DateTime?
   exam_conclution                          Exam_Conclution?
   changes_conclusion                       Changes_Conclusion?
-  assessment_conclution                    String?
   is_pass                                  Pass?
   report_date                              String?
   file_name_revision                       String?
@@ -498,6 +502,11 @@ model Skripsi {
   panelist_chairman_revision_approve_date  DateTime?
   panelist_member_revision_approve_date    DateTime?
   advisor_revision_approve_date            DateTime?
+  panelist_chairman_revision_comment       String?
+  panelist_member_revision_comment         String?
+  advisor_revision_comment                 String?
+  submission_dateline                      DateTime?
+  completed_status                         Boolean?
   approve_date                             DateTime?
   file_name_hki                            String?
   file_name_journal                        String?
@@ -516,6 +525,7 @@ model Skripsi {
   group                                    Group?               @relation("Skripsi")
   assessment                               Skripsi_Assessment[] @relation("Assessment")
   changes                                  Skripsi_Changes[]    @relation("Changes")
+  conclusion_value                         Skripsi_Conclusion[] @relation("Conclusion_Value")
 }
 
 model Proposal_Assessment {
@@ -546,7 +556,11 @@ model Proposal_Changes {
   proposal_id String
   dosen       Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id    String
-  changes     String?
+  judul       String?
+  bab1        String?
+  bab2        String?
+  bab3        String?
+  other       String?
 }
 
 model Skripsi_Changes {
@@ -556,16 +570,42 @@ model Skripsi_Changes {
   dosen      Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id   String
   changes    String?
+  abstrak    String?
+  bab1       String?
+  bab2       String?
+  bab3       String?
+  bab4       String?
+  bab5       String?
+  other      String?
+}
+
+model Proposal_Conclusion {
+  id                    String   @id @default(uuid())
+  proposal              Proposal @relation("Conclusion_Value", fields: [proposal_id], references: [id])
+  proposal_id           String
+  student               Student  @relation("Student", fields: [student_id], references: [id])
+  student_id            String
+  assessment_conclution String?
+}
+
+model Skripsi_Conclusion {
+  id                    String  @id @default(uuid())
+  skripsi               Skripsi @relation("Conclusion_Value", fields: [skripsi_id], references: [id])
+  skripsi_id            String
+  student               Student @relation("Student", fields: [student_id], references: [id])
+  student_id            String
+  assessment_conclution String?
 }
 
 model Thesis_Consultation {
-  id          String   @id @default(uuid())
-  group       Group    @relation("ThesisConsultation", fields: [group_id], references: [id])
-  group_id    String
-  description String
-  date        DateTime
-  dosen       Employee @relation("ThesisConsultation", fields: [dosen_id], references: [id])
-  dosen_id    String
+  id                  String              @id @default(uuid())
+  group               Group               @relation("ThesisConsultation", fields: [group_id], references: [id])
+  group_id            String
+  description         String
+  date                DateTime
+  dosen               Employee            @relation("ThesisConsultation", fields: [dosen_id], references: [id])
+  dosen_id            String
+  consultation_status Consultation_Status
 }
 
 model Thesis_History {
@@ -575,6 +615,15 @@ model Thesis_History {
   date        DateTime
   group       Group    @relation("History", fields: [group_id], references: [id])
   group_id    String
+}
+
+model Thesis_Link {
+  id       String   @id @default(uuid())
+  group    Group    @relation("Link", fields: [group_id], references: [id])
+  group_id String
+  name     String
+  link     String
+  date     DateTime
 }
 
 //-------------------Bimbingan Akademik-------------------/
@@ -599,22 +648,22 @@ model Curriculum {
 
 model Subject {
   id            String          @id @default(uuid())
-  curriculum_id String
   code          String          @db.VarChar(100)
   name          String
   credits       Int
   type          String          @db.VarChar(100)
   prerequisite  String?
   semester      Int
-  list          List_PreRegis[]
   grade         Grades[]
   Curriculum    Curriculum?     @relation(fields: [curriculumId], references: [id])
   curriculumId  String?
+  ListOfRequest ListOfRequest[]
 }
 
 model transaction_Grades {
   id           String    @id @default(uuid())
-  submitedDate DateTime  @default(now())
+  submitedDate DateTime  @default(now()) @db.Timestamptz(3)
+  approveDate  DateTime? @db.Timestamptz(3)
   semester     String
   comments     String?
   status       status    @default(WAITING)
@@ -644,45 +693,48 @@ model grades_access {
   semester_period String?
   major           Major
   due_date        DateTime
+  createdAt       DateTime  @default(now())
   isOpen          Boolean   @default(true)
   Employee        Employee? @relation(fields: [employeeNik], references: [nik])
   employeeNik     String?
 }
 
 model PreRegistration {
-  id           String             @id @default(uuid())
-  submitDate   DateTime           @default(now())
-  approveDate  DateTime?
-  status       status             @default(WAITING)
-  description  String
-  comments     String
-  history      History_Academic[]
-  Employee     Employee?          @relation(fields: [employeeId], references: [id])
-  employeeId   String?
-  Student      Student?           @relation(fields: [studentId], references: [id])
-  studentId    String?
-  Curriculum   Curriculum?        @relation(fields: [curriculumId], references: [id])
-  curriculumId String?
-  list         List_PreRegis[]
+  id             String      @id @default(uuid())
+  semester       Semester
+  semesterPeriod String
+  major          Major
+  dueDate        DateTime
+  isOpen         Boolean     @default(true)
+  Employee       Employee    @relation(fields: [employeeNik], references: [nik])
+  employeeNik    String
+  Curriculum     Curriculum? @relation(fields: [curriculumId], references: [id])
+  curriculumId   String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 }
 
-model List_PreRegis {
-  id                String           @id @default(uuid())
-  Subject           Subject?         @relation(fields: [subjectId], references: [id])
-  subjectId         String?
-  PreRegistration   PreRegistration? @relation(fields: [preRegistrationId], references: [id])
-  preRegistrationId String?
+model PreRegistrationData {
+  id            String          @id @default(uuid())
+  Student       Student         @relation(fields: [studentId], references: [nim])
+  studentId     String
+  Employee      Employee        @relation(fields: [employeeId], references: [nik])
+  employeeId    String
+  status        status?         @default(WAITING)
+  description   String?
+  comments      String?
+  submitDate    DateTime        @default(now())
+  approveDate   DateTime?
+  ListOfRequest ListOfRequest[]
 }
 
-model preRegis_access {
-  id              String    @id @default(uuid())
-  semester        String?
-  semester_period String?
-  major           Major
-  due_date        DateTime
-  isOpen          Boolean   @default(true)
-  Employee        Employee? @relation(fields: [employeeId], references: [id])
-  employeeId      String?
+model ListOfRequest {
+  PreRegistrationData   PreRegistrationData @relation(fields: [preRegistrationDataId], references: [id])
+  preRegistrationDataId String
+  subject               Subject             @relation(fields: [subjectId], references: [id])
+  subjectId             String
+
+  @@unique([preRegistrationDataId, subjectId])
 }
 
 model Academic_Consultation {
@@ -706,8 +758,6 @@ model Academic_Consultation {
   description          String
 
   messages Message[]
-
-  History_Academic History_Academic[]
 }
 
 model Message {
@@ -722,58 +772,60 @@ model Message {
 }
 
 model Certificate {
-  id              String                    @id @default(uuid())
+  id              String    @id @default(uuid())
   filename        String
   path            String
   title           String
   category        String
   description     String
-  submitDate      DateTime                  @default(now())
-  approval_status status                    @default(WAITING)
-  transaction     Transaction_Certificate[]
-  history         History_Academic[]
+  comments        String?
+  approvalDate    DateTime? @db.Timestamptz(3)
+  submitDate      DateTime  @default(now()) @db.Timestamptz(3)
+  approval_status status    @default(WAITING)
+  student         Student   @relation(fields: [studentNim], references: [nim])
+  studentNim      String
 }
 
 model Activity {
-  id          String                 @id @default(uuid())
-  title       String
-  description String
-  date        DateTime
-  isExpired   Boolean
-  transaction Transaction_Activity[]
-  history     History_Academic[]
+  id              String            @id @default(uuid())
+  title           String
+  description     String
+  dueDate         DateTime
+  isAttendance    Boolean
+  guidanceClass   GuidanceClass     @relation(fields: [guidanceClassId], references: [id])
+  guidanceClassId String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  activityAbsent  ActivityAbsence[]
 }
 
-model Transaction_Certificate {
-  id            String       @id @default(uuid())
-  Certificate   Certificate? @relation(fields: [certificateId], references: [id])
-  certificateId String?
-  Student       Student?     @relation(fields: [studentNim], references: [nim])
-  studentNim    String?
-  Employee      Employee?    @relation(fields: [employeeNik], references: [nik])
-  employeeNik   String?
+model ActivityAbsence {
+  presence   Boolean?
+  activity   Activity @relation(fields: [activityId], references: [id])
+  activityId String
+  student    Student  @relation(fields: [studentNim], references: [nim])
+  studentNim String
+
+  @@unique([activityId, studentNim])
 }
 
-model Transaction_Activity {
-  id          String    @id @default(uuid())
-  Employee    Employee? @relation(fields: [employeeNik], references: [nik])
-  employeeNik String?
-  Student     Student?  @relation(fields: [studentNim], references: [nim])
-  studentNim  String?
-  Activity    Activity? @relation(fields: [activityId], references: [id])
-  activityId  String?
+model GuidanceClass {
+  id                  String                @id @default(uuid())
+  teacher             Employee              @relation(fields: [teacherId], references: [nik])
+  teacherId           String                @unique
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  Activity            Activity[]
+  GuidanceClassMember GuidanceClassMember[]
 }
 
-model History_Academic {
-  id                     String                 @id @default(uuid())
-  PreRegistration        PreRegistration?       @relation(fields: [preRegistrationId], references: [id])
-  preRegistrationId      String?
-  Consultation           Academic_Consultation? @relation(fields: [academicConsultationId], references: [id])
-  academicConsultationId String?
-  Certificate            Certificate?           @relation(fields: [certificateId], references: [id])
-  certificateId          String?
-  Activity               Activity?              @relation(fields: [activityId], references: [id])
-  activityId             String?
+model GuidanceClassMember {
+  student         Student       @relation(fields: [studentNim], references: [nim])
+  studentNim      String        @unique
+  gudianceClass   GuidanceClass @relation(fields: [guidanceClassId], references: [id])
+  guidanceClassId String
+
+  @@unique([studentNim, guidanceClassId])
 }
 
 enum Major {
@@ -822,6 +874,11 @@ enum Progress {
   Proposal
   Skripsi
   Finished
+}
+
+enum Consultation_Status {
+  Proposal
+  Skripsi
 }
 
 enum status {

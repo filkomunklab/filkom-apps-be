@@ -19,6 +19,7 @@ const skripsiRepository = require("../skripsi/skripsi.repository");
 const classroomRepository = require("../classroom/classroom.repository");
 const thesisHistoryRepository = require("../thesis_history/thesis_history.repository");
 const userManagementRepository = require("../user_management/user_namagement.repository");
+const proposalConclusionRepository = require("../proposal_conclusion/proposal_conclusion_repository");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @description     Get proposal by id
@@ -332,7 +333,7 @@ const approveProposalDocumentById = async (userId, id) => {
     }
   }
   if (co_advisor2) {
-    if (co_advisor2.is_proposal_approve_by_co_advisor1 === "Approve") {
+    if (co_advisor2.is_proposal_approve_by_co_advisor2 === "Approve") {
       throw {
         status: 400,
         message: `File has been approved`,
@@ -735,106 +736,114 @@ const getAllProposalSchedule = async () => {
   if (!proposals) {
     return scheduleBySemester;
   }
-  // Dapatkan semua proposal_id di sini
-  const proposalIds = proposals.map((proposal) => proposal.id);
-
-  // Dapatkan grup berdasarkan proposalIds
-  const groups = await groupRepository.findManyGroupsByProposalIds(proposalIds);
 
   // Menggabungkan data proposal dengan data grup
   await Promise.all(
     proposals.map(async (proposal) => {
       // memproses pengambilan jadwal proposal yang belum mulai sidang
-      if (proposal.is_report_open !== true) {
-        for (const group of groups) {
-          // memproses jika menemukan group yang progress di "Proposal"
-          if (group && group.progress === "Proposal") {
-            const studentIds =
-              await groupStudentRepository.findGroupStudentByGroupId(group.id);
+      if (proposal.is_pass === null || proposal.is_pass === "Repeat") {
+        // Dapatkan grup berdasarkan proposalIds
+        const group = await groupRepository.findGroupByProposalId(proposal.id);
 
-            const students = [];
-            for (const entry of studentIds) {
-              const student = await studentRepository.findStudentById(entry);
-              let name = student.firstName;
-              if (student.lastName) {
-                name += ` ${student.lastName}`;
-              }
-              const studentData = {
-                id: student.id,
-                fullName: name,
-                nim: student.nim,
-              };
-              students.push(studentData);
+        // memproses jika menemukan group yang progress di "Proposal"
+        if (group && group.progress === "Proposal") {
+          const studentIds =
+            await groupStudentRepository.findGroupStudentByGroupId(group.id);
+
+          const students = [];
+          for (const entry of studentIds) {
+            const student = await studentRepository.findStudentById(entry);
+            let name = student.firstName;
+            if (student.lastName) {
+              name += ` ${student.lastName}`;
             }
-            // Menggabungkan firstName dan lastName menjadi fullName
-            const getEmployeeNameAndDegree = async (
-              firstName,
-              lastName,
-              degree
-            ) => {
-              let name = firstName;
-
-              if (lastName) {
-                name += ` ${lastName}`;
-              }
-
-              if (degree) {
-                name += `, ${degree}`;
-              }
-
-              return name;
+            const studentData = {
+              id: student.id,
+              fullName: name,
+              nim: student.nim,
             };
-            const advisorName = await getEmployeeNameAndDegree(
-              proposal.advisor.firstName,
-              proposal.advisor.lastName,
-              proposal.advisor.degree
-            );
-            const panelistChairmanName = await getEmployeeNameAndDegree(
-              proposal.panelist_chairman?.firstName,
-              proposal.panelist_chairman?.lastName,
-              proposal.panelist_chairman?.degree
-            );
-            const panelistMemberName = await getEmployeeNameAndDegree(
-              proposal.panelist_member?.firstName,
-              proposal.panelist_member?.lastName,
-              proposal.panelist_member?.degree
-            );
-
-            // get classroom
-            const classroom = await classroomRepository.findClassroomById(
-              proposal.classroom_id
-            );
-
-            if (group) {
-              const data = {
-                group_id: group.id,
-                proposal_id: proposal.id,
-                title: group.title,
-                students,
-                advisor_id: proposal.advisor.id,
-                advisor_name: advisorName,
-                panelist_chairman_id: proposal.panelist_chairman?.id || null,
-                panelist_chairman_name: panelistChairmanName || null,
-                panelist_member_id: proposal.panelist_member?.id || null,
-                panelist_member_name: panelistMemberName || null,
-                start_defence: proposal.start_defence,
-                end_defence: proposal.end_defence,
-                defence_room: proposal.defence_room,
-                defence_date: proposal.defence_date,
-              };
-              // Create a semester key based on the Academic_Calendar data
-              const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
-
-              if (!scheduleBySemester[semesterKey]) {
-                scheduleBySemester[semesterKey] = {
-                  semester: semesterKey,
-                  schedules: [],
-                };
-              }
-
-              scheduleBySemester[semesterKey].schedules.push(data);
-            }
+            students.push(studentData);
           }
+          // Menggabungkan firstName dan lastName menjadi fullName
+          const getEmployeeNameAndDegree = async (
+            firstName,
+            lastName,
+            degree
+          ) => {
+            let name = firstName;
+
+            if (lastName) {
+              name += ` ${lastName}`;
+            }
+
+            if (degree) {
+              name += `, ${degree}`;
+            }
+
+            return name;
+          };
+          const advisorName = await getEmployeeNameAndDegree(
+            proposal.advisor.firstName,
+            proposal.advisor.lastName,
+            proposal.advisor.degree
+          );
+          const coAdvisor1Name = await getEmployeeNameAndDegree(
+            proposal.co_advisor1?.firstName,
+            proposal.co_advisor1?.lastName,
+            proposal.co_advisor1?.degree
+          );
+          const coAdvisor2Name = await getEmployeeNameAndDegree(
+            proposal.co_advisor2?.firstName,
+            proposal.co_advisor2?.lastName,
+            proposal.co_advisor2?.degree
+          );
+          const panelistChairmanName = await getEmployeeNameAndDegree(
+            proposal.panelist_chairman?.firstName,
+            proposal.panelist_chairman?.lastName,
+            proposal.panelist_chairman?.degree
+          );
+          const panelistMemberName = await getEmployeeNameAndDegree(
+            proposal.panelist_member?.firstName,
+            proposal.panelist_member?.lastName,
+            proposal.panelist_member?.degree
+          );
+
+          // get classroom
+          const classroom = await classroomRepository.findClassroomById(
+            proposal.classroom_id
+          );
+
+          const data = {
+            group_id: group.id,
+            proposal_id: proposal.id,
+            title: group.title,
+            students,
+            advisor_id: proposal.advisor.id,
+            advisor_name: advisorName,
+            co_advisor1_id: proposal.co_advisor1?.id || null,
+            co_advisor1_name: coAdvisor1Name || null,
+            co_advisor2_id: proposal.co_advisor2?.id || null,
+            co_advisor2_name: coAdvisor2Name || null,
+            panelist_chairman_id: proposal.panelist_chairman?.id || null,
+            panelist_chairman_name: panelistChairmanName || null,
+            panelist_member_id: proposal.panelist_member?.id || null,
+            panelist_member_name: panelistMemberName || null,
+            start_defence: proposal.start_defence,
+            end_defence: proposal.end_defence,
+            defence_room: proposal.defence_room,
+            defence_date: proposal.defence_date,
+          };
+          // Create a semester key based on the Academic_Calendar data
+          const semesterKey = `${classroom.academic.year}-${classroom.academic.semester} (${classroom.name})`;
+
+          if (!scheduleBySemester[semesterKey]) {
+            scheduleBySemester[semesterKey] = {
+              semester: semesterKey,
+              schedules: [],
+            };
+          }
+
+          scheduleBySemester[semesterKey].schedules.push(data);
         }
       }
     })
@@ -900,7 +909,11 @@ const updateProposalScheduleById = async (id, userId, payload) => {
   const { panelist_chairman_id, panelist_member_id } = payload;
 
   // check if has defence
-  if (proposal.is_report_open === true) {
+  if (
+    proposal.is_pass === "Pass" ||
+    proposal.is_pass === "Fail" ||
+    proposal.is_report_open === true
+  ) {
     throw {
       status: 400,
       message: `Can't perform this action`,
@@ -993,6 +1006,10 @@ const getProposalScheduleById = async (id) => {
     })
   );
   const formatNameWithDegree = (employee) => {
+    if (!employee) {
+      return ""; // Mengembalikan string kosong jika employee bernilai null atau undefined
+    }
+
     const { firstName, lastName, degree } = employee;
     let name = firstName;
     if (lastName) {
@@ -1007,6 +1024,14 @@ const getProposalScheduleById = async (id) => {
   const panelistChairman = formatNameWithDegree(proposal.panelist_chairman);
   const panelistMember = formatNameWithDegree(proposal.panelist_member);
   const advisor = formatNameWithDegree(proposal.advisor);
+  let coAdvisor1;
+  let coAdvisor2;
+  if (proposal.co_advisor1) {
+    coAdvisor1 = formatNameWithDegree(proposal.co_advisor1);
+  }
+  if (proposal.co_advisor2) {
+    coAdvisor2 = formatNameWithDegree(proposal.co_advisor2);
+  }
   const scheduleData = {
     id: proposal.id,
     title: group.title,
@@ -1014,10 +1039,14 @@ const getProposalScheduleById = async (id) => {
     panelist_chairman: panelistChairman,
     panelist_member: panelistMember,
     advisor: advisor,
+    co_advisor1: coAdvisor1 || null,
+    co_advisor2: coAdvisor2 || null,
     start_defence: proposal.start_defence,
     end_defence: proposal.end_defence,
     defence_room: proposal.defence_room,
     defence_date: proposal.defence_date,
+    is_report_open: proposal.is_report_open,
+    is_pass: proposal.is_pass,
   };
   return scheduleData;
 };
@@ -1075,6 +1104,12 @@ const openAccessProposalReportById = async (id, userId) => {
           proposal.id,
           student,
           proposal.advisor_id
+        );
+
+        // create nilai kesimpulan perstudent
+        await proposalConclusionRepository.createConclusion(
+          proposal.id,
+          student
         );
       }
       // create empty change for chairman
@@ -1168,15 +1203,6 @@ const updateProposalAssessmentById = async (id, userId, payload) => {
       payload.value
     );
 
-  const group = await groupRepository.findGroupByProposalId(id);
-
-  // // history INPUT/UPDATE ASSESSMENT PROPOSAL by ID
-  // await thesisHistoryRepository.createThesisHistory(
-  //   userId,
-  //   "INPUT/UPDATE ASSESSMENT PROPOSAL by ID",
-  //   group.id
-  // );
-
   return updateAssessment;
 };
 
@@ -1232,6 +1258,12 @@ const getAllProposalAssessmentById = async (id) => {
       (assessment) => assessment.dosen_id === proposal.advisor_id
     );
 
+    // get nilai kesimpulan
+    const conclusionValue = await proposalConclusionRepository.findConclusion(
+      proposal.id,
+      studentId
+    );
+
     const studentData = {
       proposal_id: proposal.id,
       student_id: student.id,
@@ -1241,6 +1273,7 @@ const getAllProposalAssessmentById = async (id) => {
       value_by_chairman: chairmanValue ? chairmanValue.value : null,
       value_by_member: memberValue ? memberValue.value : null,
       value_by_advisor: advisorValue ? advisorValue.value : null,
+      value_conclusion: conclusionValue.assessment_conclution,
     };
 
     result.push(studentData);
@@ -1269,17 +1302,8 @@ const updateProposalChangesById = async (id, userId, payload) => {
   // update change
   const updateChange = await proposalChangesRepository.updateProposalChangeById(
     change.id,
-    payload.changes
+    payload
   );
-
-  const group = await groupRepository.findGroupByProposalId(id);
-
-  // // history UPDATE PROPOSAL CHANGES by ID
-  // await thesisHistoryRepository.createThesisHistory(
-  //   userId,
-  //   "UPDATE PROPOSAL CHANGES by ID",
-  //   group.id
-  // );
 
   return updateChange;
 };
@@ -1325,14 +1349,50 @@ const getAllProposalChangesById = async (id) => {
   const changesData = {
     proposal_id: proposal.id,
     is_report_open: proposal.is_report_open,
-    changes_by_chairman: chairmanChanges ? chairmanChanges.changes : null,
-    changes_by_member: memberChanges ? memberChanges.changes : null,
-    changes_by_advisor: advisorChanges ? advisorChanges.changes : null,
-    changes_by_co_advisor1: coAdvisor1Changes
-      ? coAdvisor1Changes.changes
+    changes_by_chairman_judul: chairmanChanges ? chairmanChanges.judul : null,
+    changes_by_chairman_bab1: chairmanChanges ? chairmanChanges.bab1 : null,
+    changes_by_chairman_bab2: chairmanChanges ? chairmanChanges.bab2 : null,
+    changes_by_chairman_bab3: chairmanChanges ? chairmanChanges.bab3 : null,
+    changes_by_chairman_other: chairmanChanges ? chairmanChanges.other : null,
+    changes_by_member_judul: memberChanges ? memberChanges.judul : null,
+    changes_by_member_bab1: memberChanges ? memberChanges.bab1 : null,
+    changes_by_member_bab2: memberChanges ? memberChanges.bab2 : null,
+    changes_by_member_bab3: memberChanges ? memberChanges.bab3 : null,
+    changes_by_member_other: memberChanges ? memberChanges.other : null,
+    changes_by_advisor_judul: advisorChanges ? advisorChanges.judul : null,
+    changes_by_advisor_bab1: advisorChanges ? advisorChanges.bab1 : null,
+    changes_by_advisor_bab2: advisorChanges ? advisorChanges.bab2 : null,
+    changes_by_advisor_bab3: advisorChanges ? advisorChanges.bab3 : null,
+    changes_by_advisor_other: advisorChanges ? advisorChanges.other : null,
+    changes_by_co_advisor1_judul: coAdvisor1Changes
+      ? coAdvisor1Changes.judul
       : null,
-    changes_by_co_advisor2: coAdvisor2Changes
-      ? coAdvisor2Changes.changes
+    changes_by_co_advisor1_bab1: coAdvisor1Changes
+      ? coAdvisor1Changes.bab1
+      : null,
+    changes_by_co_advisor1_bab2: coAdvisor1Changes
+      ? coAdvisor1Changes.bab2
+      : null,
+    changes_by_co_advisor1_bab3: coAdvisor1Changes
+      ? coAdvisor1Changes.bab3
+      : null,
+    changes_by_co_advisor1_other: coAdvisor1Changes
+      ? coAdvisor1Changes.other
+      : null,
+    changes_by_co_advisor2_judul: coAdvisor2Changes
+      ? coAdvisor2Changes.judul
+      : null,
+    changes_by_co_advisor2_bab1: coAdvisor2Changes
+      ? coAdvisor2Changes.bab1
+      : null,
+    changes_by_co_advisor2_bab2: coAdvisor2Changes
+      ? coAdvisor2Changes.bab2
+      : null,
+    changes_by_co_advisor2_bab3: coAdvisor2Changes
+      ? coAdvisor2Changes.bab3
+      : null,
+    changes_by_co_advisor2_other: coAdvisor2Changes
+      ? coAdvisor2Changes.other
       : null,
   };
 
@@ -1508,7 +1568,6 @@ const updateProposalConclusionById = async (id, userId, payload) => {
     memberChanges &&
     advisorChanges
   ) {
-    console.log("sudah terisi");
     if (proposal.panelist_chairman_id === userId) {
       if (
         proposal.is_report_approve_by_panelist_chairman &&
@@ -1519,6 +1578,11 @@ const updateProposalConclusionById = async (id, userId, payload) => {
           await proposalRepository.updateProposalConclusionById(id, payload);
 
         if (updatedProposal) {
+          // jika mengulang maka reset buka berita acara ke null
+          if (payload.is_pass === "Repeat") {
+            await proposalRepository.resetOpenReprtById(updatedProposal.id);
+          }
+
           // history FILL REPORT CONCLUSION PROPOSAL by ID
           await thesisHistoryRepository.createThesisHistory(
             userId,
@@ -1561,6 +1625,88 @@ const getProposalConclusionById = async (id) => {
     };
   }
   return proposal;
+};
+
+//===================================================================
+// @description     Update conclusion value
+// @route           PUT /proposal/proposal-report/conclusion-value/:id
+// @access          DOSEN
+const updateProposalConclusionValueById = async (id, userId, payload) => {
+  // check if user is chairman
+  const chairman =
+    await proposalRepository.findChairmanInProposalByIdAndChairmanId(
+      id,
+      userId
+    );
+  if (!chairman) {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
+  }
+
+  const proposal = await proposalRepository.findProposalById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+
+  // check existing conclusion value
+  const existConclusionValue =
+    await proposalConclusionRepository.findConclusion(id, payload.student_id);
+  if (!existConclusionValue) {
+    throw {
+      status: 400,
+      message: `You can't perform this action`,
+    };
+  }
+
+  const updateConclusionValule =
+    await proposalConclusionRepository.updateConclusion(
+      existConclusionValue.id,
+      payload.assessment_conclution
+    );
+
+  return updateConclusionValule;
+};
+
+//===================================================================
+// @description     Get conclusion value
+// @route           GET /proposal/proposal-report/conclusion-value/:id
+// @access          DOSEN, DOSEN_MK, KAPRODI, DEKAN, OPERATOR_FAKULTAS
+const getProposalConclusionValueById = async (id) => {
+  const result = [];
+  const proposal = await proposalRepository.findProposalById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Not found`,
+    };
+  }
+  const conclusionValue =
+    await proposalConclusionRepository.findAllConclusionById(id);
+
+  for (const entry of conclusionValue) {
+    const student = await studentRepository.findStudentById(entry.student_id);
+    let fullName = student.firstName;
+    if (student.lastName) {
+      fullName += ` ${student.lastName}`;
+    }
+
+    const data = {
+      id: entry.id,
+      proposal_id: entry.proposal_id,
+      student_id: entry.student_id,
+      fullName,
+      assessment_conclution: entry.assessment_conclution,
+    };
+
+    result.push(data);
+  }
+
+  return result;
 };
 
 //===================================================================
@@ -1683,6 +1829,10 @@ const getProposalRevisionDocumentById = async (id) => {
     is_revision_approve_by_panelist_member:
       proposal.is_revision_approve_by_panelist_member,
     is_revision_approve_by_advisor: proposal.is_revision_approve_by_advisor,
+    panelist_chairman_revision_comment:
+      proposal.panelist_chairman_revision_comment,
+    panelist_member_revision_comment: proposal.panelist_member_revision_comment,
+    advisor_revision_comment: proposal.advisor_revision_comment,
   };
   return Data;
 };
@@ -1814,6 +1964,8 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
         await groupRepository.updateGroupProgressByProposalId(
           UpdatedProposal.id
         );
+        // update approve date of proposal
+        await proposalRepository.updateProposalApproveDate(UpdatedProposal.id);
       }
       const Data = {
         is_revision_approve_by_panelist_chairman:
@@ -1858,6 +2010,8 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
         await groupRepository.updateGroupProgressByProposalId(
           UpdatedProposal.id
         );
+        // update approve date of skripsi
+        await proposalRepository.updateProposalApproveDate(UpdatedProposal.id);
       }
       const Data = {
         is_revision_approve_by_panelist_member:
@@ -1902,6 +2056,8 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
         await groupRepository.updateGroupProgressByProposalId(
           UpdatedProposal.id
         );
+        // update approve date of skripsi
+        await proposalRepository.updateProposalApproveDate(UpdatedProposal.id);
       }
       const Data = {
         is_revision_approve_by_advisor:
@@ -1928,7 +2084,7 @@ const approveProposalRevisionDocumentById = async (id, userId) => {
 // @description     Reject dokumen revisi proposal
 // @route           PUT /proposal/proposal-revision-document/reject/:id
 // @access          DOSEN
-const rejectProposalRevisionDocumentById = async (id, userId) => {
+const rejectProposalRevisionDocumentById = async (id, userId, payload) => {
   // check proposal
   const proposal = await getProposalById(id);
 
@@ -1977,7 +2133,8 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
       // reject revisi
       const UpdatedProposal =
         await proposalRepository.rejectProposalRevisionDocumentByChairmanById(
-          id
+          id,
+          payload
         );
       const Data = {
         is_revision_approve_by_panelist_chairman:
@@ -2011,7 +2168,10 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
     } else {
       // reject revisi
       const UpdatedProposal =
-        await proposalRepository.rejectProposalRevisionDocumentByMemberById(id);
+        await proposalRepository.rejectProposalRevisionDocumentByMemberById(
+          id,
+          payload
+        );
       const Data = {
         is_revision_approve_by_panelist_member:
           UpdatedProposal.is_revision_approve_by_panelist_member,
@@ -2030,7 +2190,7 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
       return Data;
     }
   }
-  // if user is member
+  // if user is advisor
   if (advisor) {
     if (
       advisor.is_revision_approve_by_advisor === "Rejected" ||
@@ -2044,7 +2204,8 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
       // reject revisi
       const UpdatedProposal =
         await proposalRepository.rejectProposalRevisionDocumentByAdvisorById(
-          id
+          id,
+          payload
         );
       const Data = {
         is_revision_approve_by_advisor:
@@ -2064,6 +2225,67 @@ const rejectProposalRevisionDocumentById = async (id, userId) => {
       return Data;
     }
   }
+};
+
+//===================================================================
+// @description     Update submission dateline
+// @route           PUT /proposal/submission-dateline/:id
+// @access          DOSEN
+const updateProposalSubmissonDatelineById = async (id, userId, payload) => {
+  // check if user is chairman
+  const chairman =
+    await proposalRepository.findChairmanInProposalByIdAndChairmanId(
+      id,
+      userId
+    );
+  if (!chairman) {
+    throw {
+      status: 400,
+      message: `You don't have permission to perform this action`,
+    };
+  }
+
+  const proposal = await proposalRepository.findProposalById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Proposal not found`,
+    };
+  }
+
+  const updatedProposal =
+    await proposalRepository.updateProposalSubmissonDatelineById(
+      id,
+      payload.submission_dateline
+    );
+
+  const data = {
+    id: updatedProposal.id,
+    submission_dateline: updatedProposal.submission_dateline,
+  };
+
+  return data;
+};
+
+//===================================================================
+// @description     Get submission dateline
+// @route           GET /proposal/submission-dateline/:id
+// @access          DOSEN
+const getProposalSubmissonDatelineById = async (id) => {
+  const proposal = await proposalRepository.findProposalById(id);
+  if (!proposal) {
+    throw {
+      status: 400,
+      message: `Proposal not found`,
+    };
+  }
+
+  const data = {
+    proposal_id: proposal.id,
+    submission_dateline: proposal.submission_dateline,
+  };
+
+  return data;
 };
 
 module.exports = {
@@ -2093,10 +2315,15 @@ module.exports = {
   signProposalReportById,
   updateProposalConclusionById,
   getProposalConclusionById,
+  updateProposalConclusionValueById,
+  getProposalConclusionValueById,
 
   updateProposalRevisionDocumentById,
   getProposalRevisionDocumentById,
   deleteProposalRevisionDocumentById,
   approveProposalRevisionDocumentById,
   rejectProposalRevisionDocumentById,
+
+  updateProposalSubmissonDatelineById,
+  getProposalSubmissonDatelineById,
 };
