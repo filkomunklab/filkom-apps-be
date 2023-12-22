@@ -2,6 +2,8 @@ const express = require("express");
 const guidanceClassController = require("./guidanceClass.controller");
 const router = express.Router();
 
+router.get("/guidance-class", guidanceClassController.getAllClass);
+
 router.get(
   "/guidance-class/get-all-unassigned-student",
   guidanceClassController.getAllUnassignedStudent

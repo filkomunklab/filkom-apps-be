@@ -1,5 +1,21 @@
 const prisma = require("../../../database");
 
+const getAllClass = async () => {
+  return await prisma.guidanceClass.findMany({
+    include: {
+      teacher: {
+        select: {
+          firstName: true,
+          lastName: true,
+          nidn: true,
+          nik: true,
+          id: true,
+        },
+      },
+    },
+  });
+};
+
 const getAllUnassignedStudent = async (payload) => {
   const { major } = payload;
   return await prisma.student.findMany({
@@ -88,4 +104,5 @@ module.exports = {
   deleteStudentFromGuidanceClass,
   getAllUnassignedStudent,
   getAllUnassignetTeacher,
+  getAllClass,
 };

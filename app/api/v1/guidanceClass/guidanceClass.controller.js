@@ -1,5 +1,16 @@
 const guidanceClassService = require("./guidanceClass.service");
 
+const getAllClass = async (req, res) => {
+  try {
+    const guidanceClassList = await guidanceClassService.getAllClass();
+    res.status(200).send({ status: "OK", data: guidanceClassList });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 const createGuidanceClass = async (req, res) => {
   const payload = req.body;
   const { teacherId } = req.params;
@@ -98,4 +109,5 @@ module.exports = {
   deleteStudentFromGuidanceClass,
   getAllUnassignedStudent,
   getAllUnassignetTeacher,
+  getAllClass,
 };

@@ -6,6 +6,10 @@ const {
   GetUnassignedSchema,
 } = require("./guidanceClass.schema");
 
+const getAllClass = async () => {
+  return await guidanceClassRepository.getAllClass();
+};
+
 const createGuidanceClass = async (payload, teacherId) => {
   const validationPayload = { ...payload, teacherId };
   await CreateGuidanceClassSchema.validate(validationPayload);
@@ -41,4 +45,5 @@ module.exports = {
   deleteStudentFromGuidanceClass,
   getAllUnassignedStudent,
   getAllUnassignetTeacher,
+  getAllClass,
 };
