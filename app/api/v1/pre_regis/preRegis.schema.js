@@ -53,21 +53,21 @@ const SubmitPreRegistSchema = Yup.object()
   })
   .noUnknown();
 
-const ApprovalSchema = Yup.object().shape({
-  id: Yup.string().required("ID is required"),
-  status: Yup.string().oneOf(["APPROVED", "REJECTED"]).required(),
-  comments: Yup.string().required("Comment is required"),
-  approveDate: Yup.date()
-    .when("status", {
+const ApprovalSchema = Yup.object()
+  .shape({
+    id: Yup.string().required("ID is required"),
+    status: Yup.string().oneOf(["APPROVED", "REJECTED"]).required(),
+    comments: Yup.string().required("Comment is required"),
+    approveDate: Yup.date().when("status", {
       is: "APPROVED",
       then: () => Yup.date().required("Approve date is required"),
       otherwise: () =>
         Yup.date()
           .is([null], "Approve date must be null if status is REJECTED")
           .nullable(),
-    })
-    .noUnknown(),
-});
+    }),
+  })
+  .noUnknown();
 
 module.exports = {
   LatestPreRegistSchema,
