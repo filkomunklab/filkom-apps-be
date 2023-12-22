@@ -31,9 +31,14 @@ const getAllUnassignedStudent = async (payload) => {
   return await guidanceClassRepository.getAllUnassignedStudent(payload);
 };
 
+const getAllUnassignetTeacher = async () => {
+  return await guidanceClassRepository.getAllUnassignetTeacher();
+};
+
 module.exports = {
   createGuidanceClass,
   addStudentToGuidanceClass,
   deleteStudentFromGuidanceClass,
   getAllUnassignedStudent,
+  getAllUnassignetTeacher,
 };

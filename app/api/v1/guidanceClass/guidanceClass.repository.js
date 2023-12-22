@@ -9,13 +9,37 @@ const getAllUnassignedStudent = async (payload) => {
     },
     select: {
       nim: true,
-      firstName: true,
+      major: true,
+      status: true,
       lastName: true,
+      firstName: true,
+      arrivalYear: true,
       MajorGlobal: {
         select: {
           name: true,
         },
       },
+    },
+  });
+};
+
+const getAllUnassignetTeacher = async () => {
+  return prisma.employee.findMany({
+    where: {
+      GuidanceClass: {
+        is: null,
+      },
+    },
+    select: {
+      id: true,
+      nik: true,
+      nidn: true,
+      email: true,
+      major: true,
+      Address: true,
+      phoneNum: true,
+      lastName: true,
+      firstName: true,
     },
   });
 };
@@ -63,4 +87,5 @@ module.exports = {
   addStudentToGuidanceClass,
   deleteStudentFromGuidanceClass,
   getAllUnassignedStudent,
+  getAllUnassignetTeacher,
 };
