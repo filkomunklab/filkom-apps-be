@@ -67,7 +67,7 @@ model Employee {
   preRegis               PreRegistration[]
   studentGrades          transaction_Grades[]
   gradesAccess           grades_access[]
-  GuidanceClass          GuidanceClass[]
+  GuidanceClass          GuidanceClass?
   PreRegistrationData    PreRegistrationData[]
 
   @@unique([firstName, lastName])

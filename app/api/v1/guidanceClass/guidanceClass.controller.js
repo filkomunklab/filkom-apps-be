@@ -81,9 +81,21 @@ const getAllUnassignedStudent = async (req, res) => {
   }
 };
 
+const getAllUnassignetTeacher = async (req, res) => {
+  try {
+    const teacherList = await guidanceClassService.getAllUnassignetTeacher();
+    res.status(200).send({ status: "OK", data: teacherList });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   createGuidanceClass,
   addStudentToGuidanceClass,
   deleteStudentFromGuidanceClass,
   getAllUnassignedStudent,
+  getAllUnassignetTeacher,
 };

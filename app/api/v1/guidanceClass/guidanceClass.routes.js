@@ -7,6 +7,11 @@ router.get(
   guidanceClassController.getAllUnassignedStudent
 );
 
+router.get(
+  "/guidance-class/get-all-unassigned-teacher",
+  guidanceClassController.getAllUnassignetTeacher
+);
+
 router.post(
   "/guidance-class/create-new/:teacherId",
   guidanceClassController.createGuidanceClass
