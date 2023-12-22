@@ -75,57 +75,57 @@ model Employee {
 }
 
 model Student {
-  id                     String                @id @default(uuid())
-  reg_num                String?               @unique
-  nim                    String                @unique
-  password               String
-  firstName              String
-  lastName               String?
-  dateOfBirth            DateTime?             @db.Date
-  gender                 gender
-  religion               String?
-  bloodType              String?
-  MaritalStatus          String?
-  studentEmail           String?               @unique
-  curriculum             Curriculum?           @relation(fields: [curriculumId], references: [id])
-  curriculumId           String?
-  arrivalYear            String?
-  highSchoolGrad         String?
-  address                String?
-  currentAddress         String?
-  currentResidenceStatus String?
-  status                 StudentStatus         @default(ACTIVE)
-  personalEmail          String?               @unique
-  faculty                String?
-  major                  Major?
-  MajorGlobal            MajorGlobal?          @relation(fields: [majorGlobalId], references: [id])
-  majorGlobalId          String?
-  graduate_year          String?
-  phoneNo                String?
-  AreaOfConcentration    String?
-  token                  String?               @unique
-  guardianName           String?
-  guardianEducation      String?
-  guardianReligion       String?
-  guardianStatus         String?
-  familyRelation         String?
-  guardianEmail          String?
-  guardianPhoneNo        String?
-  guardianAddress        String?
-  createdBy              String?
-  updatedBy              String?
-  createdAt              DateTime              @default(now())
-  updatedAt              DateTime?
-  filename               String?
-  path                   String?
-  proposal_student       Proposal_Student[]    @relation("ProposalStudent")
-  skripsi_student        Skripsi_Student[]     @relation("SkripsiStudent")
-  group_student          Group_Student[]       @relation("StudentMember")
+  id                        String                @id @default(uuid())
+  reg_num                   String?               @unique
+  nim                       String                @unique
+  password                  String
+  firstName                 String
+  lastName                  String?
+  dateOfBirth               DateTime?             @db.Date
+  gender                    gender
+  religion                  String?
+  bloodType                 String?
+  MaritalStatus             String?
+  studentEmail              String?               @unique
+  curriculum                Curriculum?           @relation(fields: [curriculumId], references: [id])
+  curriculumId              String?
+  arrivalYear               String?
+  highSchoolGrad            String?
+  address                   String?
+  currentAddress            String?
+  currentResidenceStatus    String?
+  status                    StudentStatus         @default(ACTIVE)
+  personalEmail             String?               @unique
+  faculty                   String?
+  major                     Major?
+  MajorGlobal               MajorGlobal?          @relation(fields: [majorGlobalId], references: [id])
+  majorGlobalId             String?
+  graduate_year             String?
+  phoneNo                   String?
+  AreaOfConcentration       String?
+  token                     String?               @unique
+  guardianName              String?
+  guardianEducation         String?
+  guardianReligion          String?
+  guardianStatus            String?
+  familyRelation            String?
+  guardianEmail             String?
+  guardianPhoneNo           String?
+  guardianAddress           String?
+  createdBy                 String?
+  updatedBy                 String?
+  createdAt                 DateTime              @default(now())
+  updatedAt                 DateTime?
+  filename                  String?
+  path                      String?
+  proposal_student          Proposal_Student[]    @relation("ProposalStudent")
+  skripsi_student           Skripsi_Student[]     @relation("SkripsiStudent")
+  group_student             Group_Student[]       @relation("StudentMember")
   proposal_assessment       Proposal_Assessment[] @relation("Student")
   proposal_conclusion_value Proposal_Conclusion[] @relation("Student")
   skripsi_assessment        Skripsi_Assessment[]  @relation("Student")
   skripsi_conclusion_value  Skripsi_Conclusion[]  @relation("Student")
-  FormSPT                FormSPT[]
+  FormSPT                   FormSPT[]
 
   academic_Consultation Academic_Consultation[]
   Tracer_Study          Tracer_Study[]
@@ -638,12 +638,11 @@ model Thesis_Link {
 // }
 
 model Curriculum {
-  id        String            @id @default(uuid())
-  major     String            @db.VarChar(100)
-  year      String            @db.VarChar(50)
-  Subjects  Subject[]
-  Pre_Regis PreRegistration[]
-  student   Student[]
+  id       String    @id @default(uuid())
+  major    String    @db.VarChar(100)
+  year     String    @db.VarChar(50)
+  Subjects Subject[]
+  student  Student[]
 }
 
 model Subject {
@@ -700,18 +699,16 @@ model grades_access {
 }
 
 model PreRegistration {
-  id             String      @id @default(uuid())
+  id             String   @id @default(uuid())
   semester       Semester
   semesterPeriod String
   major          Major
   dueDate        DateTime
-  isOpen         Boolean     @default(true)
-  Employee       Employee    @relation(fields: [employeeNik], references: [nik])
+  isOpen         Boolean  @default(true)
+  Employee       Employee @relation(fields: [employeeNik], references: [nik])
   employeeNik    String
-  Curriculum     Curriculum? @relation(fields: [curriculumId], references: [id])
-  curriculumId   String
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model PreRegistrationData {
@@ -746,15 +743,15 @@ model Academic_Consultation {
   receiver     Employee @relation(fields: [receiver_nik], references: [nik])
   receiver_nik String
 
-  receiver_name        String              @db.VarChar(255)
-  topic                String              @db.VarChar(50)
-  student_name         String              @db.VarChar(255)
-  supervisor_name      String              @db.VarChar(255)
-  student_major        String              @db.VarChar(50)
-  student_arrival_year String              @db.VarChar(50)
-  createdAt            DateTime            @default(now()) @db.Timestamptz(3)
-  updatedAt            DateTime            @default(now()) @db.Timestamptz(3)
-  status               Consultation_Status @default(Waiting)
+  receiver_name        String             @db.VarChar(255)
+  topic                String             @db.VarChar(50)
+  student_name         String             @db.VarChar(255)
+  supervisor_name      String             @db.VarChar(255)
+  student_major        String             @db.VarChar(50)
+  student_arrival_year String             @db.VarChar(50)
+  createdAt            DateTime           @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime           @default(now()) @db.Timestamptz(3)
+  status               ConsultationStatus @default(Waiting)
   description          String
 
   messages Message[]
@@ -924,7 +921,7 @@ enum Revision_Approve {
   Rejected
 }
 
-enum Consultation_Status {
+enum ConsultationStatus {
   Waiting
   OnProcess
   Complete
