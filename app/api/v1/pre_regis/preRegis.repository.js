@@ -1,5 +1,22 @@
 const prisma = require("../../../database");
 
+const getAllPreRegis = async (payload) => {
+  const { major } = payload;
+  return await prisma.preRegistration.findMany({
+    where: {
+      major,
+    },
+    include: {
+      Employee: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+  });
+};
+
 const findSubjectForPreRegis = async (payload) => {
   const { id } = payload;
   try {
@@ -74,4 +91,5 @@ module.exports = {
   createPreRegist,
   submitPreRegist,
   submitApproval,
+  getAllPreRegis,
 };
