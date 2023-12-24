@@ -1,5 +1,17 @@
 const preRegisService = require("./preRegis.service");
 
+const getAllPreRegis = async (req, res) => {
+  const payload = req.query;
+  try {
+    const preRegis = await preRegisService.getAllPreRegis(payload);
+    res.status(200).send({ status: "OK", data: preRegis });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 const preRegisMenu = async (req, res) => {
   const payload = req.query;
   try {
@@ -60,7 +72,6 @@ const submitPreRegist = async (req, res) => {
     const data = await preRegisService.submitPreRegist(payload);
     res.status(201).send({ status: "OK", data });
   } catch (error) {
-    console.log(error);
     if (error.name === "ValidationError") {
       return res
         .status(400)
@@ -69,10 +80,11 @@ const submitPreRegist = async (req, res) => {
     if (error.code === "P2003") {
       return res.status(404).send({
         status: "FAILED",
-        data: { error: "Student, Employee or Subject ID Not Found" },
+        data: {
+          error: "Student, Employee, Pre-Registration or Subject ID Not Found",
+        },
       });
     }
-
     res
       .status(error?.status || 500)
       .send({ status: "FAILED", data: { error: error?.message || error } });
@@ -106,9 +118,10 @@ const submitApproval = async (req, res) => {
 };
 
 module.exports = {
-  preRegisMenu,
   checkPreRegistAccess,
   createPreRegist,
   submitPreRegist,
+  getAllPreRegis,
   submitApproval,
+  preRegisMenu,
 };

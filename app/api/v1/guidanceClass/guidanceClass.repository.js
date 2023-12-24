@@ -1,5 +1,76 @@
 const prisma = require("../../../database");
 
+const getAllClass = async () => {
+  return await prisma.guidanceClass.findMany({
+    include: {
+      teacher: {
+        select: {
+          firstName: true,
+          lastName: true,
+          major: true,
+          nidn: true,
+          nik: true,
+          id: true,
+        },
+      },
+      _count: {
+        select: {
+          GuidanceClassMember: true,
+        },
+      },
+    },
+  });
+};
+
+const getGuidanceClassDetail = async (payload) => {
+  const { id } = payload;
+  return await prisma.guidanceClass.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      teacher: {
+        select: {
+          firstName: true,
+          lastName: true,
+          phoneNum: true,
+          Address: true,
+          major: true,
+          nidn: true,
+        },
+      },
+      GuidanceClassMember: {
+        where: {
+          student: {
+            status: {
+              not: "GRADUATE",
+            },
+          },
+        },
+        include: {
+          student: {
+            select: {
+              arrivalYear: true,
+              firstName: true,
+              lastName: true,
+              status: true,
+              major: true,
+              nim: true,
+              id: true,
+              _count: {
+                select: {
+                  Certificate: true,
+                  studentGrade: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
 const getAllUnassignedStudent = async (payload) => {
   const { major } = payload;
   return await prisma.student.findMany({
@@ -88,4 +159,6 @@ module.exports = {
   deleteStudentFromGuidanceClass,
   getAllUnassignedStudent,
   getAllUnassignetTeacher,
+  getAllClass,
+  getGuidanceClassDetail,
 };

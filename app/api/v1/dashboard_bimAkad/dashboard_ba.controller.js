@@ -1,6 +1,42 @@
 const dashboardService = require("./dashboard_ba.service");
 //======================Dosen Pembimbing Statistic===================//
 
+//Total Active & InActive Student Guidance
+const getTotalStudentGuidance = async (req, res) => {
+  try {
+    const statistic = await dashboardService.viewStudentGuidanceTotal();
+    res.status(200).send({ status: "OK", data: statistic });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//Total Active Student Guidance
+const getTotalActiveStudentGuidance = async (req, res) => {
+  try {
+    const statistic = await dashboardService.viewActiveStudentGuidanceTotal();
+    res.status(200).send({ status: "OK", data: statistic });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//Total InActive Student Guidance
+const getTotalInActiveStudentGuidance = async (req, res) => {
+  try {
+    const statistic = await dashboardService.viewInActiveStudentGuidanceTotal();
+    res.status(200).send({ status: "OK", data: statistic });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 //========================Kaprodi Statistic==========================//
 
 //Total All major Student
@@ -102,6 +138,9 @@ const getTotalAllInActiveFacultyStudent = async (req, res) => {
 
 module.exports = {
   //DOSPEM
+  getTotalStudentGuidance,
+  getTotalActiveStudentGuidance,
+  getTotalInActiveStudentGuidance,
   //MAJOR
   getAllMajorStudent,
   getAllTotalMajorStudent,

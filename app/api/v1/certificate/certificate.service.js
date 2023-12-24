@@ -78,7 +78,7 @@ const waitingListbyMajor = async (major, nik) => {
   }
 };
 
-//Waiting list arrival year pt2
+//Waiting list arrival year 
 const viewWaitingListByArrYear = async (arrivalYear, nik) => {
   try {
     let certificate = await certificateRepository.filterWaitingListByArrYear(
@@ -102,7 +102,7 @@ const viewWaitingListByArrYear = async (arrivalYear, nik) => {
   }
 };
 
-//show list Approved/Rejected certificate
+//History certificate POV Dospem
 const findAllStudentCertificate = async (nik) => {
   try {
     let certificate = await certificateRepository.findCertificate(nik);
@@ -163,7 +163,8 @@ const viewOneStudentCertificate = async (certificateId) => {
 };
 
 //===============================StudentAccess========================//
-//StudentAccess
+
+//Student Add Certificate
 const uploadCertificate = async (payload, nim) => {
   const storageRef = ref(
     storage,
@@ -215,7 +216,7 @@ const viewCurrentStudentCertificate = async (nim) => {
   }
 };
 
-//History Certificate
+//Student History Certificate (status Approved & Rejeceted)
 const studentHistoryCertificateView = async (nim) => {
   try {
     let certificate = await certificateRepository.findStudentCertificateHistory(

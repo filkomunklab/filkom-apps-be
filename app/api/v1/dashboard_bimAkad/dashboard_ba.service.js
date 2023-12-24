@@ -1,5 +1,134 @@
+const { guidanceClass } = require("../../../database");
 const dashboardRepository = require("./dashboard_ba.repository");
 //======================Dosen Pembimbing Statistic===================//
+
+//Total All Dosen Student Guidance (total Active & Inactive)
+const viewStudentGuidanceTotal = async () => {
+  try {
+    let statistic = await dashboardRepository.findAllStudentGuidanceTotal();
+
+    statistic = statistic.map((teacher) => {
+      const studentCount = teacher.GuidanceClass.reduce(
+        (total, guidanceClass) =>
+          total + guidanceClass.GuidanceClassMember.length,
+        0
+      );
+
+      return {
+        teacher: teacher,
+        studentCount: studentCount,
+      };
+    });
+
+    statistic = statistic.map((teacherData) => {
+      const { teacher, studentCount } = teacherData;
+      const formattedTeacher = {
+        firstName: teacher.firstName,
+        lastName: teacher.lastName,
+        nik: teacher.nik,
+      };
+
+      return {
+        teacher: formattedTeacher,
+        studentCount: studentCount,
+      };
+    });
+
+    statistic = statistic.filter((teacherData) => {
+      return teacherData.studentCount !== 0;
+    });
+
+    return statistic;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//total Active Student Guidance
+const viewActiveStudentGuidanceTotal = async () => {
+  try {
+    let statistic =
+      await dashboardRepository.findAllActiveStudentGuidanceTotal();
+
+    statistic = statistic.map((teacher) => {
+      const studentCount = teacher.GuidanceClass.reduce(
+        (total, guidanceClass) =>
+          total + guidanceClass.GuidanceClassMember.length,
+        0
+      );
+
+      return {
+        teacher: teacher,
+        studentCount: studentCount,
+      };
+    });
+
+    statistic = statistic.map((teacherData) => {
+      const { teacher, studentCount } = teacherData;
+      const formattedTeacher = {
+        firstName: teacher.firstName,
+        lastName: teacher.lastName,
+        nik: teacher.nik,
+      };
+
+      return {
+        teacher: formattedTeacher,
+        studentCount: studentCount,
+      };
+    });
+
+    statistic = statistic.filter((teacherData) => {
+      return teacherData.studentCount !== 0;
+    });
+
+    return statistic;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//total InActive Student Guidance
+const viewInActiveStudentGuidanceTotal = async () => {
+  try {
+    let statistic =
+      await dashboardRepository.findAllInActiveStudentGuidanceTotal();
+
+    statistic = statistic.map((teacher) => {
+      const studentCount = teacher.GuidanceClass.reduce(
+        (total, guidanceClass) =>
+          total + guidanceClass.GuidanceClassMember.length,
+        0
+      );
+
+      return {
+        teacher: teacher,
+        studentCount: studentCount,
+      };
+    });
+
+    statistic = statistic.map((teacherData) => {
+      const { teacher, studentCount } = teacherData;
+      const formattedTeacher = {
+        firstName: teacher.firstName,
+        lastName: teacher.lastName,
+        nik: teacher.nik,
+      };
+
+      return {
+        teacher: formattedTeacher,
+        studentCount: studentCount,
+      };
+    });
+
+    statistic = statistic.filter((teacherData) => {
+      return teacherData.studentCount !== 0;
+    });
+
+    return statistic;
+  } catch (error) {
+    throw error;
+  }
+};
 
 //========================Kaprodi Statistic==========================//
 
@@ -151,6 +280,8 @@ const viewTotalCategoryCertificate = async () => {
 };
 
 //==========================Dekan Statistic==========================//
+
+//Total All Active & InActive Faculty Student
 const viewTotalAllFacultyStudent = async () => {
   try {
     let result = await dashboardRepository.totalAllStudentFaculty();
@@ -175,6 +306,7 @@ const viewTotalAllFacultyStudent = async () => {
   } catch (error) {}
 };
 
+//Total Active Faculty Student
 const viewTotalAllActiveFacultyStudent = async () => {
   try {
     let result = await dashboardRepository.totalAllActiveStudentFaculty();
@@ -201,6 +333,7 @@ const viewTotalAllActiveFacultyStudent = async () => {
   }
 };
 
+//Total InActive Faculty Student
 const viewTotalAllInActiveFacultyStudent = async () => {
   try {
     let result = await dashboardRepository.totalAllInActiveStudentFaculty();
@@ -228,6 +361,10 @@ const viewTotalAllInActiveFacultyStudent = async () => {
 };
 
 module.exports = {
+  //Dospem
+  viewStudentGuidanceTotal,
+  viewActiveStudentGuidanceTotal,
+  viewInActiveStudentGuidanceTotal,
   //Major
   viewAllMajorStudent,
   viewTotalOfActiveMajorStudent,

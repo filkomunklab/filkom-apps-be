@@ -3,17 +3,94 @@ const prisma = require("../../../database");
 //=====================DOSPEM DASHBOARD======================//
 
 //Total All Student Guidance Acitve & InActive
-// const findAllStudentGuidance = async () => {
-//   const findTotalStudentGuidance = async () =>{
-//     try {
-//       return await prisma.guidanceClassMember.groupBy({
-//         take:{}
-//       })
-//     } catch (error) {
+const findAllStudentGuidanceTotal = async () => {
+  try {
+    return await prisma.employee.findMany({
+      select: {
+        firstName: true,
+        lastName: true,
+        nik: true,
+        GuidanceClass: {
+          include: {
+            GuidanceClassMember: {
+              include: {
+                student: true,
+              },
+              where: {
+                student: {
+                  status: { in: ["ACTIVE", "INACTIVE"] },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
-//     }
-//   }
-// }
+//Total Active Student Guidance
+const findAllActiveStudentGuidanceTotal = async () => {
+  try {
+    return await prisma.employee.findMany({
+      select: {
+        firstName: true,
+        lastName: true,
+        nik: true,
+        GuidanceClass: {
+          include: {
+            GuidanceClassMember: {
+              include: {
+                student: true,
+              },
+              where: {
+                student: {
+                  status: { in: ["ACTIVE"] },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+//Total InActive Student Guidance
+const findAllInActiveStudentGuidanceTotal = async () => {
+  try {
+    return await prisma.employee.findMany({
+      select: {
+        firstName: true,
+        lastName: true,
+        nik: true,
+        GuidanceClass: {
+          include: {
+            GuidanceClassMember: {
+              include: {
+                student: true,
+              },
+              where: {
+                student: {
+                  status: { in: ["INACTIVE"] },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
 //=====================KAPRODI DASHBOARD====================//
 
@@ -109,7 +186,7 @@ const findTotalAllCategoryCertificate = async () => {
 };
 
 //=====================DEKAN DASHBOARD=====================//
-//total Faculty Student Only Active
+//total Faculty Student Active & InActive
 const totalAllStudentFaculty = async () => {
   try {
     return await prisma.student.groupBy({
@@ -128,6 +205,7 @@ const totalAllStudentFaculty = async () => {
   }
 };
 
+//total Only active Faculty Student
 const totalAllActiveStudentFaculty = async () => {
   try {
     return await prisma.student.groupBy({
@@ -144,6 +222,7 @@ const totalAllActiveStudentFaculty = async () => {
   }
 };
 
+//Total Only InActive Student
 const totalAllInActiveStudentFaculty = async () => {
   try {
     return await prisma.student.groupBy({
@@ -162,6 +241,9 @@ const totalAllInActiveStudentFaculty = async () => {
 
 module.exports = {
   //Dospem
+  findAllStudentGuidanceTotal,
+  findAllActiveStudentGuidanceTotal,
+  findAllInActiveStudentGuidanceTotal,
   //Kaprodi
   findAllMajorStudent,
   findTotalActiveMajorStudent,
