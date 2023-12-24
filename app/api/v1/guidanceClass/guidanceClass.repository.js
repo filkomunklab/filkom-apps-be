@@ -7,9 +7,64 @@ const getAllClass = async () => {
         select: {
           firstName: true,
           lastName: true,
+          major: true,
           nidn: true,
           nik: true,
           id: true,
+        },
+      },
+      _count: {
+        select: {
+          GuidanceClassMember: true,
+        },
+      },
+    },
+  });
+};
+
+const getGuidanceClassDetail = async (payload) => {
+  const { id } = payload;
+  return await prisma.guidanceClass.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      teacher: {
+        select: {
+          firstName: true,
+          lastName: true,
+          phoneNum: true,
+          Address: true,
+          major: true,
+          nidn: true,
+        },
+      },
+      GuidanceClassMember: {
+        where: {
+          student: {
+            status: {
+              not: "GRADUATE",
+            },
+          },
+        },
+        include: {
+          student: {
+            select: {
+              arrivalYear: true,
+              firstName: true,
+              lastName: true,
+              status: true,
+              major: true,
+              nim: true,
+              id: true,
+              _count: {
+                select: {
+                  Certificate: true,
+                  studentGrade: true,
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -105,4 +160,5 @@ module.exports = {
   getAllUnassignedStudent,
   getAllUnassignetTeacher,
   getAllClass,
+  getGuidanceClassDetail,
 };

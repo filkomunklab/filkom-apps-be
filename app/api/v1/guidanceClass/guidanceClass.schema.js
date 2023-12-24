@@ -8,6 +8,11 @@ const CreateGuidanceClassSchema = Yup.object().shape({
     })
   ),
 });
+
+const GetGuidanceClassDetailSchema = Yup.object().shape({
+  id: Yup.string().required("Class id is required"),
+});
+
 const AddStudentSchema = Yup.object().shape({
   guidanceClassId: Yup.string().required("Class id is required"),
   studentList: Yup.array().of(
@@ -30,4 +35,5 @@ module.exports = {
   AddStudentSchema,
   DeleteStudentSchema,
   GetUnassignedSchema,
+  GetGuidanceClassDetailSchema,
 };

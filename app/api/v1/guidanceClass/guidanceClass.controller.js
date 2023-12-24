@@ -11,6 +11,20 @@ const getAllClass = async (req, res) => {
   }
 };
 
+const getGuidanceClassDetail = async (req, res) => {
+  const payload = req.params;
+  try {
+    const guidanceClass = await guidanceClassService.getGuidanceClassDetail(
+      payload
+    );
+    res.status(200).send({ status: "OK", data: guidanceClass });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 const createGuidanceClass = async (req, res) => {
   const payload = req.body;
   const { teacherId } = req.params;
@@ -104,10 +118,11 @@ const getAllUnassignetTeacher = async (req, res) => {
 };
 
 module.exports = {
-  createGuidanceClass,
-  addStudentToGuidanceClass,
   deleteStudentFromGuidanceClass,
-  getAllUnassignedStudent,
+  addStudentToGuidanceClass,
   getAllUnassignetTeacher,
+  getAllUnassignedStudent,
+  getGuidanceClassDetail,
+  createGuidanceClass,
   getAllClass,
 };
