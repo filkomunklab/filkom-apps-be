@@ -2,6 +2,7 @@ const { certificate } = require("../../../database");
 const certificateService = require("./certificate.service");
 
 //============================DospemAccess===========================//
+
 //Waiting List
 const advisorCertificateWaitingList = async (req, res) => {
   const { nik } = req.params;
@@ -63,6 +64,7 @@ const putApprovalCertificate = async (req, res) => {
   }
 };
 
+//waiting list By Major
 const getWaitingListbyMajor = async (req, res) => {
   const { major } = req.params;
   const { nik } = req.body;
@@ -76,7 +78,7 @@ const getWaitingListbyMajor = async (req, res) => {
   }
 };
 
-//waiting list by arrival year pt
+//waiting list by arrival year 
 const getWaitingListByArrYear = async (req, res) => {
   const { arrivalYear } = req.params;
   const { nik } = req.body;
@@ -94,7 +96,8 @@ const getWaitingListByArrYear = async (req, res) => {
 };
 
 //============================GeneralAccess=========================//
-//GeneralAccess
+
+//Detail Certificate
 const viewStudentCertificate = async (req, res) => {
   const { certificateId } = req.params;
   try {
@@ -110,7 +113,8 @@ const viewStudentCertificate = async (req, res) => {
 };
 
 //============================StudentAccess=========================//
-//studentAccess
+
+//Student Add Certificate
 const uploadCertificate = async (req, res) => {
   const payload = req.body;
   const { nim } = req.params;
@@ -127,7 +131,7 @@ const uploadCertificate = async (req, res) => {
   }
 };
 
-//StudentAccess
+//Student Current Certificate
 const getStudentCurrentCertificate = async (req, res) => {
   const { nim } = req.params;
   try {
@@ -143,7 +147,7 @@ const getStudentCurrentCertificate = async (req, res) => {
   }
 };
 
-//StudentAccess
+//Student History Certificate
 const studentCertificateHistory = async (req, res) => {
   const { nim } = req.params;
   try {
