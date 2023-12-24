@@ -4,10 +4,16 @@ const {
   AddStudentSchema,
   DeleteStudentSchema,
   GetUnassignedSchema,
+  GetGuidanceClassDetailSchema,
 } = require("./guidanceClass.schema");
 
 const getAllClass = async () => {
   return await guidanceClassRepository.getAllClass();
+};
+
+const getGuidanceClassDetail = async (payload) => {
+  await GetGuidanceClassDetailSchema.validate(payload);
+  return await guidanceClassRepository.getGuidanceClassDetail(payload);
 };
 
 const createGuidanceClass = async (payload, teacherId) => {
@@ -40,10 +46,11 @@ const getAllUnassignetTeacher = async () => {
 };
 
 module.exports = {
-  createGuidanceClass,
-  addStudentToGuidanceClass,
   deleteStudentFromGuidanceClass,
+  addStudentToGuidanceClass,
   getAllUnassignedStudent,
   getAllUnassignetTeacher,
+  getGuidanceClassDetail,
+  createGuidanceClass,
   getAllClass,
 };

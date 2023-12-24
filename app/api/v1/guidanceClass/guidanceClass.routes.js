@@ -5,6 +5,11 @@ const router = express.Router();
 router.get("/guidance-class", guidanceClassController.getAllClass);
 
 router.get(
+  "/guidance-class/:id",
+  guidanceClassController.getGuidanceClassDetail
+);
+
+router.get(
   "/guidance-class/get-all-unassigned-student",
   guidanceClassController.getAllUnassignedStudent
 );
