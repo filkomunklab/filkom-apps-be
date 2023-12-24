@@ -93,6 +93,7 @@ const deleteStudentFromGuidanceClass = async (req, res) => {
 };
 
 const getAllUnassignedStudent = async (req, res) => {
+  console.log("masuk sini");
   const query = req.query;
   try {
     const studentList = await guidanceClassService.getAllUnassignedStudent(

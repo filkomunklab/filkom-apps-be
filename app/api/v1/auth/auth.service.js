@@ -59,7 +59,7 @@ const signInEmployee = async (nik, password) => {
   const checkNIK = await authRepository.findEmployeeByNik(nik);
 
   if (checkNIK) {
-    const role = await authRepository.findRolesByUserId(checkNIK.nik);
+    const role = await authRepository.findRolesByUserId(checkNIK.id);
     const checkPassword = bcrypt.compareSync(password, checkNIK.password);
     if (checkPassword) {
       const token = jwt.sign(
@@ -109,7 +109,7 @@ const signInStudent = async (username, password) => {
   const checkNIM = await authRepository.findStudentByNim(username);
 
   if (checkNIM) {
-    const role = await authRepository.findRolesByUserId(checkNIM.nim);
+    const role = await authRepository.findRolesByUserId(checkNIM.id);
     const checkPassword = bcrypt.compareSync(password, checkNIM.password);
     if (checkPassword) {
       const token = jwt.sign(

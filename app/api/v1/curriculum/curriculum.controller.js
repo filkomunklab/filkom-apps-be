@@ -27,7 +27,7 @@ const getAllCurriculum = async (req, res) => {
   try {
     const curriculum = await curriculumService.GetAllCurriculum();
 
-    res.status(201).send({
+    res.status(200).send({
       status: "OK",
       data: curriculum,
     });
