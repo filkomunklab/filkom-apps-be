@@ -24,7 +24,7 @@ const selectAllCurriculumByIdCurriculum = async (curriculum_id) => {
   try {
     const subjects = await prisma.subject.findMany({
       where: {
-        curriculum_id,
+        curriculumId: curriculum_id,
       },
       orderBy: {
         semester: "asc",
@@ -42,11 +42,10 @@ const deleteAllSubjectByCurriculumId = async (curriculum_id) => {
   try {
     const subject = await prisma.subject.deleteMany({
       where: {
-        curriculum_id,
+        curriculumId: curriculum_id,
       },
     });
 
-    console.log("ini delete subject: ", subject);
     return subject;
   } catch (error) {
     console.log(error.message);
