@@ -1,7 +1,7 @@
 const prisma = require("../../../database");
 
 //================================Dosen Pembimbing=====================//
-//show list Approved/Rejected certificate
+//History Certificate DosPem POV
 const findCertificate = async (nik) => {
   try {
     const certificate = await prisma.certificate.findMany({
@@ -32,6 +32,7 @@ const findCertificate = async (nik) => {
         approvalDate: "desc",
       },
       select: {
+        id: true,
         title: true,
         approvalDate: true,
         student: {
@@ -72,6 +73,7 @@ const findCertificateByCategory = async (category, nik) => {
         submitDate: "desc",
       },
       select: {
+        id: true,
         title: true,
         approvalDate: true,
         student: {
@@ -106,6 +108,7 @@ const findAdvisorCertificateWaitingList = async (nik) => {
         submitDate: "desc",
       },
       select: {
+        id: true,
         title: true,
         category: true,
         approval_status: true,
@@ -166,6 +169,7 @@ const findWaitingListbyMajor = async (major, nik) => {
         submitDate: "desc",
       },
       select: {
+        id:true,
         title: true,
         category: true,
         approval_status: true,
@@ -226,6 +230,7 @@ const filterWaitingListByArrYear = async (arrivalYear, nik) => {
         submitDate: "desc",
       },
       select: {
+        id:true,
         title: true,
         category: true,
         approval_status: true,
@@ -258,7 +263,7 @@ const filterWaitingListByArrYear = async (arrivalYear, nik) => {
   }
 };
 
-//approval Certificate
+//approval Certificate by dospem
 const approvalCertificateStudent = async (certificateId, payload) => {
   const { approval_status, comments } = payload;
   try {
@@ -289,6 +294,7 @@ const findOneCertificate = async (certificateId) => {
         id: certificateId,
       },
       select: {
+        id:true,
         title: true,
         submitDate: true,
         approvalDate: true,

@@ -24,7 +24,7 @@ router.get(
   certificateController.viewCertificateCategory //View student certificate by category
 );
 
-//VIEW ACCEPTED & REJECTED CERTIFICATE
+//VIEW ACCEPTED & REJECTED CERTIFICATE (student history)
 router.get(
   "/certificate/history/student/:nim",
   certificateController.studentCertificateHistory
