@@ -50,6 +50,9 @@ const FindUserRoleByUserId = async (id) => {
       where: {
         userId: id,
       },
+      select: {
+        role: true,
+      },
     });
     return userRole;
   } catch (error) {
@@ -57,11 +60,11 @@ const FindUserRoleByUserId = async (id) => {
   }
 };
 
-const deleteEmployeeRoles = async (prisma, nik) => {
+const deleteEmployeeRoles = async (prisma, id) => {
   try {
     const count = await prisma.userRole.deleteMany({
       where: {
-        userId: nik,
+        userId: id,
       },
     });
 

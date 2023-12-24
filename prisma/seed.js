@@ -1,13 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  getStorage,
-  deleteObject,
-} = require("firebase/storage");
-const { storage } = require("../app/config/firebase");
 
 let kurikulum_informatika;
 
@@ -988,96 +980,11 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
     });
-
-  await prisma.userRole.createMany({
-    data: [
-      {
-        userId: "10502201001",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201002",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201003",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201004",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201005",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201006",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201007",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201008",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201009",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201010",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201011",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201012",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201013",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201014",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201015",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201016",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201017",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201018",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201019",
-        role: "MAHASISWA",
-      },
-      {
-        userId: "10502201020",
-        role: "MAHASISWA",
-      },
-    ],
-  });
 
   // CREATE ALUMNI
   // TODO: solve this error
@@ -1289,7 +1196,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1313,7 +1220,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1337,7 +1244,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1361,7 +1268,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1385,7 +1292,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1409,7 +1316,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1433,7 +1340,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1457,7 +1364,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1481,7 +1388,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1505,7 +1412,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1529,7 +1436,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1553,7 +1460,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1577,7 +1484,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1601,7 +1508,7 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1625,7 +1532,31 @@ async function main() {
     .then(async (student) => {
       await prisma.userRole.create({
         data: {
-          userId: student.nim,
+          userId: student.id,
+          role: "MAHASISWA",
+        },
+      });
+    });
+
+  await prisma.student
+    .create({
+      data: {
+        id: sintaID,
+        gender: "FEMALE",
+        firstName: "Sinta",
+        lastName: "Lily",
+        studentEmail: "lily@mail.com",
+        nim: "105021920016",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "IF",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+    })
+    .then(async (student) => {
+      await prisma.userRole.create({
+        data: {
+          userId: student.id,
           role: "MAHASISWA",
         },
       });
@@ -1657,7 +1588,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -1690,7 +1621,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -1723,7 +1654,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -1756,7 +1687,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -1789,7 +1720,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -1822,7 +1753,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -1854,7 +1785,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -1886,7 +1817,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -1918,7 +1849,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -1950,7 +1881,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -1982,7 +1913,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -2014,7 +1945,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -2046,35 +1977,11 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
       }
-    });
-
-  await prisma.student
-    .create({
-      data: {
-        id: sintaID,
-        gender: "FEMALE",
-        firstName: "Sinta",
-        lastName: "Lily",
-        studentEmail: "lily@mail.com",
-        nim: "105021920016",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "IF",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-    })
-    .then(async (student) => {
-      await prisma.userRole.create({
-        data: {
-          userId: student.nim,
-          role: "MAHASISWA",
-        },
-      });
     });
 
   // CREATE DOSEN 11
@@ -2102,7 +2009,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -2134,7 +2041,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -2166,7 +2073,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -2198,7 +2105,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -2230,7 +2137,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -2262,7 +2169,7 @@ async function main() {
       for (const role of rolesToAdd) {
         await prisma.userRole.create({
           data: {
-            userId: employee.nik,
+            userId: employee.id,
             role: role,
           },
         });
@@ -2288,15 +2195,18 @@ async function main() {
     .then(async (employee) => {
       await prisma.userRole.create({
         data: {
-          userId: employee.nik,
+          userId: employee.id,
           role: "OPERATOR_FAKULTAS",
         },
       });
     });
 
+  //--------------------------------------Klabat Bridge--------------------------------------------
+  // Create Student
   await prisma.student.createMany({
     data: [
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c01",
         nim: "10502201001",
         studentEmail: "s2200001@student.unklab.ac.id",
         firstName: "Angel Triany",
@@ -2311,6 +2221,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c02",
         nim: "10502201002",
         studentEmail: "s2200002@student.unklab.ac.id",
         firstName: "Brenda",
@@ -2324,6 +2235,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c03",
         nim: "10502201003",
         studentEmail: "s2200003@student.unklab.ac.id",
         firstName: "Darel",
@@ -2336,6 +2248,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c04",
         nim: "10502201004",
         studentEmail: "s2200004@student.unklab.ac.id",
         firstName: "Shyereal",
@@ -2348,6 +2261,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c05",
         nim: "10502201005",
         studentEmail: "s2200005@student.unklab.ac.id",
         firstName: "Marika",
@@ -2360,6 +2274,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c06",
         nim: "10502201006",
         studentEmail: "s2200006@student.unklab.ac.id",
         firstName: "Delphinia",
@@ -2372,6 +2287,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c07",
         nim: "10502201007",
         studentEmail: "s2200007@student.unklab.ac.id",
         firstName: "Dannye",
@@ -2385,6 +2301,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c08",
         nim: "10502201008",
         studentEmail: "s2200008@student.unklab.ac.id",
         firstName: "Rozanna",
@@ -2398,6 +2315,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c09",
         nim: "10502201009",
         studentEmail: "s2200009@student.unklab.ac.id",
         firstName: "Lars",
@@ -2411,6 +2329,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c10",
         nim: "10502201010",
         studentEmail: "s2200010@student.unklab.ac.id",
         firstName: "Dunn",
@@ -2424,6 +2343,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c11",
         nim: "10502201011",
         studentEmail: "s2200011@student.unklab.ac.id",
         firstName: "Arlyn",
@@ -2435,6 +2355,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c12",
         nim: "10502201012",
         studentEmail: "s2200012@student.unklab.ac.id",
         firstName: "Cookie",
@@ -2446,6 +2367,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c13",
         nim: "10502201013",
         studentEmail: "s2200013@student.unklab.ac.id",
         firstName: "Stacy",
@@ -2457,6 +2379,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c14",
         nim: "10502201014",
         studentEmail: "s2200014@student.unklab.ac.id",
         firstName: "Oralia",
@@ -2468,6 +2391,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c15",
         nim: "10502201015",
         studentEmail: "s2200015@student.unklab.ac.id",
         firstName: "Bethina",
@@ -2479,6 +2403,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c16",
         nim: "10502201016",
         studentEmail: "s2200016@student.unklab.ac.id",
         firstName: "Arleyne",
@@ -2490,6 +2415,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c17",
         nim: "10502201017",
         studentEmail: "s2200017@student.unklab.ac.id",
         firstName: "Julianna",
@@ -2501,6 +2427,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c18",
         nim: "10502201018",
         studentEmail: "s2200018@student.unklab.ac.id",
         firstName: "Dario",
@@ -2512,6 +2439,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c19",
         nim: "10502201019",
         studentEmail: "s2200019@student.unklab.ac.id",
         firstName: "Pietra",
@@ -2523,6 +2451,7 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c20",
         nim: "10502201020",
         studentEmail: "s2200020@student.unklab.ac.id",
         firstName: "Derril",
@@ -2536,11 +2465,96 @@ async function main() {
     ],
   });
 
-  //--------------------------------------Klabat Bridge--------------------------------------------
+  await prisma.userRole.createMany({
+    data: [
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c01",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c02",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c03",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c04",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c05",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c06",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c07",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c08",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c09",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c10",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c11",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c12",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c13",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c14",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c15",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c16",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c17",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c18",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c19",
+        role: "MAHASISWA",
+      },
+      {
+        userId: "1efcdc53-f12c-4683-b9ff-db6e53fe5c20",
+        role: "MAHASISWA",
+      },
+    ],
+  });
+
   // Create Alumni
   await prisma.student.createMany({
     data: [
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e01",
         nim: "20502201001",
         studentEmail: "s2300001@student.unklab.ac.id",
         firstName: "Stirling",
@@ -2554,6 +2568,7 @@ async function main() {
         graduate_year: "2022",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e02",
         nim: "20502201002",
         studentEmail: "s2300002@student.unklab.ac.id",
         firstName: "Julina",
@@ -2567,6 +2582,7 @@ async function main() {
         graduate_year: "2022",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e03",
         nim: "20502201003",
         studentEmail: "s2300003@student.unklab.ac.id",
         firstName: "Koenraad",
@@ -2580,6 +2596,7 @@ async function main() {
         graduate_year: "2022",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e04",
         nim: "20502201004",
         studentEmail: "s2300004@student.unklab.ac.id",
         firstName: "Rad",
@@ -2593,6 +2610,7 @@ async function main() {
         graduate_year: "2022",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e05",
         nim: "20502201005",
         studentEmail: "s2300005@student.unklab.ac.id",
         firstName: "Gene",
@@ -2606,6 +2624,7 @@ async function main() {
         graduate_year: "2022",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e06",
         nim: "20502201006",
         studentEmail: "s2300006@student.unklab.ac.id",
         firstName: "Stewart",
@@ -2619,6 +2638,7 @@ async function main() {
         graduate_year: "2022",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e07",
         nim: "20502201007",
         studentEmail: "s2300007@student.unklab.ac.id",
         firstName: "Maxim",
@@ -2632,6 +2652,7 @@ async function main() {
         graduate_year: "2022",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e08",
         nim: "20502201008",
         studentEmail: "s2300008@student.unklab.ac.id",
         firstName: "Sheilakathryn",
@@ -2645,6 +2666,7 @@ async function main() {
         graduate_year: "2022",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e09",
         nim: "20502201009",
         studentEmail: "s2300009@student.unklab.ac.id",
         firstName: "Adelle",
@@ -2658,6 +2680,7 @@ async function main() {
         graduate_year: "2022",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e10",
         nim: "20502201010",
         studentEmail: "s2300010@student.unklab.ac.id",
         firstName: "Estevan",
@@ -2671,6 +2694,7 @@ async function main() {
         graduate_year: "2022",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e11",
         nim: "20502201011",
         studentEmail: "s2300011@student.unklab.ac.id",
         firstName: "Tybalt",
@@ -2684,6 +2708,7 @@ async function main() {
         graduate_year: "2023",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e12",
         nim: "20502201012",
         studentEmail: "s2300012@student.unklab.ac.id",
         firstName: "Egor",
@@ -2697,6 +2722,7 @@ async function main() {
         graduate_year: "2023",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e13",
         nim: "20502201013",
         studentEmail: "s2300013@student.unklab.ac.id",
         firstName: "Jerrie",
@@ -2710,6 +2736,7 @@ async function main() {
         graduate_year: "2023",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e14",
         nim: "20502201014",
         studentEmail: "s2300014@student.unklab.ac.id",
         firstName: "Calli",
@@ -2723,6 +2750,7 @@ async function main() {
         graduate_year: "2023",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e15",
         nim: "20502201015",
         studentEmail: "s2300015@student.unklab.ac.id",
         firstName: "Lucilia",
@@ -2736,6 +2764,7 @@ async function main() {
         graduate_year: "2023",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e16",
         nim: "20502201016",
         studentEmail: "s2300016@student.unklab.ac.id",
         firstName: "Rowan",
@@ -2749,6 +2778,7 @@ async function main() {
         graduate_year: "2023",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e17",
         nim: "20502201017",
         studentEmail: "s2300017@student.unklab.ac.id",
         firstName: "Norine",
@@ -2762,6 +2792,7 @@ async function main() {
         graduate_year: "2023",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e18",
         nim: "20502201018",
         studentEmail: "s2300018@student.unklab.ac.id",
         firstName: "Sarina",
@@ -2775,6 +2806,7 @@ async function main() {
         graduate_year: "2023",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e19",
         nim: "20502201019",
         studentEmail: "s2300019@student.unklab.ac.id",
         firstName: "Rachele",
@@ -2788,6 +2820,7 @@ async function main() {
         graduate_year: "2023",
       },
       {
+        id: "9036e2e9-3601-4f00-b74a-bf4e731c9e20",
         nim: "20502201020",
         studentEmail: "s2300020@student.unklab.ac.id",
         firstName: "Gayle",
@@ -2806,83 +2839,83 @@ async function main() {
   await prisma.userRole.createMany({
     data: [
       {
-        userId: "20502201001",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e01",
         role: "ALUMNI",
       },
       {
-        userId: "20502201002",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e02",
         role: "ALUMNI",
       },
       {
-        userId: "20502201003",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e03",
         role: "ALUMNI",
       },
       {
-        userId: "20502201004",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e04",
         role: "ALUMNI",
       },
       {
-        userId: "20502201005",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e05",
         role: "ALUMNI",
       },
       {
-        userId: "20502201006",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e06",
         role: "ALUMNI",
       },
       {
-        userId: "20502201007",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e07",
         role: "ALUMNI",
       },
       {
-        userId: "20502201008",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e08",
         role: "ALUMNI",
       },
       {
-        userId: "20502201009",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e09",
         role: "ALUMNI",
       },
       {
-        userId: "20502201010",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e10",
         role: "ALUMNI",
       },
       {
-        userId: "20502201011",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e11",
         role: "ALUMNI",
       },
       {
-        userId: "20502201012",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e12",
         role: "ALUMNI",
       },
       {
-        userId: "20502201013",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e13",
         role: "ALUMNI",
       },
       {
-        userId: "20502201014",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e14",
         role: "ALUMNI",
       },
       {
-        userId: "20502201015",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e15",
         role: "ALUMNI",
       },
       {
-        userId: "20502201016",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e16",
         role: "ALUMNI",
       },
       {
-        userId: "20502201017",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e17",
         role: "ALUMNI",
       },
       {
-        userId: "20502201018",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e18",
         role: "ALUMNI",
       },
       {
-        userId: "20502201019",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e19",
         role: "ALUMNI",
       },
       {
-        userId: "20502201020",
+        userId: "9036e2e9-3601-4f00-b74a-bf4e731c9e20",
         role: "ALUMNI",
       },
     ],

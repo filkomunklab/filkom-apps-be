@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./app/api/v1/auth/auth.routes");
 const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
+const userManagement = require("./app/api/v1/user_management/user_management.routes");
 
 // dokumentasi
 const {
@@ -76,7 +77,6 @@ const gradesSubmissionRoutes = require("./app/api/v1/transaction_Grades/transact
 const gradesRoutes = require("./app/api/v1/Grades/grades.routes");
 const guidanceClass = require("./app/api/v1/guidanceClass/guidanceClass.routes");
 const dashboardBA = require("./app/api/v1/dashboard_bimAkad/dashboard_ba.routes");
-const { url } = require("inspector");
 
 //--------------------------------------------------------
 
@@ -124,6 +124,7 @@ app.use(`${URL}`, gradesSubmissionRoutes);
 app.use(`${URL}`, gradesRoutes);
 app.use(`${URL}`, guidanceClass);
 app.use(`${URL}`, dashboardBA);
+app.use(`${URL}`, userManagement);
 //---------------------------------------------------
 
 app.use("/", (req, res) => {

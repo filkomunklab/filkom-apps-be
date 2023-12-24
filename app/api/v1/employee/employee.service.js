@@ -16,9 +16,7 @@ const getAllEmployees = async () => {
       employees.map(async (employee) => {
         try {
           // Dapatkan role untuk setiap employee
-          let role = await userRoleRepository.FindUserRoleByUserId(
-            employee.nik
-          );
+          let role = await userRoleRepository.FindUserRoleByUserId(employee.id);
           return { ...employee, role };
         } catch (error) {
           throw error;
@@ -57,14 +55,7 @@ const createManyEmployee = async (data) => {
 
     // push user role untuk keperluan pembuatan create many role
     // role tidak ada di tabel employee jadi di pisahkan untuk keperluan crate many employee
-    data = data.map((itemEmployee) => {
-      itemEmployee.role.forEach((itemRole) => {
-        userRole.push({
-          userId: itemEmployee.nik,
-          role: itemRole,
-        });
-      });
-
+    const dataWithoutRole = data.map((itemEmployee) => {
       salt = bcrypt.genSaltSync(10);
       password = bcrypt.hashSync(itemEmployee.password, salt);
 
@@ -75,18 +66,39 @@ const createManyEmployee = async (data) => {
       };
     });
 
+    const employee = await employeeRepository.insertManyEmployee(
+      prisma,
+      dataWithoutRole
+    );
+
     // menggunakan primsa transaction untuk make sure semua proses berhasil baru commit
     // jika ada yang gagal maka akan rollback sehingga consistency data dijaga
     const result = await prisma.$transaction(async (prisma) => {
       try {
-        const employee = await employeeRepository.insertManyEmployee(
-          prisma,
-          data
-        );
+        let dataEmployeeWithId = await employeeRepository.findEmployees();
+
+        // pembuatan user role berdasarkan id user employee
+        // looping pertama untuk ambil data all employee tanpa role dengan user id
+        // looping kedua untuk all employee dengan role tanpa user id
+        // looping ketiga untuk push user role
+        dataEmployeeWithId.forEach((itemEmployeeWithoutRole) => {
+          data.forEach((itemEmployeeWithRole) => {
+            if (itemEmployeeWithRole.nik === itemEmployeeWithoutRole.nik) {
+              itemEmployeeWithRole.role.forEach((itemRole) => {
+                userRole.push({
+                  userId: itemEmployeeWithoutRole.id,
+                  role: itemRole,
+                });
+              });
+            }
+          });
+        });
+        console.log("ini user role: ", userRole);
         await userRoleRepository.CreateManyRole(prisma, userRole);
 
         return employee;
       } catch (error) {
+        console.log(error);
         throw error;
       }
     });
@@ -102,7 +114,7 @@ const deleteEmployeeById = async (id) => {
     await prisma.$transaction(async (prisma) => {
       const employee = await employeeRepository.findEmployeeById(prisma, id);
       await employeeRepository.deleteEmployee(prisma, id);
-      await userRoleRepository.deleteEmployeeRoles(prisma, employee.nik);
+      await userRoleRepository.deleteEmployeeRoles(prisma, employee.id);
       return;
     });
   } catch (error) {
