@@ -699,30 +699,33 @@ model grades_access {
 }
 
 model PreRegistration {
-  id             String   @id @default(uuid())
-  semester       Semester
-  semesterPeriod String
-  major          Major
-  dueDate        DateTime
-  isOpen         Boolean  @default(true)
-  Employee       Employee @relation(fields: [employeeNik], references: [nik])
-  employeeNik    String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                  String                @id @default(uuid())
+  semester            Semester
+  semesterPeriod      String
+  major               Major
+  dueDate             DateTime
+  isOpen              Boolean               @default(true)
+  Employee            Employee              @relation(fields: [employeeNik], references: [nik])
+  employeeNik         String
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  PreRegistrationData PreRegistrationData[]
 }
 
 model PreRegistrationData {
-  id            String          @id @default(uuid())
-  Student       Student         @relation(fields: [studentId], references: [nim])
-  studentId     String
-  Employee      Employee        @relation(fields: [employeeId], references: [nik])
-  employeeId    String
-  status        status?         @default(WAITING)
-  description   String?
-  comments      String?
-  submitDate    DateTime        @default(now())
-  approveDate   DateTime?
-  ListOfRequest ListOfRequest[]
+  id                String          @id @default(uuid())
+  Student           Student         @relation(fields: [studentId], references: [nim])
+  studentId         String
+  Employee          Employee        @relation(fields: [employeeId], references: [nik])
+  employeeId        String
+  status            status?         @default(WAITING)
+  description       String?
+  comments          String?
+  submitDate        DateTime        @default(now())
+  approveDate       DateTime?
+  PreRegistration   PreRegistration @relation(fields: [preRegistrationId], references: [id])
+  preRegistrationId String
+  ListOfRequest     ListOfRequest[]
 }
 
 model ListOfRequest {

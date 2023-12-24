@@ -5,11 +5,17 @@ const {
   SubmitPreRegistSchema,
   ApprovalSchema,
   GetCurriculumSchema,
+  GetAllPreRegisSchema,
 } = require("./preRegis.schema");
 
 const viewPreRegisMenu = async (payload) => {
   await GetCurriculumSchema.validate(payload);
   return await preRegisRepository.findSubjectForPreRegis(payload);
+};
+
+const getAllPreRegis = async (payload) => {
+  await GetAllPreRegisSchema.validate(payload);
+  return await preRegisRepository.getAllPreRegis(payload);
 };
 
 const checkPreRegistAccess = async (payload) => {
@@ -33,9 +39,10 @@ const submitApproval = async (payload) => {
 };
 
 module.exports = {
-  viewPreRegisMenu,
   checkPreRegistAccess,
+  viewPreRegisMenu,
   createPreRegist,
   submitPreRegist,
   submitApproval,
+  getAllPreRegis,
 };
