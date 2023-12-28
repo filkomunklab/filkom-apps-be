@@ -6,5 +6,6 @@ const router = express.Router();
 router.post("/access/open/grades", accessController.openGradeAccess);
 router.patch("/access/close/:id", accessController.closeGradesAccess);
 router.get("/access/list/gradeAccess", accessController.getlistGradeAccess);
+router.get("/access/list/gradesAccess/:major", accessController.getlistGradeAccessByMajor)
 router.get("/access/isOpen/:major", accessController.checkingOpenGradeAccess);
 module.exports = router;

@@ -1,6 +1,7 @@
 const accessRepository = require("./open_access.repository");
 
 /*=============================== GRADES ACCESS =============================*/
+//creat access for grades input
 const createOpenGradAccess = async (payload) => {
   try {
     const openAccess = await accessRepository.addOpenGradesAccess(payload);
@@ -10,6 +11,7 @@ const createOpenGradAccess = async (payload) => {
   }
 };
 
+//close access for grades input
 const setGradesAccessClose = async (id) => {
   try {
     const openAccess = await accessRepository.setCloseGradesAccess(id);
@@ -19,6 +21,7 @@ const setGradesAccessClose = async (id) => {
   }
 };
 
+//list grades for dekan
 const viewlistGradeAccess = async () => {
   try {
     const openAccess = await accessRepository.findlistGradesAccess();
@@ -28,6 +31,17 @@ const viewlistGradeAccess = async () => {
   }
 };
 
+//list grades for kaprodi
+const viewlistGradeAccessByMajor = async (major) => {
+  try {
+    const openAccess = await accessRepository.findlistGradesAccessByMajor(major);
+    return openAccess;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//cek access
 const viewToCheckOpenGradeAccess = async (major) => {
   try {
     return await accessRepository.findToCheckOpenGradesAccess(major);
@@ -41,4 +55,5 @@ module.exports = {
   setGradesAccessClose,
   viewlistGradeAccess,
   viewToCheckOpenGradeAccess,
+  viewlistGradeAccessByMajor
 };
