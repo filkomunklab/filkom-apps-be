@@ -1,6 +1,8 @@
 const prisma = require("../../../database");
 
 /*=============================== GRADES ACCESS =============================*/
+
+// create access for input graes
 const addOpenGradesAccess = async (payload) => {
   const { semester, semester_period, major, due_date, employeeNik } = payload;
   try {
@@ -20,15 +22,43 @@ const addOpenGradesAccess = async (payload) => {
   }
 };
 
+//find list grades access for dekan
 const findlistGradesAccess = async () => {
   try {
-    const openAccess = await prisma.grades_access.findMany();
+    const openAccess = await prisma.grades_access.findMany({
+      include:{
+        Employee:{
+          select:{
+            id: true,
+            nik: true,
+            firstName: true,
+            lastName: true,
+          }
+        }
+      }
+    });
     return openAccess;
   } catch (error) {
     throw error;
   }
 };
 
+//find list grades access for kaprodi
+const findlistGradesAccessByMajor = async (major) => {
+  try {
+    const openAccess = await prisma.grades_access.findMany({
+      where:{
+        major
+      }
+    });
+    return openAccess;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// close access for grades input
 const setCloseGradesAccess = async (id) => {
   try {
     const openAccess = await prisma.grades_access.update({
@@ -43,6 +73,7 @@ const setCloseGradesAccess = async (id) => {
   }
 };
 
+//cek access
 const findToCheckOpenGradesAccess = async (major) => {
   try {
     const openAccess = await prisma.grades_access.findFirst({
@@ -64,4 +95,5 @@ module.exports = {
   setCloseGradesAccess,
   findlistGradesAccess,
   findToCheckOpenGradesAccess,
+  findlistGradesAccessByMajor
 };
