@@ -53,7 +53,7 @@ router.get(
   employeeController.getDekanAndKaprodiByMajor
 );
 router.post("/employee", employeeController.createEmployee);
-router.post("/employees", employeeController.createManyEmployee);
+router.post("/employees", auth, employeeController.createManyEmployee);
 router.delete("/employee/:id", auth, employeeController.deleteEmployeeById);
 router.patch("/employee/:id", auth, employeeController.patchEmployeeById);
 router.put("/employee/:id", employeeController.updateEmployeeById);
@@ -81,6 +81,7 @@ router.patch(
 
 router.patch(
   "/management/employee/:nik/password",
+  auth,
   employeeController.updateEmployeePassword
 );
 

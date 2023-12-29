@@ -105,7 +105,7 @@ const createManyEmployee = async (data) => {
 
     return result;
   } catch (error) {
-    throw error.message;
+    throw error;
   }
 };
 
