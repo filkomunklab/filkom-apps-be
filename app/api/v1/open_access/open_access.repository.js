@@ -33,6 +33,7 @@ const findlistGradesAccess = async () => {
             nik: true,
             firstName: true,
             lastName: true,
+            major: true,
           }
         }
       }

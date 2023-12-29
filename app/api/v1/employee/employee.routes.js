@@ -58,7 +58,9 @@ router.delete("/employee/:id", auth, employeeController.deleteEmployeeById);
 router.patch("/employee/:id", auth, employeeController.patchEmployeeById);
 router.put("/employee/:id", employeeController.updateEmployeeById);
 router.get("/employee/dosen/:major", employeeController.viewDosenByMajor);
-router.get("/employee/profile/:nik", employeeController.viewDosenDetailProfile);
+
+router.get("/employee/profile/:classId", employeeController.viewDosenDetailProfile);
+
 router.patch(
   "/employee/student/addStudent",
   employeeController.addStudentGuidance

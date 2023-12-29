@@ -159,10 +159,10 @@ const viewDosenByMajor = async (req, res) => {
 };
 
 const viewDosenDetailProfile = async (req, res) => {
-  const { nik } = req.params;
+  const { classId } = req.params;
   try {
-    const employee = await employeeService.getDosenDetailProfile(nik);
-    res.status(201).send({ status: "OK", data: employee });
+    const employee = await employeeService.getDosenDetailProfile(classId);
+    res.status(200).send({ status: "OK", data: employee });
   } catch (error) {
     res
       .status(error?.status || 500)
