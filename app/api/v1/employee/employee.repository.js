@@ -128,27 +128,50 @@ const findEmployeeByMajor = async (major) => {
 };
 
 //Dosen biodata
-const findDosenDetailProfile = async (nik) => {
+const findDosenDetailProfile = async (classId) => {
   try {
-    const employee = await prisma.employee.findUnique({
+    const employee = await prisma.guidanceClass.findUnique({
       where: {
-        nik,
+        id: classId
       },
-      include: {
-        student: {
-          select: {
-            nim: true,
+      include:{
+        teacher:{
+          select:{
+            id: true,
+            nik: true,
+            nidn: true,
             firstName: true,
             lastName: true,
+            email: true,
+            phoneNum: true,
             major: true,
-            arrival_Year: true,
-            status: true,
+            Address:true,
+            GuidanceClass:{
+              select:{
+                GuidanceClassMember:{
+                  select:{
+                    student:{
+                      select:{
+                        id:true,
+                        nim: true,
+                        firstName: true,
+                        lastName: true,
+                        major: true,
+                        arrivalYear: true,
+                        status: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
     });
     return employee;
   } catch (error) {
+    console.log(error)
     return error;
   }
 };

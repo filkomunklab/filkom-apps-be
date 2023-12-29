@@ -143,9 +143,9 @@ const getEmployeeByMajor = async (major) => {
   }
 };
 
-const getDosenDetailProfile = async (nik) => {
+const getDosenDetailProfile = async (classId) => {
   try {
-    const employee = await employeeRepository.findDosenDetailProfile(nik);
+    const employee = await employeeRepository.findDosenDetailProfile(classId);
     return employee;
   } catch (error) {
     return error;
