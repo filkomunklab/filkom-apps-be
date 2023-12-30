@@ -122,7 +122,7 @@ const deleteGuidanceClass = async (req, res) => {
   const payload = req.params;
   try {
     await guidanceClassService.deleteGuidanceClass(payload);
-    res.status(204);
+    res.sendStatus(204);
   } catch (error) {
     if (error?.code === "P2025") {
       return res
