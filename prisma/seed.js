@@ -13,7 +13,7 @@ async function main() {
   });
 
   // CREATE CURRICULUM
-  await prisma.curriculum.create({
+  const curriculum = await prisma.curriculum.create({
     data: {
       major: "Informatika",
       year: "2020",
@@ -922,6 +922,8 @@ async function main() {
       },
     },
   });
+
+  kurikulum_informatika = curriculum.id;
 
   // .then(async (student) => {
   //   await prisma.userRole.create({
