@@ -822,7 +822,7 @@ model GuidanceClass {
 model GuidanceClassMember {
   student         Student       @relation(fields: [studentNim], references: [nim])
   studentNim      String        @unique
-  gudianceClass   GuidanceClass @relation(fields: [guidanceClassId], references: [id])
+  gudianceClass   GuidanceClass @relation(fields: [guidanceClassId], references: [id], onDelete: Cascade)
   guidanceClassId String
 
   @@unique([studentNim, guidanceClassId])

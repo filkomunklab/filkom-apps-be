@@ -35,6 +35,7 @@ const getGuidanceClassDetail = async (payload) => {
           lastName: true,
           phoneNum: true,
           Address: true,
+          email: true,
           major: true,
           nidn: true,
         },
@@ -153,12 +154,22 @@ const deleteStudentFromGuidanceClass = async (payload) => {
   });
 };
 
+const deleteGuidanceClass = async (payload) => {
+  const { id } = payload;
+  return await prisma.guidanceClass.delete({
+    where: {
+      id,
+    },
+  });
+};
+
 module.exports = {
-  createGuidanceClass,
-  addStudentToGuidanceClass,
   deleteStudentFromGuidanceClass,
+  addStudentToGuidanceClass,
   getAllUnassignedStudent,
   getAllUnassignetTeacher,
-  getAllClass,
   getGuidanceClassDetail,
+  deleteGuidanceClass,
+  createGuidanceClass,
+  getAllClass,
 };
