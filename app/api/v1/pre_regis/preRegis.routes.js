@@ -6,7 +6,10 @@ router.get("/pre-regist", preRegisController.getAllPreRegis);
 
 router.get("/pre-regist/curriculum", preRegisController.preRegisMenu);
 
-router.get("/pre-regist/status", preRegisController.checkPreRegistAccess);
+router.get(
+  "/pre-regist/status/:major",
+  preRegisController.checkPreRegistAccess
+);
 
 router.post("/pre-regist/create", preRegisController.createPreRegist);
 

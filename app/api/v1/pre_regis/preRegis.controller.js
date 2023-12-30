@@ -25,7 +25,7 @@ const preRegisMenu = async (req, res) => {
 };
 
 const checkPreRegistAccess = async (req, res) => {
-  const payload = req.body;
+  const payload = req.params;
   try {
     const data = await preRegisService.checkPreRegistAccess(payload);
     res.status(200).send({ status: "OK", data });
