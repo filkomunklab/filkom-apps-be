@@ -24,6 +24,13 @@ const findStudentByNim = async (nim) => {
     where: {
       nim,
     },
+    include: {
+      GuidanceClassMember: {
+        select: {
+          guidanceClassId: true,
+        },
+      },
+    },
   });
 
   return student;
@@ -54,7 +61,6 @@ const findRolesByUserId = async (id) => {
 
   return userRoles.map((userRole) => userRole.role);
 };
-
 
 module.exports = {
   findAdminByUsername,
