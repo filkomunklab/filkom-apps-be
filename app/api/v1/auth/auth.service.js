@@ -134,6 +134,8 @@ const signInStudent = async (username, password) => {
           status: checkNIM.status,
           role: role[0],
           majorGlobalId: checkNIM.majorGlobalId,
+          curriculumId: checkNIM.curriculumId,
+          guidanceClassId: checkNIM.GuidanceClassMember?.guidanceClassId,
         },
         token: token,
       };

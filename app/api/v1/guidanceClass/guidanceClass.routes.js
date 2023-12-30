@@ -10,12 +10,12 @@ router.get(
 );
 
 router.get(
-  "/guidance-class/get-all-unassigned-student/query",
+  "/guidance-class/get-all-unassigned-student/list",
   guidanceClassController.getAllUnassignedStudent
 );
 
 router.get(
-  "/guidance-class/get-all-unassigned-teacher/query",
+  "/guidance-class/get-all-unassigned-teacher/list",
   guidanceClassController.getAllUnassignetTeacher
 );
 
