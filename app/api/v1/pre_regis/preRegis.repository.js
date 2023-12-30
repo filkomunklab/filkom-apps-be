@@ -25,15 +25,7 @@ const findSubjectForPreRegis = async (payload) => {
         id: id ?? undefined,
       },
       include: {
-        Subjects: {
-          select: {
-            code: true,
-            name: true,
-            credits: true,
-            type: true,
-            prerequisite: true,
-          },
-        },
+        Subjects: true,
       },
     });
     return preRegis;

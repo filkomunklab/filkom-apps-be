@@ -10,7 +10,17 @@ const {
 
 const viewPreRegisMenu = async (payload) => {
   await GetCurriculumSchema.validate(payload);
-  return await preRegisRepository.findSubjectForPreRegis(payload);
+  const response = await preRegisRepository.findSubjectForPreRegis(payload);
+  const subjectsBySemester = response.Subjects.reduce((acc, subject) => {
+    const semester = subject.semester.toString(); // Convert to string for consistent keys
+    if (!acc[semester]) {
+      acc[semester] = [];
+    }
+    acc[semester].push(subject);
+    return acc;
+  }, {});
+  response.groupedSubjects = subjectsBySemester;
+  return response;
 };
 
 const getAllPreRegis = async (payload) => {
