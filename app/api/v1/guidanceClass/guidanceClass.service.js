@@ -45,6 +45,10 @@ const getAllUnassignetTeacher = async () => {
   return await guidanceClassRepository.getAllUnassignetTeacher();
 };
 
+const deleteGuidanceClass = async (payload) => {
+  return await guidanceClassRepository.deleteGuidanceClass(payload);
+};
+
 module.exports = {
   deleteStudentFromGuidanceClass,
   addStudentToGuidanceClass,
@@ -52,5 +56,6 @@ module.exports = {
   getAllUnassignetTeacher,
   getGuidanceClassDetail,
   createGuidanceClass,
+  deleteGuidanceClass,
   getAllClass,
 };

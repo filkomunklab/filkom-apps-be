@@ -34,4 +34,9 @@ router.delete(
   guidanceClassController.deleteStudentFromGuidanceClass
 );
 
+router.delete(
+  "/guidance-class/:id",
+  guidanceClassController.deleteGuidanceClass
+);
+
 module.exports = router;
