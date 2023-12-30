@@ -132,11 +132,11 @@ const findDosenDetailProfile = async (classId) => {
   try {
     const employee = await prisma.guidanceClass.findUnique({
       where: {
-        id: classId
+        id: classId,
       },
-      include:{
-        teacher:{
-          select:{
+      include: {
+        teacher: {
+          select: {
             id: true,
             nik: true,
             nidn: true,
@@ -145,14 +145,14 @@ const findDosenDetailProfile = async (classId) => {
             email: true,
             phoneNum: true,
             major: true,
-            Address:true,
-            GuidanceClass:{
-              select:{
-                GuidanceClassMember:{
-                  select:{
-                    student:{
-                      select:{
-                        id:true,
+            Address: true,
+            GuidanceClass: {
+              select: {
+                GuidanceClassMember: {
+                  select: {
+                    student: {
+                      select: {
+                        id: true,
                         nim: true,
                         firstName: true,
                         lastName: true,
@@ -171,7 +171,7 @@ const findDosenDetailProfile = async (classId) => {
     });
     return employee;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return error;
   }
 };
@@ -210,14 +210,14 @@ const selectKaprodi = async () => {
   }
 };
 
-const selectDekanName = async (niks) => {
+const selectDekanName = async (ids) => {
   try {
     const dekanName = await prisma.employee.findMany({
       where: {
         OR: [
           {
-            nik: {
-              in: niks.map((value) => value.userId),
+            id: {
+              in: ids.map((value) => value.userId),
             },
           },
         ],
@@ -235,14 +235,14 @@ const selectDekanName = async (niks) => {
   }
 };
 
-const selectKaprodiNameByMajor = async (major, niks) => {
+const selectKaprodiNameByMajor = async (major, ids) => {
   try {
     const kaprodiNameByMajor = await prisma.employee.findMany({
       where: {
         AND: [
           {
-            nik: {
-              in: niks.map((value) => value.userId),
+            id: {
+              in: ids.map((value) => value.userId),
             },
           },
           {

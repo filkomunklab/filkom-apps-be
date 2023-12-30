@@ -158,6 +158,9 @@ const getDekanAndKaprodiByMajor = async (major) => {
     const dekan = await employeeRepository.selectDekan();
     const kaprodi = await employeeRepository.selectKaprodi();
 
+    console.log("ini dekan: ", dekan);
+    console.log("ini kaprodi: ", kaprodi);
+
     // ambil nama dekan berdasarkan nik kemudian tambah key role
     let dekanName = await employeeRepository.selectDekanName(dekan);
     dekanName = dekanName.map((value) => {
