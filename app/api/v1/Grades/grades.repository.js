@@ -21,9 +21,9 @@ const findDetailSemesterGrades = async (transactionId) => {
       },
       select: {
         subjectName: true,
-        paralel: true,
+        lecturer: true,
         grades: true,
-        retrival_to: true,
+        description: true,
         transaction_Grades: {
           select: {
             semester: true,

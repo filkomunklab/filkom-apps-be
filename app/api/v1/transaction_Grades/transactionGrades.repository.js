@@ -293,15 +293,18 @@ const findStudentGradeSubmissionById = async (transactionId) => {
         Grades: {
           select: {
             grades: true,
-            retrival_to: true,
-            paralel: true,
+            lecturer: true,
+            description: true,
             subjectName: true,
           },
         },
       },
     });
     return transaction;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 module.exports = {
