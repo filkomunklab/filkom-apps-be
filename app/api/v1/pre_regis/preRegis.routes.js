@@ -17,4 +17,16 @@ router.post("/pre-regist/submit", preRegisController.submitPreRegist);
 
 router.patch("/pre-regist/approval/:id", preRegisController.submitApproval);
 
+router.get(
+  "/pre-regist/list-for-advisor/:guidanceClassId",
+  preRegisController.getPreRegistListForTeacher
+);
+
+router.get(
+  "/pre-regist/list-for-student/:studentId",
+  preRegisController.getPreRegistListForStudent
+);
+
+router.get("/pre-regist/details/:id", preRegisController.getPreRegistDetails);
+
 module.exports = router;
