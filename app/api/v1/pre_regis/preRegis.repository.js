@@ -36,13 +36,20 @@ const findSubjectForPreRegis = async (payload) => {
 };
 
 const checkPreRegistAccess = async (payload) => {
-  const { major } = payload;
+  const { major, studentId } = payload;
   return await prisma.preRegistration.findFirst({
     where: {
       major,
     },
     orderBy: {
       updatedAt: "desc",
+    },
+    include: {
+      PreRegistrationData: {
+        where: {
+          studentId,
+        },
+      },
     },
   });
 };
