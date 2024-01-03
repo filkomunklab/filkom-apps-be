@@ -6,6 +6,7 @@ const {
   ApprovalSchema,
   GetCurriculumSchema,
   GetAllPreRegisSchema,
+  GetAllPreRegisListForStudentSchema,
 } = require("./preRegis.schema");
 
 const viewPreRegisMenu = async (payload) => {
@@ -38,8 +39,24 @@ const submitApproval = async (payload) => {
   return await preRegisRepository.submitApproval(payload);
 };
 
+const getPreRegistListForTeacher = (payload) => {
+  return preRegisRepository.getPreRegistListForTeacher(payload);
+};
+
+const getPreRegistListForStudent = async (payload) => {
+  await GetAllPreRegisListForStudentSchema.validate(payload);
+  return preRegisRepository.getPreRegistListForStudent(payload);
+};
+
+const getPreRegistDetails = (payload) => {
+  return preRegisRepository.getPreRegistDetails(payload);
+};
+
 module.exports = {
+  getPreRegistListForTeacher,
+  getPreRegistListForStudent,
   checkPreRegistAccess,
+  getPreRegistDetails,
   viewPreRegisMenu,
   createPreRegist,
   submitPreRegist,

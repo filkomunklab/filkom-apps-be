@@ -117,8 +117,54 @@ const submitApproval = async (req, res) => {
   }
 };
 
+const getPreRegistListForTeacher = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getPreRegistListForTeacher(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getPreRegistListForStudent = async (req, res) => {
+  const { studentId } = req.params;
+  const { status } = req.query;
+  try {
+    const data = await preRegisService.getPreRegistListForStudent({
+      studentId,
+      status,
+    });
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getPreRegistDetails = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getPreRegistDetails(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
+  getPreRegistListForTeacher,
+  getPreRegistListForStudent,
   checkPreRegistAccess,
+  getPreRegistDetails,
   createPreRegist,
   submitPreRegist,
   getAllPreRegis,

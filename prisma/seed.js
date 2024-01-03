@@ -1,8 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-let kurikulum_informatika;
-
 async function main() {
   // CREATE MAJOR
   await prisma.majorGlobal.createMany({
@@ -11,6 +9,8 @@ async function main() {
       { id: "57201", shortName: "SI", name: "Sistem Informasi" },
     ],
   });
+
+  let kurikulum_informatika;
 
   // CREATE CURRICULUM
   const curriculum = await prisma.curriculum.create({
@@ -2237,58 +2237,6 @@ async function main() {
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
       },
       {
-        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c03",
-        nim: "10502201003",
-        studentEmail: "s2200003@student.unklab.ac.id",
-        firstName: "Darel",
-        lastName: "Yuhu",
-        gender: "MALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "DKV",
-        arrivalYear: "2020",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c04",
-        nim: "10502201004",
-        studentEmail: "s2200004@student.unklab.ac.id",
-        firstName: "Shyereal",
-        lastName: "Saerang",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "DKV",
-        arrivalYear: "2020",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c05",
-        nim: "10502201005",
-        studentEmail: "s2200005@student.unklab.ac.id",
-        firstName: "Marika",
-        lastName: "Connechy",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        arrivalYear: "2020",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
-        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c06",
-        nim: "10502201006",
-        studentEmail: "s2200006@student.unklab.ac.id",
-        firstName: "Delphinia",
-        lastName: "Leggatt",
-        gender: "FEMALE",
-        faculty: "Fakultas Ilmu Komputer",
-        major: "SI",
-        arrivalYear: "2020",
-        password:
-          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      },
-      {
         id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c07",
         nim: "10502201007",
         studentEmail: "s2200007@student.unklab.ac.id",
@@ -2340,6 +2288,58 @@ async function main() {
         faculty: "Fakultas Ilmu Komputer",
         major: "IF",
         curriculumId: kurikulum_informatika,
+        arrivalYear: "2020",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c03",
+        nim: "10502201003",
+        studentEmail: "s2200003@student.unklab.ac.id",
+        firstName: "Darel",
+        lastName: "Yuhu",
+        gender: "MALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "DKV",
+        arrivalYear: "2020",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c04",
+        nim: "10502201004",
+        studentEmail: "s2200004@student.unklab.ac.id",
+        firstName: "Shyereal",
+        lastName: "Saerang",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "DKV",
+        arrivalYear: "2020",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c05",
+        nim: "10502201005",
+        studentEmail: "s2200005@student.unklab.ac.id",
+        firstName: "Marika",
+        lastName: "Connechy",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
+        arrivalYear: "2020",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      },
+      {
+        id: "1efcdc53-f12c-4683-b9ff-db6e53fe5c06",
+        nim: "10502201006",
+        studentEmail: "s2200006@student.unklab.ac.id",
+        firstName: "Delphinia",
+        lastName: "Leggatt",
+        gender: "FEMALE",
+        faculty: "Fakultas Ilmu Komputer",
+        major: "SI",
         arrivalYear: "2020",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",

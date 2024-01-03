@@ -84,9 +84,71 @@ const submitApproval = async (payload) => {
   });
 };
 
+const getPreRegistListForTeacher = async (payload) => {
+  const { guidanceClassId } = payload;
+  // console.log(guidanceClassId);
+  return await prisma.preRegistrationData.findMany({
+    where: {
+      status: "WAITING",
+      Student: {
+        GuidanceClassMember: {
+          guidanceClassId,
+        },
+      },
+    },
+    include: {
+      Student: true,
+    },
+  });
+};
+
+const getPreRegistListForStudent = async (payload) => {
+  const { status, studentId } = payload;
+  return await prisma.preRegistrationData.findMany({
+    where: {
+      status: status ?? undefined,
+      studentId,
+    },
+    include: {
+      Student: true,
+    },
+  });
+};
+
+const getPreRegistDetails = async (payload) => {
+  const { id } = payload;
+  return await prisma.preRegistrationData.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      Employee: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+      Student: {
+        select: {
+          firstName: true,
+          lastName: true,
+          curriculum: {
+            include: {
+              Subjects: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
 module.exports = {
+  getPreRegistListForTeacher,
+  getPreRegistListForStudent,
   findSubjectForPreRegis,
   checkPreRegistAccess,
+  getPreRegistDetails,
   createPreRegist,
   submitPreRegist,
   submitApproval,
