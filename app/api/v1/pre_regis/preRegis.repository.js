@@ -143,9 +143,24 @@ const getPreRegistDetails = async (payload) => {
   });
 };
 
+const automateClosePreRegist = () => {
+  prisma.preRegistration.updateMany({
+    where: {
+      isOpen: true,
+      dueDate: {
+        lte: new Date(),
+      },
+    },
+    data: {
+      isOpen: false,
+    },
+  });
+};
+
 module.exports = {
   getPreRegistListForTeacher,
   getPreRegistListForStudent,
+  automateClosePreRegist,
   findSubjectForPreRegis,
   checkPreRegistAccess,
   getPreRegistDetails,
