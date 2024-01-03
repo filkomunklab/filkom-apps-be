@@ -7,7 +7,7 @@ router.get("/pre-regist", preRegisController.getAllPreRegis);
 router.get("/pre-regist/curriculum", preRegisController.preRegisMenu);
 
 router.get(
-  "/pre-regist/status/:major",
+  "/pre-regist/status/:major/:studentId",
   preRegisController.checkPreRegistAccess
 );
 

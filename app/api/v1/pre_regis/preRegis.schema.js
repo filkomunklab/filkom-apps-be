@@ -2,6 +2,7 @@ const Yup = require("yup");
 
 const LatestPreRegistSchema = Yup.object().shape({
   major: Yup.string().oneOf(["SI", "IF", "DKV"]).required("Major is required"),
+  studentId: Yup.string().required("Student ID is required"),
 });
 
 const GetAllPreRegisSchema = Yup.object().shape({
