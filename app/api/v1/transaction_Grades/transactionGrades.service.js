@@ -103,8 +103,8 @@ const createStudentGradesSubmmission = async (payload, nim) => {
     const gradesSubmission = data.map((item, index) => {
       return {
         grades: item.grades,
-        retrival_to: parseInt(item.retrival_to),
-        paralel: item.paralel,
+        lecturer: item.lecturer,
+        description: item.description,
         subjectId: item.subjectId,
         subjectName: item.subjectName,
         transactionId,

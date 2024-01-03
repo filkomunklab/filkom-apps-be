@@ -676,8 +676,8 @@ model transaction_Grades {
 model Grades {
   id                 String              @id @default(uuid())
   grades             String?
-  retrival_to        Int?
-  paralel            String?
+  lecturer           String
+  description        String?
   submited_Date      DateTime            @default(now())
   Subject            Subject?            @relation(fields: [subjectId], references: [id])
   subjectId          String?
