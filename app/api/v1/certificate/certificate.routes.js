@@ -8,8 +8,8 @@ router.post("/certificate/:nim", certificateController.uploadCertificate); //Upl
 
 //GET ALL CERTIFICATE ONLY STATUS = APPROVED & REJECTED
 router.get(
-  "/certificate/dosen/:nik",
-  certificateController.viewAllStudentCertificate //view all student certificate by nik
+  "/certificate/dosen/:guidanceClassId",
+  certificateController.viewAllStudentCertificate
 );
 
 //DETAIL STUDENT CERTIFICATE
@@ -20,7 +20,7 @@ router.get(
 
 //GET CERTIFICATE BY CATEGORY (INTENATIONAL, NATIONAL, LOCAL)
 router.get(
-  "/certificate/category/:nik",
+  "/certificate/category/:guidanceClassId",
   certificateController.viewCertificateCategory //View student certificate by category
 );
 
@@ -38,19 +38,19 @@ router.get(
 
 //WAITING LIST STUDENT CERTIFICATE
 router.get(
-  "/certificate/waitingList/dosen/:nik",
+  "/certificate/waitingList/dosen/:guidanceClassId",
   certificateController.advisorCertificateWaitingList
 );
 
 //Waiting List by major
 router.get(
-  "/certificate/waitingList/major/:major",
+  "/certificate/waitingList/major/:guidanceClassId",
   certificateController.getWaitingListbyMajor
 );
 
 //waiting list by arrival year pt 2
 router.get(
-  "/certificate/list/waiting/arrYear/:arrivalYear",
+  "/certificate/list/waiting/arrYear/:guidanceClassId",
   certificateController.getWaitingListByArrYear
 );
 
