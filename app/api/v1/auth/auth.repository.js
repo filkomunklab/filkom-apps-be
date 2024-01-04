@@ -14,6 +14,13 @@ const findEmployeeByNik = async (nik) => {
     where: {
       nik,
     },
+    include: {
+      GuidanceClass: {
+        select: {
+          id: true,
+        },
+      },
+    },
   });
 
   return employee;

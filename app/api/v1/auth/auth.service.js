@@ -74,13 +74,14 @@ const signInEmployee = async (nik, password) => {
         secretKey
       );
       checkNIK.token = token;
-      await employeeRepository.updateEmployee(checkNIK.id, checkNIK);
+      await employeeRepository.updateEmployee(checkNIK.id, { token });
       const data = {
         user: {
           id: checkNIK.id,
           nik: checkNIK.nik,
           name: `${checkNIK.firstName} ${checkNIK.lastName}`,
           role: role,
+          guidanceClassId: checkNIK.GuidanceClass?.id,
         },
         token: token,
       };
