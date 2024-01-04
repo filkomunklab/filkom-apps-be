@@ -304,14 +304,7 @@ const findOneCertificate = async (certificateId) => {
       where: {
         id: certificateId,
       },
-      select: {
-        id: true,
-        title: true,
-        submitDate: true,
-        approvalDate: true,
-        category: true,
-        approval_status: true,
-        description: true,
+      include: {
         student: {
           select: {
             firstName: true,
