@@ -2,7 +2,8 @@ const prisma = require("../../../database");
 
 //================================Dosen Pembimbing=====================//
 //History Certificate DosPem POV
-const findCertificate = async (nik) => {
+const findCertificate = async (payload) => {
+  const { guidanceClassId } = payload;
   try {
     const certificate = await prisma.certificate.findMany({
       where: {
@@ -10,9 +11,7 @@ const findCertificate = async (nik) => {
           {
             student: {
               GuidanceClassMember: {
-                gudianceClass: {
-                  teacherId: nik,
-                },
+                guidanceClassId,
               },
             },
           },
@@ -50,8 +49,9 @@ const findCertificate = async (nik) => {
   }
 };
 
-// find Certificate by category (dosepem)
-const findCertificateByCategory = async (category, nik) => {
+// Waiting list Certificate by filter category (dosepem)
+const findCertificateByCategory = async (category, payload) => {
+  const { guidanceClassId } = payload;
   try {
     const certificate = await prisma.certificate.findMany({
       where: {
@@ -61,9 +61,7 @@ const findCertificateByCategory = async (category, nik) => {
             category,
             student: {
               GuidanceClassMember: {
-                gudianceClass: {
-                  teacherId: nik,
-                },
+                guidanceClassId,
               },
             },
           },
@@ -75,11 +73,27 @@ const findCertificateByCategory = async (category, nik) => {
       select: {
         id: true,
         title: true,
-        approvalDate: true,
+        category: true,
+        approval_status: true,
+        submitDate: true,
         student: {
           select: {
             firstName: true,
             lastName: true,
+            GuidanceClassMember: {
+              select: {
+                gudianceClass: {
+                  select: {
+                    teacher: {
+                      select: {
+                        firstName: true,
+                        lastName: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -91,15 +105,14 @@ const findCertificateByCategory = async (category, nik) => {
 };
 
 //waiting list certificate (dospem)
-const findAdvisorCertificateWaitingList = async (nik) => {
+const findAdvisorCertificateWaitingList = async (payload) => {
+  const { guidanceClassId } = payload;
   try {
     const certificate = await prisma.certificate.findMany({
       where: {
         student: {
           GuidanceClassMember: {
-            gudianceClass: {
-              teacherId: nik,
-            },
+            guidanceClassId,
           },
         },
         approval_status: "WAITING",
@@ -143,7 +156,8 @@ const findAdvisorCertificateWaitingList = async (nik) => {
 };
 
 //WAITING LIST BY MAJOR
-const findWaitingListbyMajor = async (major, nik) => {
+const findWaitingListbyMajor = async (major, payload) => {
+  const { guidanceClassId } = payload;
   try {
     const certificate = await prisma.certificate.findMany({
       where: {
@@ -152,9 +166,7 @@ const findWaitingListbyMajor = async (major, nik) => {
           {
             student: {
               GuidanceClassMember: {
-                gudianceClass: {
-                  teacherId: nik,
-                },
+                guidanceClassId,
               },
             },
           },
@@ -169,7 +181,7 @@ const findWaitingListbyMajor = async (major, nik) => {
         submitDate: "desc",
       },
       select: {
-        id:true,
+        id: true,
         title: true,
         category: true,
         approval_status: true,
@@ -204,7 +216,8 @@ const findWaitingListbyMajor = async (major, nik) => {
 };
 
 //Waiting list by arrival year
-const filterWaitingListByArrYear = async (arrivalYear, nik) => {
+const filterWaitingListByArrYear = async (arrivalYear, payload) => {
+  const { guidanceClassId } = payload;
   try {
     const certificate = await prisma.certificate.findMany({
       where: {
@@ -213,9 +226,7 @@ const filterWaitingListByArrYear = async (arrivalYear, nik) => {
           {
             student: {
               GuidanceClassMember: {
-                gudianceClass: {
-                  teacherId: nik,
-                },
+                guidanceClassId,
               },
             },
           },
@@ -230,7 +241,7 @@ const filterWaitingListByArrYear = async (arrivalYear, nik) => {
         submitDate: "desc",
       },
       select: {
-        id:true,
+        id: true,
         title: true,
         category: true,
         approval_status: true,
@@ -294,7 +305,7 @@ const findOneCertificate = async (certificateId) => {
         id: certificateId,
       },
       select: {
-        id:true,
+        id: true,
         title: true,
         submitDate: true,
         approvalDate: true,
@@ -395,7 +406,7 @@ const findCurrentCertificateStudent = async (nim) => {
 
 //add certification (student)
 const insertCertificate = async (payload, nim, path) => {
-  const { title, category, description, employeeNik } = payload;
+  const { title, category, description } = payload;
   const { filename } = payload.certificateFile;
   try {
     const certificate = await prisma.certificate.create({

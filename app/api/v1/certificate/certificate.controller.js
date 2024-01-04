@@ -5,10 +5,10 @@ const certificateService = require("./certificate.service");
 
 //Waiting List
 const advisorCertificateWaitingList = async (req, res) => {
-  const { nik } = req.params;
+  const payload = req.params;
   try {
     const certificate =
-      await certificateService.advisorWaitingListCertificateView(nik);
+      await certificateService.advisorWaitingListCertificateView(payload);
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
@@ -20,11 +20,11 @@ const advisorCertificateWaitingList = async (req, res) => {
 //find by category
 const viewCertificateCategory = async (req, res) => {
   const { category } = req.body;
-  const { nik } = req.params;
+  const payload = req.params;
   try {
     const certificate = await certificateService.viewCertifiacateByCategory(
       category,
-      nik
+      payload
     );
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
@@ -36,9 +36,11 @@ const viewCertificateCategory = async (req, res) => {
 
 //History Approval
 const viewAllStudentCertificate = async (req, res) => {
-  const { nik } = req.params;
+  const payload = req.params;
   try {
-    const certificate = await certificateService.findAllStudentCertificate(nik);
+    const certificate = await certificateService.findAllStudentCertificate(
+      payload
+    );
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
@@ -66,10 +68,13 @@ const putApprovalCertificate = async (req, res) => {
 
 //waiting list By Major
 const getWaitingListbyMajor = async (req, res) => {
-  const { major } = req.params;
-  const { nik } = req.body;
+  const { major } = req.body;
+  const payload = req.params;
   try {
-    const certificate = await certificateService.waitingListbyMajor(major, nik);
+    const certificate = await certificateService.waitingListbyMajor(
+      major,
+      payload
+    );
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
@@ -78,14 +83,14 @@ const getWaitingListbyMajor = async (req, res) => {
   }
 };
 
-//waiting list by arrival year 
+//waiting list by arrival year
 const getWaitingListByArrYear = async (req, res) => {
-  const { arrivalYear } = req.params;
-  const { nik } = req.body;
+  const { arrivalYear } = req.body;
+  const payload = req.params;
   try {
     const certificate = await certificateService.viewWaitingListByArrYear(
       arrivalYear,
-      nik
+      payload
     );
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
