@@ -12,6 +12,7 @@ const WaitingListStudentGradeSubmmission = async (major) => {
     transaction = transaction.map((item) => {
       return {
         ...item,
+        id: item.id,
         status: item.status,
         semester: item.semester,
         submitedDate: item.submitedDate.toString(),
@@ -25,16 +26,18 @@ const WaitingListStudentGradeSubmmission = async (major) => {
 };
 
 //Waiting list Grades Submission (sort by semester)
-const viewWaitingListStudentGradeSubmmissionbySemester = async (semester) => {
+const filterBySemester = async (payload, semester) => {
   try {
     let transaction =
       await transactionGradeRepository.findWaitingListGradeSubmissionBySemester(
+        payload,
         semester
       );
 
     transaction = transaction.map((item) => {
       return {
         ...item,
+        id: item.id,
         status: item.status,
         semester: item.semester,
         submitedDate: item.submitedDate.toString(),
@@ -207,5 +210,5 @@ module.exports = {
   historyListStudentGradesSubmission,
   viewCurrentGradeSubmission,
   viewStudentHistorytGradeSubmission,
-  viewWaitingListStudentGradeSubmmissionbySemester,
+  filterBySemester,
 };

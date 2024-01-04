@@ -17,12 +17,13 @@ const getWaitingListStudentGradeSubmission = async (req, res) => {
 
 //WAITING LIST GRADE SUBMISSION (sort by semester)
 const getWaitingListBySemester = async (req, res) => {
-  const semester = req.query.params;
+  const payload = req.params;
+  const { semester } = req.body;
   try {
-    const transaction =
-      await transactionService.viewWaitingListStudentGradeSubmmissionbySemester(
-        semester
-      );
+    const transaction = await transactionService.filterBySemester(
+      payload,
+      semester
+    );
     res.status(200).send({ status: "OK", data: transaction });
   } catch (error) {
     res
