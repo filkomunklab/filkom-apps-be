@@ -122,6 +122,11 @@ const getPreRegistDetails = async (payload) => {
       id,
     },
     include: {
+      ListOfRequest: {
+        include: {
+          subject: true,
+        },
+      },
       Employee: {
         select: {
           firstName: true,
