@@ -39,22 +39,34 @@ const submitApproval = async (payload) => {
   return await preRegisRepository.submitApproval(payload);
 };
 
-const getPreRegistListForTeacher = (payload) => {
-  return preRegisRepository.getPreRegistListForTeacher(payload);
-};
-
-const getPreRegistListForStudent = async (payload) => {
-  await GetAllPreRegisListForStudentSchema.validate(payload);
-  return preRegisRepository.getPreRegistListForStudent(payload);
+const getPreRegistListForTeacher = async (payload) => {
+  const data = await preRegisRepository.getPreRegistListForTeacher(payload);
+  data.map((item) => {
+    const totalCredits = item.ListOfRequest.reduce((acc, cur) => {
+      return acc + cur.subject.credits;
+    }, 0);
+    item.totalCredits = totalCredits;
+    delete item.ListOfRequest;
+  });
+  return data;
 };
 
 const getPreRegistDetails = (payload) => {
   return preRegisRepository.getPreRegistDetails(payload);
 };
 
+const getHistoryForStudent = async (payload) => {
+  return preRegisRepository.getHistoryForStudent(payload);
+};
+
+const getHistoryForAdvisor = async (payload) => {
+  return preRegisRepository.getHistoryForAdvisor(payload);
+};
+
 module.exports = {
   getPreRegistListForTeacher,
-  getPreRegistListForStudent,
+  getHistoryForStudent,
+  getHistoryForAdvisor,
   checkPreRegistAccess,
   getPreRegistDetails,
   viewPreRegisMenu,

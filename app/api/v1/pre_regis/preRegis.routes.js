@@ -18,15 +18,19 @@ router.post("/pre-regist/submit", preRegisController.submitPreRegist);
 router.patch("/pre-regist/approval/:id", preRegisController.submitApproval);
 
 router.get(
-  "/pre-regist/list-for-advisor/:guidanceClassId",
+  "/pre-regist/review/:guidanceClassId",
   preRegisController.getPreRegistListForTeacher
 );
 
-router.get(
-  "/pre-regist/list-for-student/:studentId",
-  preRegisController.getPreRegistListForStudent
-);
-
 router.get("/pre-regist/details/:id", preRegisController.getPreRegistDetails);
+
+router.get(
+  "/pre-regist/history-for-student/:studentId",
+  preRegisController.getHistoryForStudent
+);
+router.get(
+  "/pre-regist/history-for-advisor/:guidanceClassId",
+  preRegisController.getHistoryForAdvisor
+);
 
 module.exports = router;

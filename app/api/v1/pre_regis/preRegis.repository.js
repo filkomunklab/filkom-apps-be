@@ -86,7 +86,6 @@ const submitApproval = async (payload) => {
 
 const getPreRegistListForTeacher = async (payload) => {
   const { guidanceClassId } = payload;
-  // console.log(guidanceClassId);
   return await prisma.preRegistrationData.findMany({
     where: {
       status: "WAITING",
@@ -96,21 +95,28 @@ const getPreRegistListForTeacher = async (payload) => {
         },
       },
     },
-    include: {
-      Student: true,
-    },
-  });
-};
-
-const getPreRegistListForStudent = async (payload) => {
-  const { status, studentId } = payload;
-  return await prisma.preRegistrationData.findMany({
-    where: {
-      status: status ?? undefined,
-      studentId,
-    },
-    include: {
-      Student: true,
+    select: {
+      ListOfRequest: {
+        select: {
+          subject: {
+            select: {
+              credits: true,
+            },
+          },
+        },
+      },
+      id: true,
+      status: true,
+      Student: {
+        select: {
+          nim: true,
+          firstName: true,
+          lastName: true,
+          major: true,
+          arrivalYear: true,
+          status: true,
+        },
+      },
     },
   });
 };
@@ -162,12 +168,67 @@ const automateClosePreRegist = () => {
   });
 };
 
+const getHistoryForStudent = async (payload) => {
+  const { studentId } = payload;
+  return await prisma.preRegistrationData.findMany({
+    where: {
+      studentId,
+    },
+    select: {
+      id: true,
+      submitDate: true,
+      Student: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+      PreRegistration: {
+        select: {
+          semester: true,
+          semesterPeriod: true,
+        },
+      },
+    },
+  });
+};
+
+const getHistoryForAdvisor = async (payload) => {
+  const { guidanceClassId } = payload;
+  return await prisma.preRegistrationData.findMany({
+    where: {
+      Student: {
+        GuidanceClassMember: {
+          guidanceClassId,
+        },
+      },
+    },
+    select: {
+      id: true,
+      submitDate: true,
+      Student: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+      PreRegistration: {
+        select: {
+          semester: true,
+          semesterPeriod: true,
+        },
+      },
+    },
+  });
+};
+
 module.exports = {
   getPreRegistListForTeacher,
-  getPreRegistListForStudent,
   automateClosePreRegist,
   findSubjectForPreRegis,
   checkPreRegistAccess,
+  getHistoryForStudent,
+  getHistoryForAdvisor,
   getPreRegistDetails,
   createPreRegist,
   submitPreRegist,
