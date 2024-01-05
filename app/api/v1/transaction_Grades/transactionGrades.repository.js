@@ -288,14 +288,27 @@ const findStudentGradeSubmissionById = async (transactionId) => {
         id: true,
         Student: {
           select: {
+            id: true,
+            nim: true,
             firstName: true,
             lastName: true,
-          },
-        },
-        Employee: {
-          select: {
-            firstName: true,
-            lastName: true,
+            GuidanceClassMember: {
+              select: {
+                gudianceClass: {
+                  select: {
+                    id: true,
+                    teacher: {
+                      select: {
+                        id: true,
+                        nik: true,
+                        firstName: true,
+                        lastName: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
         semester: true,
