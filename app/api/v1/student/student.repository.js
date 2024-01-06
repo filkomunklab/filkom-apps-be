@@ -161,13 +161,24 @@ const findToUpdateBiodataStudent = async (nim, payload, path) => {
         path,
       },
       include: {
-        Employee: {
+        GuidanceClassMember: {
           select: {
-            firstName: true,
-            lastName: true,
-            phoneNum: true,
-            email: true,
-            Address: true,
+            gudianceClass: {
+              select: {
+                id: true,
+                teacher: {
+                  select: {
+                    id: true,
+                    nik: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                    phoneNum: true,
+                    Address: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
