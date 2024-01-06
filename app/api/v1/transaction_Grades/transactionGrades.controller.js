@@ -3,6 +3,7 @@ const transactionService = require("./transactionGrades.service");
 //===========================Kaprodi Access==========================//
 //WAITING LIST GRADE SUBMISSION (sort by major)
 const getWaitingListStudentGradeSubmission = async (req, res) => {
+  console.log("masuk sni");
   const { major } = req.params;
   try {
     const transaction =

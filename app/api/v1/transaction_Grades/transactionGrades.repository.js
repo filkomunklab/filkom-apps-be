@@ -3,6 +3,7 @@ const prisma = require("../../../database");
 //============================Kaprodi Access==========================//
 //Waiting List Grade submmision (sort by major)
 const findWaitingListGradeSubmission = async (major) => {
+  console.log("haloooo");
   try {
     const transaction = await prisma.transaction_Grades.findMany({
       where: {
@@ -32,12 +33,23 @@ const findWaitingListGradeSubmission = async (major) => {
             lastName: true,
             major: true,
             arrivalYear: true,
-          },
-        },
-        Employee: {
-          select: {
-            firstName: true,
-            lastName: true,
+            GuidanceClassMember: {
+              select: {
+                gudianceClass: {
+                  select: {
+                    id: true,
+                    teacher: {
+                      select: {
+                        id: true,
+                        nik: true,
+                        firstName: true,
+                        lastName: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -284,8 +296,7 @@ const findStudentGradeSubmissionById = async (transactionId) => {
       where: {
         id: transactionId,
       },
-      select: {
-        id: true,
+      include: {
         Student: {
           select: {
             id: true,
@@ -311,10 +322,6 @@ const findStudentGradeSubmissionById = async (transactionId) => {
             },
           },
         },
-        semester: true,
-        status: true,
-        submitedDate: true,
-        approveDate: true,
         Grades: {
           select: {
             grades: true,
