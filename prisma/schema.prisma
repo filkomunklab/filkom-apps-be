@@ -643,6 +643,8 @@ model Curriculum {
   year     String    @db.VarChar(50)
   Subjects Subject[]
   student  Student[]
+
+  @@unique([major, year])
 }
 
 model Subject {

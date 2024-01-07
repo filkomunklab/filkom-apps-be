@@ -48,4 +48,9 @@ router.get(
 //       create     - membuat many student baru
 router.post("/student-many", studentController.createManyStudent);
 
+// update student by id
+router.put("/student/update/id/:id", studentController.patchStudentById);
+
+router.delete("/student/:id", studentController.deleteStudentById);
+
 module.exports = router;

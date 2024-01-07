@@ -60,7 +60,7 @@ const FindUserRoleByUserId = async (id) => {
   }
 };
 
-const deleteEmployeeRoles = async (prisma, id) => {
+const deleteUserRoles = async (prisma, id) => {
   try {
     const count = await prisma.userRole.deleteMany({
       where: {
@@ -129,7 +129,7 @@ module.exports = {
   findUserByNIKAndRole,
   CreateManyRole,
   FindUserRoleByUserId,
-  deleteEmployeeRoles,
+  deleteUserRoles,
   findAllUserByNIKAndRole,
   inputRoleByNIK,
   deleteRoleById,

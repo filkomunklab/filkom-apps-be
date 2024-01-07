@@ -114,7 +114,7 @@ const deleteEmployeeById = async (id) => {
     await prisma.$transaction(async (prisma) => {
       const employee = await employeeRepository.findEmployeeById(prisma, id);
       await employeeRepository.deleteEmployee(prisma, id);
-      await userRoleRepository.deleteEmployeeRoles(prisma, employee.id);
+      await userRoleRepository.deleteUserRoles(prisma, employee.id);
       return;
     });
   } catch (error) {

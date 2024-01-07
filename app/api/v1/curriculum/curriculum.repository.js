@@ -46,7 +46,33 @@ const deleteCurriculumByIdCurriculum = async (curriculum_id) => {
 
     return curriculum;
   } catch (error) {
-    console.log("ini eror curriculum delete: ", error.message);
+    throw error;
+  }
+};
+
+// @description     Check curriculum major and year
+// @route           GET /curriculum/check/by-major-year/:major/:year
+// @access
+const selectCurriculumByMajorAndYear = async (major, year) => {
+  try {
+    const curriculum = await prisma.curriculum.findMany({
+      where: {
+        AND: [
+          {
+            major: {
+              equals: major,
+              mode: "insensitive",
+            },
+          },
+          {
+            year,
+          },
+        ],
+      },
+    });
+
+    return curriculum;
+  } catch (error) {
     throw new Error(error.message);
   }
 };
@@ -55,4 +81,5 @@ module.exports = {
   insertCurriculum,
   selectAllCurriculum,
   deleteCurriculumByIdCurriculum,
+  selectCurriculumByMajorAndYear,
 };
