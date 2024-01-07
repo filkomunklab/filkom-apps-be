@@ -40,7 +40,59 @@ const takeAttendance = async (req, res) => {
   }
 };
 
+const getStudentList = async (req, res) => {
+  const payload = req.query;
+  try {
+    const studentList = await activityService.getStudentList(payload);
+    res.status(200).send({ status: "OK", data: studentList });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: error.message } });
+    }
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getHistoryForAdvisor = async (req, res) => {
+  const payload = req.params;
+  try {
+    const history = await activityService.getHistoryForAdvisor(payload);
+    res.status(200).send({ status: "OK", data: history });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getRecentActivity = async (req, res) => {
+  const payload = req.params;
+  try {
+    const recentActivity = await activityService.getRecentActivity(payload);
+    res.status(200).send({ status: "OK", data: recentActivity });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 //==========================Student Access===========================//
+const getHistoryForStudent = async (req, res) => {
+  const payload = req.params;
+  try {
+    const history = await activityService.getHistoryForStudent(payload);
+    res.status(200).send({ status: "OK", data: history });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
 
 //==============================GENERAL ACCESS=======================//
 const detailActivity = async (req, res) => {
@@ -56,6 +108,10 @@ const detailActivity = async (req, res) => {
 };
 
 module.exports = {
+  getHistoryForStudent,
+  getHistoryForAdvisor,
+  getRecentActivity,
+  getStudentList,
   createActivity,
   detailActivity,
   takeAttendance,
