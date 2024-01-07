@@ -90,6 +90,15 @@ const updateBiodataStudent = async (nim, payload) => {
   }
 };
 
+const viewToCheckBiodata = async (nim) => {
+  try {
+    const student = await studentRepository.findToCheckBiodata(nim);
+    return student;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const viewStudentbyEmployeeNik = async (nik) => {
   try {
     const student = await studentRepository.findStudentByEmployeeNik(nik);
@@ -178,4 +187,5 @@ module.exports = {
   viewAllStudent,
   getStudentHasNoSupervisorAndActive,
   createManyStudent,
+  viewToCheckBiodata,
 };

@@ -159,6 +159,7 @@ const findToUpdateBiodataStudent = async (nim, payload, path) => {
         guardianPhoneNo,
         filename,
         path,
+        biodataCheck: true,
       },
       include: {
         GuidanceClassMember: {
@@ -186,6 +187,26 @@ const findToUpdateBiodataStudent = async (nim, payload, path) => {
     return student;
   } catch (error) {
     console.log(error);
+    throw error;
+  }
+};
+
+const findToCheckBiodata = async (nim) => {
+  try {
+    const student = await prisma.student.findUnique({
+      where: {
+        nim,
+      },
+      select: {
+        biodataCheck: true,
+        id: true,
+        nim: true,
+        firstName: true,
+        lastName: true,
+      },
+    });
+    return student;
+  } catch (error) {
     throw error;
   }
 };
@@ -301,4 +322,5 @@ module.exports = {
   updateEmployeeNikStudentByNim,
   selectStudentHasNoSupervisorAndActive,
   insertManyStudent,
+  findToCheckBiodata,
 };

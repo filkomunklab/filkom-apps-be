@@ -118,6 +118,7 @@ model Student {
   updatedAt                 DateTime?
   filename                  String?
   path                      String?
+  biodataCheck              Boolean               @default(false)
   proposal_student          Proposal_Student[]    @relation("ProposalStudent")
   skripsi_student           Skripsi_Student[]     @relation("SkripsiStudent")
   group_student             Group_Student[]       @relation("StudentMember")
