@@ -5,20 +5,20 @@ const moment = require("moment-timezone");
 
 //===================================DospemAccess=======================//
 //Find certificate by category
-const viewCertifiacateByCategory = async (category, nik) => {
+const viewCertifiacateByCategory = async (category, payload) => {
   try {
     let certificate = await certificateRepository.findCertificateByCategory(
       category,
-      nik
+      payload
     );
 
     certificate = certificate.map((item) => {
       return {
         ...item,
-        Certificate: {
-          title: item.Certificate.title,
-          approvalDate: item.Certificate.approvalDate.toString(),
-        },
+        title: item.title,
+        submitDate: item.submitDate.toString(),
+        category: item.category,
+        approval_status: item.approval_status,
       };
     });
 
@@ -29,20 +29,18 @@ const viewCertifiacateByCategory = async (category, nik) => {
 };
 
 //Waiting List
-const advisorWaitingListCertificateView = async (nik) => {
+const advisorWaitingListCertificateView = async (payload) => {
   try {
     let certificate =
-      await certificateRepository.findAdvisorCertificateWaitingList(nik);
+      await certificateRepository.findAdvisorCertificateWaitingList(payload);
 
     certificate = certificate.map((item) => {
       return {
         ...item,
-        Certificate: {
-          title: item.Certificate.title,
-          submitDate: item.Certificate.submitDate.toString(),
-          category: item.Certificate.category,
-          approval_status: item.Certificate.approval_status,
-        },
+        title: item.title,
+        submitDate: item.submitDate.toString(),
+        category: item.category,
+        approval_status: item.approval_status,
       };
     });
 
@@ -54,11 +52,11 @@ const advisorWaitingListCertificateView = async (nik) => {
 };
 
 //Waiting List by major
-const waitingListbyMajor = async (major, nik) => {
+const waitingListbyMajor = async (major, payload) => {
   try {
     let certificate = await certificateRepository.findWaitingListbyMajor(
       major,
-      nik
+      payload
     );
 
     certificate = certificate.map((item) => {
@@ -78,12 +76,12 @@ const waitingListbyMajor = async (major, nik) => {
   }
 };
 
-//Waiting list arrival year 
-const viewWaitingListByArrYear = async (arrivalYear, nik) => {
+//Waiting list arrival year
+const viewWaitingListByArrYear = async (arrivalYear, payload) => {
   try {
     let certificate = await certificateRepository.filterWaitingListByArrYear(
       arrivalYear,
-      nik
+      payload
     );
 
     certificate = certificate.map((item) => {
@@ -103,17 +101,15 @@ const viewWaitingListByArrYear = async (arrivalYear, nik) => {
 };
 
 //History certificate POV Dospem
-const findAllStudentCertificate = async (nik) => {
+const findAllStudentCertificate = async (payload) => {
   try {
-    let certificate = await certificateRepository.findCertificate(nik);
+    let certificate = await certificateRepository.findCertificate(payload);
 
     certificate = certificate.map((item) => {
       return {
         ...item,
-        Certificate: {
-          title: item.Certificate.title,
-          approvalDate: item.Certificate.approvalDate.toString(),
-        },
+        title: item.title,
+        approvalDate: item.approvalDate.toString(),
       };
     });
 

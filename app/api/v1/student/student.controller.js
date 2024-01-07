@@ -48,6 +48,18 @@ const biodataStudent = async (req, res) => {
   }
 };
 
+const getToCheckBiodata = async (req, res) => {
+  const { nim } = req.params;
+  try {
+    const student = await studentService.viewToCheckBiodata(nim);
+    res.status(200).send({ status: "OK", data: student });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 const viewByEmployeeNik = async (req, res) => {
   const { nik } = req.params;
   try {
@@ -186,4 +198,5 @@ module.exports = {
   createManyStudent,
   patchStudentById,
   deleteStudentById,
+  getToCheckBiodata,
 };

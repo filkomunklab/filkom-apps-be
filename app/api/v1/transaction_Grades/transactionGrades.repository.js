@@ -3,6 +3,7 @@ const prisma = require("../../../database");
 //============================Kaprodi Access==========================//
 //Waiting List Grade submmision (sort by major)
 const findWaitingListGradeSubmission = async (major) => {
+  console.log("haloooo");
   try {
     const transaction = await prisma.transaction_Grades.findMany({
       where: {
@@ -21,6 +22,7 @@ const findWaitingListGradeSubmission = async (major) => {
         submitedDate: "desc",
       },
       select: {
+        id: true,
         status: true,
         semester: true,
         submitedDate: true,
@@ -31,12 +33,23 @@ const findWaitingListGradeSubmission = async (major) => {
             lastName: true,
             major: true,
             arrivalYear: true,
-          },
-        },
-        Employee: {
-          select: {
-            firstName: true,
-            lastName: true,
+            GuidanceClassMember: {
+              select: {
+                gudianceClass: {
+                  select: {
+                    id: true,
+                    teacher: {
+                      select: {
+                        id: true,
+                        nik: true,
+                        firstName: true,
+                        lastName: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -49,7 +62,8 @@ const findWaitingListGradeSubmission = async (major) => {
 };
 
 //Waiting List grade submission (sort by semester)
-const findWaitingListGradeSubmissionBySemester = async (semester) => {
+const findWaitingListGradeSubmissionBySemester = async (payload, semester) => {
+  const { major } = payload;
   try {
     const transaction = await prisma.transaction_Grades.findMany({
       where: {
@@ -60,12 +74,18 @@ const findWaitingListGradeSubmissionBySemester = async (semester) => {
           {
             status: "WAITING",
           },
+          {
+            Student: {
+              major,
+            },
+          },
         ],
       },
       orderBy: {
         submitedDate: "desc",
       },
       select: {
+        id: true,
         status: true,
         semester: true,
         submitedDate: true,
@@ -117,6 +137,7 @@ const findListHistoryApprovalGrades = async (major) => {
         ],
       },
       select: {
+        id: true,
         semester: true,
         approveDate: true,
         Student: {
@@ -157,11 +178,10 @@ const approvalStudentGrades = async (transactionId, payload) => {
 //INPUT GRADES
 const insertDataforGrades = async (payload, nim) => {
   try {
-    const { semester, employeeNik } = payload;
+    const { semester } = payload;
     const transaction = await prisma.transaction_Grades.create({
       data: {
         semester,
-        employeeNik,
         student_Nim: nim,
       },
     });
@@ -186,6 +206,7 @@ const findCurrentGradeSubmission = async (nim) => {
         ],
       },
       select: {
+        id: true,
         semester: true,
         submitedDate: true,
         Student: {
@@ -224,6 +245,7 @@ const findListStudentHistoryGradeSubmission = async (nim) => {
         ],
       },
       select: {
+        id: true,
         semester: true,
         approveDate: true,
         Student: {
@@ -255,7 +277,10 @@ const findListSemesterGrades = async (nim) => {
         ],
       },
       select: {
+        id: true,
         semester: true,
+        status: true,
+        student_Nim: true,
       },
     });
     return transaction;
@@ -273,35 +298,47 @@ const findStudentGradeSubmissionById = async (transactionId) => {
       where: {
         id: transactionId,
       },
-      select: {
+      include: {
         Student: {
           select: {
+            id: true,
+            nim: true,
             firstName: true,
             lastName: true,
+            GuidanceClassMember: {
+              select: {
+                gudianceClass: {
+                  select: {
+                    id: true,
+                    teacher: {
+                      select: {
+                        id: true,
+                        nik: true,
+                        firstName: true,
+                        lastName: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
-        Employee: {
-          select: {
-            firstName: true,
-            lastName: true,
-          },
-        },
-        semester: true,
-        status: true,
-        submitedDate: true,
-        approveDate: true,
         Grades: {
           select: {
             grades: true,
-            retrival_to: true,
-            paralel: true,
+            lecturer: true,
+            description: true,
             subjectName: true,
           },
         },
       },
     });
     return transaction;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 module.exports = {

@@ -16,7 +16,7 @@ router.get(
 
 //WAITING LIST GRADES (semester)
 router.get(
-  "/transaction/semester/waitingList",
+  "/transaction/waitingList/semester/:major",
   transactionController.getWaitingListBySemester
 );
 

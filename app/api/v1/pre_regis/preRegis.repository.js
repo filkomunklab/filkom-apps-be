@@ -84,9 +84,152 @@ const submitApproval = async (payload) => {
   });
 };
 
+const getPreRegistListForTeacher = async (payload) => {
+  const { guidanceClassId } = payload;
+  return await prisma.preRegistrationData.findMany({
+    where: {
+      status: "WAITING",
+      Student: {
+        GuidanceClassMember: {
+          guidanceClassId,
+        },
+      },
+    },
+    select: {
+      ListOfRequest: {
+        select: {
+          subject: {
+            select: {
+              credits: true,
+            },
+          },
+        },
+      },
+      id: true,
+      status: true,
+      Student: {
+        select: {
+          nim: true,
+          firstName: true,
+          lastName: true,
+          major: true,
+          arrivalYear: true,
+          status: true,
+        },
+      },
+    },
+  });
+};
+
+const getPreRegistDetails = async (payload) => {
+  const { id } = payload;
+  return await prisma.preRegistrationData.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      ListOfRequest: {
+        include: {
+          subject: true,
+        },
+      },
+      Employee: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+      Student: {
+        select: {
+          firstName: true,
+          lastName: true,
+          curriculum: {
+            include: {
+              Subjects: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
+const automateClosePreRegist = () => {
+  prisma.preRegistration.updateMany({
+    where: {
+      isOpen: true,
+      dueDate: {
+        lte: new Date(),
+      },
+    },
+    data: {
+      isOpen: false,
+    },
+  });
+};
+
+const getHistoryForStudent = async (payload) => {
+  const { studentId } = payload;
+  return await prisma.preRegistrationData.findMany({
+    where: {
+      studentId,
+    },
+    select: {
+      id: true,
+      submitDate: true,
+      Student: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+      PreRegistration: {
+        select: {
+          semester: true,
+          semesterPeriod: true,
+        },
+      },
+    },
+  });
+};
+
+const getHistoryForAdvisor = async (payload) => {
+  const { guidanceClassId } = payload;
+  return await prisma.preRegistrationData.findMany({
+    where: {
+      Student: {
+        GuidanceClassMember: {
+          guidanceClassId,
+        },
+      },
+    },
+    select: {
+      id: true,
+      submitDate: true,
+      Student: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+      PreRegistration: {
+        select: {
+          semester: true,
+          semesterPeriod: true,
+        },
+      },
+    },
+  });
+};
+
 module.exports = {
+  getPreRegistListForTeacher,
+  automateClosePreRegist,
   findSubjectForPreRegis,
   checkPreRegistAccess,
+  getHistoryForStudent,
+  getHistoryForAdvisor,
+  getPreRegistDetails,
   createPreRegist,
   submitPreRegist,
   submitApproval,

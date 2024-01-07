@@ -117,8 +117,64 @@ const submitApproval = async (req, res) => {
   }
 };
 
+const getPreRegistListForTeacher = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getPreRegistListForTeacher(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getPreRegistDetails = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getPreRegistDetails(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getHistoryForStudent = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getHistoryForStudent(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getHistoryForAdvisor = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getHistoryForAdvisor(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
+  getPreRegistListForTeacher,
   checkPreRegistAccess,
+  getHistoryForStudent,
+  getHistoryForAdvisor,
+  getPreRegistDetails,
   createPreRegist,
   submitPreRegist,
   getAllPreRegis,

@@ -13,6 +13,10 @@ const GetCurriculumSchema = Yup.object().shape({
   id: Yup.string().required("ID is required"),
 });
 
+const GetAllPreRegisListForStudentSchema = Yup.object().shape({
+  status: Yup.string().oneOf(["WAITING", "APPROVED", "REJECTED"]),
+});
+
 const CreatePreRegistSchema = Yup.object()
   .shape({
     semester: Yup.string()
@@ -76,6 +80,7 @@ const ApprovalSchema = Yup.object()
   .noUnknown();
 
 module.exports = {
+  GetAllPreRegisListForStudentSchema,
   LatestPreRegistSchema,
   CreatePreRegistSchema,
   SubmitPreRegistSchema,
