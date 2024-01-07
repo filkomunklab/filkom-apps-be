@@ -4,11 +4,10 @@ const prisma = require("../../../database");
 //CREATE ACTIVITY FOR STUDENT
 const createActivity = async (payload) => {
   const { members, ...res } = payload;
-  console.log(...members);
   return await prisma.activity.create({
     data: {
       ...res,
-      activityAbsent: {
+      ActivityMember: {
         createMany: {
           data: [...members],
         },
@@ -72,8 +71,122 @@ const findDetailActivity = async (activityId) => {
   }
 };
 
+const getStudentList = async (payload) => {
+  const { guidanceClassId, major, faculty } = payload;
+  return await prisma.student.findMany({
+    where: {
+      OR: [
+        {
+          GuidanceClassMember: {
+            guidanceClassId,
+          },
+        },
+        {
+          major,
+        },
+        {
+          faculty,
+        },
+      ],
+    },
+    select: {
+      firstName: true,
+      lastName: true,
+      nim: true,
+      major: true,
+      status: true,
+    },
+  });
+};
+
+const getHistoryForStudent = async (payload) => {
+  const { studentNim } = payload;
+  return await prisma.activity.findMany({
+    where: {
+      dueDate: {
+        lte: new Date(),
+      },
+      ActivityMember: {
+        some: {
+          studentNim,
+        },
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      dueDate: true,
+    },
+  });
+};
+
+const getHistoryForAdvisor = async (payload) => {
+  const { employeeNik } = payload;
+  return await prisma.activity.findMany({
+    where: {
+      employeeNik,
+      dueDate: {
+        lte: new Date(),
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      dueDate: true,
+    },
+  });
+};
+
+const getCurrentActivity = async (payload) => {
+  const { employeeNik } = payload;
+  return await prisma.activity.findMany({
+    where: {
+      employeeNik,
+      dueDate: {
+        gte: new Date(),
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      dueDate: true,
+    },
+  });
+};
+
+const getCurrentConsultation = async (payload) => {
+  const { employeeNik } = payload;
+  return await prisma.academic_Consultation.findMany({
+    where: {
+      receiver_nik: employeeNik,
+      status: {
+        not: "Complete",
+      },
+    },
+    select: {
+      id: true,
+      description: true,
+      createdAt: true,
+      receiver: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+  });
+};
+
 module.exports = {
-  createActivity,
+  getCurrentConsultation,
+  getHistoryForStudent,
+  getHistoryForAdvisor,
+  getCurrentActivity,
   findDetailActivity,
+  getStudentList,
+  createActivity,
   takeAttendance,
 };
