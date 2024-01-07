@@ -30,7 +30,6 @@ const getRecentActivity = async (payload) => {
   consultations.map((item) => (item.type = "consultation"));
 
   const recentActivity = activities.concat(consultations);
-  console.log(recentActivity);
   return recentActivity;
 };
 
