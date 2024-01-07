@@ -151,6 +151,36 @@ const getStudentHasNoSupervisorAndActive = async (req, res) => {
   }
 };
 
+const patchStudentById = async (req, res) => {
+  console.log("halo bang");
+  try {
+    const id = req.params.id;
+    const payload = req.body;
+    const student = await studentService.updateOrPatchStudentById(id, payload);
+    res.send({ status: "OK", data: student });
+  } catch (error) {
+    console.log("ini error: ", error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const deleteStudentById = async (req, res) => {
+  console.log("masuk sini");
+  try {
+    const id = req.params.id;
+    await studentService.deleteStudentById(id);
+    res.status(200).send({ status: "OK" });
+  } catch (error) {
+    console.log(error);
+    res.status(error?.status || 500).send({
+      status: "FAILED",
+      data: { error: error?.message || error || error.Error },
+    });
+  }
+};
+
 module.exports = {
   createStudent,
   getStudentByNim,
@@ -166,5 +196,7 @@ module.exports = {
   // deleteStudentById,
   getStudentHasNoSupervisorAndActive,
   createManyStudent,
+  patchStudentById,
+  deleteStudentById,
   getToCheckBiodata,
 };

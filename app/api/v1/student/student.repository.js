@@ -3,7 +3,7 @@ const prisma = require("../../../database");
 
 // @description     Get student by id
 // @used            Submission, Proposal
-const findStudentById = async (id) => {
+const findStudentById = async (prisma, id) => {
   const student = await prisma.student.findUnique({
     where: {
       id,
@@ -81,33 +81,31 @@ const insertStudent = async (payload) => {
 };
 
 // create submission
-const insertManyStudent = async (data) => {
+const insertManyStudent = async (data, prisma) => {
   try {
-    const student = await prisma.student.createMany({
-      data,
-    });
+    const students = await Promise.all(
+      data.map((studentData) => {
+        return prisma.student.create({
+          data: studentData,
+        });
+      })
+    );
 
-    return student;
+    console.log("ini isi insert student repo: ", students);
+    return students;
   } catch (error) {
     throw error.message;
   }
 };
 
 const updateStudent = async (id, payload) => {
-  const { nim, password, firstName, lastName, token } = payload;
-  const employee = await prisma.student.update({
+  const student = await prisma.student.update({
     where: {
       id,
     },
-    data: {
-      nim,
-      password,
-      firstName,
-      lastName,
-      token,
-    },
+    data: payload,
   });
-  return employee;
+  return student;
 };
 
 const findStudentByToken = async (token) => {
@@ -258,7 +256,11 @@ const findStudentByArrivalYear = async (arrival_Year) => {
 
 const findAllStudent = async () => {
   try {
-    const student = await prisma.student.findMany();
+    const student = await prisma.student.findMany({
+      include: {
+        curriculum: true,
+      },
+    });
     return student;
   } catch (error) {
     throw error;
@@ -306,6 +308,18 @@ const selectStudentHasNoSupervisorAndActive = async () => {
   }
 };
 
+const deleteStudent = async (prisma, id) => {
+  try {
+    await prisma.student.delete({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   findStudentById,
   findStudentByNim,
@@ -322,5 +336,6 @@ module.exports = {
   updateEmployeeNikStudentByNim,
   selectStudentHasNoSupervisorAndActive,
   insertManyStudent,
+  deleteStudent,
   findToCheckBiodata,
 };

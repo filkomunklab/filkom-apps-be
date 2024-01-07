@@ -62,8 +62,21 @@ const deleteCurriculumWithSubjectByCurriculumId = async (curriculum_id) => {
   }
 };
 
+const getCurriculumByMajorAndYear = async (major, year) => {
+  try {
+    // check curriculum by major and year
+    const curriculum =
+      await curriculumRepository.selectCurriculumByMajorAndYear(major, year);
+
+    return curriculum;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   createCurriculumWithItsSubjects,
   GetAllCurriculum,
   deleteCurriculumWithSubjectByCurriculumId,
+  getCurriculumByMajorAndYear,
 };

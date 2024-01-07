@@ -62,8 +62,32 @@ const deleteCurriculum = async (req, res) => {
   }
 };
 
+const getCurriculumByMajorAndYear = async (req, res) => {
+  const major = req.params.major;
+  const year = req.params.year;
+
+  try {
+    const curriculum = await curriculumService.getCurriculumByMajorAndYear(
+      major,
+      year
+    );
+
+    res.status(200).send({
+      status: "OK",
+      data: curriculum,
+    });
+  } catch (error) {
+    console.log("ini error: ", error.message);
+    res.status(error?.status || 500).send({
+      status: "FAILED",
+      data: { error: error?.message || error },
+    });
+  }
+};
+
 module.exports = {
   createCurriculumWithItsSubject,
   getAllCurriculum,
   deleteCurriculum,
+  getCurriculumByMajorAndYear,
 };

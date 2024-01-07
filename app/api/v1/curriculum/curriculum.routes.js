@@ -22,4 +22,12 @@ router.delete(
   curriculumController.deleteCurriculum
 );
 
+//===================================================================
+// @description     Get Curriculum by major and year
+// @access
+router.get(
+  "/curriculum/check/by-major-year/:major/:year",
+  curriculumController.getCurriculumByMajorAndYear
+);
+
 module.exports = router;
