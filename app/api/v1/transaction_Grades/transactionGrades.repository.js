@@ -279,6 +279,8 @@ const findListSemesterGrades = async (nim) => {
       select: {
         id: true,
         semester: true,
+        status: true,
+        student_Nim: true,
       },
     });
     return transaction;
