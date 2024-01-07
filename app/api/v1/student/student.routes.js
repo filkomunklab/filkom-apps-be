@@ -22,6 +22,8 @@ router.get("/student/:nim", studentController.getStudentByNim);
 
 router.patch("/student/biodata/:nim", studentController.biodataStudent);
 
+router.get("/student/biodata/check/:nim", studentController.getToCheckBiodata);
+
 router.get("/student/dosen/:nik", studentController.viewByEmployeeNik);
 
 router.get("/management/student", studentController.getAllStudentForManagement);
