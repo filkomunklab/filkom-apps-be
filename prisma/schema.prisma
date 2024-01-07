@@ -68,6 +68,7 @@ model Employee {
   gradesAccess           grades_access[]
   GuidanceClass          GuidanceClass?
   PreRegistrationData    PreRegistrationData[]
+  Activity               Activity[]
 
   @@unique([firstName, lastName])
   @@index([email])
@@ -129,7 +130,7 @@ model Student {
   academic_Consultation Academic_Consultation[]
   Tracer_Study          Tracer_Study[]
   studentGrade          transaction_Grades[]
-  activityAbsent        ActivityAbsence[]
+  ActivityMember        ActivityMember[]
   GuidanceClassMember   GuidanceClassMember?
   Certificate           Certificate[]
   PreRegistrationData   PreRegistrationData[]
@@ -784,19 +785,20 @@ model Certificate {
 }
 
 model Activity {
-  id              String            @id @default(uuid())
-  title           String
-  description     String
-  dueDate         DateTime
-  isAttendance    Boolean
-  guidanceClass   GuidanceClass     @relation(fields: [guidanceClassId], references: [id])
-  guidanceClassId String
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  activityAbsent  ActivityAbsence[]
+  id             String           @id @default(uuid())
+  title          String
+  description    String
+  dueDate        DateTime
+  isAttendance   Boolean
+  activityType   ActivityType
+  Employee       Employee         @relation(fields: [employeeNik], references: [nik])
+  employeeNik    String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  ActivityMember ActivityMember[]
 }
 
-model ActivityAbsence {
+model ActivityMember {
   presence   Boolean?
   activity   Activity @relation(fields: [activityId], references: [id])
   activityId String
@@ -812,7 +814,6 @@ model GuidanceClass {
   teacherId           String                @unique
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @updatedAt
-  Activity            Activity[]
   GuidanceClassMember GuidanceClassMember[]
 }
 
@@ -926,4 +927,10 @@ enum ConsultationStatus {
   Waiting
   OnProcess
   Complete
+}
+
+enum ActivityType {
+  GUIDANCE_CLASS
+  MAJOR
+  FACULTY
 }

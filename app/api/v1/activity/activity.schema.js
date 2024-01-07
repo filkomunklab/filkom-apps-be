@@ -1,29 +1,32 @@
 const Yup = require("yup");
 
-const CreateActivitySchema = Yup.object().shape({
-  title: Yup.string().required("Title is required"),
-  description: Yup.string().required("Description is required"),
-  dueDate: Yup.date().required("Date is required"),
-  isAttendance: Yup.boolean().required("Attendance type is required"),
-  guidanceClassId: Yup.string().required("Guidance Class Id is required"),
-  members: Yup.array().when("isAttendance", {
-    is: true,
-    then: () =>
-      Yup.array()
-        .of(
-          Yup.object().shape({
-            studentNim: Yup.string().required("NIM is required"),
-          })
-        )
-        .min(1, "Members is required")
-        .required("Members is required"),
-    otherwise: () =>
-      Yup.array()
-        .max(0, "Members field must be empty array if attendance is false")
-        .nullable()
-        .required("Members is required"),
-  }),
-});
+const CreateActivitySchema = Yup.object()
+  .shape({
+    title: Yup.string().required("Title is required"),
+    description: Yup.string().required("Description is required"),
+    dueDate: Yup.date().required("Date is required"),
+    isAttendance: Yup.boolean().required("Attendance type is required"),
+    activityType: Yup.string().oneOf(["GUIDANCE_CLASS", "MAJOR", "FACULTY"]),
+    employeeNik: Yup.string().required("Employee NIK is required"),
+    members: Yup.array().when("isAttendance", {
+      is: true,
+      then: () =>
+        Yup.array()
+          .of(
+            Yup.object().shape({
+              studentNim: Yup.string().required("NIM is required"),
+            })
+          )
+          .min(1, "Members is required")
+          .required("Members is required"),
+      otherwise: () =>
+        Yup.array()
+          .max(0, "Members field must be empty array if attendance is false")
+          .nullable()
+          .required("Members is required"),
+    }),
+  })
+  .noUnknown();
 
 const AttendanceSchema = Yup.object().shape({
   activityId: Yup.string().required("Activity Id is required"),
@@ -40,7 +43,14 @@ const AttendanceSchema = Yup.object().shape({
     .required("Members is required"),
 });
 
+const GetStudentListSchema = Yup.object().shape({
+  guidanceClassId: Yup.string(),
+  major: Yup.string().oneOf(["SI", "IF", "DKV"]),
+  faculty: Yup.string(),
+});
+
 module.exports = {
+  GetStudentListSchema,
   CreateActivitySchema,
   AttendanceSchema,
 };
