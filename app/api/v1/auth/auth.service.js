@@ -126,7 +126,14 @@ const signInStudent = async (username, password) => {
         secretKey
       );
       checkNIM.token = token;
-      await studentRepository.updateStudent(checkNIM.id, checkNIM);
+      const {
+        GuidanceClassMember,
+        majorGlobalId,
+        curriculumId,
+        ...checkNIMDestructuring
+      } = checkNIM;
+      console.log("ini cek nim: ", checkNIMDestructuring);
+      await studentRepository.updateStudent(checkNIM.id, checkNIMDestructuring);
       const data = {
         user: {
           id: checkNIM.id,
@@ -134,9 +141,9 @@ const signInStudent = async (username, password) => {
           name: `${checkNIM.firstName} ${checkNIM.lastName}`,
           status: checkNIM.status,
           role: role[0],
-          majorGlobalId: checkNIM.majorGlobalId,
-          curriculumId: checkNIM.curriculumId,
-          guidanceClassId: checkNIM.GuidanceClassMember?.guidanceClassId,
+          majorGlobalId: majorGlobalId,
+          curriculumId: curriculumId,
+          guidanceClassId: GuidanceClassMember?.guidanceClassId,
         },
         token: token,
       };

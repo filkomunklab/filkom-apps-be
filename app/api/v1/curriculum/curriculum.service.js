@@ -7,7 +7,7 @@ const createCurriculumWithItsSubjects = async (payload) => {
     const curriculum = await curriculumRepository.insertCurriculum(payload);
 
     // payload untuk subject
-    const curriculum_id = curriculum.id;
+    const curriculumId = curriculum.id;
 
     const data = payload.data;
 
@@ -19,7 +19,7 @@ const createCurriculumWithItsSubjects = async (payload) => {
         type: item.type,
         prerequisite: item.prerequisite,
         semester: parseInt(item.semester),
-        curriculum_id,
+        curriculumId,
       };
     });
 

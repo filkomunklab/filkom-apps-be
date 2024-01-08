@@ -70,6 +70,7 @@ const signInStudent = async (req, res) => {
     const student = await authService.signInStudent(username, password);
     res.status(200).send({ status: "SUCCESS", data: student });
   } catch (error) {
+    console.log("ini error: ", error);
     res
       .status(error?.status || 500)
       .send({ status: "FAILED", data: { error: error?.message || error } });

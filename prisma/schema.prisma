@@ -186,7 +186,7 @@ model FormSPT {
   approval_reg      status    @default(WAITING)
   created_at        DateTime  @default(now())
   updated_at        DateTime?
-  student           Student   @relation(fields: [studentId], references: [nim])
+  student           Student   @relation(fields: [studentId], references: [nim], onDelete: Cascade)
   studentId         String
 }
 
@@ -282,7 +282,7 @@ model Tracer_Study {
   f1614       String? //20 isian
   created_at  DateTime @default(now())
   studentId   String
-  student     Student  @relation(fields: [studentId], references: [nim])
+  student     Student  @relation(fields: [studentId], references: [nim], onDelete: Cascade)
 }
 
 //-------------------Skripsi App ------------------------
@@ -533,7 +533,7 @@ model Proposal_Assessment {
   id          String   @id @default(uuid())
   proposal    Proposal @relation("Assessment", fields: [proposal_id], references: [id])
   proposal_id String
-  student     Student  @relation("Student", fields: [student_id], references: [id])
+  student     Student  @relation("Student", fields: [student_id], references: [id], onDelete: Cascade)
   student_id  String
   dosen       Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id    String
@@ -544,7 +544,7 @@ model Skripsi_Assessment {
   id         String   @id @default(uuid())
   skripsi    Skripsi  @relation("Assessment", fields: [skripsi_id], references: [id])
   skripsi_id String
-  student    Student  @relation("Student", fields: [student_id], references: [id])
+  student    Student  @relation("Student", fields: [student_id], references: [id], onDelete: Cascade)
   student_id String
   dosen      Employee @relation("Dosen", fields: [dosen_id], references: [id])
   dosen_id   String
@@ -584,7 +584,7 @@ model Proposal_Conclusion {
   id                    String   @id @default(uuid())
   proposal              Proposal @relation("Conclusion_Value", fields: [proposal_id], references: [id])
   proposal_id           String
-  student               Student  @relation("Student", fields: [student_id], references: [id])
+  student               Student  @relation("Student", fields: [student_id], references: [id], onDelete: Cascade)
   student_id            String
   assessment_conclution String?
 }
@@ -593,7 +593,7 @@ model Skripsi_Conclusion {
   id                    String  @id @default(uuid())
   skripsi               Skripsi @relation("Conclusion_Value", fields: [skripsi_id], references: [id])
   skripsi_id            String
-  student               Student @relation("Student", fields: [student_id], references: [id])
+  student               Student @relation("Student", fields: [student_id], references: [id], onDelete: Cascade)
   student_id            String
   assessment_conclution String?
 }
