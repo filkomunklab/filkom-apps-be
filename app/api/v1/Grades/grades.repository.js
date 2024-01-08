@@ -24,6 +24,12 @@ const findDetailSemesterGrades = async (transactionId) => {
         lecturer: true,
         grades: true,
         description: true,
+        Subject: {
+          select: {
+            id: true,
+            type: true,
+          },
+        },
         transaction_Grades: {
           select: {
             semester: true,
