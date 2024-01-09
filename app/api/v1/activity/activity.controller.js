@@ -69,18 +69,6 @@ const getHistoryForAdvisor = async (req, res) => {
   }
 };
 
-const getRecentActivity = async (req, res) => {
-  const payload = req.params;
-  try {
-    const recentActivity = await activityService.getRecentActivity(payload);
-    res.status(200).send({ status: "OK", data: recentActivity });
-  } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
-  }
-};
-
 //==========================Student Access===========================//
 const getHistoryForStudent = async (req, res) => {
   const payload = req.params;
@@ -100,6 +88,18 @@ const detailActivity = async (req, res) => {
   try {
     const activity = await activityService.viewDetailActivity(activityId);
     res.status(201).send({ status: "OK", data: activity });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getRecentActivity = async (req, res) => {
+  const payload = req.params;
+  try {
+    const recentActivity = await activityService.getRecentActivity(payload);
+    res.status(200).send({ status: "OK", data: recentActivity });
   } catch (error) {
     res
       .status(error?.status || 500)
