@@ -172,8 +172,14 @@ const getCurrentConsultation = async (payload) => {
   const { id } = payload;
   return await prisma.academic_Consultation.findMany({
     where: {
-      receiver_nik: id,
-      student_nim: id,
+      OR: [
+        {
+          receiver_nik: id,
+        },
+        {
+          student_nim: id,
+        },
+      ],
       status: {
         not: "Complete",
       },
