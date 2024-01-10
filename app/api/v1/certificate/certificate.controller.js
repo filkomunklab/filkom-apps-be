@@ -1,10 +1,18 @@
-const { certificate } = require("../../../database");
 const certificateService = require("./certificate.service");
+const { policyFor } = require("../policy");
 
 //============================DospemAccess===========================//
 
 //Waiting List
 const advisorCertificateWaitingList = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "certificate_waiting_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const payload = req.params;
   try {
     const certificate =
@@ -17,57 +25,16 @@ const advisorCertificateWaitingList = async (req, res) => {
   }
 };
 
-//find by category
-const viewCertificateCategory = async (req, res) => {
-  const { category } = req.body;
-  const payload = req.params;
-  try {
-    const certificate = await certificateService.viewCertifiacateByCategory(
-      category,
-      payload
-    );
-    res.status(200).send({ status: "OK", data: certificate });
-  } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
-  }
-};
-
-//History Approval
-const viewAllStudentCertificate = async (req, res) => {
-  const payload = req.params;
-  try {
-    const certificate = await certificateService.findAllStudentCertificate(
-      payload
-    );
-    res.status(200).send({ status: "OK", data: certificate });
-  } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
-  }
-};
-
-//Approval certificate
-const putApprovalCertificate = async (req, res) => {
-  const { certificateId } = req.params;
-  const payload = req.body;
-  try {
-    const certificate = await certificateService.approvalCertificate(
-      certificateId,
-      payload
-    );
-    res.status(201).send({ status: "OK", data: certificate });
-  } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
-  }
-};
-
 //waiting list By Major
 const getWaitingListbyMajor = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "certificate_list_major")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { major } = req.body;
   const payload = req.params;
   try {
@@ -85,6 +52,14 @@ const getWaitingListbyMajor = async (req, res) => {
 
 //waiting list by arrival year
 const getWaitingListByArrYear = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "certificate_list_year")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { arrivalYear } = req.body;
   const payload = req.params;
   try {
@@ -100,16 +75,72 @@ const getWaitingListByArrYear = async (req, res) => {
   }
 };
 
-//============================GeneralAccess=========================//
+//find by category
+const viewCertificateCategory = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "certificate_category")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
 
-//Detail Certificate
-const viewStudentCertificate = async (req, res) => {
-  const { certificateId } = req.params;
+  const { category } = req.body;
+  const payload = req.params;
   try {
-    const certificate = await certificateService.viewOneStudentCertificate(
-      certificateId
+    const certificate = await certificateService.viewCertifiacateByCategory(
+      category,
+      payload
     );
     res.status(200).send({ status: "OK", data: certificate });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//History Approval
+const viewAllStudentCertificate = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "certificate_history_approval")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
+  const payload = req.params;
+  try {
+    const certificate = await certificateService.findAllStudentCertificate(
+      payload
+    );
+    res.status(200).send({ status: "OK", data: certificate });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//Approval student certificate
+const putApprovalCertificate = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "certificate_approval")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
+  const { certificateId } = req.params;
+  const payload = req.body;
+  try {
+    const certificate = await certificateService.approvalCertificate(
+      certificateId,
+      payload
+    );
+    res.status(201).send({ status: "OK", data: certificate });
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -121,6 +152,14 @@ const viewStudentCertificate = async (req, res) => {
 
 //Student Add Certificate
 const uploadCertificate = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("create", "upload_certificate")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const payload = req.body;
   const { nim } = req.params;
   try {
@@ -138,6 +177,14 @@ const uploadCertificate = async (req, res) => {
 
 //Student Current Certificate
 const getStudentCurrentCertificate = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "current_certificate")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { nim } = req.params;
   try {
     const certificate = await certificateService.viewCurrentStudentCertificate(
@@ -154,6 +201,14 @@ const getStudentCurrentCertificate = async (req, res) => {
 
 //Student History Certificate
 const studentCertificateHistory = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "student_certificate_history")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { nim } = req.params;
   try {
     const certificate = await certificateService.studentHistoryCertificateView(
@@ -162,6 +217,31 @@ const studentCertificateHistory = async (req, res) => {
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     console.log("eror: ", error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//============================GeneralAccess=========================//
+
+//Detail Certificate
+const viewStudentCertificate = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "certificate_detail")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
+  const { certificateId } = req.params;
+  try {
+    const certificate = await certificateService.viewOneStudentCertificate(
+      certificateId
+    );
+    res.status(200).send({ status: "OK", data: certificate });
+  } catch (error) {
     res
       .status(error?.status || 500)
       .send({ status: "FAILED", data: { error: error?.message || error } });
