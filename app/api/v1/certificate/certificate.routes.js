@@ -1,63 +1,78 @@
 const express = require("express");
 const certificateController = require("./certificate.controller");
-
+const { auth } = require("../../../middleware/auth");
 const router = express.Router();
 
-//STUDENT POST CERTIFICATE
-router.post("/certificate/:nim", certificateController.uploadCertificate); //Upload certificate
+//========================DOSEN==========================
+
+//Approval Certificate
+router.put(
+  "/certificate/approval/status/:certificateId",
+  auth,
+  certificateController.putApprovalCertificate
+);
 
 //GET ALL CERTIFICATE ONLY STATUS = APPROVED & REJECTED
 router.get(
   "/certificate/dosen/:guidanceClassId",
+  auth,
   certificateController.viewAllStudentCertificate
 );
 
-//DETAIL STUDENT CERTIFICATE
+//WAITING LIST STUDENT CERTIFICATE
 router.get(
-  "/certificate/student/:certificateId",
-  certificateController.viewStudentCertificate //view students detail certificate
+  "/certificate/waitingList/dosen/:guidanceClassId",
+  auth,
+  certificateController.advisorCertificateWaitingList
+);
+
+//waiting list by arrival year pt 2
+router.get(
+  "/certificate/list/waiting/arrYear/:guidanceClassId",
+  auth,
+  certificateController.getWaitingListByArrYear
+);
+
+//Waiting List by major
+router.get(
+  "/certificate/waitingList/major/:guidanceClassId",
+  auth,
+  certificateController.getWaitingListbyMajor
 );
 
 //GET CERTIFICATE BY CATEGORY (INTENATIONAL, NATIONAL, LOCAL)
 router.get(
   "/certificate/category/:guidanceClassId",
+  auth,
   certificateController.viewCertificateCategory //View student certificate by category
 );
+
+//======================MAHASISWA========================
+
+//STUDENT POST CERTIFICATE
+router.post("/certificate/:nim", auth, certificateController.uploadCertificate); //Upload certificate
 
 //VIEW ACCEPTED & REJECTED CERTIFICATE (student history)
 router.get(
   "/certificate/history/student/:nim",
+  auth,
   certificateController.studentCertificateHistory
 );
 
 //VIEW STUDENT WAITING CERTIFICATE
 router.get(
   "/certificate/current/student/:nim",
+  auth,
   certificateController.getStudentCurrentCertificate
 );
 
-//WAITING LIST STUDENT CERTIFICATE
-router.get(
-  "/certificate/waitingList/dosen/:guidanceClassId",
-  certificateController.advisorCertificateWaitingList
-);
+//======================General==========================
 
-//Waiting List by major
+//DETAIL STUDENT CERTIFICATE
 router.get(
-  "/certificate/waitingList/major/:guidanceClassId",
-  certificateController.getWaitingListbyMajor
-);
-
-//waiting list by arrival year pt 2
-router.get(
-  "/certificate/list/waiting/arrYear/:guidanceClassId",
-  certificateController.getWaitingListByArrYear
-);
-
-//Approval Certificate
-router.put(
-  "/certificate/approval/status/:certificateId",
-  certificateController.putApprovalCertificate
+  "/certificate/student/:certificateId",
+  auth,
+  certificateController.viewStudentCertificate //view students detail certificate
 );
 
 module.exports = router;
