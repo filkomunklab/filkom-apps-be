@@ -169,7 +169,7 @@ const getCurrentActivity = async (payload) => {
       id: true,
       title: true,
       description: true,
-      dueDate: true,
+      createdAt: true,
     },
   });
 };
