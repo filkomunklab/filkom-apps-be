@@ -118,6 +118,9 @@ const getHistoryForStudent = async (payload) => {
       description: true,
       dueDate: true,
     },
+    orderBy: {
+      dueDate: "desc",
+    },
   });
 };
 
@@ -135,6 +138,9 @@ const getHistoryForAdvisor = async (payload) => {
       title: true,
       description: true,
       dueDate: true,
+    },
+    orderBy: {
+      dueDate: "desc",
     },
   });
 };
