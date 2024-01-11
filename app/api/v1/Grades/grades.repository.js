@@ -28,6 +28,7 @@ const findDetailSemesterGrades = async (transactionId) => {
           select: {
             id: true,
             type: true,
+            credits: true,
           },
         },
         transaction_Grades: {

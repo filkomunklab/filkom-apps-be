@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 router.get(
-  "/grades/semesterList/:transactionId",
+  "/grades/detailGrades/:transactionId",
   gradesController.getDetailSemesterGrades
 );
 
