@@ -55,20 +55,16 @@ const takeAttendance = async (payload) => {
 // };
 
 //==============================General Access========================//
-const findDetailActivity = async (activityId) => {
-  try {
-    const activity = await prisma.activity.findUnique({
-      where: {
-        id: activityId,
-      },
-      include: {
-        activityAbsent: true,
-      },
-    });
-    return activity;
-  } catch (error) {
-    return error;
-  }
+const findDetailActivity = async (payload) => {
+  const { activityId } = payload;
+  return await prisma.activity.findUnique({
+    where: {
+      id: activityId,
+    },
+    include: {
+      ActivityMember: true,
+    },
+  });
 };
 
 const getStudentList = async (payload) => {

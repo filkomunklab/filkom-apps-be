@@ -84,11 +84,12 @@ const getHistoryForStudent = async (req, res) => {
 
 //==============================GENERAL ACCESS=======================//
 const detailActivity = async (req, res) => {
-  const { activityId } = req.params;
+  const payload = req.params;
   try {
-    const activity = await activityService.viewDetailActivity(activityId);
+    const activity = await activityService.viewDetailActivity(payload);
     res.status(201).send({ status: "OK", data: activity });
   } catch (error) {
+    console.log(error);
     res
       .status(error?.status || 500)
       .send({ status: "FAILED", data: { error: error?.message || error } });
