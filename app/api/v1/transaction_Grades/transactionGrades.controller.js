@@ -1,9 +1,17 @@
 const transactionService = require("./transactionGrades.service");
+const { policyFor } = require("../policy");
 
 //===========================Kaprodi Access==========================//
 //WAITING LIST GRADE SUBMISSION (sort by major)
 const getWaitingListStudentGradeSubmission = async (req, res) => {
-  console.log("masuk sni");
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "grades_waiting_list")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { major } = req.params;
   try {
     const transaction =
@@ -18,6 +26,14 @@ const getWaitingListStudentGradeSubmission = async (req, res) => {
 
 //WAITING LIST GRADE SUBMISSION (sort by semester)
 const getWaitingListBySemester = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "grades_waiting_semester")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const payload = req.params;
   const { semester } = req.body;
   try {
@@ -33,8 +49,16 @@ const getWaitingListBySemester = async (req, res) => {
   }
 };
 
-//History Approval Grades
+//Kaprodi History Approval Grades
 const getHistoryApprovalGrades = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "grades_history_approval")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { major } = req.params;
   try {
     const transaction =
@@ -47,8 +71,16 @@ const getHistoryApprovalGrades = async (req, res) => {
   }
 };
 
-//APPROVAL GRADES
+//Kaprodi APPROVAL GRADES
 const putApprovalGrades = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "grades_approval")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { transactionId } = req.params;
   const payload = req.body;
   try {
@@ -67,6 +99,14 @@ const putApprovalGrades = async (req, res) => {
 //===========================Student Access=========================//
 //APPROVED GRADES LIST
 const getListSemesterGrades = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "approved_semester_grades")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { nim } = req.params;
   try {
     const transaction = await transactionService.viewListSemesterGrades(nim);
@@ -80,6 +120,14 @@ const getListSemesterGrades = async (req, res) => {
 
 //GRADES SUBMISSION
 const postTransactionWithGrades = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("create", "upload_grades")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   try {
     const payload = req.body;
     const { nim } = req.params;
@@ -97,6 +145,14 @@ const postTransactionWithGrades = async (req, res) => {
 
 //Waiting Grades Approval
 const getCurrentGradeSubmission = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "grades_student_current")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { nim } = req.params;
   try {
     const transaction = await transactionService.viewCurrentGradeSubmission(
@@ -112,6 +168,14 @@ const getCurrentGradeSubmission = async (req, res) => {
 
 //Approval Grades History
 const getStudentHistoryGradeSubmission = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "grades_student_history")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { nim } = req.params;
   try {
     const transaction =
@@ -125,8 +189,16 @@ const getStudentHistoryGradeSubmission = async (req, res) => {
 };
 
 //===========================General Access=========================//
-//General Access
+//Detail Submission
 const getStudentGradeSubmissionDetail = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "grades_submission_detail")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { transactionId } = req.params;
   try {
     const transaction =
