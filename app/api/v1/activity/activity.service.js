@@ -45,13 +45,8 @@ const getHistoryForAdvisor = (payload) => {
 };
 
 //============================GENERAL ACCESS=========================//
-const viewDetailActivity = async (activityId) => {
-  try {
-    const activity = await activityRepository.findDetailActivity(activityId);
-    return activity;
-  } catch (error) {
-    return error;
-  }
+const viewDetailActivity = (payload) => {
+  return activityRepository.findDetailActivity(payload);
 };
 
 module.exports = {
