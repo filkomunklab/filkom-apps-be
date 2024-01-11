@@ -40,6 +40,23 @@ const getAllCurriculum = async (req, res) => {
   }
 };
 
+const getCurriculumById = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const curriculum = await curriculumService.GetCurriculumById(id);
+
+    res.status(200).send({
+      status: "OK",
+      data: curriculum,
+    });
+  } catch (error) {
+    res.status(error?.status || 500).send({
+      status: "FAILED",
+      data: { error: error?.message || error },
+    });
+  }
+};
+
 const deleteCurriculum = async (req, res) => {
   try {
     const curriculum_id = req.params.curriculum_id;
@@ -88,6 +105,7 @@ const getCurriculumByMajorAndYear = async (req, res) => {
 module.exports = {
   createCurriculumWithItsSubject,
   getAllCurriculum,
+  getCurriculumById,
   deleteCurriculum,
   getCurriculumByMajorAndYear,
 };

@@ -45,6 +45,17 @@ const GetAllCurriculum = async () => {
   }
 };
 
+const GetCurriculumById = async (id) => {
+  try {
+    // select curriculum by id
+    const curriculum = await curriculumRepository.selectCurriculumById(id);
+
+    return curriculum;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 const deleteCurriculumWithSubjectByCurriculumId = async (curriculum_id) => {
   try {
     // delete subject
@@ -77,6 +88,7 @@ const getCurriculumByMajorAndYear = async (major, year) => {
 module.exports = {
   createCurriculumWithItsSubjects,
   GetAllCurriculum,
+  GetCurriculumById,
   deleteCurriculumWithSubjectByCurriculumId,
   getCurriculumByMajorAndYear,
 };

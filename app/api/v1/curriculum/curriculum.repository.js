@@ -77,9 +77,27 @@ const selectCurriculumByMajorAndYear = async (major, year) => {
   }
 };
 
+// @description     Get curriculum By Id
+// @route           GET /curriculum/:id
+// @access
+const selectCurriculumById = async (id) => {
+  try {
+    const curriculum = await prisma.curriculum.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return curriculum;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   insertCurriculum,
   selectAllCurriculum,
+  selectCurriculumById,
   deleteCurriculumByIdCurriculum,
   selectCurriculumByMajorAndYear,
 };

@@ -15,6 +15,11 @@ router.post("/curriculum", curriculumController.createCurriculumWithItsSubject);
 router.get("/curriculum", curriculumController.getAllCurriculum);
 
 //===================================================================
+// @description     Get Curriculum by Id
+// @access
+router.get("/curriculum/:id", curriculumController.getCurriculumById);
+
+//===================================================================
 // @description     Delete Curriculum
 // @access
 router.delete(
