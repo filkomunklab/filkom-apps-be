@@ -42,6 +42,7 @@ const biodataStudent = async (req, res) => {
     const student = await studentService.updateBiodataStudent(nim, payload);
     res.status(201).send({ status: "OK", data: student });
   } catch (error) {
+    console.log(error);
     res
       .status(error?.status || 500)
       .send({ status: "FAILED", data: { error: error?.message || error } });
