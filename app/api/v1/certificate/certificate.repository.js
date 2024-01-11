@@ -34,6 +34,7 @@ const findCertificate = async (payload) => {
         id: true,
         title: true,
         approvalDate: true,
+        approval_status: true,
         student: {
           select: {
             firstName: true,

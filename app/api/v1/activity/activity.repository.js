@@ -118,6 +118,9 @@ const getHistoryForStudent = async (payload) => {
       description: true,
       dueDate: true,
     },
+    orderBy: {
+      dueDate: "desc",
+    },
   });
 };
 
@@ -136,14 +139,28 @@ const getHistoryForAdvisor = async (payload) => {
       description: true,
       dueDate: true,
     },
+    orderBy: {
+      dueDate: "desc",
+    },
   });
 };
 
 const getCurrentActivity = async (payload) => {
-  const { employeeNik } = payload;
+  const { id } = payload;
   return await prisma.activity.findMany({
     where: {
-      employeeNik,
+      OR: [
+        {
+          employeeNik: id,
+        },
+        {
+          ActivityMember: {
+            some: {
+              studentNim: id,
+            },
+          },
+        },
+      ],
       dueDate: {
         gte: new Date(),
       },
@@ -152,16 +169,23 @@ const getCurrentActivity = async (payload) => {
       id: true,
       title: true,
       description: true,
-      dueDate: true,
+      createdAt: true,
     },
   });
 };
 
 const getCurrentConsultation = async (payload) => {
-  const { employeeNik } = payload;
+  const { id } = payload;
   return await prisma.academic_Consultation.findMany({
     where: {
-      receiver_nik: employeeNik,
+      OR: [
+        {
+          receiver_nik: id,
+        },
+        {
+          student_nim: id,
+        },
+      ],
       status: {
         not: "Complete",
       },

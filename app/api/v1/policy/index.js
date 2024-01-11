@@ -369,6 +369,24 @@ const policyFor = ({ user }) => {
     can("update", "history_list_chairman");
     // (Dosen: Member) view history list member
     can("update", "history_list_member");
+
+    //===============================Bimbingan Academik======================
+
+    //CERTIFICATE
+    //Dosen : view certificate waiting list
+    can("read", "certificate_waiting_list");
+    //Dosen: view certificate waiting list by student major
+    can("read", "certificate_list_major");
+    //Dosen: view certificate waiting list by arrival year
+    can("read", "certificate_list_year");
+    //Dosen : view certicate by category
+    can("read", "certificate_category");
+    //Dosen : view History Approval
+    can("read", "certificate_history_approval");
+    //Dosen : do Approval Student Certificate
+    can("update", "certificate_approval");
+    //Dosen : view certificate detail
+    can("read", "certificate_detail");
   }
 
   if (hasRole("DOSEN_MK")) {
@@ -544,6 +562,17 @@ const policyFor = ({ user }) => {
     can("create", "SPT");
     //mengisi form TS
     can("create", "TS");
+
+    //===========================Bimbingan Akademik=======================
+
+    //Mahasiswa : add certificate
+    can("create", "upload_certificate");
+    //Mahasiswa : view current certificate
+    can("read", "current_certificate");
+    //Mahasiswa : view certificate history approval
+    can("read", "student_certificate_history");
+    //Mahasiswa : view certificate detail
+    can("read", "certificate_detail");
   }
 
   if (hasRole("ALUMNI")) {

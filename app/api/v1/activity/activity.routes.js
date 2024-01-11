@@ -18,10 +18,7 @@ router.get(
   activityController.getHistoryForAdvisor
 );
 
-router.get(
-  "/activity/current/:employeeNik",
-  activityController.getRecentActivity
-);
+router.get("/activity/current/:id", activityController.getRecentActivity);
 
 router.patch(
   "/activity/take-attendance/:activityId",

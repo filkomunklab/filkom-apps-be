@@ -8,23 +8,7 @@ const CreateActivitySchema = Yup.object()
     isAttendance: Yup.boolean().required("Attendance type is required"),
     activityType: Yup.string().oneOf(["GUIDANCE_CLASS", "MAJOR", "FACULTY"]),
     employeeNik: Yup.string().required("Employee NIK is required"),
-    members: Yup.array().when("isAttendance", {
-      is: true,
-      then: () =>
-        Yup.array()
-          .of(
-            Yup.object().shape({
-              studentNim: Yup.string().required("NIM is required"),
-            })
-          )
-          .min(1, "Members is required")
-          .required("Members is required"),
-      otherwise: () =>
-        Yup.array()
-          .max(0, "Members field must be empty array if attendance is false")
-          .nullable()
-          .required("Members is required"),
-    }),
+    members: Yup.array().required("Members is required"),
   })
   .noUnknown();
 

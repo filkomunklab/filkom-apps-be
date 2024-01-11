@@ -29,7 +29,9 @@ const getRecentActivity = async (payload) => {
   activities.map((item) => (item.type = "activity"));
   consultations.map((item) => (item.type = "consultation"));
 
-  const recentActivity = activities.concat(consultations);
+  const recentActivity = activities.concat(consultations).sort((a, b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
   return recentActivity;
 };
 
