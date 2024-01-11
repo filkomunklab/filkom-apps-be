@@ -177,6 +177,11 @@ const policyFor = ({ user }) => {
     can("read", "history_list_dekan");
     // Dekan view is_report_open in skripsi
     can("read", "open_skripsi_report");
+
+    //==========================BIMBINGAN AKADEMIK================
+    //GRADES ACCESS
+    //DEKAN : view created access by all kaprodi
+    can("read", "grades_access_dekan");
   }
 
   if (hasRole("KAPRODI")) {
@@ -252,6 +257,30 @@ const policyFor = ({ user }) => {
     can("read", "history_list_kaprodi");
     // Kaprodi view is_report_open in skripsi
     can("read", "open_skripsi_report");
+
+    //=========================BIMBINGAN AKADEMIK==================
+
+    //GRADES
+    //KAPRODI : view waiting list grades all major student
+    can("read", "grades_waiting_list");
+    //KAPRODI : view filter waiting list all major student by semester
+    can("read", "grades_waiting_semester");
+    //KAPRODI : view history approval grades of all major student
+    can("read", "grades_history_approval");
+    //KAPRODI : do approval for all student major grades
+    can("update", "grades_approval");
+    //Mahasiswa : view detail grades submission
+    can("read", "grades_submission_detail");
+
+    //GRADES ACCESS
+    //KAPRODI : create access for student to input grades
+    can("create", "open_grades_access");
+    //KAPRODI : view list grades access
+    can("read", "list_created_access");
+    //KAPRODI : close access
+    can("update", "grades_close_access");
+    //KAPRODI : check access
+    can("read", "grades_check_access");
   }
 
   if (hasRole("DOSEN")) {
@@ -565,6 +594,7 @@ const policyFor = ({ user }) => {
 
     //===========================Bimbingan Akademik=======================
 
+    //CERTIFICATE
     //Mahasiswa : add certificate
     can("create", "upload_certificate");
     //Mahasiswa : view current certificate
@@ -573,6 +603,20 @@ const policyFor = ({ user }) => {
     can("read", "student_certificate_history");
     //Mahasiswa : view certificate detail
     can("read", "certificate_detail");
+
+    //GRADES
+    //Mahasiswa : add grades last semeseter
+    can("create", "upload_grades");
+    //Mahasiswa : view list approved grades
+    can("read", "approved_semester_grades");
+    //Mahasiswa : view current grades submission
+    can("read", "grades_student_current");
+    //Mahasiswa : view history grades submission
+    can("read", "grades_student_history");
+    //Mahasiswa : view detail grades only with GPA
+    can("read", "grades_detail_only");
+    //Mahasiswa : view detail grades submission
+    can("read", "grades_submission_detail");
   }
 
   if (hasRole("ALUMNI")) {
