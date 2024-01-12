@@ -296,6 +296,31 @@ const approvalCertificateStudent = async (certificateId, payload) => {
   }
 };
 
+// View all certificate student
+const viewAllStudentCertificate = async (nim) => {
+  try {
+    const certificate = await prisma.certificate.findMany({
+      where: {
+        student: {
+          nim,
+        },
+      },
+      include: {
+        student: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    return certificate;
+  } catch (error) {
+    throw error;
+  }
+};
+
 //===============================General Access==========================//
 
 //find detail certificate
@@ -431,4 +456,5 @@ module.exports = {
   approvalCertificateStudent,
   findWaitingListbyMajor,
   filterWaitingListByArrYear,
+  viewAllStudentCertificate,
 };
