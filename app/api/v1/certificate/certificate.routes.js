@@ -16,7 +16,7 @@ router.put(
 router.get(
   "/certificate/dosen/:guidanceClassId",
   auth,
-  certificateController.viewAllStudentCertificate
+  certificateController.viewAllApprovalStudentCertificate
 );
 
 //WAITING LIST STUDENT CERTIFICATE
@@ -45,6 +45,12 @@ router.get(
   "/certificate/category/:guidanceClassId",
   auth,
   certificateController.viewCertificateCategory //View student certificate by category
+);
+
+//View Certificate student
+router.get(
+  "/certificate/all/:nim",
+  certificateController.getAllCertificateStudent
 );
 
 //======================MAHASISWA========================

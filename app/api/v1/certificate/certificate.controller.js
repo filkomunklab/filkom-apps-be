@@ -101,7 +101,7 @@ const viewCertificateCategory = async (req, res) => {
 };
 
 //History Approval
-const viewAllStudentCertificate = async (req, res) => {
+const viewAllApprovalStudentCertificate = async (req, res) => {
   const policy = policyFor(req.user);
   if (!policy.can("read", "certificate_history_approval")) {
     return res.status(401).send({
@@ -112,9 +112,8 @@ const viewAllStudentCertificate = async (req, res) => {
 
   const payload = req.params;
   try {
-    const certificate = await certificateService.findAllStudentCertificate(
-      payload
-    );
+    const certificate =
+      await certificateService.findAllApprovalStudentCertificate(payload);
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
@@ -141,6 +140,19 @@ const putApprovalCertificate = async (req, res) => {
       payload
     );
     res.status(201).send({ status: "OK", data: certificate });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+//view certificate student
+const getAllCertificateStudent = async (req, res) => {
+  try {
+    const { nim } = req.params;
+    const certificate = await certificateService.findAllCertificateStudent(nim);
+    res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -250,7 +262,7 @@ const viewStudentCertificate = async (req, res) => {
 
 module.exports = {
   uploadCertificate,
-  viewAllStudentCertificate,
+  viewAllApprovalStudentCertificate,
   viewStudentCertificate,
   viewCertificateCategory,
   studentCertificateHistory,
@@ -259,4 +271,5 @@ module.exports = {
   putApprovalCertificate,
   getWaitingListbyMajor,
   getWaitingListByArrYear,
+  getAllCertificateStudent,
 };

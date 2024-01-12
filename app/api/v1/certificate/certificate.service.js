@@ -101,7 +101,7 @@ const viewWaitingListByArrYear = async (arrivalYear, payload) => {
 };
 
 //History certificate POV Dospem
-const findAllStudentCertificate = async (payload) => {
+const findAllApprovalStudentCertificate = async (payload) => {
   try {
     let certificate = await certificateRepository.findCertificate(payload);
 
@@ -133,6 +133,15 @@ const approvalCertificate = async (certificateId, payload) => {
         "Asia/Makassar"
       )}`,
     };
+  } catch (error) {
+    throw error;
+  }
+};
+
+//view certificate student
+const findAllCertificateStudent = async (nim) => {
+  try {
+    return await certificateRepository.viewAllStudentCertificate(nim);
   } catch (error) {
     throw error;
   }
@@ -235,7 +244,7 @@ const studentHistoryCertificateView = async (nim) => {
 
 module.exports = {
   uploadCertificate,
-  findAllStudentCertificate,
+  findAllApprovalStudentCertificate,
   viewOneStudentCertificate,
   viewCertifiacateByCategory,
   studentHistoryCertificateView,
@@ -244,4 +253,5 @@ module.exports = {
   approvalCertificate,
   waitingListbyMajor,
   viewWaitingListByArrYear,
+  findAllCertificateStudent,
 };
