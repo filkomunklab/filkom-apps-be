@@ -56,7 +56,7 @@ router.get(
 //======================MAHASISWA========================
 
 //STUDENT POST CERTIFICATE
-router.post("/certificate/:nim", certificateController.uploadCertificate); //Upload certificate
+router.post("/certificate/:nim", auth, certificateController.uploadCertificate); //Upload certificate
 
 //VIEW ACCEPTED & REJECTED CERTIFICATE (student history)
 router.get(

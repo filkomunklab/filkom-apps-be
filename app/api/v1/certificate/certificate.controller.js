@@ -164,13 +164,13 @@ const getAllCertificateStudent = async (req, res) => {
 
 //Student Add Certificate
 const uploadCertificate = async (req, res) => {
-  // const policy = policyFor(req.user);
-  // if (!policy.can("create", "upload_certificate")) {
-  //   return res.status(401).send({
-  //     status: "FAILED",
-  //     data: { error: "You don't have permission to perform this action" },
-  //   });
-  // }
+  const policy = policyFor(req.user);
+  if (!policy.can("create", "upload_certificate")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
 
   const payload = req.body;
   const { nim } = req.params;
