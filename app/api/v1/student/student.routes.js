@@ -20,10 +20,6 @@ router.post("/student", studentController.createStudent);
 
 router.get("/student/:nim", studentController.getStudentByNim);
 
-router.patch("/student/biodata/:nim", studentController.biodataStudent);
-
-router.get("/student/biodata/check/:nim", studentController.getToCheckBiodata);
-
 router.get("/student/dosen/:nik", studentController.viewByEmployeeNik);
 
 router.get("/management/student", studentController.getAllStudentForManagement);
@@ -54,5 +50,13 @@ router.post("/student-many", studentController.createManyStudent);
 router.put("/student/update/id/:id", studentController.patchStudentById);
 
 router.delete("/student/:id", studentController.deleteStudentById);
+
+router.patch("/student/biodata/:nim", auth, studentController.biodataStudent);
+
+router.get(
+  "/student/biodata/check/:nim",
+  auth,
+  studentController.getToCheckBiodata
+);
 
 module.exports = router;
