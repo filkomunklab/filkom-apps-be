@@ -51,7 +51,11 @@ router.put("/student/update/id/:id", studentController.patchStudentById);
 
 router.delete("/student/:id", studentController.deleteStudentById);
 
-router.patch("/student/biodata/:nim", auth, studentController.biodataStudent);
+router.patch(
+  "/student/biodata/:nim",
+  auth,
+  studentController.patchBiodataStudent
+);
 
 router.get(
   "/student/biodata/check/:nim",

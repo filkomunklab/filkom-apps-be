@@ -1,8 +1,8 @@
 //Layer untuk handle request dan response
 //Biasanya juga handle validasi body
 
-const { student } = require("../../../database");
 const studentService = require("./student.service");
+const { policyFor } = require("../policy");
 
 const createStudent = async (req, res) => {
   const payload = req.body;
