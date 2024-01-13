@@ -92,6 +92,7 @@ router.patch(
 
 router.patch(
   "/employee/biodataStudent/status/:nim",
+  auth,
   employeeController.patchStudentStatus
 );
 

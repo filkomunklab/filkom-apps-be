@@ -182,6 +182,18 @@ const policyFor = ({ user }) => {
     //GRADES ACCESS
     //DEKAN : view created access by all kaprodi
     can("read", "grades_access_dekan");
+
+    //Dashboard
+    //Dekan : view total All faculty student
+    can("read", "total_faculty_student");
+    //Dekan : view total active faculty student
+    can("read", "total_active_faculty");
+    //Dekan : view total inactive faculty student
+    can("read", "total_inactive_faculty");
+    //Dekan : view statistic student
+    can("read", "statistic_student");
+    //Dekan : view statistic approved certificate
+    can("read", "statistic_certificate");
   }
 
   if (hasRole("KAPRODI")) {
@@ -281,6 +293,14 @@ const policyFor = ({ user }) => {
     can("update", "grades_close_access");
     //KAPRODI : check access
     can("read", "grades_check_access");
+
+    //Dashboard Kaprodi
+    //Kaprodi : view total All major student
+    can("read", "total_major_student");
+    //Kaprodi : view total Active major student
+    can("read", "total_active_major");
+    //Kaprodi : view total Inactive major student
+    can("read", "total_inactive_major");
   }
 
   if (hasRole("DOSEN")) {
@@ -418,6 +438,18 @@ const policyFor = ({ user }) => {
     can("read", "certificate_detail");
     //Dosen : view all student Certificate
     can("read", "certificate_all_student");
+
+    //Guidance Student
+    //Dosen : set student status
+    can("update", "student_status");
+
+    // //Dashboard Dosen
+    // //Dosen : view total of Active & InActive Student guidance
+    // can("read", "total_student");
+    // //Dosen : view total Active student guidance
+    // can("read", "total_active_guidance");
+    // //Dosen : view total InActive student guidance
+    // can("read", "total_Inactive_guidance");
   }
 
   if (hasRole("DOSEN_MK")) {
