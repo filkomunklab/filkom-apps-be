@@ -35,7 +35,15 @@ const getStudentByNim = async (req, res) => {
   }
 };
 
-const biodataStudent = async (req, res) => {
+const patchBiodataStudent = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "biodata")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const payload = req.body;
   const { nim } = req.params;
   try {
@@ -50,6 +58,14 @@ const biodataStudent = async (req, res) => {
 };
 
 const getToCheckBiodata = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "check_biodata")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { nim } = req.params;
   try {
     const student = await studentService.viewToCheckBiodata(nim);
@@ -185,7 +201,7 @@ const deleteStudentById = async (req, res) => {
 module.exports = {
   createStudent,
   getStudentByNim,
-  biodataStudent,
+  patchBiodataStudent,
   viewByEmployeeNik,
   getAllStudentForManagement,
   updateStudentPassword,

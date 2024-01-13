@@ -619,6 +619,12 @@ const policyFor = ({ user }) => {
     can("read", "grades_detail_only");
     //Mahasiswa : view detail grades submission
     can("read", "grades_submission_detail");
+
+    //BIODATA STUDENT
+    //Mahasiswa : input empty data to biodata in the first login
+    can("update", "biodata");
+    //Mahasiswa : cek if the biodata already inputed
+    can("read", "check_biodata");
   }
 
   if (hasRole("ALUMNI")) {
