@@ -149,6 +149,14 @@ const putApprovalCertificate = async (req, res) => {
 
 //view certificate student
 const getAllCertificateStudent = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "certificate_all_student")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   try {
     const { nim } = req.params;
     const certificate = await certificateService.findAllCertificateStudent(nim);
