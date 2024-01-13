@@ -416,6 +416,8 @@ const policyFor = ({ user }) => {
     can("update", "certificate_approval");
     //Dosen : view certificate detail
     can("read", "certificate_detail");
+    //Dosen : view all student Certificate
+    can("read", "certificate_all_student");
   }
 
   if (hasRole("DOSEN_MK")) {
