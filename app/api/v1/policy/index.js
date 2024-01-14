@@ -183,6 +183,10 @@ const policyFor = ({ user }) => {
     //DEKAN : view created access by all kaprodi
     can("read", "grades_access_dekan");
 
+    //Certificate
+    //Dekan : view all student Certificate
+    can("read", "certificate_all_student");
+
     //Dashboard
     //Dekan : view total All faculty student
     can("read", "total_faculty_student");
@@ -301,6 +305,10 @@ const policyFor = ({ user }) => {
     can("read", "total_active_major");
     //Kaprodi : view total Inactive major student
     can("read", "total_inactive_major");
+
+    //Certificate
+    //Kaprodi : view all student Certificate
+    can("read", "certificate_all_student");
   }
 
   if (hasRole("DOSEN")) {
