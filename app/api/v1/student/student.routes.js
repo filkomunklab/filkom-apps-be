@@ -63,4 +63,10 @@ router.get(
   studentController.getToCheckBiodata
 );
 
+router.get(
+  "/student/view/biodata/:nim",
+  auth,
+  studentController.getBiodataStudent
+);
+
 module.exports = router;

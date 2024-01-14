@@ -117,92 +117,6 @@ const findStudentByToken = async (token) => {
   return student;
 };
 
-const findToUpdateBiodataStudent = async (nim, payload, path) => {
-  const {
-    bloodType,
-    dateOfBirth,
-    phoneNo,
-    AreaOfConcentration,
-    highSchoolGrad,
-    currentAddress,
-    currentResidenceStatus,
-    guardianEducation,
-    guardianStatus,
-    guardianEmail,
-    guardianPhoneNo,
-  } = payload;
-  const { filename } = payload.studentImage;
-  try {
-    const student = await prisma.student.update({
-      where: {
-        nim,
-      },
-      data: {
-        bloodType,
-        dateOfBirth,
-        phoneNo,
-        AreaOfConcentration,
-        highSchoolGrad,
-        currentAddress,
-        currentResidenceStatus,
-        guardianEducation,
-        guardianStatus,
-        guardianEmail,
-        guardianPhoneNo,
-        filename,
-        path,
-        biodataCheck: true,
-      },
-      include: {
-        GuidanceClassMember: {
-          select: {
-            gudianceClass: {
-              select: {
-                id: true,
-                teacher: {
-                  select: {
-                    id: true,
-                    nik: true,
-                    firstName: true,
-                    lastName: true,
-                    email: true,
-                    phoneNum: true,
-                    Address: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-    return student;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-
-const findToCheckBiodata = async (nim) => {
-  try {
-    const student = await prisma.student.findUnique({
-      where: {
-        nim,
-      },
-      select: {
-        biodataCheck: true,
-        id: true,
-        nim: true,
-        firstName: true,
-        lastName: true,
-      },
-    });
-    return student;
-  } catch (error) {
-    throw error;
-  }
-};
-
 const getAllStudent = async () => {
   const students = await prisma.student.findMany({
     orderBy: {
@@ -314,6 +228,129 @@ const deleteStudent = async (prisma, id) => {
   }
 };
 
+//=======================================Bimbingan Akademik==========
+
+const findToUpdateBiodataStudent = async (nim, payload, path) => {
+  const {
+    bloodType,
+    dateOfBirth,
+    phoneNo,
+    AreaOfConcentration,
+    highSchoolGrad,
+    currentAddress,
+    currentResidenceStatus,
+    guardianEducation,
+    guardianStatus,
+    guardianEmail,
+    guardianPhoneNo,
+  } = payload;
+  const { filename } = payload.studentImage;
+  try {
+    const student = await prisma.student.update({
+      where: {
+        nim,
+      },
+      data: {
+        bloodType,
+        dateOfBirth,
+        phoneNo,
+        AreaOfConcentration,
+        highSchoolGrad,
+        currentAddress,
+        currentResidenceStatus,
+        guardianEducation,
+        guardianStatus,
+        guardianEmail,
+        guardianPhoneNo,
+        filename,
+        path,
+        biodataCheck: true,
+      },
+      include: {
+        GuidanceClassMember: {
+          select: {
+            gudianceClass: {
+              select: {
+                id: true,
+                teacher: {
+                  select: {
+                    id: true,
+                    nik: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                    phoneNum: true,
+                    Address: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    return student;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const findToCheckBiodata = async (nim) => {
+  try {
+    const student = await prisma.student.findUnique({
+      where: {
+        nim,
+      },
+      select: {
+        biodataCheck: true,
+        id: true,
+        nim: true,
+        firstName: true,
+        lastName: true,
+      },
+    });
+    return student;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const findBiodataStudent = async (nim) => {
+  try {
+    const student = await prisma.student.findUnique({
+      where: {
+        nim,
+      },
+      include: {
+        GuidanceClassMember: {
+          select: {
+            gudianceClass: {
+              select: {
+                id: true,
+                teacher: {
+                  select: {
+                    id: true,
+                    nik: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                    phoneNum: true,
+                    Address: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    return student;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   findStudentById,
   findStudentByNim,
@@ -332,4 +369,5 @@ module.exports = {
   insertManyStudent,
   deleteStudent,
   findToCheckBiodata,
+  findBiodataStudent,
 };
