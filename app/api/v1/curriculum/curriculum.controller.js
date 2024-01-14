@@ -59,12 +59,12 @@ const getCurriculumById = async (req, res) => {
 
 const deleteCurriculum = async (req, res) => {
   try {
-    const curriculum_id = req.params.curriculum_id;
-    console.log("ini curriculum id: ", curriculum_id);
+    const curriculumId = req.params.curriculum_id;
+    console.log("ini curriculum id: ", curriculumId);
 
     const curriculum =
       await curriculumService.deleteCurriculumWithSubjectByCurriculumId(
-        curriculum_id
+        curriculumId
       );
 
     res.status(200).send({
