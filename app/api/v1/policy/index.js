@@ -183,6 +183,12 @@ const policyFor = ({ user }) => {
     //DEKAN : view created access by all kaprodi
     can("read", "grades_access_dekan");
 
+    //GRADES
+    //DEKAN : view list approved grades student
+    can("read", "approved_semester_grades");
+    //DEKAN : view detail student grades only with GPA
+    can("read", "grades_detail_only");
+
     //Certificate
     //Dekan : view all student Certificate
     can("read", "certificate_all_student");
@@ -285,8 +291,12 @@ const policyFor = ({ user }) => {
     can("read", "grades_history_approval");
     //KAPRODI : do approval for all student major grades
     can("update", "grades_approval");
-    //Mahasiswa : view detail grades submission
+    //KAPRODI : view detail grades submission
     can("read", "grades_submission_detail");
+    //KAPRODI : view list approved grades student
+    can("read", "approved_semester_grades");
+    //KAPRODI : view detail student grades only with GPA
+    can("read", "grades_detail_only");
 
     //GRADES ACCESS
     //KAPRODI : create access for student to input grades
@@ -446,6 +456,12 @@ const policyFor = ({ user }) => {
     can("read", "certificate_detail");
     //Dosen : view all student Certificate
     can("read", "certificate_all_student");
+
+    //Grades
+    //DOSEN : view list approved grades student
+    can("read", "approved_semester_grades");
+    //DOSEN : view detail student grades only with GPA
+    can("read", "grades_detail_only");
 
     //Guidance Student
     //Dosen : set student status
@@ -649,12 +665,12 @@ const policyFor = ({ user }) => {
     //GRADES
     //Mahasiswa : add grades last semeseter
     can("create", "upload_grades");
-    //Mahasiswa : view list approved grades
-    can("read", "approved_semester_grades");
     //Mahasiswa : view current grades submission
     can("read", "grades_student_current");
     //Mahasiswa : view history grades submission
     can("read", "grades_student_history");
+    //Mahasiswa : view list approved grades
+    can("read", "approved_semester_grades");
     //Mahasiswa : view detail grades only with GPA
     can("read", "grades_detail_only");
     //Mahasiswa : view detail grades submission
