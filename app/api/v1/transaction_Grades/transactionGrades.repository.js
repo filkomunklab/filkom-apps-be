@@ -136,6 +136,9 @@ const findListHistoryApprovalGrades = async (major) => {
           },
         ],
       },
+      orderBy: {
+        approveDate: "desc",
+      },
       select: {
         id: true,
         semester: true,
