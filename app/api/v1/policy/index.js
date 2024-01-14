@@ -97,6 +97,11 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_list_sekretaris");
     // Sekertaris view skripsi_history_list_sekretaris
     can("read", "skripsi_history_list_sekretaris");
+
+    //=================================BIMBINGAN AKADEMIK=====================
+    //Biodata Student
+    //operator_fakultas: view profile student
+    can("read", "student_biodata");
   }
 
   if (hasRole("DEKAN")) {
@@ -192,6 +197,10 @@ const policyFor = ({ user }) => {
     //Certificate
     //Dekan : view all student Certificate
     can("read", "certificate_all_student");
+
+    //Biodata Student
+    //Dekan: view profile student
+    can("read", "student_biodata");
 
     //Dashboard
     //Dekan : view total All faculty student
@@ -315,6 +324,10 @@ const policyFor = ({ user }) => {
     can("read", "total_active_major");
     //Kaprodi : view total Inactive major student
     can("read", "total_inactive_major");
+
+    //Biodata Student
+    //Kaprodi: view profile student
+    can("read", "student_biodata");
 
     //Certificate
     //Kaprodi : view all student Certificate
@@ -466,6 +479,10 @@ const policyFor = ({ user }) => {
     //Guidance Student
     //Dosen : set student status
     can("update", "student_status");
+
+    //Biodata Student
+    //Dosen: view profile student
+    can("read", "student_biodata");
 
     // //Dashboard Dosen
     // //Dosen : view total of Active & InActive Student guidance
@@ -681,6 +698,12 @@ const policyFor = ({ user }) => {
     can("update", "biodata");
     //Mahasiswa : cek if the biodata already inputed
     can("read", "check_biodata");
+    //Mahasiswa : view profile
+    can("read", "student_biodata");
+
+    //Grades Access
+    //Mahasiswa : check access for input grades
+    can("read", "grades_check_access");
   }
 
   if (hasRole("ALUMNI")) {

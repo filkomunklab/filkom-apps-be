@@ -81,39 +81,6 @@ const findStudentByNim = async (nim) => {
   return student;
 };
 
-const updateBiodataStudent = async (nim, payload) => {
-  const storageRef = ref(
-    storage,
-    `student/${nim}/${payload.studentImage.filename}`
-  );
-  const metadata = { contentType: "image/jpeg" };
-  try {
-    const binaryString = atob(payload.studentImage.buffer);
-    const byteArray = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      byteArray[i] = binaryString.charCodeAt(i);
-    }
-    await uploadBytes(storageRef, byteArray, metadata);
-    const path = await getDownloadURL(storageRef);
-    return await studentRepository.findToUpdateBiodataStudent(
-      nim,
-      payload,
-      path
-    );
-  } catch (error) {
-    throw error;
-  }
-};
-
-const viewToCheckBiodata = async (nim) => {
-  try {
-    const student = await studentRepository.findToCheckBiodata(nim);
-    return student;
-  } catch (error) {
-    throw error;
-  }
-};
-
 const viewStudentbyEmployeeNik = async (nik) => {
   try {
     const student = await studentRepository.findStudentByEmployeeNik(nik);
@@ -232,6 +199,48 @@ const deleteStudentById = async (id) => {
   }
 };
 
+//===============================Bimbingan Akademik==================
+const updateBiodataStudent = async (nim, payload) => {
+  const storageRef = ref(
+    storage,
+    `student/${nim}/${payload.studentImage.filename}`
+  );
+  const metadata = { contentType: "image/jpeg" };
+  try {
+    const binaryString = atob(payload.studentImage.buffer);
+    const byteArray = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      byteArray[i] = binaryString.charCodeAt(i);
+    }
+    await uploadBytes(storageRef, byteArray, metadata);
+    const path = await getDownloadURL(storageRef);
+    return await studentRepository.findToUpdateBiodataStudent(
+      nim,
+      payload,
+      path
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+const viewToCheckBiodata = async (nim) => {
+  try {
+    const student = await studentRepository.findToCheckBiodata(nim);
+    return student;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const viewBiodataStudent = async (nim) => {
+  try {
+    return await studentRepository.findBiodataStudent(nim);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createStudent,
   findStudentByNim,
@@ -247,4 +256,5 @@ module.exports = {
   updateOrPatchStudentById,
   deleteStudentById,
   viewToCheckBiodata,
+  viewBiodataStudent,
 };
