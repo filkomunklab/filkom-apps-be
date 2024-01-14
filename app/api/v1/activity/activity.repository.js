@@ -62,7 +62,17 @@ const findDetailActivity = async (payload) => {
       id: activityId,
     },
     include: {
-      ActivityMember: true,
+      ActivityMember: {
+        include: {
+          student: {
+            select: {
+              firstName: true,
+              lastName: true,
+              major: true,
+            },
+          },
+        },
+      },
     },
   });
 };
@@ -113,6 +123,7 @@ const getHistoryForStudent = async (payload) => {
       title: true,
       description: true,
       dueDate: true,
+      createdAt: true,
     },
     orderBy: {
       dueDate: "desc",
@@ -134,6 +145,7 @@ const getHistoryForAdvisor = async (payload) => {
       title: true,
       description: true,
       dueDate: true,
+      createdAt: true,
     },
     orderBy: {
       dueDate: "desc",
