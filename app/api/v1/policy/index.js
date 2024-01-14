@@ -700,6 +700,10 @@ const policyFor = ({ user }) => {
     can("read", "check_biodata");
     //Mahasiswa : view profile
     can("read", "student_biodata");
+
+    //Grades Access
+    //Mahasiswa : check access for input grades
+    can("read", "grades_check_access");
   }
 
   if (hasRole("ALUMNI")) {
