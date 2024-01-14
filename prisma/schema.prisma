@@ -727,6 +727,8 @@ model PreRegistrationData {
   PreRegistration   PreRegistration @relation(fields: [preRegistrationId], references: [id])
   preRegistrationId String
   ListOfRequest     ListOfRequest[]
+
+  @@unique([preRegistrationId, studentId])
 }
 
 model ListOfRequest {
