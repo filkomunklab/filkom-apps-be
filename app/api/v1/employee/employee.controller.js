@@ -290,6 +290,14 @@ const updateEmployeePassword = async (req, res) => {
 };
 
 const patchStudentStatus = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "student_status")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
   const { nim } = req.params;
   const payload = req.body;
   try {
