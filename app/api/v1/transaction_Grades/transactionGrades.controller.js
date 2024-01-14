@@ -74,7 +74,7 @@ const getHistoryApprovalGrades = async (req, res) => {
 //Kaprodi APPROVAL GRADES
 const putApprovalGrades = async (req, res) => {
   const policy = policyFor(req.user);
-  if (!policy.can("read", "grades_approval")) {
+  if (!policy.can("update", "grades_approval")) {
     return res.status(401).send({
       status: "FAILED",
       data: { error: "You don't have permission to perform this action" },
