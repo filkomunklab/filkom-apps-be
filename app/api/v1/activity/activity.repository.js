@@ -19,7 +19,7 @@ const createActivity = async (payload) => {
 const takeAttendance = async (payload) => {
   const { activityId, members } = payload;
   return await prisma.$transaction(async (prisma) => {
-    await prisma.activityAbsence.updateMany({
+    await prisma.activityMember.updateMany({
       where: {
         studentNim: {
           in: members,
@@ -31,7 +31,7 @@ const takeAttendance = async (payload) => {
       },
     });
 
-    await prisma.activityAbsence.updateMany({
+    await prisma.activityMember.updateMany({
       where: {
         studentNim: {
           notIn: members,
