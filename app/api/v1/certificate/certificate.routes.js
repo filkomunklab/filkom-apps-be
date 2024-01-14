@@ -50,6 +50,7 @@ router.get(
 //View Certificate student
 router.get(
   "/certificate/all/:nim",
+  auth,
   certificateController.getAllCertificateStudent
 );
 
