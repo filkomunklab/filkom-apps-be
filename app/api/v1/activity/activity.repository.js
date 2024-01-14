@@ -190,7 +190,7 @@ const getCurrentConsultation = async (payload) => {
       id: true,
       description: true,
       createdAt: true,
-      receiver: {
+      student: {
         select: {
           firstName: true,
           lastName: true,
