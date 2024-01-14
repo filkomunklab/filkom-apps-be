@@ -12,7 +12,7 @@ const createSubjectByIdCurriculum = async (payload) => {
   } catch (error) {
     await prisma.curriculum.delete({
       where: {
-        id: payload[0].curriculum_id,
+        id: payload[0].curriculumId,
       },
     });
     throw new Error(error.message);
