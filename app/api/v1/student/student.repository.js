@@ -323,6 +323,12 @@ const findBiodataStudent = async (nim) => {
         nim,
       },
       include: {
+        curriculum: {
+          select: {
+            major: true,
+            year: true,
+          },
+        },
         GuidanceClassMember: {
           select: {
             gudianceClass: {
@@ -331,6 +337,7 @@ const findBiodataStudent = async (nim) => {
                 teacher: {
                   select: {
                     id: true,
+                    nidn: true,
                     nik: true,
                     firstName: true,
                     lastName: true,
