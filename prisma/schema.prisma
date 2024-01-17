@@ -795,6 +795,7 @@ model Activity {
   description    String
   dueDate        DateTime
   isAttendance   Boolean
+  isDone         Boolean          @default(false)
   activityType   ActivityType
   Employee       Employee         @relation(fields: [employeeNik], references: [nik])
   employeeNik    String

@@ -42,6 +42,15 @@ const takeAttendance = async (payload) => {
         presence: false,
       },
     });
+
+    await prisma.activity.update({
+      where: {
+        id: activityId,
+      },
+      data: {
+        isDone: true,
+      },
+    });
   });
 };
 
@@ -109,9 +118,16 @@ const getHistoryForStudent = async (payload) => {
   const { studentNim } = payload;
   return await prisma.activity.findMany({
     where: {
-      dueDate: {
-        lte: new Date(),
-      },
+      OR: [
+        {
+          dueDate: {
+            lte: new Date(),
+          },
+        },
+        {
+          isDone: true,
+        },
+      ],
       ActivityMember: {
         some: {
           studentNim,
@@ -135,10 +151,17 @@ const getHistoryForAdvisor = async (payload) => {
   const { employeeNik } = payload;
   return await prisma.activity.findMany({
     where: {
+      OR: [
+        {
+          dueDate: {
+            lte: new Date(),
+          },
+        },
+        {
+          isDone: true,
+        },
+      ],
       employeeNik,
-      dueDate: {
-        lte: new Date(),
-      },
     },
     select: {
       id: true,
@@ -157,21 +180,34 @@ const getCurrentActivity = async (payload) => {
   const { id } = payload;
   return await prisma.activity.findMany({
     where: {
-      OR: [
+      AND: [
         {
-          employeeNik: id,
+          OR: [
+            {
+              dueDate: {
+                gt: new Date(),
+              },
+            },
+            {
+              isDone: false,
+            },
+          ],
         },
         {
-          ActivityMember: {
-            some: {
-              studentNim: id,
+          OR: [
+            {
+              employeeNik: id,
             },
-          },
+            {
+              ActivityMember: {
+                some: {
+                  studentNim: id,
+                },
+              },
+            },
+          ],
         },
       ],
-      dueDate: {
-        gte: new Date(),
-      },
     },
     select: {
       id: true,
