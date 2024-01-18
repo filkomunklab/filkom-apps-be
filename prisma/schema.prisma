@@ -668,6 +668,7 @@ model transaction_Grades {
   approveDate  DateTime? @db.Timestamptz(3)
   semester     String
   comments     String?
+  isInput      Boolean   @default(true)
   status       status    @default(WAITING)
   Student      Student?  @relation(fields: [student_Nim], references: [nim])
   student_Nim  String
