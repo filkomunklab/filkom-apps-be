@@ -1,7 +1,12 @@
 const guidanceClassService = require("./guidanceClass.service");
+const { guidanceClassPolicy } = require("./guidanceClass.policy");
 
 const getAllClass = async (req, res) => {
+  const policy = guidanceClassPolicy(req.user);
   try {
+    if (!policy.can("read", "allClass")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const guidanceClassList = await guidanceClassService.getAllClass();
     res.status(200).send({ status: "OK", data: guidanceClassList });
   } catch (error) {
@@ -13,7 +18,11 @@ const getAllClass = async (req, res) => {
 
 const getGuidanceClassDetail = async (req, res) => {
   const payload = req.params;
+  const policy = guidanceClassPolicy(req.user);
   try {
+    if (!policy.can("read", "guidanceClassDetail")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const guidanceClass = await guidanceClassService.getGuidanceClassDetail(
       payload
     );
@@ -28,7 +37,11 @@ const getGuidanceClassDetail = async (req, res) => {
 const createGuidanceClass = async (req, res) => {
   const payload = req.body;
   const { teacherId } = req.params;
+  const policy = guidanceClassPolicy(req.user);
   try {
+    if (!policy.can("create", "guidaceClass")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const guidanceClass = await guidanceClassService.createGuidanceClass(
       payload,
       teacherId
@@ -55,7 +68,11 @@ const createGuidanceClass = async (req, res) => {
 const addStudentToGuidanceClass = async (req, res) => {
   const payload = req.body;
   const { guidanceClassId } = req.params;
+  const policy = guidanceClassPolicy(req.user);
   try {
+    if (!policy.can("update", "guidaceClassStudent")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const guidanceClass = await guidanceClassService.addStudentToGuidanceClass(
       payload,
       guidanceClassId
@@ -81,7 +98,11 @@ const addStudentToGuidanceClass = async (req, res) => {
 
 const deleteStudentFromGuidanceClass = async (req, res) => {
   const payload = req.body;
+  const policy = guidanceClassPolicy(req.user);
   try {
+    if (!policy.can("delete", "guidaceClassStudent")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const guidanceClass =
       await guidanceClassService.deleteStudentFromGuidanceClass(payload);
     res.status(201).send({ status: "OK", data: guidanceClass });
@@ -93,9 +114,12 @@ const deleteStudentFromGuidanceClass = async (req, res) => {
 };
 
 const getAllUnassignedStudent = async (req, res) => {
-  console.log("masuk sini");
   const query = req.query;
+  const policy = guidanceClassPolicy(req.user);
   try {
+    if (!policy.can("read", "allUnassignedStudent")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const studentList = await guidanceClassService.getAllUnassignedStudent(
       query
     );
@@ -108,7 +132,11 @@ const getAllUnassignedStudent = async (req, res) => {
 };
 
 const getAllUnassignetTeacher = async (req, res) => {
+  const policy = guidanceClassPolicy(req.user);
   try {
+    if (!policy.can("read", "allUnassignedTeacher")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const teacherList = await guidanceClassService.getAllUnassignetTeacher();
     res.status(200).send({ status: "OK", data: teacherList });
   } catch (error) {
@@ -120,7 +148,11 @@ const getAllUnassignetTeacher = async (req, res) => {
 
 const deleteGuidanceClass = async (req, res) => {
   const payload = req.params;
+  const policy = guidanceClassPolicy(req.user);
   try {
+    if (!policy.can("delete", "guidaceClass")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     await guidanceClassService.deleteGuidanceClass(payload);
     res.sendStatus(204);
   } catch (error) {

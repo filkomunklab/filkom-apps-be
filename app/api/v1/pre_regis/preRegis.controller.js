@@ -1,8 +1,13 @@
 const preRegisService = require("./preRegis.service");
+const { preRegistPolicy } = require("./preRegist.policy");
 
 const getAllPreRegis = async (req, res) => {
   const payload = req.query;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("read", "allPreRegist")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const preRegis = await preRegisService.getAllPreRegis(payload);
     res.status(200).send({ status: "OK", data: preRegis });
   } catch (error) {
@@ -14,7 +19,11 @@ const getAllPreRegis = async (req, res) => {
 
 const preRegisMenu = async (req, res) => {
   const payload = req.query;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("read", "subjects")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const preRegis = await preRegisService.viewPreRegisMenu(payload);
     res.status(201).send({ status: "OK", data: preRegis });
   } catch (error) {
@@ -26,7 +35,11 @@ const preRegisMenu = async (req, res) => {
 
 const checkPreRegistAccess = async (req, res) => {
   const payload = req.params;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("read", "preRegistAccess")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.checkPreRegistAccess(payload);
     res.status(200).send({ status: "OK", data });
   } catch (error) {
@@ -43,7 +56,11 @@ const checkPreRegistAccess = async (req, res) => {
 
 const createPreRegist = async (req, res) => {
   const payload = req.body;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("create", "preRegist")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.createPreRegist(payload);
     res.status(201).send({ status: "OK", data });
   } catch (error) {
@@ -68,7 +85,11 @@ const createPreRegist = async (req, res) => {
 
 const submitPreRegist = async (req, res) => {
   const payload = req.body;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("create", "submitPreRegist")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.submitPreRegist(payload);
     res.status(201).send({ status: "OK", data });
   } catch (error) {
@@ -94,7 +115,11 @@ const submitPreRegist = async (req, res) => {
 const submitApproval = async (req, res) => {
   const payload = req.body;
   const { id } = req.params;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("update", "preRegistApproval")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.submitApproval({ ...payload, id });
     res.status(201).send({ status: "OK", data });
   } catch (error) {
@@ -119,7 +144,11 @@ const submitApproval = async (req, res) => {
 
 const getPreRegistListForTeacher = async (req, res) => {
   const payload = req.params;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("read", "preRegistList")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.getPreRegistListForTeacher(payload);
     res.status(200).send({ status: "OK", data });
   } catch (error) {
@@ -132,7 +161,11 @@ const getPreRegistListForTeacher = async (req, res) => {
 
 const getPreRegistDetails = async (req, res) => {
   const payload = req.params;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("read", "preRegistDetails")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.getPreRegistDetails(payload);
     res.status(200).send({ status: "OK", data });
   } catch (error) {
@@ -145,7 +178,11 @@ const getPreRegistDetails = async (req, res) => {
 
 const getHistoryForStudent = async (req, res) => {
   const payload = req.params;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("read", "preRegistHistoryForStudent")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.getHistoryForStudent(payload);
     res.status(200).send({ status: "OK", data });
   } catch (error) {
@@ -158,7 +195,11 @@ const getHistoryForStudent = async (req, res) => {
 
 const getHistoryForAdvisor = async (req, res) => {
   const payload = req.params;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("read", "preRegistHistoryForAdvisor")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.getHistoryForAdvisor(payload);
     res.status(200).send({ status: "OK", data });
   } catch (error) {
@@ -169,15 +210,54 @@ const getHistoryForAdvisor = async (req, res) => {
   }
 };
 
+const getCurrentPreRegist = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getCurrentPreRegist(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getAllSubmitedPreRegist = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getAllSubmitedPreRegist(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getAllSubject = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getAllSubject(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getPreRegistListForTeacher,
+  getAllSubmitedPreRegist,
   checkPreRegistAccess,
   getHistoryForStudent,
   getHistoryForAdvisor,
   getPreRegistDetails,
+  getCurrentPreRegist,
   createPreRegist,
   submitPreRegist,
   getAllPreRegis,
   submitApproval,
+  getAllSubject,
   preRegisMenu,
 };
