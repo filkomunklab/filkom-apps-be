@@ -45,5 +45,13 @@ router.get(
   auth,
   preRegisController.getHistoryForAdvisor
 );
+router.get("/pre-regist/current/:id", preRegisController.getCurrentPreRegist);
+
+router.get(
+  "/pre-regist/list-submitted/:id",
+  preRegisController.getAllSubmitedPreRegist
+);
+
+router.get("/pre-regist/list-subject/:id", preRegisController.getAllSubject);
 
 module.exports = router;

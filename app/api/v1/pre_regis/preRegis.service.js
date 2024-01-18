@@ -63,15 +63,34 @@ const getHistoryForAdvisor = async (payload) => {
   return preRegisRepository.getHistoryForAdvisor(payload);
 };
 
+const getCurrentPreRegist = (payload) => {
+  return preRegisRepository.getCurrentPreRegist(payload);
+};
+
+const getAllSubmitedPreRegist = (payload) => {
+  return preRegisRepository.getAllSubmitedPreRegist(payload);
+};
+
+const getAllSubject = async (payload) => {
+  const data = await preRegisRepository.getAllSubject(payload);
+  data.map((item) => {
+    item.totalRequest = item.totalRequest.toString();
+  });
+  return data;
+};
+
 module.exports = {
   getPreRegistListForTeacher,
+  getAllSubmitedPreRegist,
   getHistoryForStudent,
   getHistoryForAdvisor,
   checkPreRegistAccess,
   getPreRegistDetails,
+  getCurrentPreRegist,
   viewPreRegisMenu,
   createPreRegist,
   submitPreRegist,
   submitApproval,
   getAllPreRegis,
+  getAllSubject,
 };

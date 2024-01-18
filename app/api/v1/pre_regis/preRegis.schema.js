@@ -67,7 +67,7 @@ const ApprovalSchema = Yup.object()
   .shape({
     id: Yup.string().required("ID is required"),
     status: Yup.string().oneOf(["APPROVED", "REJECTED"]).required(),
-    comments: Yup.string().required("Comment is required"),
+    comments: Yup.string().optional(),
     approveDate: Yup.date().when("status", {
       is: "APPROVED",
       then: () => Yup.date().required("Approve date is required"),

@@ -210,15 +210,54 @@ const getHistoryForAdvisor = async (req, res) => {
   }
 };
 
+const getCurrentPreRegist = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getCurrentPreRegist(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getAllSubmitedPreRegist = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getAllSubmitedPreRegist(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const getAllSubject = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getAllSubject(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getPreRegistListForTeacher,
+  getAllSubmitedPreRegist,
   checkPreRegistAccess,
   getHistoryForStudent,
   getHistoryForAdvisor,
   getPreRegistDetails,
+  getCurrentPreRegist,
   createPreRegist,
   submitPreRegist,
   getAllPreRegis,
   submitApproval,
+  getAllSubject,
   preRegisMenu,
 };
