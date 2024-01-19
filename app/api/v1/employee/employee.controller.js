@@ -407,6 +407,20 @@ const deleteDosenSkripsiById = async (req, res) => {
   }
 };
 
+const changePasswordByEmployee = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const payload = req.body;
+
+    const admin = await employeeService.changePasswordByEmployee(id, payload);
+    res.status(200).send({ status: "OK", data: admin });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -431,4 +445,5 @@ module.exports = {
   getAllDosen,
   createDosenSkripsi,
   deleteDosenSkripsiById,
+  changePasswordByEmployee,
 };

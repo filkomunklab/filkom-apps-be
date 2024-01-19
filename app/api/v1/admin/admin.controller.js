@@ -115,6 +115,20 @@ const updateAdminById = async (req, res) => {
   }
 };
 
+const changePasswordByAdmin = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const payload = req.body;
+
+    const admin = await adminService.changePasswordByAdmin(id, payload);
+    res.status(200).send({ status: "OK", data: admin });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getAllAdmins,
   getAdminById,
@@ -122,4 +136,5 @@ module.exports = {
   deleteAdminById,
   patchAdminById,
   updateAdminById,
+  changePasswordByAdmin,
 };

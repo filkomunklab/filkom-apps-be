@@ -214,6 +214,13 @@ const updateBiodataStudent = async (nim, payload) => {
     }
     await uploadBytes(storageRef, byteArray, metadata);
     const path = await getDownloadURL(storageRef);
+
+    if (payload.password) {
+      const salt = bcrypt.genSaltSync(10);
+      const password = bcrypt.hashSync(payload.password, salt);
+      payload = { ...payload, password };
+    }
+
     return await studentRepository.findToUpdateBiodataStudent(
       nim,
       payload,
@@ -241,6 +248,44 @@ const viewBiodataStudent = async (nim) => {
   }
 };
 
+const changePasswordByStudent = async (id, payload) => {
+  try {
+    const student = await studentRepository.findStudentById(prisma, id);
+
+    if (!student) {
+      throw createHttpStatusError("Your Account is not found!!");
+    }
+
+    const checkPassword = bcrypt.compareSync(
+      payload.oldPassword,
+      student.password
+    );
+
+    if (checkPassword) {
+      if (payload.newPassword === payload.confirmationNewPassword) {
+        const salt = bcrypt.genSaltSync(10);
+        const password = bcrypt.hashSync(payload.newPassword, salt);
+
+        const updatePasswordStudent = await studentRepository.updateStudent(
+          id,
+          { password }
+        );
+
+        console.log("ini update password student: ", updatePasswordStudent);
+        return updatePasswordStudent;
+      } else {
+        throw createHttpStatusError(
+          "New Password and Confirmation Do Not Match"
+        );
+      }
+    } else {
+      throw createHttpStatusError("Incorrect Old Password", 400);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createStudent,
   findStudentByNim,
@@ -257,4 +302,5 @@ module.exports = {
   deleteStudentById,
   viewToCheckBiodata,
   viewBiodataStudent,
+  changePasswordByStudent,
 };

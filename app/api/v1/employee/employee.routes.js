@@ -96,4 +96,9 @@ router.patch(
   employeeController.patchStudentStatus
 );
 
+router.patch(
+  "/change-password-employee/:id",
+  employeeController.changePasswordByEmployee
+);
+
 module.exports = router;

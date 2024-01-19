@@ -232,6 +232,7 @@ const deleteStudent = async (prisma, id) => {
 
 const findToUpdateBiodataStudent = async (nim, payload, path) => {
   const {
+    password,
     bloodType,
     dateOfBirth,
     phoneNo,
@@ -251,6 +252,7 @@ const findToUpdateBiodataStudent = async (nim, payload, path) => {
         nim,
       },
       data: {
+        password,
         bloodType,
         dateOfBirth,
         phoneNo,
