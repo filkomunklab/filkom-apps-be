@@ -7,6 +7,7 @@ const guidanceClassPolicy = ({ user }) => {
   const hasRole = (role) => user.role.includes(role);
 
   if (hasRole("MAHASISWA")) {
+    can("read", "guidanceClassDetail");
   }
 
   if (hasRole("DOSEN")) {
