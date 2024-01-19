@@ -83,13 +83,17 @@ const deleteEmployee = async (prisma, id) => {
 };
 
 const updateEmployee = async (id, payload) => {
-  const employee = await prisma.employee.update({
-    where: {
-      id,
-    },
-    data: payload,
-  });
-  return employee;
+  try {
+    const employee = await prisma.employee.update({
+      where: {
+        id,
+      },
+      data: payload,
+    });
+    return employee;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const updateEmployeeByNik = async (nik, payload) => {

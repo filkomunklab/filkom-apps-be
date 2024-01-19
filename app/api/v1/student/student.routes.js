@@ -69,4 +69,10 @@ router.get(
   studentController.getBiodataStudent
 );
 
+// student change password byself
+router.patch(
+  "/change-password-student/:id",
+  studentController.changePasswordByStudent
+);
+
 module.exports = router;

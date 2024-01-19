@@ -6,6 +6,7 @@ const studentRepository = require("../student/student.repository");
 const userRoleRepository = require("../user_management/user_namagement.repository");
 const bcrypt = require("bcrypt");
 const prisma = require("../../../database");
+const { createHttpStatusError } = require("../../../utils");
 
 const getAllEmployees = async () => {
   try {
@@ -411,6 +412,45 @@ const deleteDosenSkripsiById = async (id) => {
   await userManagement.deleteRoleById(id);
 };
 
+// employee change password
+const changePasswordByEmployee = async (id, payload) => {
+  try {
+    const employee = await employeeRepository.findEmployeeById(prisma, id);
+
+    if (!employee) {
+      throw createHttpStatusError("Your Account is not found!!");
+    }
+
+    const checkPassword = bcrypt.compareSync(
+      payload.oldPassword,
+      employee.password
+    );
+
+    if (checkPassword) {
+      if (payload.newPassword === payload.confirmationNewPassword) {
+        const salt = bcrypt.genSaltSync(10);
+        const password = bcrypt.hashSync(payload.newPassword, salt);
+
+        const updatePasswordEmployee = await employeeRepository.updateEmployee(
+          id,
+          { password }
+        );
+
+        return updatePasswordEmployee;
+      } else {
+        throw createHttpStatusError(
+          "New Password and Confirmation Do Not Match",
+          400
+        );
+      }
+    } else {
+      throw createHttpStatusError("Incorrect Old Password", 400);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -434,4 +474,5 @@ module.exports = {
   getAllDosen,
   createDosenSkripsi,
   deleteDosenSkripsiById,
+  changePasswordByEmployee,
 };

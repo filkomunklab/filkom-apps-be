@@ -220,6 +220,20 @@ const getBiodataStudent = async (req, res) => {
   }
 };
 
+const changePasswordByStudent = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const payload = req.body;
+
+    const student = await studentService.changePasswordByStudent(id, payload);
+    res.status(200).send({ status: "OK", data: student });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   createStudent,
   getStudentByNim,
@@ -239,4 +253,5 @@ module.exports = {
   deleteStudentById,
   getToCheckBiodata,
   getBiodataStudent,
+  changePasswordByStudent,
 };
