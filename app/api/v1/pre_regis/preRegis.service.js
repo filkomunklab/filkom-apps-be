@@ -67,6 +67,10 @@ const getCurrentPreRegist = (payload) => {
   return preRegisRepository.getCurrentPreRegist(payload);
 };
 
+const getCurrentForStudent = (payload) => {
+  return preRegisRepository.getCurrentForStudent(payload);
+};
+
 const getAllSubmitedPreRegist = (payload) => {
   return preRegisRepository.getAllSubmitedPreRegist(payload);
 };
@@ -84,6 +88,7 @@ module.exports = {
   getAllSubmitedPreRegist,
   getHistoryForStudent,
   getHistoryForAdvisor,
+  getCurrentForStudent,
   checkPreRegistAccess,
   getPreRegistDetails,
   getCurrentPreRegist,

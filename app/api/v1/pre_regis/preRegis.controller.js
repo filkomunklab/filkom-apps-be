@@ -222,6 +222,18 @@ const getCurrentPreRegist = async (req, res) => {
   }
 };
 
+const getCurrentForStudent = async (req, res) => {
+  const payload = req.params;
+  try {
+    const data = await preRegisService.getCurrentForStudent(payload);
+    res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 const getAllSubmitedPreRegist = async (req, res) => {
   const payload = req.params;
   try {
@@ -251,6 +263,7 @@ module.exports = {
   getAllSubmitedPreRegist,
   checkPreRegistAccess,
   getHistoryForStudent,
+  getCurrentForStudent,
   getHistoryForAdvisor,
   getPreRegistDetails,
   getCurrentPreRegist,
