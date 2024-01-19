@@ -173,6 +173,9 @@ const getHistoryForStudent = async (payload) => {
   return await prisma.preRegistrationData.findMany({
     where: {
       studentId,
+      status: {
+        not: "WAITING",
+      },
     },
     select: {
       id: true,
@@ -241,6 +244,34 @@ const getCurrentPreRegist = async (payload) => {
   });
 };
 
+const getCurrentForStudent = async (payload) => {
+  const { studentId } = payload;
+  return await prisma.preRegistrationData.findMany({
+    where: {
+      studentId,
+      status: {
+        equals: "WAITING",
+      },
+    },
+    select: {
+      id: true,
+      submitDate: true,
+      Student: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+      PreRegistration: {
+        select: {
+          semester: true,
+          semesterPeriod: true,
+        },
+      },
+    },
+  });
+};
+
 const getAllSubmitedPreRegist = async (payload) => {
   const { id } = payload;
   return await prisma.preRegistration.findUnique({
@@ -281,6 +312,7 @@ module.exports = {
   getAllSubmitedPreRegist,
   automateClosePreRegist,
   findSubjectForPreRegis,
+  getCurrentForStudent,
   checkPreRegistAccess,
   getHistoryForStudent,
   getHistoryForAdvisor,
