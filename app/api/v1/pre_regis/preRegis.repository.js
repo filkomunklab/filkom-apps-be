@@ -222,16 +222,73 @@ const getHistoryForAdvisor = async (payload) => {
   });
 };
 
+const getCurrentPreRegist = async (payload) => {
+  const { id } = payload;
+  return await prisma.preRegistrationData.findMany({
+    where: {
+      OR: [
+        {
+          Student: {
+            GuidanceClassMember: {
+              guidanceClassId: id,
+            },
+          },
+        },
+        { studentId: id },
+      ],
+      status: "WAITING",
+    },
+  });
+};
+
+const getAllSubmitedPreRegist = async (payload) => {
+  const { id } = payload;
+  return await prisma.preRegistration.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      PreRegistrationData: {
+        select: {
+          status: true,
+          Student: {
+            select: {
+              firstName: true,
+              lastName: true,
+              nim: true,
+              arrivalYear: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
+const getAllSubject = async (payload) => {
+  const { id } = payload;
+  return await prisma.$queryRaw`
+  SELECT lr."subjectId", s.code, s.name, s.type, count(*) "totalRequest"
+  FROM "ListOfRequest" lr 
+  JOIN "Subject" s ON lr."subjectId" = s."id" 
+  JOIN "PreRegistrationData" prd ON lr."preRegistrationDataId" = prd."id"
+  WHERE prd."preRegistrationId" = ${id} 
+  GROUP BY lr."subjectId", s.code, s.name, s.type`;
+};
+
 module.exports = {
   getPreRegistListForTeacher,
+  getAllSubmitedPreRegist,
   automateClosePreRegist,
   findSubjectForPreRegis,
   checkPreRegistAccess,
   getHistoryForStudent,
   getHistoryForAdvisor,
   getPreRegistDetails,
+  getCurrentPreRegist,
   createPreRegist,
   submitPreRegist,
   submitApproval,
   getAllPreRegis,
+  getAllSubject,
 };
