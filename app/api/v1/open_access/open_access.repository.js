@@ -26,17 +26,17 @@ const addOpenGradesAccess = async (payload) => {
 const findlistGradesAccess = async () => {
   try {
     const openAccess = await prisma.grades_access.findMany({
-      include:{
-        Employee:{
-          select:{
+      include: {
+        Employee: {
+          select: {
             id: true,
             nik: true,
             firstName: true,
             lastName: true,
             major: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
     return openAccess;
   } catch (error) {
@@ -48,16 +48,15 @@ const findlistGradesAccess = async () => {
 const findlistGradesAccessByMajor = async (major) => {
   try {
     const openAccess = await prisma.grades_access.findMany({
-      where:{
-        major
-      }
+      where: {
+        major,
+      },
     });
     return openAccess;
   } catch (error) {
     throw error;
   }
 };
-
 
 // close access for grades input
 const setCloseGradesAccess = async (id) => {
@@ -91,10 +90,26 @@ const findToCheckOpenGradesAccess = async (major) => {
   }
 };
 
+//automate close access
+const automateCloesGradesAccess = () => {
+  prisma.grades_access.updateMany({
+    where: {
+      isOpen: true,
+      due_date: {
+        lte: new Date(),
+      },
+    },
+    data: {
+      isOpen: false,
+    },
+  });
+};
+
 module.exports = {
   addOpenGradesAccess,
   setCloseGradesAccess,
   findlistGradesAccess,
   findToCheckOpenGradesAccess,
-  findlistGradesAccessByMajor
+  findlistGradesAccessByMajor,
+  automateCloesGradesAccess,
 };
