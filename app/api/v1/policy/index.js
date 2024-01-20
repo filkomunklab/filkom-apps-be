@@ -692,6 +692,8 @@ const policyFor = ({ user }) => {
     can("read", "grades_detail_only");
     //Mahasiswa : view detail grades submission
     can("read", "grades_submission_detail");
+    //Mahasiswa : check isInput
+    can("read", "grades_check");
 
     //BIODATA STUDENT
     //Mahasiswa : input empty data to biodata in the first login

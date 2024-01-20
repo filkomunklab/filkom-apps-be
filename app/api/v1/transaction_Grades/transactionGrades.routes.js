@@ -41,6 +41,13 @@ router.post(
   transactionController.postTransactionWithGrades
 );
 
+//check isInput grades
+router.get(
+  "/transaction/grades/check/:id",
+  auth,
+  transactionController.getCheckIsInput
+);
+
 //STUDENT APPROVED SEMESTER LIST
 router.get(
   "/transaction/semesterList/:nim",
