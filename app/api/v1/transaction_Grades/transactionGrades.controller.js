@@ -143,6 +143,28 @@ const postTransactionWithGrades = async (req, res) => {
   }
 };
 
+//check isInput grades
+const getCheckIsInput = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("read", "grades_check")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+
+  try {
+    const { id } = req.params;
+    const transaction = await transactionService.viewCheckIsInput(id);
+    // console.log("transaction controller: ", transaction);
+    res.status(200).send({ status: "ok", data: transaction });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 //Waiting Grades Approval
 const getCurrentGradeSubmission = async (req, res) => {
   const policy = policyFor(req.user);
@@ -221,4 +243,6 @@ module.exports = {
   getCurrentGradeSubmission,
   getStudentHistoryGradeSubmission,
   getWaitingListBySemester,
+  // getCheckIsInput,
+  getCheckIsInput,
 };
