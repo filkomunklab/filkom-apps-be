@@ -9,6 +9,7 @@ const activityPolicy = ({ user }) => {
   if (hasRole("MAHASISWA")) {
     can("read", "activity");
     can("read", "historyForStudent");
+    can("read", "currentActivity");
   }
 
   if (hasRole("DOSEN")) {
