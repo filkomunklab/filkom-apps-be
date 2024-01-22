@@ -2,6 +2,7 @@
 //Biasanya juga handle validasi body
 
 const studentService = require("./student.service");
+const { subject } = require("@casl/ability");
 const { policyFor } = require("../policy");
 
 const createStudent = async (req, res) => {
@@ -221,6 +222,14 @@ const getBiodataStudent = async (req, res) => {
 };
 
 const changePasswordByStudent = async (req, res) => {
+  const policy = policyFor(req.user);
+  const Student = { id: req.params.id };
+  if (!policy.can("update", subject("StudentPassword", Student))) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const id = req.params.id;
     const payload = req.body;

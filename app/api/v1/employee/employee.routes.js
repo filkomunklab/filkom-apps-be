@@ -98,6 +98,7 @@ router.patch(
 
 router.patch(
   "/change-password-employee/:id",
+  auth,
   employeeController.changePasswordByEmployee
 );
 

@@ -408,6 +408,14 @@ const deleteDosenSkripsiById = async (req, res) => {
 };
 
 const changePasswordByEmployee = async (req, res) => {
+  const policy = policyFor(req.user);
+  const Employee = { id: req.params.id };
+  if (!policy.can("update", subject("EmployeePassword", Employee))) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const id = req.params.id;
     const payload = req.body;
