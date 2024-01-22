@@ -9,22 +9,14 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "app.js"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": [
-            "http://localhost:3000",
-            "https://development-filkom-apps-fe.vercel.app",
-            "http://localhost:5173"
-          ]
-        }
-      ]
+      "dest": "app.js",
+      "headers": {
+        "Access-Control-Allow-Origin": [
+          "http://localhost:3000",
+          "https://development-filkom-apps-fe.vercel.app",
+          "http://localhost:5173"
+        ]
+      }
     }
   ]
 }
