@@ -11,11 +11,7 @@
       "src": "/(.*)",
       "dest": "app.js",
       "headers": {
-        "Access-Control-Allow-Origin": [
-          "http://localhost:3000",
-          "https://development-filkom-apps-fe.vercel.app",
-          "http://localhost:5173"
-        ]
+        "Access-Control-Allow-Origin": "*"
       }
     }
   ]
