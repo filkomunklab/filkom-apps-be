@@ -72,6 +72,7 @@ router.get(
 // student change password byself
 router.patch(
   "/change-password-student/:id",
+  auth,
   studentController.changePasswordByStudent
 );
 

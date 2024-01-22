@@ -116,6 +116,13 @@ const updateAdminById = async (req, res) => {
 };
 
 const changePasswordByAdmin = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "Admin")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const id = req.params.id;
     const payload = req.body;

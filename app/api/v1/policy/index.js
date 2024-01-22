@@ -14,6 +14,9 @@ const policyFor = ({ user }) => {
 
   if (hasRole("ADMIN_LPMI")) {
     // Do something for ADMIN_LPMI
+
+    // change password
+    can("update", "EmployeePassword", { id: user.id });
   }
 
   if (hasRole("OPERATOR_LPMI")) {
@@ -31,6 +34,9 @@ const policyFor = ({ user }) => {
     can("broadcastEmail", "alumni_list");
     //EXPORT DATA TO EXCEL
     can("export", "alumni_list");
+
+    // change password
+    can("update", "EmployeePassword", { id: user.id });
   }
 
   if (hasRole("OPERATOR_FAKULTAS")) {
@@ -102,6 +108,15 @@ const policyFor = ({ user }) => {
     //Biodata Student
     //operator_fakultas: view profile student
     can("read", "student_biodata");
+
+    // change password
+    can("update", "EmployeePassword", { id: user.id });
+
+    // Create Curriculum
+    can("create", "Curriculum");
+
+    // Delete Curriculum
+    can("delete", "Curriculum");
   }
 
   if (hasRole("DEKAN")) {
@@ -213,6 +228,18 @@ const policyFor = ({ user }) => {
     can("read", "statistic_student");
     //Dekan : view statistic approved certificate
     can("read", "statistic_certificate");
+
+    // change password
+    can("update", "EmployeePassword", { id: user.id });
+
+    // get Academic Consultation by Employee
+    can("get", "AcademicConsultationByEmployee", { nik: user.nik });
+
+    // get Academic Consultation Detail
+    can("get", "AcademicConsultationDetail");
+
+    // update Complete Status Academic Consultation
+    can("update", "AcademicConsultationStatusComplete");
   }
 
   if (hasRole("KAPRODI")) {
@@ -332,6 +359,18 @@ const policyFor = ({ user }) => {
     //Certificate
     //Kaprodi : view all student Certificate
     can("read", "certificate_all_student");
+
+    // change password
+    can("update", "EmployeePassword", { id: user.id });
+
+    // get Academic Consultation by Employee
+    can("get", "AcademicConsultationByEmployee", { nik: user.nik });
+
+    // get Academic Consultation Detail
+    can("get", "AcademicConsultationDetail");
+
+    // update Complete Status Academic Consultation
+    can("update", "AcademicConsultationStatusComplete");
   }
 
   if (hasRole("DOSEN")) {
@@ -491,6 +530,18 @@ const policyFor = ({ user }) => {
     // can("read", "total_active_guidance");
     // //Dosen : view total InActive student guidance
     // can("read", "total_Inactive_guidance");
+
+    // change password
+    can("update", "EmployeePassword", { id: user.id });
+
+    // get Academic Consultation by Employee
+    can("get", "AcademicConsultationByEmployee", { nik: user.nik });
+
+    // get Academic Consultation Detail
+    can("get", "AcademicConsultationDetail");
+
+    // update Complete Status Academic Consultation
+    can("update", "AcademicConsultationStatusComplete");
   }
 
   if (hasRole("DOSEN_MK")) {
@@ -572,6 +623,18 @@ const policyFor = ({ user }) => {
     can("read", "link_source_code");
     // Dosen MK view skripsi list dosen mk
     can("read", "skripsi_list_mk");
+
+    // change password
+    can("update", "EmployeePassword", { id: user.id });
+
+    // get Academic Consultation by Employee
+    can("get", "AcademicConsultationByEmployee", { nik: user.nik });
+
+    // get Academic Consultation Detail
+    can("get", "AcademicConsultationDetail");
+
+    // update Complete Status Academic Consultation
+    can("update", "AcademicConsultationStatusComplete");
   }
 
   if (hasRole("MAHASISWA")) {
@@ -706,6 +769,21 @@ const policyFor = ({ user }) => {
     //Grades Access
     //Mahasiswa : check access for input grades
     can("read", "grades_check_access");
+
+    // change password
+    can("update", "StudentPassword", { id: user.id });
+
+    // Create Academic Consultation
+    can("create", "AcademicConsultation");
+
+    // Get Academic Consultation
+    can("get", "AcademicConsultationByStudent", { nim: user.nim });
+
+    // get Academic Consultation Detail
+    can("get", "AcademicConsultationDetail");
+
+    // update Complete Status Academic Consultation
+    can("update", "AcademicConsultationStatusComplete");
   }
 
   if (hasRole("ALUMNI")) {
@@ -714,6 +792,21 @@ const policyFor = ({ user }) => {
     can("read", "dashboard");
     //mengisi form TS
     can("create", "TS");
+
+    // change password
+    can("update", "StudentPassword", { id: user.id });
+
+    // Create Academic Consultation
+    can("create", "AcademicConsultation");
+
+    // Get Academic Consultation
+    can("get", "AcademicConsultationByStudent", { nim: user.nim });
+
+    // get Academic Consultation Detail
+    can("get", "AcademicConsultationDetail");
+
+    // update Complete Status Academic Consultation
+    can("update", "AcademicConsultationStatusComplete");
   }
 
   if (hasRole("REGISTER")) {
@@ -725,6 +818,15 @@ const policyFor = ({ user }) => {
     can("update", "status_mahasiswa");
     //Approved SPT Mahasiswa
     can("update", "status_SPT");
+
+    // change password
+    can("update", "EmployeePassword", { id: user.id });
+
+    // Create Curriculum
+    can("create", "Curriculum");
+
+    // Delete Curriculum
+    can("delete", "Curriculum");
   }
 
   // Default access for other users

@@ -1,6 +1,14 @@
 const curriculumService = require("./curriculum.service");
+const { policyFor } = require("../policy");
 
 const createCurriculumWithItsSubject = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("create", "Curriculum")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const payload = req.body;
 
@@ -58,6 +66,13 @@ const getCurriculumById = async (req, res) => {
 };
 
 const deleteCurriculum = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("delete", "Curriculum")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
   try {
     const curriculumId = req.params.curriculum_id;
     console.log("ini curriculum id: ", curriculumId);
