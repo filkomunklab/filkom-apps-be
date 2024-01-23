@@ -9,25 +9,7 @@ const prisma = require("../../../database");
 const { createHttpStatusError } = require("../../../utils");
 
 const getAllEmployees = async () => {
-  try {
-    let employees = await employeeRepository.findEmployees();
-
-    // Gunakan Promise.all untuk menunggu semua promise selesai
-    employees = await Promise.all(
-      employees.map(async (employee) => {
-        try {
-          // Dapatkan role untuk setiap employee
-          let role = await userRoleRepository.FindUserRoleByUserId(employee.id);
-          return { ...employee, role };
-        } catch (error) {
-          throw error;
-        }
-      })
-    );
-    return employees;
-  } catch (error) {
-    throw error;
-  }
+  return await employeeRepository.findEmployees();
 };
 
 const getEmployeeById = async (id) => {

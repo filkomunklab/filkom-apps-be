@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 // ------- global ------------------------
@@ -25,10 +25,18 @@ model Admin {
   updatedAt DateTime?
 }
 
+model User {
+  id       String     @id @default(uuid())
+  Roles    Roles[]
+  Employee Employee[]
+  Student  Student[]
+}
+
 model Employee {
-  id                        String                @id @default(uuid())
   nik                       String                @unique
   nidn                      String?               @unique
+  User                      User                  @relation(fields: [userId], references: [id])
+  userId                    String
   password                  String
   firstName                 String
   lastName                  String
@@ -76,9 +84,10 @@ model Employee {
 }
 
 model Student {
-  id                        String                @id @default(uuid())
   reg_num                   String?               @unique
-  nim                       String                @unique
+  nim                       String                @id
+  User                      User                  @relation(fields: [userId], references: [id])
+  userId                    String
   password                  String
   firstName                 String
   lastName                  String?
@@ -148,8 +157,9 @@ model MajorGlobal {
   Student   Student[]
 }
 
-model UserRole {
+model Roles {
   id        String    @id @default(uuid())
+  User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   role      Role      @default(MAHASISWA)
   createdBy String?
@@ -289,7 +299,7 @@ model Tracer_Study {
 //-------------------Skripsi App ------------------------
 model Proposal_Student {
   id           String    @id @default(uuid())
-  student      Student   @relation("ProposalStudent", fields: [student_id], references: [id])
+  student      Student   @relation("ProposalStudent", fields: [student_id], references: [nim])
   student_id   String
   classroom    Classroom @relation("ProposalClassroom", fields: [classroom_id], references: [id])
   classroom_id String
@@ -297,7 +307,7 @@ model Proposal_Student {
 
 model Skripsi_Student {
   id           String     @id @default(uuid())
-  student      Student    @relation("SkripsiStudent", fields: [student_id], references: [id])
+  student      Student    @relation("SkripsiStudent", fields: [student_id], references: [nim])
   student_id   String
   classroom    Classroom? @relation("SkripsiClassroom", fields: [classroom_id], references: [id])
   classroom_id String?
@@ -307,7 +317,7 @@ model Group_Student {
   id         String  @id @default(uuid())
   group      Group   @relation("Group", fields: [group_id], references: [id])
   group_id   String
-  student    Student @relation("StudentMember", fields: [student_id], references: [id])
+  student    Student @relation("StudentMember", fields: [student_id], references: [nim])
   student_id String
 }
 
@@ -341,7 +351,7 @@ model Academic_Calendar {
 
 model Classroom {
   id               String             @id @default(uuid())
-  dosen_mk         Employee           @relation("DosenMK", fields: [dosen_mk_id], references: [id])
+  dosen_mk         Employee           @relation("DosenMK", fields: [dosen_mk_id], references: [nik])
   dosen_mk_id      String
   academic         Academic_Calendar  @relation("Academic", fields: [academic_id], references: [id])
   academic_id      String
@@ -360,11 +370,11 @@ model Submission {
   file_size               String
   file_path               String
   is_consultation         Boolean
-  proposed_advisor        Employee           @relation("ProposedAdvisor", fields: [proposed_advisor_id], references: [id])
+  proposed_advisor        Employee           @relation("ProposedAdvisor", fields: [proposed_advisor_id], references: [nik])
   proposed_advisor_id     String
-  proposed_co_advisor1    Employee?          @relation("ProposedCoAdvisor1", fields: [proposed_co_advisor1_id], references: [id])
+  proposed_co_advisor1    Employee?          @relation("ProposedCoAdvisor1", fields: [proposed_co_advisor1_id], references: [nik])
   proposed_co_advisor1_id String?
-  proposed_co_advisor2    Employee?          @relation("ProposedCoAdvisor2", fields: [proposed_co_advisor2_id], references: [id])
+  proposed_co_advisor2    Employee?          @relation("ProposedCoAdvisor2", fields: [proposed_co_advisor2_id], references: [nik])
   proposed_co_advisor2_id String?
   is_approve              Submission_Approve @default(Waiting)
   classroom               Classroom          @relation("SubmissionClassroom", fields: [classroom_id], references: [id])
@@ -388,11 +398,11 @@ model Proposal {
   file_path_proposal                       String?
   file_path_payment                        String?
   file_path_plagiarismcheck                String?
-  advisor                                  Employee              @relation("ProposalAdvisor", fields: [advisor_id], references: [id])
+  advisor                                  Employee              @relation("ProposalAdvisor", fields: [advisor_id], references: [nik])
   advisor_id                               String
-  co_advisor1                              Employee?             @relation("ProposalCoAdvisor1", fields: [co_advisor1_id], references: [id])
+  co_advisor1                              Employee?             @relation("ProposalCoAdvisor1", fields: [co_advisor1_id], references: [nik])
   co_advisor1_id                           String?
-  co_advisor2                              Employee?             @relation("ProposalCoAdvisor2", fields: [co_advisor2_id], references: [id])
+  co_advisor2                              Employee?             @relation("ProposalCoAdvisor2", fields: [co_advisor2_id], references: [nik])
   co_advisor2_id                           String?
   classroom                                Classroom             @relation("ProposalClassroom", fields: [classroom_id], references: [id])
   classroom_id                             String
@@ -402,9 +412,9 @@ model Proposal {
   advisor_proposal_approved_date           DateTime?
   co_advisor1_proposal_approved_date       DateTime?
   co_advisor2_proposal_approved_date       DateTime?
-  panelist_chairman                        Employee?             @relation("ProposalPanelistChairman", fields: [panelist_chairman_id], references: [id])
+  panelist_chairman                        Employee?             @relation("ProposalPanelistChairman", fields: [panelist_chairman_id], references: [nik])
   panelist_chairman_id                     String?
-  panelist_member                          Employee?             @relation("ProposalPanelistMember", fields: [panelist_member_id], references: [id])
+  panelist_member                          Employee?             @relation("ProposalPanelistMember", fields: [panelist_member_id], references: [nik])
   panelist_member_id                       String?
   start_defence                            String?
   end_defence                              String?
@@ -459,11 +469,11 @@ model Skripsi {
   file_path_skripsi                        String?
   file_path_payment                        String?
   file_path_plagiarismcheck                String?
-  advisor                                  Employee             @relation("SkripsiAdvisor", fields: [advisor_id], references: [id])
+  advisor                                  Employee             @relation("SkripsiAdvisor", fields: [advisor_id], references: [nik])
   advisor_id                               String
-  co_advisor1                              Employee?            @relation("SkripsiCoAdvisor1", fields: [co_advisor1_id], references: [id])
+  co_advisor1                              Employee?            @relation("SkripsiCoAdvisor1", fields: [co_advisor1_id], references: [nik])
   co_advisor1_id                           String?
-  co_advisor2                              Employee?            @relation("SkripsiCoAdvisor2", fields: [co_advisor2_id], references: [id])
+  co_advisor2                              Employee?            @relation("SkripsiCoAdvisor2", fields: [co_advisor2_id], references: [nik])
   co_advisor2_id                           String?
   classroom                                Classroom?           @relation("SkripsiClassroom", fields: [classroom_id], references: [id])
   classroom_id                             String?
@@ -473,9 +483,9 @@ model Skripsi {
   advisor_skripsi_approved_date            DateTime?
   co_advisor1_skripsi_approved_date        DateTime?
   co_advisor2_skripsi_approved_date        DateTime?
-  panelist_chairman                        Employee?            @relation("SkripsiPanelistChairman", fields: [panelist_chairman_id], references: [id])
+  panelist_chairman                        Employee?            @relation("SkripsiPanelistChairman", fields: [panelist_chairman_id], references: [nik])
   panelist_chairman_id                     String?
-  panelist_member                          Employee?            @relation("SkripsiPanelistMember", fields: [panelist_member_id], references: [id])
+  panelist_member                          Employee?            @relation("SkripsiPanelistMember", fields: [panelist_member_id], references: [nik])
   panelist_member_id                       String?
   start_defence                            String?
   end_defence                              String?
@@ -534,9 +544,9 @@ model Proposal_Assessment {
   id          String   @id @default(uuid())
   proposal    Proposal @relation("Assessment", fields: [proposal_id], references: [id])
   proposal_id String
-  student     Student  @relation("Student", fields: [student_id], references: [id], onDelete: Cascade)
+  student     Student  @relation("Student", fields: [student_id], references: [nim], onDelete: Cascade)
   student_id  String
-  dosen       Employee @relation("Dosen", fields: [dosen_id], references: [id])
+  dosen       Employee @relation("Dosen", fields: [dosen_id], references: [nik])
   dosen_id    String
   value       String?
 }
@@ -545,9 +555,9 @@ model Skripsi_Assessment {
   id         String   @id @default(uuid())
   skripsi    Skripsi  @relation("Assessment", fields: [skripsi_id], references: [id])
   skripsi_id String
-  student    Student  @relation("Student", fields: [student_id], references: [id], onDelete: Cascade)
+  student    Student  @relation("Student", fields: [student_id], references: [nim], onDelete: Cascade)
   student_id String
-  dosen      Employee @relation("Dosen", fields: [dosen_id], references: [id])
+  dosen      Employee @relation("Dosen", fields: [dosen_id], references: [nik])
   dosen_id   String
   value      String?
 }
@@ -556,7 +566,7 @@ model Proposal_Changes {
   id          String   @id @default(uuid())
   proposal    Proposal @relation("Changes", fields: [proposal_id], references: [id])
   proposal_id String
-  dosen       Employee @relation("Dosen", fields: [dosen_id], references: [id])
+  dosen       Employee @relation("Dosen", fields: [dosen_id], references: [nik])
   dosen_id    String
   judul       String?
   bab1        String?
@@ -569,7 +579,7 @@ model Skripsi_Changes {
   id         String   @id @default(uuid())
   skripsi    Skripsi  @relation("Changes", fields: [skripsi_id], references: [id])
   skripsi_id String
-  dosen      Employee @relation("Dosen", fields: [dosen_id], references: [id])
+  dosen      Employee @relation("Dosen", fields: [dosen_id], references: [nik])
   dosen_id   String
   changes    String?
   abstrak    String?
@@ -585,7 +595,7 @@ model Proposal_Conclusion {
   id                    String   @id @default(uuid())
   proposal              Proposal @relation("Conclusion_Value", fields: [proposal_id], references: [id])
   proposal_id           String
-  student               Student  @relation("Student", fields: [student_id], references: [id], onDelete: Cascade)
+  student               Student  @relation("Student", fields: [student_id], references: [nim], onDelete: Cascade)
   student_id            String
   assessment_conclution String?
 }
@@ -594,7 +604,7 @@ model Skripsi_Conclusion {
   id                    String  @id @default(uuid())
   skripsi               Skripsi @relation("Conclusion_Value", fields: [skripsi_id], references: [id])
   skripsi_id            String
-  student               Student @relation("Student", fields: [student_id], references: [id], onDelete: Cascade)
+  student               Student @relation("Student", fields: [student_id], references: [nim], onDelete: Cascade)
   student_id            String
   assessment_conclution String?
 }
@@ -605,7 +615,7 @@ model Thesis_Consultation {
   group_id            String
   description         String
   date                DateTime
-  dosen               Employee            @relation("ThesisConsultation", fields: [dosen_id], references: [id])
+  dosen               Employee            @relation("ThesisConsultation", fields: [dosen_id], references: [nik])
   dosen_id            String
   consultation_status Consultation_Status
 }

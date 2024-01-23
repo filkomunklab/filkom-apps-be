@@ -5,12 +5,16 @@ const prisma = require("../../../database");
 // @description     Get all employee
 // @used            getAllDosenSkripsi
 const findEmployees = async () => {
-  try {
-    const employee = await prisma.employee.findMany();
-    return employee;
-  } catch (error) {
-    throw error;
-  }
+  return await prisma.employee.findMany({
+    include: {
+      User: {
+        select: {
+          id: true,
+          Roles: true,
+        },
+      },
+    },
+  });
 };
 
 // @description     Get employee by id
