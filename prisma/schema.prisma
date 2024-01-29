@@ -137,6 +137,7 @@ model Student {
   GuidanceClassMember   GuidanceClassMember?
   Certificate           Certificate[]
   PreRegistrationData   PreRegistrationData[]
+  StudentGrade          StudentGrade[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
@@ -723,24 +724,40 @@ model Subject_Cpl {
 }
 
 model Cpmk {
-  id            String          @id
-  subject       Subject         @relation(fields: [subjectId], references: [id])
-  subjectId     String
-  rps           Rps             @relation(fields: [rpsId], references: [id])
-  rpsId         String
-  description   String
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  CplListOnCpmk CplListOnCpmk[]
-  CpmkGrading   CpmkGrading?
+  id                 String          @id
+  subject            Subject         @relation(fields: [subjectId], references: [id])
+  subjectId          String
+  rps                Rps             @relation(fields: [rpsId], references: [id])
+  rpsId              String
+  description        String
+  totalGradingWeight String
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  CplListOnCpmk      CplListOnCpmk[]
+  CpmkGrading        CpmkGrading[]
 }
 
 model CpmkGrading {
-  Cpmk      Cpmk     @relation(fields: [cpmkId], references: [id])
-  cpmkId    String   @unique
-  grade     Json
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String         @id @default(uuid())
+  Cpmk          Cpmk           @relation(fields: [cpmkId], references: [id])
+  cpmkId        String
+  gradingName   String
+  gradingWeight String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  StudentGrade  StudentGrade[]
+}
+
+model StudentGrade {
+  id             String      @id @default(uuid())
+  rawGrade       Int
+  calculateGrade Int
+  Student        Student     @relation(fields: [studentNim], references: [nim])
+  studentNim     String
+  CpmkGrading    CpmkGrading @relation(fields: [cpmkGradingId], references: [id])
+  cpmkGradingId  String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 }
 
 model CplListOnCpmk {
@@ -823,6 +840,8 @@ model SubjectReqForRps {
 
   @@unique([rpsId, subjectCode])
 }
+
+// =================== OBE END ===================
 
 model transaction_Grades {
   id           String    @id @default(uuid())
