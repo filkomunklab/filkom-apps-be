@@ -239,7 +239,7 @@ const policyFor = ({ user }) => {
     can("update", "EmployeePassword", { id: user.id });
 
     // get Academic Consultation by Employee
-    can("get", "AcademicConsultationByEmployee", { nik: user.nik });
+    can("get", "AcademicConsultationByEmployee");
 
     // get Academic Consultation Detail
     can("get", "AcademicConsultationDetail");
@@ -370,7 +370,7 @@ const policyFor = ({ user }) => {
     can("update", "EmployeePassword", { id: user.id });
 
     // get Academic Consultation by Employee
-    can("get", "AcademicConsultationByEmployee", { nik: user.nik });
+    can("get", "AcademicConsultationByEmployee");
 
     // get Academic Consultation Detail
     can("get", "AcademicConsultationDetail");
@@ -541,7 +541,7 @@ const policyFor = ({ user }) => {
     can("update", "EmployeePassword", { id: user.id });
 
     // get Academic Consultation by Employee
-    can("get", "AcademicConsultationByEmployee", { nik: user.nik });
+    can("get", "AcademicConsultationByEmployee");
 
     // get Academic Consultation Detail
     can("get", "AcademicConsultationDetail");
@@ -634,7 +634,7 @@ const policyFor = ({ user }) => {
     can("update", "EmployeePassword", { id: user.id });
 
     // get Academic Consultation by Employee
-    can("get", "AcademicConsultationByEmployee", { nik: user.nik });
+    can("get", "AcademicConsultationByEmployee");
 
     // get Academic Consultation Detail
     can("get", "AcademicConsultationDetail");

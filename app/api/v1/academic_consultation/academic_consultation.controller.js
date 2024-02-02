@@ -45,7 +45,7 @@ const getConsultationByNim = async (req, res) => {
 const getConsultationByNik = async (req, res) => {
   const policy = policyFor(req.user);
   const Employee = { nik: req.params.nik };
-  if (!policy.can("get", subject("AcademicConsultationByEmployee", Employee))) {
+  if (!policy.can("get", "AcademicConsultationByEmployee")) {
     return res.status(401).send({
       status: "FAILED",
       data: { error: "You don't have permission to perform this action" },
