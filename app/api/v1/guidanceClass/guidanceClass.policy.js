@@ -28,6 +28,13 @@ const guidanceClassPolicy = ({ user }) => {
     can("read", "allClass");
   }
 
+  if (hasRole("SEKRETARIS")) {
+    can("read", "allClass");
+    can("read", "guidanceClassDetail");
+    can("read", "allUnassignedStudent");
+    can("read", "allUnassignedTeacher");
+  }
+
   return build();
 };
 
