@@ -173,7 +173,7 @@ const insertDataforGrades = async (payload, nim) => {
 
 //Check if student had input grades
 const findCheckIsInput = async (id) => {
-  const transaction = await prisma.transaction_Grades.findUnique({
+  const transaction = await prisma.Transaction_Grades.findUnique({
     where: {
       id,
     },

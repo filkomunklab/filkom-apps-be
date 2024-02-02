@@ -105,7 +105,7 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_history_list_sekretaris");
 
     //=================================BIMBINGAN AKADEMIK=====================
-    //Biodata Student
+
     //operator_fakultas: view profile student
     can("read", "student_biodata");
 
@@ -117,6 +117,12 @@ const policyFor = ({ user }) => {
 
     // Delete Curriculum
     can("delete", "Curriculum");
+
+    //View Student grades
+    can("read", "approved_semester_grades");
+
+    //View all certificate of one student
+    can("read", "certificate_all_student");
   }
 
   if (hasRole("DEKAN")) {

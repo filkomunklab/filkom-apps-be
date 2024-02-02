@@ -14,5 +14,11 @@
         "Access-Control-Allow-Origin": "*"
       }
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "pre-production": false,
+      "master": false
+    }
+  }
 }
