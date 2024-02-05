@@ -11,6 +11,7 @@ const preRegistPolicy = ({ user }) => {
     can("read", "preRegistAccess");
     can("create", "submitPreRegist");
     can("read", "preRegistHistoryForStudent");
+    can("read", "preRegistDetails");
   }
 
   if (hasRole("KAPRODI")) {
