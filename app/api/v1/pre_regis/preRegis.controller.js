@@ -222,6 +222,22 @@ const getCurrentPreRegist = async (req, res) => {
   }
 };
 
+const patchManualCloseAccess = async (req, res) => {
+  const { id } = req.params;
+  const policy = preRegistPolicy(req.user);
+  try {
+    if (!policy.can("update", "closeAccessPreRegist")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
+    const data = await preRegisService.patchManualClosedPreRegist(id);
+    res.status(201).send({ status: "OK", data });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 const getCurrentForStudent = async (req, res) => {
   const payload = req.params;
   try {
@@ -273,4 +289,5 @@ module.exports = {
   submitApproval,
   getAllSubject,
   preRegisMenu,
+  patchManualCloseAccess,
 };

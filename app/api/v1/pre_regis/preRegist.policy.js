@@ -17,6 +17,7 @@ const preRegistPolicy = ({ user }) => {
   if (hasRole("KAPRODI")) {
     can("read", "allPreRegist");
     can("create", "preRegist");
+    can("update", "closeAccessPreRegist");
   }
 
   if (hasRole("DEKAN")) {

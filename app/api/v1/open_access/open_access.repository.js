@@ -58,7 +58,7 @@ const findlistGradesAccessByMajor = async (major) => {
   }
 };
 
-// close access for grades input
+// close manual access for grades input
 const setCloseGradesAccess = async (id) => {
   try {
     const openAccess = await prisma.grades_access.update({

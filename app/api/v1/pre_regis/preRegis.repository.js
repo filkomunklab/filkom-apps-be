@@ -1,4 +1,5 @@
 const prisma = require("../../../database");
+const moment = require("moment-timezone");
 
 const getAllPreRegis = async (payload) => {
   const { major } = payload;
@@ -159,9 +160,19 @@ const automateClosePreRegist = () => {
     where: {
       isOpen: true,
       dueDate: {
-        lte: new Date(),
+        lte: moment(),
       },
     },
+    data: {
+      isOpen: false,
+    },
+  });
+  console.log("testing schaduler from repo");
+};
+
+const manualClosePreRegist = async (id) => {
+  return await prisma.preRegistration.update({
+    where: { id },
     data: {
       isOpen: false,
     },
@@ -311,6 +322,7 @@ module.exports = {
   getPreRegistListForTeacher,
   getAllSubmitedPreRegist,
   automateClosePreRegist,
+  manualClosePreRegist,
   findSubjectForPreRegis,
   getCurrentForStudent,
   checkPreRegistAccess,
