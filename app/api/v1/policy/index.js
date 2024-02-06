@@ -225,6 +225,9 @@ const policyFor = ({ user }) => {
     //Dekan: view profile student
     can("read", "student_biodata");
 
+    //Dekan : set student status
+    can("update", "student_status");
+
     //Dashboard
     //Dekan : view total All faculty student
     can("read", "total_faculty_student");
@@ -381,6 +384,9 @@ const policyFor = ({ user }) => {
 
     // update Complete Status Academic Consultation
     can("update", "AcademicConsultationStatusComplete");
+
+    //Kaprodi : set student status
+    can("update", "student_status");
   }
 
   if (hasRole("DOSEN")) {
