@@ -218,6 +218,8 @@ const policyFor = ({ user }) => {
     //Certificate
     //Dekan : view all student Certificate
     can("read", "certificate_all_student");
+    //Dekan : view history certificate of role DOSEN
+    can("read", "certificate_history_approval");
 
     //Biodata Student
     //Dekan: view profile student
@@ -365,6 +367,8 @@ const policyFor = ({ user }) => {
     //Certificate
     //Kaprodi : view all student Certificate
     can("read", "certificate_all_student");
+    //Kaprodi : view history certificate of role DOSEN
+    can("read", "certificate_history_approval");
 
     // change password
     can("update", "EmployeePassword", { id: user.id });
