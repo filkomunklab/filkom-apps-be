@@ -48,7 +48,7 @@ const getlistGradeAccessByMajor = async (req, res) => {
 //close access for grades input
 const closeGradesAccess = async (req, res) => {
   const policy = policyFor(req.user);
-  if (!policy.can("read", "grades_close_access")) {
+  if (!policy.can("update", "grades_close_access")) {
     return res.status(401).send({
       status: "FAILED",
       data: { error: "You don't have permission to perform this action" },
