@@ -22,6 +22,11 @@ const activityPolicy = ({ user }) => {
 
   if (hasRole("KAPRODI")) {
     can("read", "studentList");
+    can("read", "historyForAdvisor");
+  }
+
+  if (hasRole("DEKAN")) {
+    can("read", "historyForAdvisor");
   }
 
   return build();
