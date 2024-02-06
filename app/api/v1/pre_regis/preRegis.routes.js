@@ -59,4 +59,10 @@ router.get(
 
 router.get("/pre-regist/list-subject/:id", preRegisController.getAllSubject);
 
+router.patch(
+  "/pre-regist/close-access/:id",
+  auth,
+  preRegisController.patchManualCloseAccess
+);
+
 module.exports = router;
