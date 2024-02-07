@@ -230,9 +230,7 @@ const getCurrentConsultation = async (payload) => {
           student_nim: id,
         },
       ],
-      status: {
-        not: "Complete",
-      },
+      status: "OnProcess",
     },
     select: {
       id: true,
