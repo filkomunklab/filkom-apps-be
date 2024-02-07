@@ -362,6 +362,8 @@ const policyFor = ({ user }) => {
     can("read", "total_active_major");
     //Kaprodi : view total Inactive major student
     can("read", "total_inactive_major");
+    //Kaprodi : view statistic student
+    can("read", "statistic_student");
 
     //Biodata Student
     //Kaprodi: view profile student
