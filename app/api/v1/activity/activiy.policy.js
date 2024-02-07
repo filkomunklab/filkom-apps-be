@@ -7,14 +7,14 @@ const activityPolicy = ({ user }) => {
   const hasRole = (role) => user.role.includes(role);
 
   if (hasRole("MAHASISWA")) {
-    can("read", "activity");
+    can("read", "Activity");
     can("read", "historyForStudent");
     can("read", "currentActivity");
   }
 
   if (hasRole("DOSEN")) {
     can("create", "activity");
-    can("read", "activity");
+    can("read", "Activity");
     can("read", "historyForAdvisor");
     can("read", "currentActivity");
     can("update", "attendance");
@@ -23,10 +23,12 @@ const activityPolicy = ({ user }) => {
   if (hasRole("KAPRODI")) {
     can("read", "studentList");
     can("read", "historyForAdvisor");
+    can("read", "Activity");
   }
 
   if (hasRole("DEKAN")) {
     can("read", "historyForAdvisor");
+    can("read", "Activity");
   }
 
   return build();
