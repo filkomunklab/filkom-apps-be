@@ -1,0 +1,12 @@
+- name: Google Artifact Registry Build & Push
+  uses: piotr-krusinski/action-google-artifact-registry@v1.0
+  with:
+    google_project_id: filkom-unklab 
+    google_artifact_registry_region: asia-southeast1
+    google_artifact_registry_hostname: asia.gcr.io
+    google_artifact_registry_name: filkom-unklab
+    service_account_key: ${{ secrets.GCP_SA_KEY }}
+    dockerfile: Dockerfile
+    image_name: filkom-app-be
+    tag_list: latest 
+    build_args: docker build -t asia.gcr.io/filkom-unklab/filkom-app-be:latest .
