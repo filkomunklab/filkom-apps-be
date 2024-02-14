@@ -16,15 +16,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Login to DockerHub
-        run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        uses: actions/checkout@v3
 
       - name: Build Docker image
         run: |
-          docker compose build
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker compose build .
           docker compose push
 
   deploy:
@@ -33,12 +30,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Print working directory and list files
-        run: |
-          pwd
-          ls -la
+        uses: actions/checkout@v3
 
       - name: SSH into server
         uses: appleboy/ssh-action@master
