@@ -8,16 +8,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+      POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+      POSTGRES_DB: ${{secrets.POSTGRES_DB}}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Login to DockerHub
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build Docker image
         run: |
-          docker build -t darellyuhu/filkom-app-be .
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push darellyuhu/filkom-app-be
+          docker-compose build
+          docker-compose push
 
   deploy:
     runs-on: ubuntu-latest
@@ -31,7 +38,6 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            docker stop filkomapp || true
-            docker rm filkomapp || true
-            docker pull darellyuhu/filkom-app-be
-            docker run -d --name filkomapp -p 3000:3000 darellyuhu/filkom-app-be
+            docker-compose down || true
+            docker-compose pull
+            docker-compose up -d
