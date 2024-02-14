@@ -24,8 +24,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker-compose build
-          docker-compose push
+          docker compose build
+          docker compose push
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,6 +47,6 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            docker-compose down
-            docker-compose pull
-            docker-compose up -d
+            docer compose down || true
+            docer compose pull
+            docer compose up -d
