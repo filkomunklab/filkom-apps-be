@@ -47,6 +47,6 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            docker-compose down || true
+            docker-compose down
             docker-compose pull
             docker-compose up -d
