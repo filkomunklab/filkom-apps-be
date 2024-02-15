@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install Google Cloud cli
-        uses: google-github-actions/setup-gcloud@v0
+        uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: filkom-unklab
           service_account_key: ${{secrets.SERVICE_ACCOUNT_KEY}}
@@ -20,7 +20,7 @@ jobs:
       - name: Build Docker Image
         run: |
           gcloud auth configure-docker \ asia-southeast1-docker.pkg.dev
-          docker build -t asia-southeast1-docker.pkg.dev/filkom-unklab/filkom-app-api:latest .
+          docker build -t asia-southeast1-docker.pkg.dev/filkom-unklab/filkom-app-api/main:latest .
 
       - name: Push Docker Image
-        run: docker push asia-southeast1-docker.pkg.dev/filkom-unklab/filkom-app-api:latest
+        run: docker push asia-southeast1-docker.pkg.dev/filkom-unklab/filkom-app-api/main:latest
