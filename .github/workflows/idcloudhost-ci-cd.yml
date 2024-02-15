@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           source: "."
-          target: "/filkomapp-be"
+          target: "~/filkomapp-be"
 
       - name: SSH into server
         uses: appleboy/ssh-action@master
@@ -48,9 +48,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd /filkomapp-be
-            pwd
-            ls -la
+            cd ~/filkomapp-be
             docker compose down || true
             docker compose pull
             docker compose up -d
