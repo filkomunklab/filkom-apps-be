@@ -7,9 +7,22 @@ const findAdmins = async () => {
 };
 
 const findAdminById = async (id) => {
+  try {
+    const admin = await prisma.admin.findUnique({
+      where: {
+        id,
+      },
+    });
+    return admin;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const findAdminByToken = async (token) => {
   const admin = await prisma.admin.findUnique({
     where: {
-      id,
+      token,
     },
   });
   return admin;
@@ -36,7 +49,7 @@ const deleteAdmin = async (id) => {
 };
 
 const updateAdmin = async (id, payload) => {
-  const { username, email, password } = payload;
+  const { username, email, password, token } = payload;
   const admin = await prisma.admin.update({
     where: {
       id,
@@ -45,15 +58,35 @@ const updateAdmin = async (id, payload) => {
       username,
       email,
       password,
+      token,
     },
   });
   return admin;
 };
 
+const updatePasswordAdmin = async (id, password) => {
+  try {
+    const admin = await prisma.admin.update({
+      where: {
+        id,
+      },
+      data: {
+        password: password,
+      },
+    });
+
+    return admin;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   findAdmins,
   findAdminById,
+  findAdminByToken,
   insertAdmin,
   deleteAdmin,
   updateAdmin,
+  updatePasswordAdmin,
 };

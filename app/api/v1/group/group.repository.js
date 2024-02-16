@@ -1,0 +1,383 @@
+//Layer untuk komunikasi dengan database
+const prisma = require("../../../database");
+
+// @description     Get group by submission_id
+// @used            Submission
+const findGroupBySubmissionId = async (submission_id) => {
+  const group = await prisma.group.findUnique({
+    where: {
+      submission_id,
+    },
+  });
+  return group;
+};
+
+// @description     Get group by proposal_id
+// @used            Proposal
+const findGroupByProposalId = async (proposal_id) => {
+  const group = await prisma.group.findUnique({
+    where: {
+      proposal_id,
+    },
+  });
+  return group;
+};
+
+// @description     Get group by skripsi_id
+// @used            Skripsi
+const findGroupBySkripsiId = async (skripsi_id) => {
+  const group = await prisma.group.findUnique({
+    where: {
+      skripsi_id,
+    },
+  });
+  return group;
+};
+
+// @description     Create group from submission by title
+// @used            Submission
+const insertGroup = async (payload) => {
+  const { title } = payload;
+  const group = await prisma.group.create({
+    data: {
+      title,
+      progress: "Submission",
+    },
+  });
+
+  return group;
+};
+
+// @description     Update group from submission by id & submission_id
+// @used            Submission
+const updateGroupByIdAndSubmissionId = async (id, submission_id) => {
+  const group = await prisma.group.update({
+    where: {
+      id,
+    },
+    data: {
+      submission_id,
+    },
+  });
+
+  return group;
+};
+
+// @description     Update group title by submission_id
+// @used            Submission
+const updateGroupTitleBySubmissionId = async (id, payload) => {
+  const { title } = payload;
+  const group = await prisma.group.update({
+    where: {
+      submission_id: id,
+    },
+    data: {
+      title,
+      updated_at: new Date(),
+    },
+  });
+  return group;
+};
+
+// @description     Update proposal_id by submission_id
+// @used            Submission
+const updateGroupProposalIdBySubmissionId = async (
+  submission_id,
+  proposal_id
+) => {
+  const group = await prisma.group.update({
+    where: {
+      submission_id,
+    },
+    data: {
+      proposal_id,
+    },
+  });
+  return group;
+};
+
+// @description     Update proposal_id by submission_id
+// @used            Submission
+const updateGroupSkripsiIdBySubmissionId = async (
+  submission_id,
+  skripsi_id
+) => {
+  const group = await prisma.group.update({
+    where: {
+      submission_id,
+    },
+    data: {
+      skripsi_id,
+    },
+  });
+
+  return group;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update group progress by proposal_id
+// @used            Proposal,
+const updateGroupProgressByProposalId = async (proposal_id) => {
+  const group = await prisma.group.update({
+    where: {
+      proposal_id,
+    },
+    data: {
+      progress: "Skripsi",
+    },
+  });
+
+  return group;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update group progress by skripsi_id
+// @used            Skripsi,
+const updateGroupProgressBySkripsiId = async (skripsi_id) => {
+  const group = await prisma.group.update({
+    where: {
+      skripsi_id,
+    },
+    data: {
+      progress: "Finished",
+    },
+  });
+
+  return group;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update group progress by submission_id
+// @used            Submission
+const updateGroupProgressBySubmissionId = async (submission_id) => {
+  const group = await prisma.group.update({
+    where: {
+      submission_id,
+    },
+    data: {
+      progress: "Proposal",
+    },
+  });
+
+  return group;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get group by proposalIds
+// @used            Proposal
+const findManyGroupsByProposalIds = async (proposalIds) => {
+  const groups = await prisma.group.findMany({
+    where: {
+      proposal_id: {
+        in: proposalIds,
+      },
+    },
+    select: {
+      id: true,
+      proposal_id: true,
+      title: true,
+      progress: true,
+    },
+  });
+  return groups;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get group by skripsiIds
+// @used            Skripsi
+const findManyGroupsBySkripsiIds = async (skripsiIds) => {
+  const groups = await prisma.group.findMany({
+    where: {
+      skripsi_id: {
+        in: skripsiIds,
+      },
+    },
+    select: {
+      id: true,
+      skripsi_id: true,
+      title: true,
+      progress: true,
+    },
+  });
+  return groups;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get group by id
+// @used            Consultation, getSubmissionList
+const findGroupById = async (id) => {
+  const groups = await prisma.group.findUnique({
+    where: {
+      id,
+    },
+  });
+  return groups;
+};
+
+// Main - get kelompok mahasiswa
+const findSubmissionListById = async (student_id) => {
+  // Mengambil semua entri dalam tabel Group_Student yang memiliki student_id yang sesuai
+  const group_students = await prisma.group_Student.findMany({
+    where: {
+      student_id,
+    },
+  });
+
+  // Untuk setiap entri dalam group_students, Anda dapat mengambil ID grupnya
+  const groupIds = group_students.map((groupStudent) => groupStudent.group_id);
+
+  const groups = await findGroup(groupIds);
+
+  return groups;
+};
+
+// Mencari grup dengan data submission
+const findGroup = async (groupIds) => {
+  const groups = await findGroupsByIds(groupIds);
+  const groupsWithSubmissionData = await combineSubmissionData(groups);
+  return groupsWithSubmissionData;
+};
+
+// Mencari grup berdasarkan ID grup
+const findGroupsByIds = async (groupIds) => {
+  const groups = await prisma.group.findMany({
+    where: {
+      id: {
+        in: groupIds,
+      },
+    },
+    select: {
+      id: true,
+      progress: true,
+      title: true,
+      submission_id: true,
+    },
+  });
+  return groups;
+};
+
+// Menggabungkan data submission ke dalam grup
+const combineSubmissionData = async (groups) => {
+  for (const group of groups) {
+    const submissionId = group.submission_id;
+    if (submissionId) {
+      group.submission = await findSubmissionById(submissionId);
+    }
+  }
+  return groups;
+};
+
+// Mencari data submission berdasarkan submission_id
+const findSubmissionById = async (submissionId) => {
+  const submission = await prisma.submission.findUnique({
+    where: {
+      id: submissionId,
+    },
+    select: {
+      is_approve: true,
+    },
+  });
+  return submission;
+};
+
+// Main - get submission details - beranda
+const findSubmissionDetailsById = async (id) => {
+  const students = await prisma.group_Student.findMany({
+    where: {
+      group_id: id,
+    },
+    select: {
+      student_id: true,
+    },
+  });
+
+  // const studentIds = students.map((groupStudent) => groupStudent.student_id);
+  const group = await findTitleById(id);
+  submission_id = group.submission_id;
+  const submission = await findSubmissionById(submission_id);
+  const groupData = {
+    group_id: group.id,
+    title: group.title,
+    students: students.map((student) => student.student_id),
+    is_approve: submission.is_approve,
+  };
+
+  return groupData;
+};
+
+const findTitleById = async (id) => {
+  const group = await prisma.group.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  // const { id: submission_id } = group;
+
+  // const submission = await findSubmissionById(submission_id);
+
+  return group;
+};
+
+//===================================================================
+// @description     Put metadata
+// @route           PUT /group/metadata/:id
+// @access          MAHASISWA
+const updateMetadataById = async (id, payload) => {
+  const { keywords, abstrak, reference } = payload;
+  const group = await prisma.group.update({
+    where: {
+      id,
+    },
+    data: {
+      keywords,
+      abstrak,
+      reference,
+    },
+    select: {
+      id: true,
+      keywords: true,
+      abstrak: true,
+      reference: true,
+    },
+  });
+  return group;
+};
+
+//===================================================================
+// @description     Get all complete skripsi
+// @route           GET /group/skripsi-filkom
+// @access          All
+const findAllCompleteSkripsi = async () => {
+  const group = prisma.group.findMany({
+    where: {
+      progress: "Finished",
+    },
+    select: {
+      title: true,
+    },
+  });
+  return group;
+};
+
+module.exports = {
+  findGroupBySubmissionId,
+  findGroupByProposalId,
+  findGroupBySkripsiId,
+  insertGroup,
+  updateGroupByIdAndSubmissionId,
+  updateGroupTitleBySubmissionId,
+  updateGroupProposalIdBySubmissionId,
+  updateGroupSkripsiIdBySubmissionId,
+  updateGroupProgressByProposalId,
+  updateGroupProgressBySubmissionId,
+  updateGroupProgressBySkripsiId,
+  findManyGroupsByProposalIds,
+  findManyGroupsBySkripsiIds,
+  findGroupById,
+
+  findSubmissionListById,
+  findSubmissionDetailsById,
+  updateMetadataById,
+  findAllCompleteSkripsi,
+};

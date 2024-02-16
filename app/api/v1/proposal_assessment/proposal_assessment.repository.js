@@ -1,0 +1,93 @@
+//Layer untuk komunikasi dengan database
+const prisma = require("../../../database");
+
+//===================================================================
+// @description     Create proposal assessment
+// @route           POST /proposal-assessment
+// @access          DOSEN
+const insertProposalAssessment = async (userId, payload) => {
+  const { proposal_id, student_id, value } = payload;
+  const proposalAssessment = await prisma.proposal_Assessment.create({
+    data: {
+      proposal_id,
+      student_id,
+      dosen_id: userId,
+      value,
+    },
+  });
+
+  return proposalAssessment;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get proposal_assessment by proposal_id, & student_id, & dosen_id
+// @used            createProposalAssessment, Proposal
+const findProposalAssessmentByProposalIdAndStudentIdAndDosenId = async (
+  proposal_id,
+  student_id,
+  dosen_id
+) => {
+  const proposalAssessment = await prisma.proposal_Assessment.findFirst({
+    where: {
+      proposal_id,
+      student_id,
+      dosen_id,
+    },
+  });
+  return proposalAssessment;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Get all proposal_assessment by proposal_id
+// @used            Proposal
+const findAllProposalAssessmentByProposalId = async (proposal_id) => {
+  const proposalAssessment = await prisma.proposal_Assessment.findMany({
+    where: {
+      proposal_id,
+    },
+  });
+  return proposalAssessment;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Create empty assessment for all student by panelist team
+// @used            Proposal
+const insertEmptyProposalAssessment = async (
+  proposal_id,
+  student_id,
+  dosen_id
+) => {
+  const proposalAssessment = await prisma.proposal_Assessment.create({
+    data: {
+      proposal_id,
+      student_id,
+      dosen_id,
+    },
+  });
+
+  return proposalAssessment;
+};
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @description     Update proposal assessment by id
+// @used            Proposal
+const updateProposalAssessmentById = async (id, value) => {
+  const proposalAssessment = await prisma.proposal_Assessment.update({
+    where: {
+      id,
+    },
+    data: {
+      value,
+    },
+  });
+
+  return proposalAssessment;
+};
+
+module.exports = {
+  insertProposalAssessment,
+  insertEmptyProposalAssessment,
+  findProposalAssessmentByProposalIdAndStudentIdAndDosenId,
+  findAllProposalAssessmentByProposalId,
+  updateProposalAssessmentById,
+};

@@ -1,5 +1,6 @@
 //Layer untuk handle business logic
 
+const { createHttpStatusError } = require("../../../utils");
 const adminRepository = require("./admin.repository");
 const bcrypt = require("bcrypt");
 
@@ -44,10 +45,49 @@ const updateOrPatchAdminById = async (id, payload) => {
   return admin;
 };
 
+const changePasswordByAdmin = async (id, payload) => {
+  try {
+    const admin = await adminRepository.findAdminById(id);
+
+    if (!admin) {
+      throw createHttpStatusError("Your Account is not found!!");
+    }
+
+    const checkPassword = bcrypt.compareSync(
+      payload.oldPassword,
+      admin.password
+    );
+
+    if (checkPassword) {
+      if (payload.newPassword === payload.confirmationNewPassword) {
+        const salt = bcrypt.genSaltSync(10);
+        const password = bcrypt.hashSync(payload.newPassword, salt);
+
+        const updatePasswordAdmin = await adminRepository.updatePasswordAdmin(
+          id,
+          password
+        );
+
+        return updatePasswordAdmin;
+      } else {
+        throw createHttpStatusError(
+          "New Password and Confirmation Do Not Match",
+          400
+        );
+      }
+    } else {
+      throw createHttpStatusError("Incorrect Old Password", 400);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   getAllAdmins,
   getAdminById,
   createAdmin,
   deleteAdminById,
   updateOrPatchAdminById,
+  changePasswordByAdmin,
 };

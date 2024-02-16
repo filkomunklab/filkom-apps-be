@@ -12,5 +12,10 @@ router.post("/admin", auth, adminController.createAdmin);
 router.delete("/admin/:id", auth, adminController.deleteAdminById);
 router.patch("/admin/:id", auth, adminController.patchAdminById);
 router.put("/admin/:id", auth, adminController.updateAdminById);
+router.patch(
+  "/change-password-admin/:id",
+  auth,
+  adminController.changePasswordByAdmin
+);
 
 module.exports = router;
