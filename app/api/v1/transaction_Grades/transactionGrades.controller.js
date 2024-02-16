@@ -137,6 +137,7 @@ const postTransactionWithGrades = async (req, res) => {
     );
     res.status(201).send({ status: "OK", data: transaction });
   } catch (error) {
+    console.log(error);
     res
       .status(error?.status || 500)
       .send({ status: "FAILED", data: { error: error?.message || error } });

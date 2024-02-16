@@ -6,7 +6,7 @@ const prisma = require("../../../database");
 const addOpenGradesAccess = async (payload) => {
   const { semester, semester_period, major, due_date, employeeNik } = payload;
   try {
-    const openAccess = await prisma.grades_access.create({
+    const openAccess = await prisma.aKAD_Grades_access.create({
       data: {
         semester,
         semester_period,
@@ -25,7 +25,7 @@ const addOpenGradesAccess = async (payload) => {
 //find list grades access for dekan
 const findlistGradesAccess = async () => {
   try {
-    const openAccess = await prisma.grades_access.findMany({
+    const openAccess = await prisma.aKAD_Grades_access.findMany({
       include: {
         Employee: {
           select: {
@@ -47,7 +47,7 @@ const findlistGradesAccess = async () => {
 //find list grades access for kaprodi
 const findlistGradesAccessByMajor = async (major) => {
   try {
-    const openAccess = await prisma.grades_access.findMany({
+    const openAccess = await prisma.aKAD_Grades_access.findMany({
       where: {
         major,
       },
@@ -61,7 +61,7 @@ const findlistGradesAccessByMajor = async (major) => {
 // close manual access for grades input
 const setCloseGradesAccess = async (id) => {
   try {
-    const openAccess = await prisma.grades_access.update({
+    const openAccess = await prisma.aKAD_Grades_access.update({
       where: { id },
       data: {
         isOpen: false,
@@ -76,7 +76,7 @@ const setCloseGradesAccess = async (id) => {
 //cek access
 const findToCheckOpenGradesAccess = async (major) => {
   try {
-    const openAccess = await prisma.grades_access.findFirst({
+    const openAccess = await prisma.aKAD_Grades_access.findFirst({
       where: {
         major,
       },
@@ -92,7 +92,7 @@ const findToCheckOpenGradesAccess = async (major) => {
 
 //automate close access
 const automateCloesGradesAccess = () => {
-  prisma.grades_access.updateMany({
+  prisma.aKAD_Grades_access.updateMany({
     where: {
       isOpen: true,
       due_date: {

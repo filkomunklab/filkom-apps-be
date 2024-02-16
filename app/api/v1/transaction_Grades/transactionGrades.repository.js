@@ -3,7 +3,7 @@ const prisma = require("../../../database");
 //============================Kaprodi Access==========================//
 //Waiting List Grade submmision (sort by major)
 const findWaitingListGradeSubmission = async (major) => {
-  const transaction = await prisma.transaction_Grades.findMany({
+  const transaction = await prisma.aKAD_Transaction_Grades.findMany({
     where: {
       AND: [
         {
@@ -58,7 +58,7 @@ const findWaitingListGradeSubmission = async (major) => {
 //Waiting List grade submission (sort by semester)
 const findWaitingListGradeSubmissionBySemester = async (payload, semester) => {
   const { major } = payload;
-  const transaction = await prisma.transaction_Grades.findMany({
+  const transaction = await prisma.aKAD_Transaction_Grades.findMany({
     where: {
       AND: [
         {
@@ -104,7 +104,7 @@ const findWaitingListGradeSubmissionBySemester = async (payload, semester) => {
 
 //List History Approval Submission Grades
 const findListHistoryApprovalGrades = async (major) => {
-  const transaction = await prisma.transaction_Grades.findMany({
+  const transaction = await prisma.aKAD_Transaction_Grades.findMany({
     where: {
       AND: [
         {
@@ -145,7 +145,7 @@ const findListHistoryApprovalGrades = async (major) => {
 //Approval grades
 const approvalStudentGrades = async (transactionId, payload) => {
   const { status, comments } = payload;
-  const transaction = await prisma.transaction_Grades.update({
+  const transaction = await prisma.aKAD_Transaction_Grades.update({
     where: {
       id: transactionId,
     },
@@ -162,7 +162,7 @@ const approvalStudentGrades = async (transactionId, payload) => {
 //INPUT GRADES
 const insertDataforGrades = async (payload, nim) => {
   const { semester } = payload;
-  const transaction = await prisma.transaction_Grades.create({
+  const transaction = await prisma.aKAD_Transaction_Grades.create({
     data: {
       semester,
       student_Nim: nim,
@@ -173,7 +173,7 @@ const insertDataforGrades = async (payload, nim) => {
 
 //Check if student had input grades
 const findCheckIsInput = async (id) => {
-  const transaction = await prisma.Transaction_Grades.findUnique({
+  const transaction = await prisma.aKAD_Transaction_Grades.findUnique({
     where: {
       id,
     },
@@ -192,7 +192,7 @@ const findCheckIsInput = async (id) => {
 
 //Current Grades Submission
 const findCurrentGradeSubmission = async (nim) => {
-  const transaction = await prisma.transaction_Grades.findMany({
+  const transaction = await prisma.aKAD_Transaction_Grades.findMany({
     where: {
       AND: [
         {
@@ -220,7 +220,7 @@ const findCurrentGradeSubmission = async (nim) => {
 
 //HISTORY GRADE SUBMISSION
 const findListStudentHistoryGradeSubmission = async (nim) => {
-  const transaction = await prisma.transaction_Grades.findMany({
+  const transaction = await prisma.aKAD_Transaction_Grades.findMany({
     where: {
       AND: [
         {
@@ -255,7 +255,7 @@ const findListStudentHistoryGradeSubmission = async (nim) => {
 
 //LIST Approved Grades/semester (student acccess)
 const findListSemesterGrades = async (nim) => {
-  const transaction = await prisma.transaction_Grades.findMany({
+  const transaction = await prisma.aKAD_Transaction_Grades.findMany({
     where: {
       AND: [
         {
@@ -279,7 +279,7 @@ const findListSemesterGrades = async (nim) => {
 //===========================General Access==========================//
 //detail submission
 const findStudentGradeSubmissionById = async (transactionId) => {
-  const transaction = await prisma.transaction_Grades.findUnique({
+  const transaction = await prisma.aKAD_Transaction_Grades.findUnique({
     where: {
       id: transactionId,
     },

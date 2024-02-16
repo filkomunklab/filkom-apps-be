@@ -5,7 +5,7 @@ const prisma = require("../../../database");
 const findCertificate = async (payload) => {
   const { guidanceClassId } = payload;
   try {
-    const certificate = await prisma.certificate.findMany({
+    const certificate = await prisma.aKAD_Certificate.findMany({
       where: {
         AND: [
           {
@@ -54,7 +54,7 @@ const findCertificate = async (payload) => {
 const findCertificateByCategory = async (category, payload) => {
   const { guidanceClassId } = payload;
   try {
-    const certificate = await prisma.certificate.findMany({
+    const certificate = await prisma.aKAD_Certificate.findMany({
       where: {
         AND: [
           {
@@ -109,7 +109,7 @@ const findCertificateByCategory = async (category, payload) => {
 const findAdvisorCertificateWaitingList = async (payload) => {
   const { guidanceClassId } = payload;
   try {
-    const certificate = await prisma.certificate.findMany({
+    const certificate = await prisma.aKAD_Certificate.findMany({
       where: {
         student: {
           GuidanceClassMember: {
@@ -160,7 +160,7 @@ const findAdvisorCertificateWaitingList = async (payload) => {
 const findWaitingListbyMajor = async (major, payload) => {
   const { guidanceClassId } = payload;
   try {
-    const certificate = await prisma.certificate.findMany({
+    const certificate = await prisma.aKAD_Certificate.findMany({
       where: {
         approval_status: "WAITING",
         AND: [
@@ -220,7 +220,7 @@ const findWaitingListbyMajor = async (major, payload) => {
 const filterWaitingListByArrYear = async (arrivalYear, payload) => {
   const { guidanceClassId } = payload;
   try {
-    const certificate = await prisma.certificate.findMany({
+    const certificate = await prisma.aKAD_Certificate.findMany({
       where: {
         approval_status: "WAITING",
         AND: [
@@ -279,7 +279,7 @@ const filterWaitingListByArrYear = async (arrivalYear, payload) => {
 const approvalCertificateStudent = async (certificateId, payload) => {
   const { approval_status, comments } = payload;
   try {
-    const certificate = await prisma.certificate.update({
+    const certificate = await prisma.aKAD_Certificate.update({
       where: {
         id: certificateId,
       },
@@ -299,7 +299,7 @@ const approvalCertificateStudent = async (certificateId, payload) => {
 // View all certificate student
 const viewAllStudentCertificate = async (nim) => {
   try {
-    const certificate = await prisma.certificate.findMany({
+    const certificate = await prisma.aKAD_Certificate.findMany({
       where: {
         student: {
           nim,
@@ -326,7 +326,7 @@ const viewAllStudentCertificate = async (nim) => {
 //find detail certificate
 const findOneCertificate = async (certificateId) => {
   try {
-    const certificate = await prisma.certificate.findUnique({
+    const certificate = await prisma.aKAD_Certificate.findUnique({
       where: {
         id: certificateId,
       },
@@ -365,7 +365,7 @@ const findOneCertificate = async (certificateId) => {
 const findStudentCertificateHistory = async (nim) => {
   console.log("ini Nim student: ", nim);
   try {
-    const certificate = await prisma.certificate.findMany({
+    const certificate = await prisma.aKAD_Certificate.findMany({
       where: {
         studentNim: nim,
         approval_status: {
@@ -397,7 +397,7 @@ const findStudentCertificateHistory = async (nim) => {
 //current Certificate Student (student)
 const findCurrentCertificateStudent = async (nim) => {
   try {
-    const certificate = await prisma.certificate.findMany({
+    const certificate = await prisma.aKAD_Certificate.findMany({
       where: {
         studentNim: nim,
         approval_status: "WAITING",
@@ -428,7 +428,7 @@ const insertCertificate = async (payload, nim, path) => {
   const { title, category, description } = payload;
   const { filename } = payload.certificateFile;
   try {
-    const certificate = await prisma.certificate.create({
+    const certificate = await prisma.aKAD_Certificate.create({
       data: {
         title,
         category,

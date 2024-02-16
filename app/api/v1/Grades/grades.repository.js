@@ -2,7 +2,7 @@ const prisma = require("../../../database");
 
 const studentInsertGradeSubmission = async (payload) => {
   try {
-    const grades = await prisma.grades.createMany({
+    const grades = await prisma.aKAD_Grades.createMany({
       data: payload,
     });
     return grades;
@@ -13,7 +13,7 @@ const studentInsertGradeSubmission = async (payload) => {
 
 const findDetailSemesterGrades = async (transactionId) => {
   try {
-    const grades = await prisma.grades.findMany({
+    const grades = await prisma.aKAD_Grades.findMany({
       where: {
         transaction_Grades: {
           id: transactionId,
