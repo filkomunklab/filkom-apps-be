@@ -7,7 +7,7 @@ const prisma = require("../../../database");
 const insertCurriculum = async (payload) => {
   try {
     const { major, year } = payload;
-    const curriculum = await prisma.curriculum.create({
+    const curriculum = await prisma.aKAD_Curriculum.create({
       data: {
         major,
         year,
@@ -25,7 +25,7 @@ const insertCurriculum = async (payload) => {
 // @access
 const selectAllCurriculum = async () => {
   try {
-    const curriculum = await prisma.curriculum.findMany();
+    const curriculum = await prisma.aKAD_Curriculum.findMany();
 
     return curriculum;
   } catch (error) {
@@ -38,7 +38,7 @@ const selectAllCurriculum = async () => {
 // @access
 const deleteCurriculumByIdCurriculum = async (curriculum_id) => {
   try {
-    const curriculum = await prisma.curriculum.delete({
+    const curriculum = await prisma.aKAD_Curriculum.delete({
       where: {
         id: curriculum_id,
       },
@@ -55,7 +55,7 @@ const deleteCurriculumByIdCurriculum = async (curriculum_id) => {
 // @access
 const selectCurriculumByMajorAndYear = async (major, year) => {
   try {
-    const curriculum = await prisma.curriculum.findMany({
+    const curriculum = await prisma.aKAD_Curriculum.findMany({
       where: {
         AND: [
           {
@@ -82,7 +82,7 @@ const selectCurriculumByMajorAndYear = async (major, year) => {
 // @access
 const selectCurriculumById = async (id) => {
   try {
-    const curriculum = await prisma.curriculum.findUnique({
+    const curriculum = await prisma.aKAD_Curriculum.findUnique({
       where: {
         id,
       },

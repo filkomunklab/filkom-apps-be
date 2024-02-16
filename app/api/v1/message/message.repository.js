@@ -2,7 +2,7 @@ const prisma = require("../../../database");
 
 const selectCountMessageByConsultationId = async (consultation_id) => {
   try {
-    const count = await prisma.message.count({
+    const count = await prisma.aKAD_Message.count({
       where: {
         academic_consultation_id: consultation_id,
       },
@@ -16,7 +16,7 @@ const selectCountMessageByConsultationId = async (consultation_id) => {
 
 const insertMessage = async (payload) => {
   try {
-    const message = await prisma.message.create({
+    const message = await prisma.aKAD_Message.create({
       data: payload,
     });
 
@@ -28,7 +28,7 @@ const insertMessage = async (payload) => {
 
 const selectMessageByConsultationId = async (academic_consultation_id) => {
   try {
-    const message = await prisma.message.findMany({
+    const message = await prisma.aKAD_Message.findMany({
       where: {
         academic_consultation_id,
       },

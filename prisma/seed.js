@@ -13,7 +13,7 @@ async function main() {
   let kurikulum_informatika;
 
   // CREATE CURRICULUM
-  const curriculum = await prisma.curriculum.create({
+  const curriculum = await prisma.aKAD_Curriculum.create({
     data: {
       major: "Informatika",
       year: "2020",
