@@ -1,8 +1,9 @@
 const prisma = require("../../../database");
+const moment = require("moment-timezone");
 
 const getAllPreRegis = async (payload) => {
   const { major } = payload;
-  return await prisma.preRegistration.findMany({
+  return await prisma.aKAD_PreRegistration.findMany({
     where: {
       major,
     },
@@ -20,7 +21,7 @@ const getAllPreRegis = async (payload) => {
 const findSubjectForPreRegis = async (payload) => {
   const { id } = payload;
   try {
-    const preRegis = await prisma.curriculum.findUnique({
+    const preRegis = await prisma.aKAD_Curriculum.findUnique({
       where: {
         id: id ?? undefined,
       },
@@ -37,7 +38,7 @@ const findSubjectForPreRegis = async (payload) => {
 
 const checkPreRegistAccess = async (payload) => {
   const { major, studentId } = payload;
-  return await prisma.preRegistration.findFirst({
+  return await prisma.aKAD_PreRegistration.findFirst({
     where: {
       major,
     },
@@ -55,14 +56,14 @@ const checkPreRegistAccess = async (payload) => {
 };
 
 const createPreRegist = async (paylaod) => {
-  return await prisma.preRegistration.create({
+  return await prisma.aKAD_PreRegistration.create({
     data: paylaod,
   });
 };
 
 const submitPreRegist = async (payload) => {
   const { listOfSubject, ...rest } = payload;
-  return await prisma.preRegistrationData.create({
+  return await prisma.aKAD_PreRegistrationData.create({
     data: {
       ...rest,
       ListOfRequest: {
@@ -76,7 +77,7 @@ const submitPreRegist = async (payload) => {
 
 const submitApproval = async (payload) => {
   const { id, ...data } = payload;
-  return await prisma.preRegistrationData.update({
+  return await prisma.aKAD_PreRegistrationData.update({
     where: {
       id,
     },
@@ -86,7 +87,7 @@ const submitApproval = async (payload) => {
 
 const getPreRegistListForTeacher = async (payload) => {
   const { guidanceClassId } = payload;
-  return await prisma.preRegistrationData.findMany({
+  return await prisma.aKAD_PreRegistrationData.findMany({
     where: {
       status: "WAITING",
       Student: {
@@ -123,7 +124,7 @@ const getPreRegistListForTeacher = async (payload) => {
 
 const getPreRegistDetails = async (payload) => {
   const { id } = payload;
-  return await prisma.preRegistrationData.findUnique({
+  return await prisma.aKAD_PreRegistrationData.findUnique({
     where: {
       id,
     },
@@ -155,13 +156,23 @@ const getPreRegistDetails = async (payload) => {
 };
 
 const automateClosePreRegist = () => {
-  prisma.preRegistration.updateMany({
+  prisma.aKAD_PreRegistration.updateMany({
     where: {
       isOpen: true,
       dueDate: {
-        lte: new Date(),
+        lte: moment(),
       },
     },
+    data: {
+      isOpen: false,
+    },
+  });
+  console.log("testing schaduler from repo");
+};
+
+const manualClosePreRegist = async (id) => {
+  return await prisma.aKAD_PreRegistration.update({
+    where: { id },
     data: {
       isOpen: false,
     },
@@ -170,7 +181,7 @@ const automateClosePreRegist = () => {
 
 const getHistoryForStudent = async (payload) => {
   const { studentId } = payload;
-  return await prisma.preRegistrationData.findMany({
+  return await prisma.aKAD_PreRegistrationData.findMany({
     where: {
       studentId,
       status: {
@@ -198,7 +209,7 @@ const getHistoryForStudent = async (payload) => {
 
 const getHistoryForAdvisor = async (payload) => {
   const { guidanceClassId } = payload;
-  return await prisma.preRegistrationData.findMany({
+  return await prisma.aKAD_PreRegistrationData.findMany({
     where: {
       Student: {
         GuidanceClassMember: {
@@ -227,7 +238,7 @@ const getHistoryForAdvisor = async (payload) => {
 
 const getCurrentPreRegist = async (payload) => {
   const { id } = payload;
-  return await prisma.preRegistrationData.findMany({
+  return await prisma.aKAD_PreRegistrationData.findMany({
     where: {
       OR: [
         {
@@ -246,7 +257,7 @@ const getCurrentPreRegist = async (payload) => {
 
 const getCurrentForStudent = async (payload) => {
   const { studentId } = payload;
-  return await prisma.preRegistrationData.findMany({
+  return await prisma.aKAD_PreRegistrationData.findMany({
     where: {
       studentId,
       status: {
@@ -274,7 +285,7 @@ const getCurrentForStudent = async (payload) => {
 
 const getAllSubmitedPreRegist = async (payload) => {
   const { id } = payload;
-  return await prisma.preRegistration.findUnique({
+  return await prisma.aKAD_PreRegistration.findUnique({
     where: {
       id,
     },
@@ -311,6 +322,7 @@ module.exports = {
   getPreRegistListForTeacher,
   getAllSubmitedPreRegist,
   automateClosePreRegist,
+  manualClosePreRegist,
   findSubjectForPreRegis,
   getCurrentForStudent,
   checkPreRegistAccess,

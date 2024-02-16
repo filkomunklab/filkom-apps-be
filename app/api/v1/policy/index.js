@@ -105,7 +105,7 @@ const policyFor = ({ user }) => {
     can("read", "skripsi_history_list_sekretaris");
 
     //=================================BIMBINGAN AKADEMIK=====================
-    //Biodata Student
+
     //operator_fakultas: view profile student
     can("read", "student_biodata");
 
@@ -117,6 +117,12 @@ const policyFor = ({ user }) => {
 
     // Delete Curriculum
     can("delete", "Curriculum");
+
+    //View Student grades
+    can("read", "approved_semester_grades");
+
+    //View all certificate of one student
+    can("read", "certificate_all_student");
   }
 
   if (hasRole("DEKAN")) {
@@ -212,10 +218,15 @@ const policyFor = ({ user }) => {
     //Certificate
     //Dekan : view all student Certificate
     can("read", "certificate_all_student");
+    //Dekan : view history certificate of role DOSEN
+    can("read", "certificate_history_approval");
 
     //Biodata Student
     //Dekan: view profile student
     can("read", "student_biodata");
+
+    //Dekan : set student status
+    can("update", "student_status");
 
     //Dashboard
     //Dekan : view total All faculty student
@@ -233,7 +244,7 @@ const policyFor = ({ user }) => {
     can("update", "EmployeePassword", { id: user.id });
 
     // get Academic Consultation by Employee
-    can("get", "AcademicConsultationByEmployee", { nik: user.nik });
+    can("get", "AcademicConsultationByEmployee");
 
     // get Academic Consultation Detail
     can("get", "AcademicConsultationDetail");
@@ -351,6 +362,10 @@ const policyFor = ({ user }) => {
     can("read", "total_active_major");
     //Kaprodi : view total Inactive major student
     can("read", "total_inactive_major");
+    //Kaprodi : view statistic student
+    can("read", "statistic_student");
+    //Dekan : view statistic approved certificate
+    can("read", "statistic_certificate");
 
     //Biodata Student
     //Kaprodi: view profile student
@@ -359,18 +374,23 @@ const policyFor = ({ user }) => {
     //Certificate
     //Kaprodi : view all student Certificate
     can("read", "certificate_all_student");
+    //Kaprodi : view history certificate of role DOSEN
+    can("read", "certificate_history_approval");
 
     // change password
     can("update", "EmployeePassword", { id: user.id });
 
     // get Academic Consultation by Employee
-    can("get", "AcademicConsultationByEmployee", { nik: user.nik });
+    can("get", "AcademicConsultationByEmployee");
 
     // get Academic Consultation Detail
     can("get", "AcademicConsultationDetail");
 
     // update Complete Status Academic Consultation
     can("update", "AcademicConsultationStatusComplete");
+
+    //Kaprodi : set student status
+    can("update", "student_status");
   }
 
   if (hasRole("DOSEN")) {
@@ -535,7 +555,7 @@ const policyFor = ({ user }) => {
     can("update", "EmployeePassword", { id: user.id });
 
     // get Academic Consultation by Employee
-    can("get", "AcademicConsultationByEmployee", { nik: user.nik });
+    can("get", "AcademicConsultationByEmployee");
 
     // get Academic Consultation Detail
     can("get", "AcademicConsultationDetail");
@@ -628,7 +648,7 @@ const policyFor = ({ user }) => {
     can("update", "EmployeePassword", { id: user.id });
 
     // get Academic Consultation by Employee
-    can("get", "AcademicConsultationByEmployee", { nik: user.nik });
+    can("get", "AcademicConsultationByEmployee");
 
     // get Academic Consultation Detail
     can("get", "AcademicConsultationDetail");

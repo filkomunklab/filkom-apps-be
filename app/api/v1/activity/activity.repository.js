@@ -4,7 +4,7 @@ const prisma = require("../../../database");
 //CREATE ACTIVITY FOR STUDENT
 const createActivity = async (payload) => {
   const { members, ...res } = payload;
-  return await prisma.activity.create({
+  return await prisma.aKAD_Activity.create({
     data: {
       ...res,
       ActivityMember: {
@@ -19,7 +19,7 @@ const createActivity = async (payload) => {
 const takeAttendance = async (payload) => {
   const { activityId, members } = payload;
   return await prisma.$transaction(async (prisma) => {
-    await prisma.activityMember.updateMany({
+    await prisma.aKAD_ActivityMember.updateMany({
       where: {
         studentNim: {
           in: members,
@@ -31,7 +31,7 @@ const takeAttendance = async (payload) => {
       },
     });
 
-    await prisma.activityMember.updateMany({
+    await prisma.aKAD_ActivityMember.updateMany({
       where: {
         studentNim: {
           notIn: members,
@@ -43,7 +43,7 @@ const takeAttendance = async (payload) => {
       },
     });
 
-    await prisma.activity.update({
+    await prisma.aKAD_Activity.update({
       where: {
         id: activityId,
       },
@@ -66,7 +66,7 @@ const takeAttendance = async (payload) => {
 //==============================General Access========================//
 const findDetailActivity = async (payload) => {
   const { activityId } = payload;
-  return await prisma.activity.findUnique({
+  return await prisma.aKAD_Activity.findUnique({
     where: {
       id: activityId,
     },
@@ -116,7 +116,7 @@ const getStudentList = async (payload) => {
 
 const getHistoryForStudent = async (payload) => {
   const { studentNim } = payload;
-  return await prisma.activity.findMany({
+  return await prisma.aKAD_Activity.findMany({
     where: {
       OR: [
         {
@@ -149,7 +149,7 @@ const getHistoryForStudent = async (payload) => {
 
 const getHistoryForAdvisor = async (payload) => {
   const { employeeNik } = payload;
-  return await prisma.activity.findMany({
+  return await prisma.aKAD_Activity.findMany({
     where: {
       OR: [
         {
@@ -178,7 +178,7 @@ const getHistoryForAdvisor = async (payload) => {
 
 const getCurrentActivity = async (payload) => {
   const { id } = payload;
-  return await prisma.activity.findMany({
+  return await prisma.aKAD_Activity.findMany({
     where: {
       AND: [
         {
@@ -220,7 +220,7 @@ const getCurrentActivity = async (payload) => {
 
 const getCurrentConsultation = async (payload) => {
   const { id } = payload;
-  return await prisma.academic_Consultation.findMany({
+  return await prisma.aKAD_Academic_Consultation.findMany({
     where: {
       OR: [
         {
@@ -230,9 +230,7 @@ const getCurrentConsultation = async (payload) => {
           student_nim: id,
         },
       ],
-      status: {
-        not: "Complete",
-      },
+      status: "OnProcess",
     },
     select: {
       id: true,

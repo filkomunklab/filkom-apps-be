@@ -83,6 +83,10 @@ const getAllSubject = async (payload) => {
   return data;
 };
 
+const patchManualClosedPreRegist = async (id) => {
+  return preRegisRepository.manualClosePreRegist(id);
+};
+
 module.exports = {
   getPreRegistListForTeacher,
   getAllSubmitedPreRegist,
@@ -98,4 +102,5 @@ module.exports = {
   submitApproval,
   getAllPreRegis,
   getAllSubject,
+  patchManualClosedPreRegist,
 };

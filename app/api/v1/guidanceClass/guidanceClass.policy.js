@@ -22,10 +22,19 @@ const guidanceClassPolicy = ({ user }) => {
     can("read", "allClass");
     can("read", "allUnassignedStudent");
     can("read", "allUnassignedTeacher");
+    can("read", "guidanceClassDetail");
   }
 
   if (hasRole("DEKAN")) {
     can("read", "allClass");
+    can("read", "guidanceClassDetail");
+  }
+
+  if (hasRole("SEKRETARIS")) {
+    can("read", "allClass");
+    can("read", "guidanceClassDetail");
+    can("read", "allUnassignedStudent");
+    can("read", "allUnassignedTeacher");
   }
 
   return build();

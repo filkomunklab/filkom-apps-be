@@ -1,7 +1,7 @@
 const prisma = require("../../../database");
 
 const getAllClass = async () => {
-  return await prisma.guidanceClass.findMany({
+  return await prisma.aKAD_GuidanceClass.findMany({
     include: {
       teacher: {
         select: {
@@ -24,7 +24,7 @@ const getAllClass = async () => {
 
 const getGuidanceClassDetail = async (payload) => {
   const { id } = payload;
-  return await prisma.guidanceClass.findUnique({
+  return await prisma.aKAD_GuidanceClass.findUnique({
     where: {
       id,
     },
@@ -118,7 +118,7 @@ const getAllUnassignetTeacher = async () => {
 
 const createGuidanceClass = async (payload, teacherId) => {
   const { studentList } = payload;
-  return await prisma.guidanceClass.create({
+  return await prisma.aKAD_GuidanceClass.create({
     data: {
       teacherId,
       GuidanceClassMember: {
@@ -138,14 +138,14 @@ const addStudentToGuidanceClass = async (payload, guidanceClassId) => {
       guidanceClassId: guidanceClassId,
     };
   });
-  return await prisma.guidanceClassMember.createMany({
+  return await prisma.aKAD_GuidanceClassMember.createMany({
     data: normalized,
   });
 };
 
 const deleteStudentFromGuidanceClass = async (payload) => {
   const { studentList } = payload;
-  return await prisma.guidanceClassMember.deleteMany({
+  return await prisma.aKAD_GuidanceClassMember.deleteMany({
     where: {
       studentNim: {
         in: studentList,
@@ -156,7 +156,7 @@ const deleteStudentFromGuidanceClass = async (payload) => {
 
 const deleteGuidanceClass = async (payload) => {
   const { id } = payload;
-  return await prisma.guidanceClass.delete({
+  return await prisma.aKAD_GuidanceClass.delete({
     where: {
       id,
     },

@@ -2,7 +2,7 @@ const prisma = require("../../../database");
 
 const insertConsultation = async (payload) => {
   try {
-    const consultation = await prisma.academic_Consultation.create({
+    const consultation = await prisma.aKAD_Academic_Consultation.create({
       data: payload,
     });
 
@@ -15,7 +15,7 @@ const insertConsultation = async (payload) => {
 
 const selectConsultationByNim = async (nim) => {
   try {
-    const consultation = await prisma.academic_Consultation.findMany({
+    const consultation = await prisma.aKAD_Academic_Consultation.findMany({
       where: {
         student_nim: nim,
       },
@@ -32,7 +32,7 @@ const selectConsultationByNim = async (nim) => {
 
 const selectConsultationByNik = async (nik) => {
   try {
-    const consultation = await prisma.academic_Consultation.findMany({
+    const consultation = await prisma.aKAD_Academic_Consultation.findMany({
       where: {
         receiver_nik: nik,
       },
@@ -48,7 +48,7 @@ const selectConsultationByNik = async (nik) => {
 
 const selectConsultationById = async (id) => {
   try {
-    const consultation = await prisma.academic_Consultation.findUnique({
+    const consultation = await prisma.aKAD_Academic_Consultation.findUnique({
       where: {
         id,
       },
@@ -61,7 +61,7 @@ const selectConsultationById = async (id) => {
 
 const updateStatusConsultationById = async (id, status, now) => {
   try {
-    const consultation = await prisma.academic_Consultation.update({
+    const consultation = await prisma.aKAD_Academic_Consultation.update({
       where: {
         id,
       },

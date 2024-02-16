@@ -11,15 +11,19 @@ const preRegistPolicy = ({ user }) => {
     can("read", "preRegistAccess");
     can("create", "submitPreRegist");
     can("read", "preRegistHistoryForStudent");
+    can("read", "preRegistDetails");
   }
 
   if (hasRole("KAPRODI")) {
     can("read", "allPreRegist");
     can("create", "preRegist");
+    can("update", "closeAccessPreRegist");
+    can("read", "preRegistHistoryForAdvisor");
   }
 
   if (hasRole("DEKAN")) {
     can("read", "allPreRegist");
+    can("read", "preRegistHistoryForAdvisor");
   }
 
   if (hasRole("DOSEN")) {

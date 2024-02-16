@@ -50,7 +50,7 @@ const SubmitPreRegistSchema = Yup.object()
         excludeEmptyString: true,
       })
       .required("Employee ID is required"),
-    description: Yup.string(),
+    description: Yup.string().nullable(),
     preRegistrationId: Yup.string().required("Pre-Registration ID is required"),
     listOfSubject: Yup.array()
       .of(
@@ -67,7 +67,7 @@ const ApprovalSchema = Yup.object()
   .shape({
     id: Yup.string().required("ID is required"),
     status: Yup.string().oneOf(["APPROVED", "REJECTED"]).required(),
-    comments: Yup.string().optional(),
+    comments: Yup.string().optional().nullable(),
     approveDate: Yup.date().when("status", {
       is: "APPROVED",
       then: () => Yup.date().required("Approve date is required"),
