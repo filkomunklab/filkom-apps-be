@@ -50,4 +50,5 @@ jobs:
           ssh_user: ${{ secrets.SERVER_USERNAME }}
           ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
           ssh_host_public_key: ${{ secrets.SERVER_PUBLIC_KEY }}
+          ssh_jump_public_key: ${{ secrets.SERVER_JUMP_PUBLIC_KEY }}
           docker_compose_prefix: filkomapp
