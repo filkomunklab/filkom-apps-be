@@ -10,7 +10,8 @@
     "migrate:skripsi": "npx prisma migrate dev --name skripsi_app",
     "db:migrate": "npx prisma migrate dev",
     "db:seed": "npx prisma db seed",
-    "db:reset": "npx prisma migrate reset"
+    "db:reset": "npx prisma migrate reset",
+    "db:migrate:prod": "npx prisma migrate deploy"
   },
   "dependencies": {
     "@casl/ability": "^6.5.0",
