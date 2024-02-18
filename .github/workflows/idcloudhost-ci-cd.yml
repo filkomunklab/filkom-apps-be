@@ -44,9 +44,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Deploy into server
-        uses: alex-ac/github-action-ssh-docker-compose@master
+        uses: astappiev/docker-compose-remote-action@master
         with:
           ssh_host: ${{ secrets.SERVER_HOST }}
           ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
+          ssh_host_public_key: ${{ secrets.SERVER_PUBLIC_KEY }}
           ssh_user: ${{ secrets.SERVER_USERNAME }}
           docker_compose_prefix: filkomapp
