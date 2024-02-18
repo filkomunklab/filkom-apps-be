@@ -44,10 +44,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Deploy into server
-        uses: astappiev/docker-compose-remote-action@master
+        uses: TapTap21/docker-remote-deployment-action@v1.0
         with:
-          ssh_host: ${{ secrets.SERVER_HOST }}
+          remote_docker_host: ${{ secrets.SERVER_HOST }}
           ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
-          ssh_host_public_key: ${{ secrets.SERVER_PUBLIC_KEY }}
-          ssh_user: ${{ secrets.SERVER_USERNAME }}
-          docker_compose_prefix: filkomapp
+          ssh_public_key: ${{ secrets.SERVER_PUBLIC_KEY }}
+          stack_file_name: docker-compose.yml
+          docker_login_password: ${{ secrets.DOCKER_PASSWORD }}
+          docker_login_user: ${{ secrets.DOCKER_USERNAME }}
+          args: -p filkomapp -d up
