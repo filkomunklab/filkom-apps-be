@@ -41,15 +41,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Deploy into server
-        uses: TapTap21/docker-remote-deployment-action@v1.0
+        uses: alex-ac/github-action-ssh-docker-compose@master
         with:
-          remote_docker_host: ${{ secrets.SERVER_HOST }}
+          ssh_host: ${{ secrets.SERVER_HOST }}
           ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
-          ssh_public_key: ${{ secrets.SERVER_PUBLIC_KEY }}
-          stack_file_name: docker-compose.yml
-          docker_login_password: ${{ secrets.DOCKER_PASSWORD }}
-          docker_login_user: ${{ secrets.DOCKER_USERNAME }}
-          args: -p filkomapp -d up
+          ssh_user: ${{ secrets.SERVER_USERNAME }}
+          docker_compose_prefix: filkomapp
