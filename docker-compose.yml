@@ -1,13 +1,14 @@
 version: "3"
 services:
   app:
-    image: node:18-alpine
-    command: npm ci && npm start
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
     ports:
       - "3000:3000"
-    working_dir: /app
-    volumes:
-      - ./:/app
+    command: npm start
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}
       - SECRET_KEY=${SECRET_KEY}
