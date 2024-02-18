@@ -49,4 +49,5 @@ jobs:
           remote_docker_host: ${{ secrets.SERVER_HOST }}
           ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
           ssh_public_key: ${{ secrets.SERVER_PUBLIC_KEY }}
+          stack_file_name: docker-compose.yml
           args: filkomapp
