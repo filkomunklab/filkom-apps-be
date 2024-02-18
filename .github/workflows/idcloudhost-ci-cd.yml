@@ -52,12 +52,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Deploy into server
-        uses: astappiev/docker-compose-remote-action@master
+      - name: Deploy to Docker swarm
+        uses: wshihadeh/docker-deployment-action@v1
         with:
-          ssh_host: ${{ secrets.SERVER_HOST }}
-          ssh_user: ${{ secrets.SERVER_USERNAME }}
+          remote_docker_host: ${{ secrets.SERVER_HOST }}
           ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
-          ssh_host_public_key: ${{ secrets.SERVER_PUBLIC_KEY }}
-          ssh_jump_public_key: ${{ secrets.SERVER_JUMP_PUBLIC_KEY }}
-          docker_compose_prefix: filkomapp
+          ssh_public_key: ${{ secrets.SERVER_PUBLIC_KEY }}
+          stack_file_name: docker-compose.yml
+          args: filkomapp
+
+      # - name: Deploy into server
+      #   uses: astappiev/docker-compose-remote-action@master
+      #   with:
+      #     ssh_host: ${{ secrets.SERVER_HOST }}
+      #     ssh_user: ${{ secrets.SERVER_USERNAME }}
+      #     ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
+      #     ssh_host_public_key: ${{ secrets.SERVER_PUBLIC_KEY }}
+      #     ssh_jump_public_key: ${{ secrets.SERVER_JUMP_PUBLIC_KEY }}
+      #     docker_compose_prefix: filkomapp
