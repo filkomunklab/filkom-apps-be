@@ -52,6 +52,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Prisma migrantion
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: postgres://${{secrets.POSTGRES_USER}}:${{secrets.POSTGRES_PASSWORD}}@${{secrets.SERVER_HOST}}:5432/${{secrets.POSTGRES_DB}}?schema=public
+
       - name: Copy docker-compose.yml via SSH
         uses: appleboy/scp-action@master
         with:
