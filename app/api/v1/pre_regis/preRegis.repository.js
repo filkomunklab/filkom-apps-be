@@ -221,7 +221,7 @@ const getHistoryForAdvisor = async (payload) => {
       },
     },
     orderBy: {
-      submitDate: "desc",
+      approveDate: "desc",
     },
     select: {
       id: true,
