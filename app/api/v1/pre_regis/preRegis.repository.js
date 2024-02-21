@@ -216,6 +216,12 @@ const getHistoryForAdvisor = async (payload) => {
           guidanceClassId,
         },
       },
+      status: {
+        not: "WAITING",
+      },
+    },
+    orderBy: {
+      submitDate: "desc",
     },
     select: {
       id: true,
