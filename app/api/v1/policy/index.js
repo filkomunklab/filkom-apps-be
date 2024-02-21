@@ -364,7 +364,7 @@ const policyFor = ({ user }) => {
     can("read", "total_inactive_major");
     //Kaprodi : view statistic student
     can("read", "statistic_student");
-    //Dekan : view statistic approved certificate
+    //Kaprodi : view statistic approved certificate
     can("read", "statistic_certificate");
 
     //Biodata Student

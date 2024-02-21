@@ -32,24 +32,14 @@ const CreatePreRegistSchema = Yup.object()
       .oneOf(["SI", "IF", "DKV"])
       .required("Major is required"),
     dueDate: Yup.date().required("Due date is required"),
-    employeeNik: Yup.string().required("Employee NIK is required"),
+    employeeId: Yup.string().required("Employee id is required"),
   })
   .noUnknown();
 
 const SubmitPreRegistSchema = Yup.object()
   .shape({
-    studentId: Yup.string()
-      .matches(/^[0-9]+$/, {
-        message: "NIM must be a number",
-        excludeEmptyString: true,
-      })
-      .required("Student ID is required"),
-    employeeId: Yup.string()
-      .matches(/^[0-9]+$/, {
-        message: "NIM must be a number",
-        excludeEmptyString: true,
-      })
-      .required("Employee ID is required"),
+    studentId: Yup.string().required("Student ID is required"),
+    employeeId: Yup.string().required("Employee ID is required"),
     description: Yup.string().nullable(),
     preRegistrationId: Yup.string().required("Pre-Registration ID is required"),
     listOfSubject: Yup.array()
