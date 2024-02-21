@@ -158,8 +158,10 @@ const getAllCertificateStudent = async (req, res) => {
   }
 
   try {
-    const { nim } = req.params;
-    const certificate = await certificateService.findAllCertificateStudent(nim);
+    const { studentId } = req.params;
+    const certificate = await certificateService.findAllCertificateStudent(
+      studentId
+    );
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
     res
@@ -181,11 +183,11 @@ const uploadCertificate = async (req, res) => {
   }
 
   const payload = req.body;
-  const { nim } = req.params;
+  const { studentId } = req.params;
   try {
     const certificate = await certificateService.uploadCertificate(
       payload,
-      nim
+      studentId
     );
     res.status(201).send({ status: "OK", data: certificate });
   } catch (error) {
@@ -205,10 +207,10 @@ const getStudentCurrentCertificate = async (req, res) => {
     });
   }
 
-  const { nim } = req.params;
+  const { id } = req.params;
   try {
     const certificate = await certificateService.viewCurrentStudentCertificate(
-      nim
+      id
     );
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {
@@ -229,10 +231,10 @@ const studentCertificateHistory = async (req, res) => {
     });
   }
 
-  const { nim } = req.params;
+  const { studentId } = req.params;
   try {
     const certificate = await certificateService.studentHistoryCertificateView(
-      nim
+      studentId
     );
     res.status(200).send({ status: "OK", data: certificate });
   } catch (error) {

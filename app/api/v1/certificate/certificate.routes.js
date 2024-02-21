@@ -49,7 +49,7 @@ router.get(
 
 //View Certificate student
 router.get(
-  "/certificate/all/:nim",
+  "/certificate/all/:studentId",
   auth,
   certificateController.getAllCertificateStudent
 );
@@ -57,18 +57,22 @@ router.get(
 //======================MAHASISWA========================
 
 //STUDENT POST CERTIFICATE
-router.post("/certificate/:nim", auth, certificateController.uploadCertificate); //Upload certificate
+router.post(
+  "/certificate/:studentId",
+  auth,
+  certificateController.uploadCertificate
+); //Upload certificate
 
 //VIEW ACCEPTED & REJECTED CERTIFICATE (student history)
 router.get(
-  "/certificate/history/student/:nim",
+  "/certificate/history/student/:studentId",
   auth,
   certificateController.studentCertificateHistory
 );
 
 //VIEW STUDENT WAITING CERTIFICATE
 router.get(
-  "/certificate/current/student/:nim",
+  "/certificate/current/student/:id",
   auth,
   certificateController.getStudentCurrentCertificate
 );

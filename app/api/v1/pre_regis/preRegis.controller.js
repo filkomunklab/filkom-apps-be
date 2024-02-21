@@ -252,8 +252,9 @@ const getCurrentForStudent = async (req, res) => {
 
 const getAllSubmitedPreRegist = async (req, res) => {
   const payload = req.params;
+  const { major } = req.body;
   try {
-    const data = await preRegisService.getAllSubmitedPreRegist(payload);
+    const data = await preRegisService.getAllSubmitedPreRegist(payload, major);
     res.status(200).send({ status: "OK", data });
   } catch (error) {
     res

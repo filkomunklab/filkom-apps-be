@@ -4,15 +4,15 @@ const prisma = require("../../../database");
 
 // create access for input graes
 const addOpenGradesAccess = async (payload) => {
-  const { semester, semester_period, major, due_date, employeeNik } = payload;
+  const { semester, semesterPeriod, major, dueDate, employeeId } = payload;
   try {
     const openAccess = await prisma.aKAD_Grades_access.create({
       data: {
         semester,
-        semester_period,
+        semesterPeriod,
         major,
-        due_date,
-        employeeNik,
+        dueDate,
+        employeeId,
       },
     });
     return openAccess;

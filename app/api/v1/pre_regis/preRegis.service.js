@@ -71,8 +71,8 @@ const getCurrentForStudent = (payload) => {
   return preRegisRepository.getCurrentForStudent(payload);
 };
 
-const getAllSubmitedPreRegist = (payload) => {
-  return preRegisRepository.getAllSubmitedPreRegist(payload);
+const getAllSubmitedPreRegist = (payload, major) => {
+  return preRegisRepository.getAllSubmitedPreRegist(payload, major);
 };
 
 const getAllSubject = async (payload) => {

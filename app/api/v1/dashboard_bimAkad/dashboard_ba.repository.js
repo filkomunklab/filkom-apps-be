@@ -171,7 +171,7 @@ const findTotalOfMajorStudent = async () => {
 //total of all category certificate
 const findTotalAllCategoryCertificate = async () => {
   try {
-    return await prisma.certificate.groupBy({
+    return await prisma.aKAD_Certificate.groupBy({
       where: {
         approval_status: "APPROVED",
       },

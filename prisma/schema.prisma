@@ -76,7 +76,7 @@ model Employee {
 }
 
 model Student {
-  id                        String                @id @default(uuid())
+  id                        String                @id @unique @default(uuid())
   reg_num                   String?               @unique
   nim                       String                @unique
   password                  String
@@ -662,8 +662,8 @@ model AKAD_Transaction_Grades {
   comments     String?
   isInput      Boolean       @default(true)
   status       status        @default(WAITING)
-  Student      Student?      @relation(fields: [student_Nim], references: [nim])
-  student_Nim  String
+  Student      Student?      @relation(fields: [studentId], references: [id])
+  studentId    String
   Grades       AKAD_Grades[]
 }
 
@@ -681,16 +681,16 @@ model AKAD_Grades {
 }
 
 model AKAD_Grades_access {
-  id              String    @id @default(uuid())
-  semester        String?
-  semester_period String?
-  major           Major
-  due_date        DateTime
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  isOpen          Boolean   @default(true)
-  Employee        Employee? @relation(fields: [employeeNik], references: [nik])
-  employeeNik     String?
+  id             String    @id @default(uuid())
+  semester       String?
+  semesterPeriod String?
+  major          Major
+  dueDate        DateTime
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  isOpen         Boolean   @default(true)
+  Employee       Employee? @relation(fields: [employeeId], references: [id])
+  employeeId     String?
 }
 
 model AKAD_PreRegistration {
@@ -700,8 +700,8 @@ model AKAD_PreRegistration {
   major               Major
   dueDate             DateTime
   isOpen              Boolean                    @default(true)
-  Employee            Employee                   @relation(fields: [employeeNik], references: [nik])
-  employeeNik         String
+  Employee            Employee                   @relation(fields: [employeeId], references: [id])
+  employeeId          String
   createdAt           DateTime                   @default(now())
   updatedAt           DateTime                   @updatedAt
   PreRegistrationData AKAD_PreRegistrationData[]
@@ -709,9 +709,9 @@ model AKAD_PreRegistration {
 
 model AKAD_PreRegistrationData {
   id                String               @id @default(uuid())
-  Student           Student              @relation(fields: [studentId], references: [nim])
+  Student           Student              @relation(fields: [studentId], references: [id])
   studentId         String
-  Employee          Employee             @relation(fields: [employeeId], references: [nik])
+  Employee          Employee             @relation(fields: [employeeId], references: [id])
   employeeId        String
   status            status?              @default(WAITING)
   description       String?
@@ -769,18 +769,18 @@ model AKAD_Message {
 }
 
 model AKAD_Certificate {
-  id              String    @id @default(uuid())
-  filename        String
-  path            String
-  title           String
-  category        String
-  description     String
-  comments        String?
-  approvalDate    DateTime? @db.Timestamptz(3)
-  submitDate      DateTime  @default(now()) @db.Timestamptz(3)
-  approval_status status    @default(WAITING)
-  student         Student   @relation(fields: [studentNim], references: [nim])
-  studentNim      String
+  id             String    @id @default(uuid())
+  filename       String
+  path           String
+  title          String
+  category       String
+  description    String
+  comments       String?
+  approvalDate   DateTime? @db.Timestamptz(3)
+  submitDate     DateTime  @default(now()) @db.Timestamptz(3)
+  approvalStatus status    @default(WAITING)
+  student        Student   @relation(fields: [studentId], references: [id])
+  studentId      String
 }
 
 model AKAD_Activity {

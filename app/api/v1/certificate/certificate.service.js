@@ -139,9 +139,9 @@ const approvalCertificate = async (certificateId, payload) => {
 };
 
 //view certificate student
-const findAllCertificateStudent = async (nim) => {
+const findAllCertificateStudent = async (studentId) => {
   try {
-    return await certificateRepository.viewAllStudentCertificate(nim);
+    return await certificateRepository.viewAllStudentCertificate(studentId);
   } catch (error) {
     throw error;
   }
@@ -170,10 +170,10 @@ const viewOneStudentCertificate = async (certificateId) => {
 //===============================StudentAccess========================//
 
 //Student Add Certificate
-const uploadCertificate = async (payload, nim) => {
+const uploadCertificate = async (payload, studentId) => {
   const storageRef = ref(
     storage,
-    `certificate/${nim}/${payload.certificateFile.filename}`
+    `certificate/${studentId}/${payload.certificateFile.filename}`
   );
   const metadata = { contentType: "application/pdf" };
   try {
@@ -186,7 +186,7 @@ const uploadCertificate = async (payload, nim) => {
     const path = await getDownloadURL(storageRef);
     const certificate = await certificateRepository.insertCertificate(
       payload,
-      nim,
+      studentId,
       path
     );
     return {
@@ -199,19 +199,17 @@ const uploadCertificate = async (payload, nim) => {
 };
 
 //Current Certificate (Status Waiting)
-const viewCurrentStudentCertificate = async (nim) => {
+const viewCurrentStudentCertificate = async (id) => {
   try {
     let certificate = await certificateRepository.findCurrentCertificateStudent(
-      nim
+      id
     );
 
     certificate = certificate.map((item) => {
       return {
         ...item,
-        Certificate: {
-          title: item.title,
-          submitDate: item.submitDate.toString(),
-        },
+        title: item.title,
+        submitDate: item.submitDate.toString(),
       };
     });
 
@@ -222,10 +220,10 @@ const viewCurrentStudentCertificate = async (nim) => {
 };
 
 //Student History Certificate (status Approved & Rejeceted)
-const studentHistoryCertificateView = async (nim) => {
+const studentHistoryCertificateView = async (studentId) => {
   try {
     let certificate = await certificateRepository.findStudentCertificateHistory(
-      nim
+      studentId
     );
 
     certificate = certificate.map((item) => {

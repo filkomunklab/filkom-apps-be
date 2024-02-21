@@ -283,24 +283,29 @@ const getCurrentForStudent = async (payload) => {
   });
 };
 
-const getAllSubmitedPreRegist = async (payload) => {
+const getAllSubmitedPreRegist = async (payload, major) => {
   const { id } = payload;
-  return await prisma.aKAD_PreRegistration.findUnique({
+  return await prisma.student.findMany({
     where: {
-      id,
+      PreRegistrationData: {
+        every: {
+          preRegistrationId: id,
+        },
+      },
+      major,
     },
-    include: {
+    select: {
+      id: true,
+      nim: true,
+      firstName: true,
+      lastName: true,
+      arrivalYear: true,
+      major: true,
       PreRegistrationData: {
         select: {
+          id: true,
           status: true,
-          Student: {
-            select: {
-              firstName: true,
-              lastName: true,
-              nim: true,
-              arrivalYear: true,
-            },
-          },
+          preRegistrationId: true,
         },
       },
     },
