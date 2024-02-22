@@ -4,6 +4,7 @@
 const studentService = require("./student.service");
 const { subject } = require("@casl/ability");
 const { policyFor } = require("../policy");
+const { xlsxFileSchema } = require("./student.schema");
 
 const createStudent = async (req, res) => {
   const payload = req.body;
@@ -243,6 +244,31 @@ const changePasswordByStudent = async (req, res) => {
   }
 };
 
+const insertByXlsx = async (req, res) => {
+  const file = req.file;
+  try {
+    await xlsxFileSchema.validate({ file });
+    await studentService.insertByXlsx(file);
+    res.status(201).send({ status: "OK", data: "Data inserted" });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+    console.log(error);
+    if (error.name === "PrismaClientValidationError") {
+      return res.status(400).send({
+        status: "FAILED",
+        data: { error: "Check xlsx data to follow the field rules" },
+      });
+    }
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   createStudent,
   getStudentByNim,
@@ -263,4 +289,5 @@ module.exports = {
   getToCheckBiodata,
   getBiodataStudent,
   changePasswordByStudent,
+  insertByXlsx,
 };
