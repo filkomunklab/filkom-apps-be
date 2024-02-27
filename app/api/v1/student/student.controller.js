@@ -4,7 +4,7 @@
 const studentService = require("./student.service");
 const { subject } = require("@casl/ability");
 const { policyFor } = require("../policy");
-const { xlsxFileSchema } = require("./student.schema");
+const { xlsxFileSchema } = require("../../../schemas");
 
 const createStudent = async (req, res) => {
   const payload = req.body;
