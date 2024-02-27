@@ -1,6 +1,8 @@
 version: "3"
 services:
   app:
+    depends_on:
+      - postgres
     image: darellyuhu/filkomapp-be
     ports:
       - "3000:3000"
