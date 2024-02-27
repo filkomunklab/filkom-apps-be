@@ -38,10 +38,10 @@ app.use(
 );
 
 //--------------------KlabatBridge------------------------------
-const sptRoutes = require("./app/api/v1/spt/spt.routes");
-const tsRoutes = require("./app/api/v1/tracer_study/ts.routes");
-const alumniRoutes = require("./app/api/v1/alumni/alumni.routes");
-const dashboardKB = require("./app/api/v1/dashboard_klabatBridge/dashboard_kb.routes");
+// const sptRoutes = require("./app/api/v1/spt/spt.routes");
+// const tsRoutes = require("./app/api/v1/tracer_study/ts.routes");
+// const alumniRoutes = require("./app/api/v1/alumni/alumni.routes");
+// const dashboardKB = require("./app/api/v1/dashboard_klabatBridge/dashboard_kb.routes");
 
 //------------------Ruter Skripsi App---------------------------
 const studentRoutes = require("./app/api/v1/student/student.routes");
@@ -67,18 +67,18 @@ const corsOptions = {
 };
 
 //-------------------------BIMBINGAN AKADEMIK------------
-const certificateRoutes = require("./app/api/v1/certificate/certificate.routes");
-const activityRoutes = require("./app/api/v1/activity/activity.routes");
-const curriculumRoutes = require("./app/api/v1/curriculum/curriculum.routes");
-const subjectRoutes = require("./app/api/v1/subject/subject.routes");
-const preRegisRoutes = require("./app/api/v1/pre_regis/preRegis.routes");
-const academicConsultation = require("./app/api/v1/academic_consultation/academic_consultation.routes");
-const message = require("./app/api/v1/message/message.router");
-const openAccessRoutes = require("./app/api/v1/open_access/open_access.routes");
-const gradesSubmissionRoutes = require("./app/api/v1/transaction_Grades/transactionGrades.routes");
-const gradesRoutes = require("./app/api/v1/Grades/grades.routes");
-const guidanceClass = require("./app/api/v1/guidanceClass/guidanceClass.routes");
-const dashboardBA = require("./app/api/v1/dashboard_bimAkad/dashboard_ba.routes");
+// const certificateRoutes = require("./app/api/v1/certificate/certificate.routes");
+// const activityRoutes = require("./app/api/v1/activity/activity.routes");
+// const curriculumRoutes = require("./app/api/v1/curriculum/curriculum.routes");
+// const subjectRoutes = require("./app/api/v1/subject/subject.routes");
+// const preRegisRoutes = require("./app/api/v1/pre_regis/preRegis.routes");
+// const academicConsultation = require("./app/api/v1/academic_consultation/academic_consultation.routes");
+// const message = require("./app/api/v1/message/message.router");
+// const openAccessRoutes = require("./app/api/v1/open_access/open_access.routes");
+// const gradesSubmissionRoutes = require("./app/api/v1/transaction_Grades/transactionGrades.routes");
+// const gradesRoutes = require("./app/api/v1/Grades/grades.routes");
+// const guidanceClass = require("./app/api/v1/guidanceClass/guidanceClass.routes");
+// const dashboardBA = require("./app/api/v1/dashboard_bimAkad/dashboard_ba.routes");
 
 //--------------------------------------------------------
 
@@ -96,10 +96,10 @@ app.use(`${URL}`, adminRoutes);
 app.use(`${URL}`, employeeRoutes);
 
 //---------------Router KlabatBridge---------------------------
-app.use(`${URL}`, sptRoutes);
-app.use(`${URL}`, tsRoutes);
-app.use(`${URL}`, alumniRoutes);
-app.use(`${URL}`, dashboardKB);
+// app.use(`${URL}`, sptRoutes);
+// app.use(`${URL}`, tsRoutes);
+// app.use(`${URL}`, alumniRoutes);
+// app.use(`${URL}`, dashboardKB);
 
 //------------------Ruter Skripsi App---------------------------
 app.use(`${URL}`, studentRoutes);
@@ -114,18 +114,18 @@ app.use(`${URL}`, consultationRoutes);
 app.use(`${URL}`, skripsiRoutes);
 
 //--------BIMBINGAN AKADEMIK-------------------------------
-app.use(`${URL}`, certificateRoutes);
-app.use(`${URL}`, activityRoutes);
-app.use(`${URL}`, curriculumRoutes);
-app.use(`${URL}`, subjectRoutes);
-app.use(`${URL}`, preRegisRoutes);
-app.use(`${URL}`, academicConsultation);
-app.use(`${URL}`, message);
-app.use(`${URL}`, openAccessRoutes);
-app.use(`${URL}`, gradesSubmissionRoutes);
-app.use(`${URL}`, gradesRoutes);
-app.use(`${URL}`, guidanceClass);
-app.use(`${URL}`, dashboardBA);
+// app.use(`${URL}`, certificateRoutes);
+// app.use(`${URL}`, activityRoutes);
+// app.use(`${URL}`, curriculumRoutes);
+// app.use(`${URL}`, subjectRoutes);
+// app.use(`${URL}`, preRegisRoutes);
+// app.use(`${URL}`, academicConsultation);
+// app.use(`${URL}`, message);
+// app.use(`${URL}`, openAccessRoutes);
+// app.use(`${URL}`, gradesSubmissionRoutes);
+// app.use(`${URL}`, gradesRoutes);
+// app.use(`${URL}`, guidanceClass);
+// app.use(`${URL}`, dashboardBA);
 app.use(`${URL}`, userManagement);
 //---------------------------------------------------
 

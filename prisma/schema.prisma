@@ -34,7 +34,7 @@ model Employee {
   lastName                  String
   email                     String                @unique
   phoneNum                  String                @unique
-  Address                   String
+  Address                   String?
   degree                    String?
   major                     Major?
   token                     String?               @unique

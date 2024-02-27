@@ -1,6 +1,6 @@
 const alumniRepository = require("./alumni.repository");
 const nodemailer = require("nodemailer");
-const { Client, LocalAuth } = require("whatsapp-web.js");
+// const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrCode = require("qrcode-terminal");
 const fs = require("fs");
 
