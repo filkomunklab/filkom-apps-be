@@ -63,7 +63,7 @@ jobs:
             echo POSTGRES_DB=${{secrets.POSTGRES_DB}} >> .env
             echo SECRET_KEY=${{secrets.SECRET_KEY}} >> .env
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker compose down
             docker compose pull
             docker compose up -d
-            cat .env
             rm .env
