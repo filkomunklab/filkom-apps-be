@@ -21,9 +21,9 @@ const createConsultation = async (req, res) => {
   }
 };
 
-const getConsultationByNim = async (req, res) => {
+const getConsultationByStudentId = async (req, res) => {
   const policy = policyFor(req.user);
-  const Student = { nim: req.params.nim };
+  const Student = { studentId: req.params.studentId };
   if (!policy.can("get", subject("AcademicConsultationByStudent", Student))) {
     return res.status(401).send({
       status: "FAILED",
@@ -31,9 +31,11 @@ const getConsultationByNim = async (req, res) => {
     });
   }
 
-  const nim = req.params.nim;
+  const studentId = req.params.studentId;
   try {
-    const consultation = await academicConsService.getConsultationByNim(nim);
+    const consultation = await academicConsService.getConsultationByStudentId(
+      studentId
+    );
     res.status(200).send({ status: "OK", data: consultation });
   } catch (error) {
     res
@@ -42,9 +44,8 @@ const getConsultationByNim = async (req, res) => {
   }
 };
 
-const getConsultationByNik = async (req, res) => {
+const getConsultationByEmployeeId = async (req, res) => {
   const policy = policyFor(req.user);
-  const Employee = { nik: req.params.nik };
   if (!policy.can("get", "AcademicConsultationByEmployee")) {
     return res.status(401).send({
       status: "FAILED",
@@ -52,9 +53,11 @@ const getConsultationByNik = async (req, res) => {
     });
   }
 
-  const nik = req.params.nik;
+  const employeeId = req.params.employeeId;
   try {
-    const consultation = await academicConsService.getConsultationByNik(nik);
+    const consultation = await academicConsService.getConsultationByEmployeeId(
+      employeeId
+    );
     res.status(200).send({ status: "OK", data: consultation });
   } catch (error) {
     res
@@ -106,8 +109,8 @@ const updateConsultationStatusCompleteById = async (req, res) => {
 
 module.exports = {
   createConsultation,
-  getConsultationByNim,
-  getConsultationByNik,
+  getConsultationByStudentId,
+  getConsultationByEmployeeId,
   getConsultationById,
   updateConsultationStatusCompleteById,
 };
