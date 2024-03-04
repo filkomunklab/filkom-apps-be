@@ -480,13 +480,14 @@ const insertByXlsx = async (file) => {
         },
       },
       select: {
+        id: true,
         nik: true,
       },
     });
 
     const rolePayload = employees.map((employee) => {
       return {
-        userId: employee.nik,
+        userId: employee.id,
         role: normalize.find((item) => item.nik === employee.nik).role,
       };
     });

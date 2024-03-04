@@ -312,13 +312,13 @@ const insertByXlsx = async (file) => {
         },
       },
       select: {
-        nim: true,
+        id: true,
       },
     });
 
     const rolePaylod = students.map((item) => {
       return {
-        userId: item.nim,
+        userId: item.id,
         role: "MAHASISWA",
       };
     });
