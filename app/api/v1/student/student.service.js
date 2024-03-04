@@ -200,10 +200,10 @@ const deleteStudentById = async (id) => {
 };
 
 //===============================Bimbingan Akademik==================
-const updateBiodataStudent = async (nim, payload) => {
+const updateBiodataStudent = async (studentId, payload) => {
   const storageRef = ref(
     storage,
-    `student/${nim}/${payload.studentImage.filename}`
+    `student/${studentId}/${payload.studentImage.filename}`
   );
   const metadata = { contentType: "image/jpeg" };
   try {
@@ -222,7 +222,7 @@ const updateBiodataStudent = async (nim, payload) => {
     }
 
     return await studentRepository.findToUpdateBiodataStudent(
-      nim,
+      studentId,
       payload,
       path
     );
@@ -231,18 +231,18 @@ const updateBiodataStudent = async (nim, payload) => {
   }
 };
 
-const viewToCheckBiodata = async (nim) => {
+const viewToCheckBiodata = async (studentId) => {
   try {
-    const student = await studentRepository.findToCheckBiodata(nim);
+    const student = await studentRepository.findToCheckBiodata(studentId);
     return student;
   } catch (error) {
     throw error;
   }
 };
 
-const viewBiodataStudent = async (nim) => {
+const viewBiodataStudent = async (studentId) => {
   try {
-    return await studentRepository.findBiodataStudent(nim);
+    return await studentRepository.findBiodataStudent(studentId);
   } catch (error) {
     throw error;
   }

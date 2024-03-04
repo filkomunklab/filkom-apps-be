@@ -21,7 +21,7 @@ const takeAttendance = async (payload) => {
   return await prisma.$transaction(async (prisma) => {
     await prisma.aKAD_ActivityMember.updateMany({
       where: {
-        studentNim: {
+        studentId: {
           in: members,
         },
         activityId: activityId,
@@ -33,7 +33,7 @@ const takeAttendance = async (payload) => {
 
     await prisma.aKAD_ActivityMember.updateMany({
       where: {
-        studentNim: {
+        studentId: {
           notIn: members,
         },
         activityId: activityId,
@@ -54,16 +54,6 @@ const takeAttendance = async (payload) => {
   });
 };
 
-// const addActivityForChoossenStudent = async (payload, nik) => {
-//   //
-// };
-
-//=============================Student Access=========================//
-// const findActivityFromDospem = async (nik) => {
-//   const activity = await prisma.activity.findMany({});
-// };
-
-//==============================General Access========================//
 const findDetailActivity = async (payload) => {
   const { activityId } = payload;
   return await prisma.aKAD_Activity.findUnique({
@@ -115,7 +105,7 @@ const getStudentList = async (payload) => {
 };
 
 const getHistoryForStudent = async (payload) => {
-  const { studentNim } = payload;
+  const { studentId } = payload;
   return await prisma.aKAD_Activity.findMany({
     where: {
       OR: [
@@ -130,7 +120,7 @@ const getHistoryForStudent = async (payload) => {
       ],
       ActivityMember: {
         some: {
-          studentNim,
+          studentId,
         },
       },
     },
@@ -148,7 +138,7 @@ const getHistoryForStudent = async (payload) => {
 };
 
 const getHistoryForAdvisor = async (payload) => {
-  const { employeeNik } = payload;
+  const { employeeId } = payload;
   return await prisma.aKAD_Activity.findMany({
     where: {
       OR: [
@@ -161,7 +151,7 @@ const getHistoryForAdvisor = async (payload) => {
           isDone: true,
         },
       ],
-      employeeNik,
+      employeeId,
     },
     select: {
       id: true,
@@ -196,12 +186,12 @@ const getCurrentActivity = async (payload) => {
         {
           OR: [
             {
-              employeeNik: id,
+              employeeId: id,
             },
             {
               ActivityMember: {
                 some: {
-                  studentNim: id,
+                  studentId: id,
                 },
               },
             },
@@ -224,10 +214,10 @@ const getCurrentConsultation = async (payload) => {
     where: {
       OR: [
         {
-          receiver_nik: id,
+          receiverId: id,
         },
         {
-          student_nim: id,
+          studentId: id,
         },
       ],
       status: "OnProcess",

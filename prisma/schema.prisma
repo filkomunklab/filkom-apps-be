@@ -62,8 +62,6 @@ model Employee {
   proposal_changes          Proposal_Changes[]    @relation("Dosen")
   skripsi_changes           Skripsi_Changes[]     @relation("Dosen")
 
-  // supervisior            Academic_Consultation[]   @relation("supervisior")
-  // reciever               Academic_Consultation[]   @relation("consultationRecivier")
   academic_consultations AKAD_Academic_Consultation[]
   preRegis               AKAD_PreRegistration[]
   gradesAccess           AKAD_Grades_access[]
@@ -76,66 +74,59 @@ model Employee {
 }
 
 model Student {
-  id                        String                @id @unique @default(uuid())
-  reg_num                   String?               @unique
-  nim                       String                @unique
+  id                        String                 @id @unique @default(uuid())
+  reg_num                   String?                @unique
+  nim                       String                 @unique
   password                  String
   firstName                 String
   lastName                  String?
-  dateOfBirth               DateTime?             @db.Date
+  dateOfBirth               DateTime?              @db.Date
   gender                    gender
   religion                  String?
-  bloodType                 String?
-  MaritalStatus             String?
-  studentEmail              String?               @unique
-  curriculum                AKAD_Curriculum?      @relation(fields: [curriculumId], references: [id])
+  studentEmail              String?                @unique
+  curriculum                AKAD_Curriculum?       @relation(fields: [curriculumId], references: [id])
   curriculumId              String?
   arrivalYear               String?
-  highSchoolGrad            String?
   address                   String?
-  currentAddress            String?
   currentResidenceStatus    String?
-  status                    StudentStatus         @default(ACTIVE)
-  personalEmail             String?               @unique
+  status                    StudentStatus          @default(ACTIVE)
+  personalEmail             String?                @unique
   faculty                   String?
   major                     Major?
-  MajorGlobal               MajorGlobal?          @relation(fields: [majorGlobalId], references: [id])
+  MajorGlobal               MajorGlobal?           @relation(fields: [majorGlobalId], references: [id])
   majorGlobalId             String?
   graduate_year             String?
   phoneNo                   String?
-  AreaOfConcentration       String?
-  token                     String?               @unique
+  areaOfConcentration       Area_Of_Concentration?
+  token                     String?                @unique
   guardianName              String?
-  guardianEducation         String?
-  guardianReligion          String?
-  guardianStatus            String?
   familyRelation            String?
   guardianEmail             String?
   guardianPhoneNo           String?
-  guardianAddress           String?
   createdBy                 String?
   updatedBy                 String?
-  createdAt                 DateTime              @default(now())
+  createdAt                 DateTime               @default(now())
   updatedAt                 DateTime?
   filename                  String?
   path                      String?
-  biodataCheck              Boolean               @default(false)
-  proposal_student          Proposal_Student[]    @relation("ProposalStudent")
-  skripsi_student           Skripsi_Student[]     @relation("SkripsiStudent")
-  group_student             Group_Student[]       @relation("StudentMember")
-  proposal_assessment       Proposal_Assessment[] @relation("Student")
-  proposal_conclusion_value Proposal_Conclusion[] @relation("Student")
-  skripsi_assessment        Skripsi_Assessment[]  @relation("Student")
-  skripsi_conclusion_value  Skripsi_Conclusion[]  @relation("Student")
+  biodataCheck              Boolean                @default(false)
+  proposal_student          Proposal_Student[]     @relation("ProposalStudent")
+  skripsi_student           Skripsi_Student[]      @relation("SkripsiStudent")
+  group_student             Group_Student[]        @relation("StudentMember")
+  proposal_assessment       Proposal_Assessment[]  @relation("Student")
+  proposal_conclusion_value Proposal_Conclusion[]  @relation("Student")
+  skripsi_assessment        Skripsi_Assessment[]   @relation("Student")
+  skripsi_conclusion_value  Skripsi_Conclusion[]   @relation("Student")
   FormSPT                   FormSPT[]
 
   academic_Consultation AKAD_Academic_Consultation[]
   Tracer_Study          Tracer_Study[]
-  studentGrade          AKAD_Transaction_Grades[]
-  ActivityMember        AKAD_ActivityMember[]
-  GuidanceClassMember   AKAD_GuidanceClassMember?
-  Certificate           AKAD_Certificate[]
-  PreRegistrationData   AKAD_PreRegistrationData[]
+
+  studentGrade        AKAD_Transaction_Grades[]
+  ActivityMember      AKAD_ActivityMember[]
+  GuidanceClassMember AKAD_GuidanceClassMember?
+  Certificate         AKAD_Certificate[]
+  PreRegistrationData AKAD_PreRegistrationData[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
@@ -682,7 +673,7 @@ model AKAD_Grades {
 
 model AKAD_Grades_access {
   id             String    @id @default(uuid())
-  semester       String?
+  semester       Semester
   semesterPeriod String?
   major          Major
   dueDate        DateTime
@@ -737,11 +728,11 @@ model AKAD_ListOfRequest {
 model AKAD_Academic_Consultation {
   id String @id @default(uuid())
 
-  student     Student @relation(fields: [student_nim], references: [nim])
-  student_nim String
+  student   Student @relation(fields: [studentId], references: [id])
+  studentId String
 
-  receiver     Employee @relation(fields: [receiver_nik], references: [nik])
-  receiver_nik String
+  receiver   Employee @relation(fields: [receiverId], references: [id])
+  receiverId String
 
   receiver_name        String             @db.VarChar(255)
   topic                String             @db.VarChar(50)
@@ -769,17 +760,18 @@ model AKAD_Message {
 }
 
 model AKAD_Certificate {
-  id             String    @id @default(uuid())
+  id             String               @id @default(uuid())
   filename       String
   path           String
   title          String
-  category       String
+  category       Certificate_Category
+  level          Certificate_Level
   description    String
   comments       String?
-  approvalDate   DateTime? @db.Timestamptz(3)
-  submitDate     DateTime  @default(now()) @db.Timestamptz(3)
-  approvalStatus status    @default(WAITING)
-  student        Student   @relation(fields: [studentId], references: [id])
+  approvalDate   DateTime?            @db.Timestamptz(3)
+  submitDate     DateTime             @default(now()) @db.Timestamptz(3)
+  approvalStatus status               @default(WAITING)
+  student        Student              @relation(fields: [studentId], references: [id])
   studentId      String
 }
 
@@ -791,8 +783,8 @@ model AKAD_Activity {
   isAttendance   Boolean
   isDone         Boolean               @default(false)
   activityType   ActivityType
-  Employee       Employee              @relation(fields: [employeeNik], references: [nik])
-  employeeNik    String
+  Employee       Employee              @relation(fields: [employeeId], references: [id])
+  employeeId     String
   createdAt      DateTime              @default(now())
   updatedAt      DateTime              @updatedAt
   ActivityMember AKAD_ActivityMember[]
@@ -802,15 +794,15 @@ model AKAD_ActivityMember {
   presence   Boolean?
   activity   AKAD_Activity @relation(fields: [activityId], references: [id])
   activityId String
-  student    Student       @relation(fields: [studentNim], references: [nim])
-  studentNim String
+  student    Student       @relation(fields: [studentId], references: [id])
+  studentId  String
 
-  @@unique([activityId, studentNim])
+  @@unique([activityId, studentId])
 }
 
 model AKAD_GuidanceClass {
   id                  String                     @id @default(uuid())
-  teacher             Employee                   @relation(fields: [teacherId], references: [nik])
+  teacher             Employee                   @relation(fields: [teacherId], references: [id])
   teacherId           String                     @unique
   createdAt           DateTime                   @default(now())
   updatedAt           DateTime                   @updatedAt
@@ -818,12 +810,12 @@ model AKAD_GuidanceClass {
 }
 
 model AKAD_GuidanceClassMember {
-  student         Student            @relation(fields: [studentNim], references: [nim])
-  studentNim      String             @unique
+  student         Student            @relation(fields: [studentId], references: [id])
+  studentId       String             @unique
   gudianceClass   AKAD_GuidanceClass @relation(fields: [guidanceClassId], references: [id], onDelete: Cascade)
   guidanceClassId String
 
-  @@unique([studentNim, guidanceClassId])
+  @@unique([studentId, guidanceClassId])
 }
 
 // ENUM 
@@ -934,4 +926,26 @@ enum ActivityType {
   GUIDANCE_CLASS
   MAJOR
   FACULTY
+}
+
+enum Area_Of_Concentration {
+  OBJECT_PROGRAMMER
+  COMPETITIVE_INTELEGENT_ANALYSIS
+  NETWORK_ADMINISTRATOR
+}
+
+enum Certificate_Level {
+  INTERNATIONAL
+  NATIONAL
+  REGION
+  UNIVERSITY
+  MAJOR
+}
+
+enum Certificate_Category {
+  PENALARAN_KEILMUAN
+  ORGANISASI_KEPEMIMPINAN
+  BAKAT_MINAT
+  PENGABDIAN_MASYARAKAT
+  OTHER
 }

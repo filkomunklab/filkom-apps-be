@@ -147,7 +147,7 @@ const deleteStudentFromGuidanceClass = async (payload) => {
   const { studentList } = payload;
   return await prisma.aKAD_GuidanceClassMember.deleteMany({
     where: {
-      studentNim: {
+      studentId: {
         in: studentList,
       },
     },

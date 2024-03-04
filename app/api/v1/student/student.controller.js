@@ -169,9 +169,12 @@ const patchBiodataStudent = async (req, res) => {
   }
 
   const payload = req.body;
-  const { nim } = req.params;
+  const { studentId } = req.params;
   try {
-    const student = await studentService.updateBiodataStudent(nim, payload);
+    const student = await studentService.updateBiodataStudent(
+      studentId,
+      payload
+    );
     res.status(201).send({ status: "OK", data: student });
   } catch (error) {
     console.log(error);
@@ -190,9 +193,9 @@ const getToCheckBiodata = async (req, res) => {
     });
   }
 
-  const { nim } = req.params;
+  const { studentId } = req.params;
   try {
-    const student = await studentService.viewToCheckBiodata(nim);
+    const student = await studentService.viewToCheckBiodata(studentId);
     res.status(200).send({ status: "OK", data: student });
   } catch (error) {
     res
@@ -211,8 +214,8 @@ const getBiodataStudent = async (req, res) => {
   }
 
   try {
-    const { nim } = req.params;
-    const student = await studentService.viewBiodataStudent(nim);
+    const { studentId } = req.params;
+    const student = await studentService.viewBiodataStudent(studentId);
     res.status(200).send({ status: "OK", data: student });
   } catch (error) {
     res
