@@ -82,7 +82,6 @@ router.get(
 //DETAIL STUDENT CERTIFICATE
 router.get(
   "/certificate/student/:certificateId",
-  auth,
   certificateController.viewStudentCertificate //view students detail certificate
 );
 

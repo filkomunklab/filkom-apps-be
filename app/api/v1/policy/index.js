@@ -797,7 +797,7 @@ const policyFor = ({ user }) => {
     can("create", "AcademicConsultation");
 
     // Get Academic Consultation
-    can("get", "AcademicConsultationByStudent", { nim: user.nim });
+    can("get", "AcademicConsultationByStudent", { studentId: user.studentId });
 
     // get Academic Consultation Detail
     can("get", "AcademicConsultationDetail");

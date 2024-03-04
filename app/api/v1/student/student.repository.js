@@ -230,18 +230,13 @@ const deleteStudent = async (prisma, id) => {
 
 //=======================================Bimbingan Akademik==========
 
-const findToUpdateBiodataStudent = async (nim, payload, path) => {
+const findToUpdateBiodataStudent = async (studentId, payload, path) => {
   const {
     password,
-    bloodType,
     dateOfBirth,
     phoneNo,
-    AreaOfConcentration,
-    highSchoolGrad,
-    currentAddress,
+    areaOfConcentration,
     currentResidenceStatus,
-    guardianEducation,
-    guardianStatus,
     guardianEmail,
     guardianPhoneNo,
   } = payload;
@@ -249,19 +244,14 @@ const findToUpdateBiodataStudent = async (nim, payload, path) => {
   try {
     const student = await prisma.student.update({
       where: {
-        nim,
+        id: studentId,
       },
       data: {
         password,
-        bloodType,
         dateOfBirth,
         phoneNo,
-        AreaOfConcentration,
-        highSchoolGrad,
-        currentAddress,
+        areaOfConcentration,
         currentResidenceStatus,
-        guardianEducation,
-        guardianStatus,
         guardianEmail,
         guardianPhoneNo,
         filename,
@@ -298,11 +288,11 @@ const findToUpdateBiodataStudent = async (nim, payload, path) => {
   }
 };
 
-const findToCheckBiodata = async (nim) => {
+const findToCheckBiodata = async (studentId) => {
   try {
     const student = await prisma.student.findUnique({
       where: {
-        nim,
+        id: studentId,
       },
       select: {
         biodataCheck: true,
@@ -318,11 +308,11 @@ const findToCheckBiodata = async (nim) => {
   }
 };
 
-const findBiodataStudent = async (nim) => {
+const findBiodataStudent = async (studentId) => {
   try {
     const student = await prisma.student.findUnique({
       where: {
-        nim,
+        id: studentId,
       },
       include: {
         curriculum: {

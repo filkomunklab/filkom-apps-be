@@ -422,13 +422,14 @@ const findCurrentCertificateStudent = async (id) => {
 
 //add certification (student)
 const insertCertificate = async (payload, studentId, path) => {
-  const { title, category, description } = payload;
+  const { title, category, level, description } = payload;
   const { filename } = payload.certificateFile;
   try {
     const certificate = await prisma.aKAD_Certificate.create({
       data: {
         title,
         category,
+        level,
         description,
         filename,
         studentId,

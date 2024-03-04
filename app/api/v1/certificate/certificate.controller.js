@@ -249,14 +249,13 @@ const studentCertificateHistory = async (req, res) => {
 
 //Detail Certificate
 const viewStudentCertificate = async (req, res) => {
-  const policy = policyFor(req.user);
-  if (!policy.can("read", "certificate_detail")) {
-    return res.status(401).send({
-      status: "FAILED",
-      data: { error: "You don't have permission to perform this action" },
-    });
-  }
-
+  // const policy = policyFor(req.user);
+  // if (!policy.can("read", "certificate_detail")) {
+  //   return res.status(401).send({
+  //     status: "FAILED",
+  //     data: { error: "You don't have permission to perform this action" },
+  //   });
+  // }
   const { certificateId } = req.params;
   try {
     const certificate = await certificateService.viewOneStudentCertificate(
