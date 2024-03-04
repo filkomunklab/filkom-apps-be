@@ -8,16 +8,15 @@ const insertConsultation = async (payload) => {
 
     return consultation;
   } catch (error) {
-    console.log("ini error: ", error);
     throw error.message;
   }
 };
 
-const selectConsultationByNim = async (nim) => {
+const selectConsultationByStudentId = async (studentId) => {
   try {
     const consultation = await prisma.aKAD_Academic_Consultation.findMany({
       where: {
-        student_nim: nim,
+        studentId,
       },
       orderBy: {
         createdAt: "desc",
@@ -30,11 +29,11 @@ const selectConsultationByNim = async (nim) => {
   }
 };
 
-const selectConsultationByNik = async (nik) => {
+const selectConsultationByEmployeeId = async (employeeId) => {
   try {
     const consultation = await prisma.aKAD_Academic_Consultation.findMany({
       where: {
-        receiver_nik: nik,
+        receiverId: employeeId,
       },
       orderBy: {
         createdAt: "desc",
@@ -79,8 +78,8 @@ const updateStatusConsultationById = async (id, status, now) => {
 
 module.exports = {
   insertConsultation,
-  selectConsultationByNim,
-  selectConsultationByNik,
+  selectConsultationByStudentId,
+  selectConsultationByEmployeeId,
   selectConsultationById,
   updateStatusConsultationById,
 };

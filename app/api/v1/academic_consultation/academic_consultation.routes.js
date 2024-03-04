@@ -8,21 +8,25 @@ router.post(
   auth,
   academicConsController.createConsultation
 );
+
 router.get(
-  "/academic-consultation/student/:nim",
+  "/academic-consultation/student/:studentId",
   auth,
-  academicConsController.getConsultationByNim
+  academicConsController.getConsultationByStudentId
 );
+
 router.get(
-  "/academic-consultation/employee/:nik",
+  "/academic-consultation/employee/:employeeId",
   auth,
-  academicConsController.getConsultationByNik
+  academicConsController.getConsultationByEmployeeId
 );
+
 router.get(
   "/academic-consultation/detail/:id",
   auth,
   academicConsController.getConsultationById
 );
+
 router.patch(
   "/academic-consultation/:id/status/complete",
   auth,

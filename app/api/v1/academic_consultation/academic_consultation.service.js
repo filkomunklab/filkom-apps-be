@@ -17,11 +17,10 @@ const createConsultation = async (payload) => {
   }
 };
 
-const getConsultationByNim = async (nim) => {
+const getConsultationByStudentId = async (studentId) => {
   try {
-    let consultation = await academicConsRepository.selectConsultationByNim(
-      nim
-    );
+    let consultation =
+      await academicConsRepository.selectConsultationByStudentId(studentId);
 
     consultation = consultation
       ? consultation.map((value) => {
@@ -39,11 +38,10 @@ const getConsultationByNim = async (nim) => {
   }
 };
 
-const getConsultationByNik = async (nik) => {
+const getConsultationByEmployeeId = async (employeeId) => {
   try {
-    let consultation = await academicConsRepository.selectConsultationByNik(
-      nik
-    );
+    let consultation =
+      await academicConsRepository.selectConsultationByEmployeeId(employeeId);
 
     consultation = consultation
       ? consultation.map((value) => {
@@ -100,8 +98,8 @@ const updateConsultationStatusCompleteById = async (id) => {
 
 module.exports = {
   createConsultation,
-  getConsultationByNim,
-  getConsultationByNik,
+  getConsultationByStudentId,
+  getConsultationByEmployeeId,
   getConsultationById,
   updateConsultationStatusCompleteById,
 };
