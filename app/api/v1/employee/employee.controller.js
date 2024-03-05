@@ -6,6 +6,7 @@ const { policyFor } = require("../policy");
 const { subject } = require("@casl/ability");
 const { message } = require("../../../database");
 const prisma = require("../../../database");
+const { xlsxFileSchema } = require("../../../schemas");
 
 const getAllEmployees = async (req, res) => {
   const policy = policyFor(req.user);
@@ -429,6 +430,29 @@ const changePasswordByEmployee = async (req, res) => {
   }
 };
 
+const insertByXlsx = async (req, res) => {
+  const file = req.file;
+  try {
+    await xlsxFileSchema.validate({ file });
+    await employeeService.insertByXlsx(file);
+    res.status(201).send({ status: "OK" });
+  } catch (error) {
+    console.log(error);
+    if (error.name === "ValidationError") {
+      return res
+        .status(400)
+        .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+    if (error.name === "PrismaClientValidationError") {
+      return res.status(400).send({
+        status: "FAILED",
+        data: { error: "Check xlsx data to follow the field rules" },
+      });
+    }
+    res.status(500).send({ status: "FAILED", data: { error: error.message } });
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -448,6 +472,7 @@ module.exports = {
   createManyEmployee,
   updateEmployeePassword,
   patchStudentStatus,
+  insertByXlsx,
   // ---------skripsi app------------
   getAllDosenSkripsi,
   getAllDosen,

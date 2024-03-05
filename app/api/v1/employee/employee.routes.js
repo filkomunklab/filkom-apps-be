@@ -5,6 +5,9 @@ const express = require("express");
 const router = express.Router();
 const employeeController = require("./employee.controller");
 const { auth } = require("../../../middleware/auth");
+const multer = require("multer");
+
+const upload = multer();
 
 router.get("/employee", auth, employeeController.getAllEmployees);
 
@@ -54,6 +57,11 @@ router.get(
 );
 router.post("/employee", employeeController.createEmployee);
 router.post("/employees", auth, employeeController.createManyEmployee);
+router.post(
+  "/employee-many",
+  upload.single("file"),
+  employeeController.insertByXlsx
+);
 router.delete("/employee/:id", auth, employeeController.deleteEmployeeById);
 router.patch("/employee/:id", auth, employeeController.patchEmployeeById);
 router.put("/employee/:id", employeeController.updateEmployeeById);

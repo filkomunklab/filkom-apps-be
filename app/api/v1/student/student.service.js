@@ -6,7 +6,7 @@ const userRoleRepository = require("../user_management/user_namagement.repositor
 const bcrypt = require("bcrypt");
 const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 const { storage } = require("../../../config/firebase");
-const { createHttpStatusError } = require("../../../utils");
+const { createHttpStatusError, extractXlsx } = require("../../../utils");
 const prisma = require("../../../database");
 
 const createStudent = async (payload) => {
@@ -286,6 +286,50 @@ const changePasswordByStudent = async (id, payload) => {
   }
 };
 
+const insertByXlsx = async (file) => {
+  const data = extractXlsx(file);
+  const normalize = data.map((data) => ({
+    nim: data.nim?.toString(),
+    firstName: data.firstName,
+    lastName: data.lastName,
+    phoneNo: data.phoneNo?.toString(),
+    gender: data.gender,
+    major: data.major,
+    religion: data.religion,
+    currentResidenceStatus: data.currentResidenceStatus,
+  }));
+
+  await prisma.$transaction(async (prisma) => {
+    await prisma.student.createMany({
+      data: normalize,
+      skipDuplicates: true,
+    });
+
+    const students = await prisma.student.findMany({
+      where: {
+        nim: {
+          in: normalize.map((item) => item.nim),
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const rolePaylod = students.map((item) => {
+      return {
+        userId: item.id,
+        role: "MAHASISWA",
+      };
+    });
+
+    await prisma.userRole.createMany({
+      data: rolePaylod,
+      skipDuplicates: true,
+    });
+  });
+};
+
 module.exports = {
   createStudent,
   findStudentByNim,
@@ -303,4 +347,5 @@ module.exports = {
   viewToCheckBiodata,
   viewBiodataStudent,
   changePasswordByStudent,
+  insertByXlsx,
 };
