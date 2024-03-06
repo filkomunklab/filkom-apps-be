@@ -80,6 +80,7 @@ const getAllUnassignedStudent = async (payload) => {
       major: major ? major : undefined,
     },
     select: {
+      id: true,
       nim: true,
       major: true,
       status: true,
