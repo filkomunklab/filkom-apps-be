@@ -297,6 +297,11 @@ const insertByXlsx = async (file) => {
     major: data.major,
     religion: data.religion,
     currentResidenceStatus: data.currentResidenceStatus,
+    studentEmail: data.studentEmail,
+    address: data.address,
+    curriculumId: data.curriculumId,
+    guardianName: data.guardianName,
+    familyRelation: data.familyRelation,
   }));
 
   await prisma.$transaction(async (prisma) => {
