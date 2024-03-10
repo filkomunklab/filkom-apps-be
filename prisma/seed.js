@@ -1576,7 +1576,6 @@ async function main() {
         lastName: "Mandias",
         degree: "SKom, MCs",
         nik: "1001",
-        nidn: "0904028101",
         major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1609,7 +1608,6 @@ async function main() {
         lastName: "Pungus",
         degree: "MT, PhD",
         nik: "1002",
-        nidn: "0922098101",
         major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1642,7 +1640,6 @@ async function main() {
         lastName: "Liem",
         degree: "MT, PhD",
         nik: "1003",
-        nidn: "0916038101",
         major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1675,7 +1672,6 @@ async function main() {
         lastName: "Adam",
         degree: " SKom, MSc",
         nik: "1004",
-        nidn: " 0915098707",
         major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1708,7 +1704,6 @@ async function main() {
         lastName: "Moedjahedy ",
         degree: " SKom, MKom, MM",
         nik: "1005",
-        nidn: "0923128602",
         major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1741,7 +1736,6 @@ async function main() {
         lastName: "Lengkong",
         degree: " SKom, MDs, MM",
         nik: "1006",
-        nidn: " 0912108301",
         major: "DKV",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1773,7 +1767,6 @@ async function main() {
         lastName: "Sandag",
         degree: " SKom, MDs, MM",
         nik: "1007",
-        nidn: "0907129001",
         major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1805,7 +1798,6 @@ async function main() {
         lastName: "Sondakh",
         degree: " SKom, MDs, MM",
         nik: "1008",
-        nidn: "0926128001",
         major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1837,7 +1829,6 @@ async function main() {
         lastName: "Waworundeng",
         degree: " SKom, MDs, MM",
         nik: "1009",
-        nidn: "0904118303",
         major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1869,7 +1860,6 @@ async function main() {
         lastName: "Putra",
         degree: " SKom, MDs, MM",
         nik: "1010",
-        nidn: " 0011106901",
         major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1901,7 +1891,6 @@ async function main() {
         lastName: "Tombeng",
         degree: " SKom, MDs, MM",
         nik: "1011",
-        nidn: "2330038801",
         major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1933,7 +1922,6 @@ async function main() {
         lastName: "Wahyudi",
         degree: " SKom, MDs, MM",
         nik: "1012",
-        nidn: "0916088901",
         major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1965,7 +1953,6 @@ async function main() {
         lastName: "Laoh",
         degree: " SKom, MDs, MM",
         nik: "1013",
-        nidn: "0929038001",
         major: "IF",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -1997,7 +1984,6 @@ async function main() {
         lastName: "Mambu",
         degree: " SKom, MDs, MM",
         nik: "1014",
-        nidn: "0927078306",
         major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -2029,7 +2015,6 @@ async function main() {
         lastName: "Sahulata",
         degree: " SKom, MDs, MM",
         nik: "1015",
-        nidn: "0311106605",
         major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -2061,7 +2046,6 @@ async function main() {
         lastName: "Taju",
         degree: " SKom, MDs, MM",
         nik: "1016",
-        nidn: "1604098901",
         major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -2093,7 +2077,6 @@ async function main() {
         lastName: "Lontaan",
         degree: " SKom, MDs, MM",
         nik: "1017",
-        nidn: "1626068101",
         major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -2125,7 +2108,6 @@ async function main() {
         lastName: "Lolong",
         degree: " SKom, MDs, MM",
         nik: "1018",
-        nidn: "0922098001",
         major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
@@ -2157,7 +2139,6 @@ async function main() {
         lastName: "Rewah",
         degree: " SKom, MDs, MM",
         nik: "1019",
-        nidn: "0917018303",
         major: "SI",
         password:
           "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",

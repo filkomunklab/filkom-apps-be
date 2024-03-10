@@ -227,6 +227,7 @@ const selectDekanName = async (ids) => {
         ],
       },
       select: {
+        id: true,
         nik: true,
         firstName: true,
         lastName: true,
@@ -255,6 +256,7 @@ const selectKaprodiNameByMajor = async (major, ids) => {
         ],
       },
       select: {
+        id: true,
         nik: true,
         firstName: true,
         lastName: true,
