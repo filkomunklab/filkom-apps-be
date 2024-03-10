@@ -28,7 +28,6 @@ model Admin {
 model Employee {
   id                        String                @id @default(uuid())
   nik                       String                @unique
-  nidn                      String?               @unique
   password                  String
   firstName                 String
   lastName                  String
