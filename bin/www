@@ -82,5 +82,5 @@ function onListening() {
   const addr = server.address();
   const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
   debug("Listening on " + bind);
-  console.log("Server is now ready to accept connections");
+  console.log("Server is now ready to accept connections on port " + port);
 }

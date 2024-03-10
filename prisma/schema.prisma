@@ -29,11 +29,12 @@ model Employee {
   id                        String                @id @default(uuid())
   nik                       String                @unique
   password                  String
+  // password                  String                @default("$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu")
   firstName                 String
   lastName                  String
   email                     String                @unique
-  phoneNum                  String                @unique
-  Address                   String
+  phoneNum                  String?               @unique
+  Address                   String?
   degree                    String?
   major                     Major?
   token                     String?               @unique
@@ -73,10 +74,10 @@ model Employee {
 }
 
 model Student {
-  id                        String                 @id @unique @default(uuid())
+  id                        String                 @id @default(uuid())
   reg_num                   String?                @unique
   nim                       String                 @unique
-  password                  String
+  password                  String                 @default("$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu")
   firstName                 String
   lastName                  String?
   dateOfBirth               DateTime?              @db.Date
@@ -146,6 +147,8 @@ model UserRole {
   updatedBy String?
   createdAt DateTime  @default(now())
   updatedAt DateTime?
+
+  @@unique([userId, role])
 }
 
 //-------------------Klabat Bridge ----------------------//

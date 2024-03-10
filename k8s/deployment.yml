@@ -1,0 +1,19 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name: filkom-app-be
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: filkom-app-be
+  template:
+    metadata:
+      labels:
+        app: filkom-app-be
+    spec:
+      containers:
+        - name: filkom-app-be
+          image: asia.gcr.io/filkom-unklab/filkom-app-be:latest
+          ports:
+            - containerPort: 3000
