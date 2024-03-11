@@ -18,10 +18,10 @@ const findCertificate = async (payload) => {
           {
             OR: [
               {
-                approval_status: "APPROVED",
+                approvalStatus: "APPROVED",
               },
               {
-                approval_status: "REJECTED",
+                approvalStatus: "REJECTED",
               },
             ],
           },
@@ -34,7 +34,7 @@ const findCertificate = async (payload) => {
         id: true,
         title: true,
         approvalDate: true,
-        approval_status: true,
+        approvalStatus: true,
         student: {
           select: {
             firstName: true,
@@ -116,7 +116,7 @@ const findAdvisorCertificateWaitingList = async (payload) => {
             guidanceClassId,
           },
         },
-        approval_status: "WAITING",
+        approvalStatus: "WAITING",
       },
       orderBy: {
         submitDate: "desc",
@@ -125,10 +125,11 @@ const findAdvisorCertificateWaitingList = async (payload) => {
         id: true,
         title: true,
         category: true,
-        approval_status: true,
+        approvalStatus: true,
         submitDate: true,
         student: {
           select: {
+            id: true,
             firstName: true,
             lastName: true,
             GuidanceClassMember: {
@@ -137,6 +138,7 @@ const findAdvisorCertificateWaitingList = async (payload) => {
                   select: {
                     teacher: {
                       select: {
+                        id: true,
                         firstName: true,
                         lastName: true,
                       },

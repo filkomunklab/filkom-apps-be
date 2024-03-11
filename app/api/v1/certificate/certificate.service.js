@@ -40,7 +40,7 @@ const advisorWaitingListCertificateView = async (payload) => {
         title: item.title,
         submitDate: item.submitDate.toString(),
         category: item.category,
-        approval_status: item.approval_status,
+        approvalStatus: item.approvalStatus,
       };
     });
 
