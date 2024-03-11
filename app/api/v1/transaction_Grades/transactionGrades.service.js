@@ -107,8 +107,9 @@ const createStudentGradesSubmmission = async (payload, studentId) => {
 };
 
 //Check if isInput
-const viewCheckIsInput = async (id) => {
-  const transaction = transactionGradeRepository.findCheckIsInput(id);
+const viewCheckIsInput = async (transactionId) => {
+  const transaction =
+    transactionGradeRepository.findCheckIsInput(transactionId);
   return transaction;
 };
 

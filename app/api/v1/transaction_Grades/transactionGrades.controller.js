@@ -157,8 +157,10 @@ const getCheckIsInput = async (req, res) => {
   }
 
   try {
-    const { id } = req.params;
-    const transaction = await transactionService.viewCheckIsInput(id);
+    const { transactionId } = req.params;
+    const transaction = await transactionService.viewCheckIsInput(
+      transactionId
+    );
     res.status(200).send({ status: "ok", data: transaction });
   } catch (error) {
     res
