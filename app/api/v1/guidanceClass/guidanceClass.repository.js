@@ -8,7 +8,6 @@ const getAllClass = async () => {
           firstName: true,
           lastName: true,
           major: true,
-          nidn: true,
           nik: true,
           id: true,
         },
@@ -37,7 +36,6 @@ const getGuidanceClassDetail = async (payload) => {
           Address: true,
           email: true,
           major: true,
-          nidn: true,
         },
       },
       GuidanceClassMember: {
