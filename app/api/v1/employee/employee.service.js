@@ -6,7 +6,7 @@ const studentRepository = require("../student/student.repository");
 const userRoleRepository = require("../user_management/user_namagement.repository");
 const bcrypt = require("bcrypt");
 const prisma = require("../../../database");
-const { createHttpStatusError } = require("../../../utils");
+const { createHttpStatusError, extractXlsx } = require("../../../utils");
 
 const getAllEmployees = async () => {
   try {
@@ -451,6 +451,54 @@ const changePasswordByEmployee = async (id, payload) => {
   }
 };
 
+const insertByXlsx = async (file) => {
+  const data = extractXlsx(file);
+  const normalize = data.map((item) => ({
+    nik: item.nik?.toString(),
+    firstName: item?.firstName,
+    lastName: item.lastName,
+    role: item.role,
+    major: item.major,
+    email: item.email,
+    phoneNum: item.phoneNum?.toString(),
+  }));
+
+  await prisma.$transaction(async (prisma) => {
+    const employeePayload = normalize.map((item) => {
+      const { role, ...rest } = item;
+      return rest;
+    });
+    await prisma.employee.createMany({
+      data: employeePayload,
+      skipDuplicates: true,
+    });
+
+    const employees = await prisma.employee.findMany({
+      where: {
+        nik: {
+          in: normalize.map((item) => item.nik),
+        },
+      },
+      select: {
+        id: true,
+        nik: true,
+      },
+    });
+
+    const rolePayload = employees.map((employee) => {
+      return {
+        userId: employee.id,
+        role: normalize.find((item) => item.nik === employee.nik).role,
+      };
+    });
+
+    await prisma.userRole.createMany({
+      data: rolePayload,
+      skipDuplicates: true,
+    });
+  });
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -469,6 +517,7 @@ module.exports = {
   createManyEmployee,
   updateEmployeePassword,
   changeStudentStatus,
+  insertByXlsx,
   //-----------skripsi app-----------
   getAllDosenSkripsi,
   getAllDosen,

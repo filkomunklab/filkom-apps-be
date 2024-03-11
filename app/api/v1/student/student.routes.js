@@ -5,6 +5,9 @@ const express = require("express");
 const router = express.Router();
 const studentController = require("./student.controller");
 const { auth } = require("../../../middleware/auth");
+const multer = require("multer");
+
+const upload = multer();
 
 //-------------------Skripsi App ------------------------
 //       create     - membuat student baru
@@ -17,6 +20,12 @@ router.post("/student", studentController.createStudent);
 // router.put("/student/:id", studentController.updateStudentById);
 // //       delete     - hapus student
 // router.delete("/student/:id", studentController.deleteStudentById);
+
+router.post(
+  "/student-many/file",
+  upload.single("xlsxFile"),
+  studentController.insertByXlsx
+);
 
 router.get("/student/:nim", studentController.getStudentByNim);
 
