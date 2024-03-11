@@ -329,7 +329,6 @@ const findBiodataStudent = async (studentId) => {
                 teacher: {
                   select: {
                     id: true,
-                    nidn: true,
                     nik: true,
                     firstName: true,
                     lastName: true,
