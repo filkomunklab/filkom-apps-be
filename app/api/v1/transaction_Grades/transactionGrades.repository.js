@@ -172,10 +172,10 @@ const insertDataforGrades = async (payload, studentId) => {
 };
 
 //Check if student had input grades
-const findCheckIsInput = async (id) => {
+const findCheckIsInput = async (transactionId) => {
   const transaction = await prisma.aKAD_Transaction_Grades.findUnique({
     where: {
-      id,
+      id: transactionId,
     },
     include: {
       Student: {

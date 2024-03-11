@@ -43,7 +43,7 @@ router.post(
 
 //check isInput grades
 router.get(
-  "/transaction/grades/check/:id",
+  "/transaction/grades/check/:transactionId",
   auth,
   transactionController.getCheckIsInput
 );
