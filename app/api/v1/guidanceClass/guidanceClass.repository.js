@@ -106,7 +106,6 @@ const getAllUnassignetTeacher = async () => {
     select: {
       id: true,
       nik: true,
-      nidn: true,
       email: true,
       major: true,
       Address: true,
