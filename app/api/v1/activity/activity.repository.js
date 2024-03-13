@@ -212,13 +212,13 @@ const getCurrentActivity = async (payload) => {
 const automateCloseActivity = () => {
   prisma.aKAD_Activity.updateMany({
     where: {
-      isDone: true,
+      isDone: false,
       dueDate: {
         lte: moment(),
       },
     },
     data: {
-      isDone: false,
+      isDone: true,
     },
   });
   console.log("hello world");
