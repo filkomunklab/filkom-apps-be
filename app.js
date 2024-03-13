@@ -10,7 +10,11 @@ const authRoutes = require("./app/api/v1/auth/auth.routes");
 const adminRoutes = require("./app/api/v1/admin/admin.routes");
 const employeeRoutes = require("./app/api/v1/employee/employee.routes");
 const userManagement = require("./app/api/v1/user_management/user_management.routes");
+
+//scheduler for bimAkad
 require("./app/api/v1/pre_regis/preRegis.scheduler");
+require("./app/api/v1/activity/activity.scheduler");
+require("./app/api/v1/open_access/open_access.scheduler");
 
 // dokumentasi
 const {
