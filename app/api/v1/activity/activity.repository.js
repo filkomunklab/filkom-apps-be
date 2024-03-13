@@ -66,6 +66,7 @@ const findDetailActivity = async (payload) => {
         include: {
           student: {
             select: {
+              nim: true,
               firstName: true,
               lastName: true,
               major: true,
