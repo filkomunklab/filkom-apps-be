@@ -1,4 +1,5 @@
 const prisma = require("../../../database");
+const moment = require("moment-timezone");
 
 //==========================Dospem Access============================//
 //CREATE ACTIVITY FOR STUDENT
@@ -208,6 +209,21 @@ const getCurrentActivity = async (payload) => {
   });
 };
 
+const automateCloseActivity = () => {
+  prisma.aKAD_Activity.updateMany({
+    where: {
+      isDone: true,
+      dueDate: {
+        lte: moment(),
+      },
+    },
+    data: {
+      isDone: false,
+    },
+  });
+  console.log("hello world");
+};
+
 const getCurrentConsultation = async (payload) => {
   const { id } = payload;
   return await prisma.aKAD_Academic_Consultation.findMany({
@@ -245,4 +261,5 @@ module.exports = {
   getStudentList,
   createActivity,
   takeAttendance,
+  automateCloseActivity,
 };

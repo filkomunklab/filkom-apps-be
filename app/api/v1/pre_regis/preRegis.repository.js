@@ -167,7 +167,6 @@ const automateClosePreRegist = () => {
       isOpen: false,
     },
   });
-  console.log("testing schaduler from repo");
 };
 
 const manualClosePreRegist = async (id) => {
