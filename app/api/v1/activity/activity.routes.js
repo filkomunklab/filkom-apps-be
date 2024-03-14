@@ -14,13 +14,13 @@ router.get(
 router.get("/activity/student-list", auth, activityController.getStudentList);
 
 router.get(
-  "/activity/history-for-student/:studentNim",
+  "/activity/history-for-student/:studentId",
   auth,
   activityController.getHistoryForStudent
 );
 
 router.get(
-  "/activity/history-for-advisor/:employeeNik",
+  "/activity/history-for-advisor/:employeeId",
   auth,
   activityController.getHistoryForAdvisor
 );
