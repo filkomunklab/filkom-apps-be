@@ -110,21 +110,27 @@ const getHistoryForStudent = async (payload) => {
   const { studentId } = payload;
   return await prisma.aKAD_Activity.findMany({
     where: {
-      OR: [
+      AND: [
         {
-          dueDate: {
-            lte: new Date(),
+          OR: [
+            {
+              dueDate: {
+                lte: new Date(),
+              },
+            },
+            {
+              isDone: true,
+            },
+          ],
+        },
+        {
+          ActivityMember: {
+            some: {
+              studentId,
+            },
           },
         },
-        {
-          isDone: true,
-        },
       ],
-      ActivityMember: {
-        some: {
-          studentId,
-        },
-      },
     },
     select: {
       id: true,
@@ -143,17 +149,23 @@ const getHistoryForAdvisor = async (payload) => {
   const { employeeId } = payload;
   return await prisma.aKAD_Activity.findMany({
     where: {
-      OR: [
+      AND: [
         {
-          dueDate: {
-            lte: new Date(),
-          },
+          OR: [
+            {
+              dueDate: {
+                lte: new Date(),
+              },
+            },
+            {
+              isDone: true,
+            },
+          ],
         },
         {
-          isDone: true,
+          employeeId,
         },
       ],
-      employeeId,
     },
     select: {
       id: true,
