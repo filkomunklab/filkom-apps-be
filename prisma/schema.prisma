@@ -28,8 +28,7 @@ model Admin {
 model Employee {
   id                        String                @id @default(uuid())
   nik                       String                @unique
-  password                  String
-  // password                  String                @default("$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu")
+  password                  String                @default("$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu")
   firstName                 String
   lastName                  String
   email                     String                @unique
@@ -68,6 +67,8 @@ model Employee {
   GuidanceClass          AKAD_GuidanceClass?
   PreRegistrationData    AKAD_PreRegistrationData[]
   Activity               AKAD_Activity[]
+  Curriculum             Curriculum[]
+  Rps                    Rps[]
 
   @@unique([firstName, lastName])
   @@index([email])
@@ -84,7 +85,7 @@ model Student {
   gender                    gender
   religion                  String?
   studentEmail              String?                @unique
-  curriculum                AKAD_Curriculum?       @relation(fields: [curriculumId], references: [id])
+  curriculum                Curriculum?            @relation(fields: [curriculumId], references: [id])
   curriculumId              String?
   arrivalYear               String?
   address                   String?
@@ -127,6 +128,8 @@ model Student {
   GuidanceClassMember AKAD_GuidanceClassMember?
   Certificate         AKAD_Certificate[]
   PreRegistrationData AKAD_PreRegistrationData[]
+  StudentGrade        StudentGrade[]
+  ClassStudent        ClassStudent[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
@@ -149,6 +152,52 @@ model UserRole {
   updatedAt DateTime?
 
   @@unique([userId, role])
+}
+
+model Curriculum {
+  id                   String               @id @default(uuid())
+  major                String               @db.VarChar(100)
+  year                 String               @db.Char(4)
+  headOfProgramStudy   Employee             @relation(fields: [headOfProgramStudyId], references: [id])
+  headOfProgramStudyId String
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  student              Student[]
+  Cpl                  Cpl[]
+  Curriculum_Subject   Curriculum_Subject[]
+
+  @@unique([major, year])
+}
+
+model Subject {
+  id            String      @id @default(uuid())
+  code          String      @unique
+  englishName   String
+  indonesiaName String
+  credits       Int
+  type          SubjectType
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  Curriculum_Subject Curriculum_Subject[]
+  Subject_Cpl        Subject_Cpl[]
+  Rps                Rps[]
+  AKAD_Grades        AKAD_Grades[]
+  AKAD_ListOfRequest AKAD_ListOfRequest[]
+}
+
+model Curriculum_Subject {
+  id           String     @id @default(uuid())
+  curriculum   Curriculum @relation(fields: [curriculumId], references: [id])
+  curriculumId String
+  subject      Subject    @relation(fields: [subjectId], references: [id])
+  subjectId    String
+  semester     Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  prerequisite String[]
+
+  @@unique([curriculumId, subjectId])
 }
 
 //-------------------Klabat Bridge ----------------------//
@@ -623,30 +672,6 @@ model Thesis_Link {
 
 //---------------------------------------Bimbingan Akademik---------------------------------------/
 
-model AKAD_Curriculum {
-  id       String         @id @default(uuid())
-  major    String         @db.VarChar(100)
-  year     String         @db.VarChar(50)
-  Subjects AKAD_Subject[]
-  student  Student[]
-
-  @@unique([major, year])
-}
-
-model AKAD_Subject {
-  id            String               @id @default(uuid())
-  code          String               @db.VarChar(100)
-  name          String
-  credits       Int
-  type          String               @db.VarChar(100)
-  prerequisite  String?
-  semester      Int
-  grade         AKAD_Grades[]
-  Curriculum    AKAD_Curriculum?     @relation(fields: [curriculumId], references: [id])
-  curriculumId  String?
-  ListOfRequest AKAD_ListOfRequest[]
-}
-
 model AKAD_Transaction_Grades {
   id           String        @id @default(uuid())
   submitedDate DateTime      @default(now()) @db.Timestamptz(3)
@@ -666,7 +691,7 @@ model AKAD_Grades {
   lecturer           String
   description        String?
   submited_Date      DateTime                 @default(now())
-  Subject            AKAD_Subject?            @relation(fields: [subjectId], references: [id])
+  Subject            Subject?                 @relation(fields: [subjectId], references: [id])
   subjectId          String?
   subjectName        String?
   transaction_Grades AKAD_Transaction_Grades? @relation(fields: [transactionId], references: [id])
@@ -721,7 +746,7 @@ model AKAD_PreRegistrationData {
 model AKAD_ListOfRequest {
   PreRegistrationData   AKAD_PreRegistrationData @relation(fields: [preRegistrationDataId], references: [id])
   preRegistrationDataId String
-  subject               AKAD_Subject             @relation(fields: [subjectId], references: [id])
+  subject               Subject                  @relation(fields: [subjectId], references: [id])
   subjectId             String
 
   @@unique([preRegistrationDataId, subjectId])
@@ -819,6 +844,198 @@ model AKAD_GuidanceClassMember {
 
   @@unique([studentId, guidanceClassId])
 }
+
+// =================== OBE START ===================
+
+model Cpl {
+  id           String         @id @default(uuid())
+  code         String
+  description  String
+  curriculum   Curriculum     @relation(fields: [curriculumId], references: [id])
+  curriculumId String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Subject_Cpl  Subject_Cpl[]
+  SupportedCpl SupportedCpl[]
+
+  @@unique([code, curriculumId])
+}
+
+model Subject_Cpl {
+  id        String   @id @default(uuid())
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  subjectId String
+  cpl       Cpl      @relation(fields: [cplId], references: [id])
+  cplId     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([subjectId, cplId])
+}
+
+model Cpmk {
+  id           String         @id @default(cuid())
+  code         String
+  rps          Rps            @relation(fields: [rpsId], references: [id])
+  rpsId        String
+  description  String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  SupportedCpl SupportedCpl[]
+
+  @@unique([rpsId, code])
+}
+
+model CpmkGrading {
+  id                 String          @id @default(uuid())
+  Rps                Rps             @relation(fields: [rpsId], references: [id])
+  rpsId              String
+  code               String
+  totalGradingWeight Int
+  GradingSystem      GradingSystem[]
+
+  @@unique([rpsId, code])
+}
+
+model GradingSystem {
+  id            String         @id @default(uuid())
+  CpmkGrading   CpmkGrading    @relation(fields: [cpmkGradingId], references: [id])
+  cpmkGradingId String
+  gradingName   String
+  gradingWeight Int
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  StudentGrade  StudentGrade[]
+}
+
+model StudentGrade {
+  id              String        @id @default(uuid())
+  rawGrade        Float
+  score           Float
+  calculateGrade  Float?
+  Student         Student       @relation(fields: [studentNim], references: [nim])
+  studentNim      String
+  GradingSystem   GradingSystem @relation(fields: [gradingSystemId], references: [id])
+  gradingSystemId String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@unique(name: "studentGradeId", [studentNim, gradingSystemId])
+}
+
+model SupportedCpl {
+  cpmk   Cpmk   @relation(fields: [cpmkId], references: [id])
+  cpmkId String
+  cpl    Cpl    @relation(fields: [cplId], references: [id])
+  cplId  String
+
+  @@unique([cpmkId, cplId])
+}
+
+model Rps {
+  id                    String                  @id @default(uuid())
+  subjectFamily         String
+  subjectDescription    String
+  parallel              String                  @db.Char(1)
+  semester              Int
+  schedule              String
+  rpsDeveloper          String
+  headOfExpertise       String
+  headOfProgramStudy    String
+  mainReferences        String[]
+  supportingReferences  String[]
+  software              String
+  hardware              String
+  teamTeaching          String[]
+  minPassStudents       String
+  minPassGrade          String
+  Subject               Subject                 @relation(fields: [subjectId], references: [id])
+  subjectId             String
+  teacher               Employee                @relation(fields: [teacherId], references: [nik])
+  teacherId             String
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  Cpmk                  Cpmk[]
+  MeetingPlan           MeetingPlan[]
+  StudentAssignmentPlan StudentAssignmentPlan[]
+  ReportSummary         ReportSummary?
+  ReportDetail          ReportDetail?
+  CpmkGrading           CpmkGrading[]
+  ClassStudent          ClassStudent[]
+}
+
+model ClassStudent {
+  id         String  @id @default(uuid())
+  Student    Student @relation(fields: [studentNim], references: [nim])
+  studentNim String
+  Rps        Rps     @relation(fields: [rpsId], references: [id])
+  rpsId      String
+
+  @@unique([studentNim, rpsId])
+}
+
+model MeetingPlan {
+  id                    String   @id @default(uuid())
+  week                  String
+  cpmkList              String[]
+  subCpmkDescription    String
+  achievementIndicators String
+  assessmentModel       String
+  material              String
+  method                String
+  offlineActivity       String
+  onlineActivity        String
+  rps                   Rps      @relation(fields: [rpsId], references: [id])
+  rpsId                 String
+}
+
+model StudentAssignmentPlan {
+  id                    String @id @default(uuid())
+  title                 String
+  assignmentModel       String
+  references            String
+  subLearningOutcomes   String
+  assignmentDescription String
+  icbValuation          String
+  dueSchedule           String
+  others                String
+  referenceList         String
+  rps                   Rps    @relation(fields: [rpsId], references: [id])
+  rpsId                 String
+}
+
+model ReportSummary {
+  Rps              Rps    @relation(fields: [rpsId], references: [id])
+  rpsId            String @unique
+  subjectName      String
+  curriculum       String
+  major            String
+  credits          Int
+  parallel         String @db.Char(1)
+  status           String
+  semester         String
+  teacher          String
+  schedule         String
+  highestCpmk      Float
+  lowestCpmk       Float
+  cpmkGradeSummary Json
+  studentCpmkGrade Json
+}
+
+model ReportDetail {
+  Rps           Rps    @relation(fields: [rpsId], references: [id])
+  rpsId         String @unique
+  subjectName   String
+  major         String
+  credits       Int
+  parallel      String @db.Char(1)
+  teacher       String
+  schedule      String
+  gradingSystem Json
+  studentGrade  Json
+}
+
+// =================== OBE END ===================
 
 // ENUM 
 enum Major {
@@ -950,4 +1167,12 @@ enum Certificate_Category {
   BAKAT_MINAT
   PENGABDIAN_MASYARAKAT
   OTHER
+}
+
+enum SubjectType {
+  Prerequisite
+  Major
+  General
+  Basic
+  Elective
 }
