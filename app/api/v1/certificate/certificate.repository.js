@@ -377,6 +377,8 @@ const findStudentCertificateHistory = async (studentId) => {
       select: {
         id: true,
         title: true,
+        category: true,
+        level: true,
         approvalDate: true,
         student: {
           select: {
@@ -407,6 +409,8 @@ const findCurrentCertificateStudent = async (id) => {
       select: {
         id: true,
         title: true,
+        category: true,
+        level: true,
         submitDate: true,
         student: {
           select: {
