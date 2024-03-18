@@ -12,6 +12,7 @@ const preRegistPolicy = ({ user }) => {
     can("create", "submitPreRegist");
     can("read", "preRegistHistoryForStudent");
     can("read", "preRegistDetails");
+    can("read", "preRegistCurrentForStudent");
   }
 
   if (hasRole("KAPRODI")) {
@@ -19,13 +20,12 @@ const preRegistPolicy = ({ user }) => {
     can("create", "preRegist");
     can("update", "closeAccessPreRegist");
     can("read", "preRegistHistoryForAdvisor");
-    can("read", "listSubmited");
+    can("read", "submitedList");
   }
 
   if (hasRole("DEKAN")) {
     can("read", "allPreRegist");
     can("read", "preRegistHistoryForAdvisor");
-    can("read", "listSubmited");
   }
 
   if (hasRole("DOSEN")) {

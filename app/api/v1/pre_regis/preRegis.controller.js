@@ -240,7 +240,11 @@ const patchManualCloseAccess = async (req, res) => {
 
 const getCurrentForStudent = async (req, res) => {
   const payload = req.params;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("read", "preRegistCurrentForStudent")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.getCurrentForStudent(payload);
     res.status(200).send({ status: "OK", data });
   } catch (error) {
@@ -252,8 +256,12 @@ const getCurrentForStudent = async (req, res) => {
 
 const getAllSubmitedPreRegist = async (req, res) => {
   const payload = req.params;
-  const { major } = req.body;
+  const { major } = req.query;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("read", "submitedList")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.getAllSubmitedPreRegist(payload, major);
     res.status(200).send({ status: "OK", data });
   } catch (error) {
@@ -269,6 +277,7 @@ const getAllSubject = async (req, res) => {
     const data = await preRegisService.getAllSubject(payload);
     res.status(200).send({ status: "OK", data });
   } catch (error) {
+    console.log(error);
     res
       .status(error?.status || 500)
       .send({ status: "FAILED", data: { error: error?.message || error } });
