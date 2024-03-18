@@ -49,11 +49,13 @@ router.get("/pre-regist/current/:id", preRegisController.getCurrentPreRegist);
 
 router.get(
   "/pre-regist/current/student/:studentId",
+  auth,
   preRegisController.getCurrentForStudent
 );
 
 router.get(
   "/pre-regist/list-submitted/:id",
+  auth,
   preRegisController.getAllSubmitedPreRegist
 );
 

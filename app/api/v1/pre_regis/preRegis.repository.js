@@ -321,9 +321,9 @@ const getAllSubject = async (payload) => {
   const { id } = payload;
   return await prisma.$queryRaw`
   SELECT lr."subjectId", s.code, s.name, s.type, count(*) "totalRequest"
-  FROM "ListOfRequest" lr 
-  JOIN "Subject" s ON lr."subjectId" = s."id" 
-  JOIN "PreRegistrationData" prd ON lr."preRegistrationDataId" = prd."id"
+  FROM "AKAD_ListOfRequest" lr 
+  JOIN "AKAD_Subject" s ON lr."subjectId" = s."id" 
+  JOIN "AKAD_PreRegistrationData" prd ON lr."preRegistrationDataId" = prd."id"
   WHERE prd."preRegistrationId" = ${id} 
   GROUP BY lr."subjectId", s.code, s.name, s.type`;
 };
