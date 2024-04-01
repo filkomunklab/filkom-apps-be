@@ -29,7 +29,6 @@ model Employee {
   id                        String                @id @default(uuid())
   nik                       String                @unique
   password                  String
-  // password                  String                @default("$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu")
   firstName                 String
   lastName                  String
   email                     String                @unique
@@ -119,14 +118,14 @@ model Student {
   skripsi_conclusion_value  Skripsi_Conclusion[]   @relation("Student")
   FormSPT                   FormSPT[]
 
-  academic_Consultation AKAD_Academic_Consultation[]
-  Tracer_Study          Tracer_Study[]
+  Tracer_Study Tracer_Study[]
 
-  studentGrade        AKAD_Transaction_Grades[]
-  ActivityMember      AKAD_ActivityMember[]
-  GuidanceClassMember AKAD_GuidanceClassMember?
-  Certificate         AKAD_Certificate[]
-  PreRegistrationData AKAD_PreRegistrationData[]
+  academic_Consultation AKAD_Academic_Consultation[]
+  studentGrade          AKAD_Transaction_Grades[]
+  ActivityMember        AKAD_ActivityMember[]
+  GuidanceClassMember   AKAD_GuidanceClassMember?
+  Certificate           AKAD_Certificate[]
+  PreRegistrationData   AKAD_PreRegistrationData[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
@@ -728,14 +727,11 @@ model AKAD_ListOfRequest {
 }
 
 model AKAD_Academic_Consultation {
-  id String @id @default(uuid())
-
-  student   Student @relation(fields: [studentId], references: [id])
-  studentId String
-
-  receiver   Employee @relation(fields: [receiverId], references: [id])
-  receiverId String
-
+  id                   String             @id @default(uuid())
+  student              Student            @relation(fields: [studentId], references: [id])
+  studentId            String
+  receiver             Employee           @relation(fields: [receiverId], references: [id])
+  receiverId           String
   receiver_name        String             @db.VarChar(255)
   topic                String             @db.VarChar(50)
   student_name         String             @db.VarChar(255)
@@ -751,14 +747,12 @@ model AKAD_Academic_Consultation {
 }
 
 model AKAD_Message {
-  id String @id @default(uuid())
-
+  id                       String                     @id @default(uuid())
   academic_consultation    AKAD_Academic_Consultation @relation(fields: [academic_consultation_id], references: [id])
   academic_consultation_id String
-
-  sender_name String   @db.VarChar(255)
-  content     String
-  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  sender_name              String                     @db.VarChar(255)
+  content                  String
+  createdAt                DateTime                   @default(now()) @db.Timestamptz(3)
 }
 
 model AKAD_Certificate {
@@ -818,6 +812,13 @@ model AKAD_GuidanceClassMember {
   guidanceClassId String
 
   @@unique([studentId, guidanceClassId])
+}
+
+model AKAD_Lecturer {
+  id        String @id @default(uuid())
+  firstName String
+  lastName  String
+  degree    String
 }
 
 // ENUM 
