@@ -110,4 +110,10 @@ router.patch(
   employeeController.changePasswordByEmployee
 );
 
+router.patch(
+  "/employee/change-student-profile/:studentId",
+  auth,
+  employeeController.changeBiodataStudent
+);
+
 module.exports = router;

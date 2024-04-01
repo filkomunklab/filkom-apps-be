@@ -453,6 +453,29 @@ const insertByXlsx = async (req, res) => {
   }
 };
 
+const changeBiodataStudent = async (req, res) => {
+  const policy = policyFor(req.user);
+  if (!policy.can("update", "employee_Change_Student_Profile")) {
+    return res.status(401).send({
+      status: "FAILED",
+      data: { error: "You don't have permission to perform this action" },
+    });
+  }
+  const payload = req.body;
+  const { studentId } = req.params;
+  try {
+    const employee = await employeeService.changeStudentProfile(
+      studentId,
+      payload
+    );
+    res.status(201).send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -479,4 +502,5 @@ module.exports = {
   createDosenSkripsi,
   deleteDosenSkripsiById,
   changePasswordByEmployee,
+  changeBiodataStudent,
 };

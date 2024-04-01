@@ -251,6 +251,9 @@ const policyFor = ({ user }) => {
 
     // update Complete Status Academic Consultation
     can("update", "AcademicConsultationStatusComplete");
+
+    // change student Profile
+    can("update", "employee_Change_Student_Profile");
   }
 
   if (hasRole("KAPRODI")) {
@@ -391,6 +394,9 @@ const policyFor = ({ user }) => {
 
     //Kaprodi : set student status
     can("update", "student_status");
+
+    // change student Profile
+    can("update", "employee_Change_Student_Profile");
   }
 
   if (hasRole("DOSEN")) {
@@ -543,14 +549,6 @@ const policyFor = ({ user }) => {
     //Dosen: view profile student
     can("read", "student_biodata");
 
-    // //Dashboard Dosen
-    // //Dosen : view total of Active & InActive Student guidance
-    // can("read", "total_student");
-    // //Dosen : view total Active student guidance
-    // can("read", "total_active_guidance");
-    // //Dosen : view total InActive student guidance
-    // can("read", "total_Inactive_guidance");
-
     // change password
     can("update", "EmployeePassword", { id: user.id });
 
@@ -562,6 +560,9 @@ const policyFor = ({ user }) => {
 
     // update Complete Status Academic Consultation
     can("update", "AcademicConsultationStatusComplete");
+
+    // change student Profile
+    can("update", "employee_Change_Student_Profile");
   }
 
   if (hasRole("DOSEN_MK")) {

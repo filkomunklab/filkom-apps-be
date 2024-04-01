@@ -499,6 +499,10 @@ const insertByXlsx = async (file) => {
   });
 };
 
+const changeStudentProfile = async (studnetId, payload) => {
+  return await employeeRepository.changeStudentProfile(studnetId, payload);
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -524,4 +528,5 @@ module.exports = {
   createDosenSkripsi,
   deleteDosenSkripsiById,
   changePasswordByEmployee,
+  changeStudentProfile,
 };
