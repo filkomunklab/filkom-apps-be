@@ -175,9 +175,9 @@ const findTotalAllCategoryCertificate = async () => {
       where: {
         approvalStatus: "APPROVED",
       },
-      by: ["category"],
+      by: ["level"],
       _count: {
-        category: true,
+        level: true,
       },
     });
   } catch (error) {
