@@ -937,7 +937,6 @@ model Rps {
   subjectFamily         String
   subjectDescription    String
   parallel              String                  @db.Char(1)
-  semester              Int
   schedule              String
   rpsDeveloper          String
   headOfExpertise       String
@@ -953,8 +952,10 @@ model Rps {
   subjectId             String
   teacher               Employee                @relation(fields: [teacherId], references: [id])
   teacherId             String
+  status                status                  @default(WAITING)
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
+  approvedAt            DateTime?
   Cpmk                  Cpmk[]
   MeetingPlan           MeetingPlan[]
   StudentAssignmentPlan StudentAssignmentPlan[]
@@ -975,9 +976,9 @@ model ClassStudent {
 }
 
 model MeetingPlan {
-  id                    String   @id @default(uuid())
+  id                    String @id @default(uuid())
   week                  String
-  cpmkList              String[]
+  cpmkList              String
   subCpmkDescription    String
   achievementIndicators String
   assessmentModel       String
@@ -985,13 +986,12 @@ model MeetingPlan {
   method                String
   offlineActivity       String
   onlineActivity        String
-  rps                   Rps      @relation(fields: [rpsId], references: [id])
+  rps                   Rps    @relation(fields: [rpsId], references: [id])
   rpsId                 String
 }
 
 model StudentAssignmentPlan {
   id                    String @id @default(uuid())
-  title                 String
   assignmentModel       String
   references            String
   subLearningOutcomes   String
