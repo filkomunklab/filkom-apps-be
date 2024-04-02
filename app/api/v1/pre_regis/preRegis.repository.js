@@ -317,6 +317,18 @@ const getAllSubmitedPreRegist = async (payload, major) => {
   });
 };
 
+const updatePreRegisAccess = async (preRegId, payload) => {
+  const { semester, semesterPeriod, dueDate } = payload;
+  return await prisma.aKAD_PreRegistration.update({
+    where: { id: preRegId },
+    data: {
+      semester,
+      semesterPeriod,
+      dueDate,
+    },
+  });
+};
+
 const getAllSubject = async (payload) => {
   const { id } = payload;
   return await prisma.$queryRaw`
@@ -345,4 +357,5 @@ module.exports = {
   submitApproval,
   getAllPreRegis,
   getAllSubject,
+  updatePreRegisAccess,
 };
