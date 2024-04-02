@@ -347,6 +347,8 @@ const policyFor = ({ user }) => {
     can("read", "approved_semester_grades");
     //KAPRODI : view detail student grades only with GPA
     can("read", "grades_detail_only");
+    // edit access
+    can("update", "kaprodi_edit_access");
 
     //GRADES ACCESS
     //KAPRODI : create access for student to input grades

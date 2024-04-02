@@ -81,13 +81,25 @@ const findToCheckOpenGradesAccess = async (major) => {
         major,
       },
       orderBy: {
-        createdAt: "desc",
+        updatedAt: "desc",
       },
     });
     return openAccess;
   } catch (error) {
     throw error;
   }
+};
+
+const updateAccess = async (accessId, payload) => {
+  const { semester, semesterPeriod, dueDate } = payload;
+  return await prisma.aKAD_Grades_access.update({
+    where: { id: accessId },
+    data: {
+      semester,
+      semesterPeriod,
+      dueDate,
+    },
+  });
 };
 
 //automate close access
@@ -112,4 +124,5 @@ module.exports = {
   findToCheckOpenGradesAccess,
   findlistGradesAccessByMajor,
   automateCloesGradesAccess,
+  updateAccess,
 };

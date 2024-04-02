@@ -284,6 +284,26 @@ const getAllSubject = async (req, res) => {
   }
 };
 
+const updatePreRegisAccess = async (req, res) => {
+  const payload = req.body;
+  const { preRegId } = req.params;
+  const policy = preRegistPolicy(req.user);
+  try {
+    if (!policy.can("update", "preRegistAccess")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
+    const access = await preRegisService.updatePreRegisAccess(
+      preRegId,
+      payload
+    );
+    res.status(200).send({ status: "OK", data: access });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getPreRegistListForTeacher,
   getAllSubmitedPreRegist,
@@ -300,4 +320,5 @@ module.exports = {
   getAllSubject,
   preRegisMenu,
   patchManualCloseAccess,
+  updatePreRegisAccess,
 };

@@ -87,6 +87,10 @@ const patchManualClosedPreRegist = async (id) => {
   return preRegisRepository.manualClosePreRegist(id);
 };
 
+const updatePreRegisAccess = async (preRegId, payload) => {
+  return await preRegisRepository.updatePreRegisAccess(preRegId, payload);
+};
+
 module.exports = {
   getPreRegistListForTeacher,
   getAllSubmitedPreRegist,
@@ -103,4 +107,5 @@ module.exports = {
   getAllPreRegis,
   getAllSubject,
   patchManualClosedPreRegist,
+  updatePreRegisAccess,
 };

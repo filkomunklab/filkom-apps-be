@@ -67,4 +67,10 @@ router.patch(
   preRegisController.patchManualCloseAccess
 );
 
+router.patch(
+  "/pre-regist/update/:preRegId",
+  auth,
+  preRegisController.updatePreRegisAccess
+);
+
 module.exports = router;

@@ -21,6 +21,7 @@ const preRegistPolicy = ({ user }) => {
     can("update", "closeAccessPreRegist");
     can("read", "preRegistHistoryForAdvisor");
     can("read", "submitedList");
+    can("update", "preRegistAccess");
   }
 
   if (hasRole("DEKAN")) {
