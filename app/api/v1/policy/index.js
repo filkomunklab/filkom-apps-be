@@ -251,9 +251,6 @@ const policyFor = ({ user }) => {
 
     // update Complete Status Academic Consultation
     can("update", "AcademicConsultationStatusComplete");
-
-    // change student Profile
-    can("update", "employee_Change_Student_Profile");
   }
 
   if (hasRole("KAPRODI")) {
@@ -396,9 +393,6 @@ const policyFor = ({ user }) => {
 
     //Kaprodi : set student status
     can("update", "student_status");
-
-    // change student Profile
-    can("update", "employee_Change_Student_Profile");
   }
 
   if (hasRole("DOSEN")) {
