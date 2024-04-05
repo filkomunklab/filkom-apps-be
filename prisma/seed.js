@@ -2185,6 +2185,62 @@ async function main() {
     });
 
   //--------------------------------------Klabat Bridge--------------------------------------------
+  // Create Lecturer
+  await prisma.aKAD_Lecturer.createMany({
+    data: [
+      {
+        firstName: "John",
+        lastName: "Smith",
+        degree: "Ph.D",
+      },
+      {
+        firstName: "Mary",
+        lastName: "Johnson",
+        degree: "M.A",
+      },
+      {
+        firstName: "Michael",
+        lastName: "Williams",
+        degree: "Ed.D",
+      },
+      {
+        firstName: "Jennifer",
+        lastName: "Brown",
+        degree: "Ph.D",
+      },
+      {
+        firstName: "David",
+        lastName: "Jones",
+        degree: "M.Sc",
+      },
+      {
+        firstName: "Sarah",
+        lastName: "Davis",
+        degree: "D.Phil",
+      },
+      {
+        firstName: "Christopher",
+        lastName: "Wilson",
+        degree: "J.D",
+      },
+      {
+        firstName: "Laura",
+        lastName: "Martinez",
+        degree: "D.Ed",
+      },
+      {
+        firstName: "Daniel",
+        lastName: "Taylor",
+        degree: "M.D",
+      },
+      {
+        firstName: "Emily",
+        lastName: "Anderson",
+        degree: "Psy.D",
+      },
+    ],
+  });
+
   // Create Student
   await prisma.student.createMany({
     data: [
