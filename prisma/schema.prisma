@@ -1016,8 +1016,8 @@ model ReportSummary {
   semester         String
   teacher          String
   schedule         String
-  highestCpmk      Float
-  lowestCpmk       Float
+  highestCpmk      Json
+  lowestCpmk       Json
   cpmkGradeSummary Json
   studentCpmkGrade Json
   createAt         DateTime @default(now())
