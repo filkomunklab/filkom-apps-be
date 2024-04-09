@@ -325,6 +325,7 @@ const updatePreRegisAccess = async (preRegId, payload) => {
       semester,
       semesterPeriod,
       dueDate,
+      isOpen: true,
     },
   });
 };
