@@ -98,6 +98,7 @@ const updateAccess = async (accessId, payload) => {
       semester,
       semesterPeriod,
       dueDate,
+      isOpen: true,
     },
   });
 };
