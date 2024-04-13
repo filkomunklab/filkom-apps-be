@@ -257,18 +257,18 @@ const viewTotalCategoryCertificate = async () => {
   try {
     let result = await dashboardRepository.findTotalAllCategoryCertificate();
     result = result.reduce((acc, item) => {
-      const category = item.category;
-      const count = item._count.category;
+      const level = item.level;
+      const count = item._count.level;
 
       // Check if the major is already in the accumulator
-      const categoryEntry = acc.find((entry) => entry.category === category);
+      const levelEntry = acc.find((entry) => entry.level === level);
 
-      if (categoryEntry) {
+      if (levelEntry) {
         // Increment the total count for the major
-        categoryEntry.count += count;
+        levelEntry.count += count;
       } else {
         // Add a new entry for the major
-        acc.push({ category, count });
+        acc.push({ level, count });
       }
 
       return acc;
