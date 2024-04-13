@@ -251,6 +251,7 @@ const getCurrentConsultation = async (payload) => {
       ],
       status: "OnProcess",
     },
+    orderBy: { updatedAt: "desc" },
     select: {
       id: true,
       description: true,
