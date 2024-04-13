@@ -213,6 +213,7 @@ const getCurrentActivity = async (payload) => {
         },
       ],
     },
+    orderBy: { updatedAt: "desc" },
     select: {
       id: true,
       title: true,
