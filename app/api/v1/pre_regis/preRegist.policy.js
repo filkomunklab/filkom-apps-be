@@ -22,11 +22,14 @@ const preRegistPolicy = ({ user }) => {
     can("read", "preRegistHistoryForAdvisor");
     can("read", "submitedList");
     can("update", "preRegistAccess");
+    can("read", "subjectList");
   }
 
   if (hasRole("DEKAN")) {
     can("read", "allPreRegist");
     can("read", "preRegistHistoryForAdvisor");
+    can("read", "submitedList");
+    can("read", "subjectList");
   }
 
   if (hasRole("DOSEN")) {

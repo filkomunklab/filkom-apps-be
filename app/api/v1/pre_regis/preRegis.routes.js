@@ -59,7 +59,11 @@ router.get(
   preRegisController.getAllSubmitedPreRegist
 );
 
-router.get("/pre-regist/list-subject/:id", preRegisController.getAllSubject);
+router.get(
+  "/pre-regist/list-subject/:id",
+  auth,
+  preRegisController.getAllSubject
+);
 
 router.patch(
   "/pre-regist/close-access/:id",
