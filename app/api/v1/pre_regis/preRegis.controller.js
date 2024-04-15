@@ -273,7 +273,11 @@ const getAllSubmitedPreRegist = async (req, res) => {
 
 const getAllSubject = async (req, res) => {
   const payload = req.params;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("read", "subjectList")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.getAllSubject(payload);
     res.status(200).send({ status: "OK", data });
   } catch (error) {
