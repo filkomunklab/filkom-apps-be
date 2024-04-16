@@ -21,7 +21,10 @@ const signInAdmin = async (username, password) => {
             role: checkUsername.role,
           },
         },
-        secretKey
+        secretKey,
+        {
+          expiresIn: "3d",
+        }
       );
       checkUsername.token = token;
       await adminRepository.updateAdmin(checkUsername.id, checkUsername);
@@ -33,6 +36,7 @@ const signInAdmin = async (username, password) => {
           role: checkUsername.role,
         },
         token: token,
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       };
       return data;
     } else {
@@ -71,7 +75,10 @@ const signInEmployee = async (nik, password) => {
             role: role,
           },
         },
-        secretKey
+        secretKey,
+        {
+          expiresIn: "3d",
+        }
       );
       checkNIK.token = token;
       await employeeRepository.updateEmployee(checkNIK.id, { token });
@@ -84,6 +91,7 @@ const signInEmployee = async (nik, password) => {
           guidanceClassId: checkNIK.GuidanceClass?.id,
         },
         token: token,
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       };
       return data;
     } else {
@@ -123,7 +131,10 @@ const signInStudent = async (username, password) => {
             majorGlobalId: checkNIM.majorGlobalId,
           },
         },
-        secretKey
+        secretKey,
+        {
+          expiresIn: "3d",
+        }
       );
       checkNIM.token = token;
       const {
@@ -146,6 +157,7 @@ const signInStudent = async (username, password) => {
           guidanceClassId: GuidanceClassMember?.guidanceClassId,
         },
         token: token,
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       };
       return data;
     } else {
