@@ -59,7 +59,7 @@ router.post("/employee", employeeController.createEmployee);
 router.post("/employees", auth, employeeController.createManyEmployee);
 router.post(
   "/employee-many",
-  upload.single("file"),
+  upload.single("xlsxFile"),
   employeeController.insertByXlsx
 );
 router.delete("/employee/:id", auth, employeeController.deleteEmployeeById);
