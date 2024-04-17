@@ -2189,54 +2189,96 @@ async function main() {
   await prisma.aKAD_Lecturer.createMany({
     data: [
       {
-        firstName: "John",
-        lastName: "Smith",
-        degree: "Ph.D",
+        firstName: "Andrew T",
+        lastName: "Liem",
       },
       {
-        firstName: "Mary",
-        lastName: "Johnson",
-        degree: "M.A",
+        firstName: "Oktaverano H",
+        lastName: "Lengkong",
       },
       {
-        firstName: "Michael",
-        lastName: "Williams",
-        degree: "Ed.D",
+        firstName: "Green F",
+        lastName: "Mandias",
       },
       {
-        firstName: "Jennifer",
-        lastName: "Brown",
-        degree: "Ph.D",
+        firstName: "Stenly R",
+        lastName: "Pungus",
       },
       {
-        firstName: "David",
-        lastName: "Jones",
-        degree: "M.Sc",
+        firstName: "Semmy W",
+        lastName: "Taju",
       },
       {
-        firstName: "Sarah",
-        lastName: "Davis",
-        degree: "D.Phil",
+        firstName: "Reymon",
+        lastName: "Rotikan",
       },
       {
-        firstName: "Christopher",
-        lastName: "Wilson",
-        degree: "J.D",
+        firstName: "Joe Yuan Y",
+        lastName: "Mambu",
       },
       {
-        firstName: "Laura",
-        lastName: "Martinez",
-        degree: "D.Ed",
+        firstName: "Jimmy H",
+        lastName: "Moedjahedy",
       },
       {
-        firstName: "Daniel",
-        lastName: "Taylor",
-        degree: "M.D",
+        firstName: "Jein",
+        lastName: "Rewah",
       },
       {
-        firstName: "Emily",
-        lastName: "Anderson",
-        degree: "Psy.D",
+        firstName: "Reynoldus A",
+        lastName: "Sahulata",
+      },
+      {
+        firstName: "Rolly J",
+        lastName: "Lontaan",
+      },
+      {
+        firstName: "Steven",
+        lastName: "Lolong",
+      },
+      {
+        firstName: "Stenly I",
+        lastName: "Adam",
+      },
+      {
+        firstName: "Debby E",
+        lastName: "Sondakh",
+      },
+      {
+        firstName: "Edson Y",
+        lastName: "Putra",
+      },
+      {
+        firstName: "Marchel T",
+        lastName: "Tombeng",
+      },
+      {
+        firstName: "Andria K",
+        lastName: "Wahyudi",
+      },
+      {
+        firstName: "Jacquline",
+        lastName: "Waworundeng",
+      },
+      {
+        firstName: "Green A",
+        lastName: "Sandag",
+      },
+      {
+        firstName: "Lidya C",
+        lastName: "Laoh",
+      },
+      {
+        firstName: "Raissa C",
+        lastName: "Maringka",
+      },
+      {
+        firstName: "Andrew",
+        lastName: "Tambunan",
+      },
+      {
+        firstName: "George W",
+        lastName: "Tangka",
       },
     ],
   });
