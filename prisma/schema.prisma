@@ -818,7 +818,6 @@ model AKAD_Lecturer {
   id        String @id @default(uuid())
   firstName String
   lastName  String
-  degree    String
 }
 
 // ENUM 
