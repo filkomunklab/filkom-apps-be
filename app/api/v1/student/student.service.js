@@ -303,7 +303,7 @@ const insertByXlsx = async (file) => {
     guardianName: data.guardianName,
     familyRelation: data.familyRelation,
     reg_num: data.reg_num,
-    arrivalYear: data.arrivalYear.toString(),
+    arrivalYear: data.arrivalYear?.toString(),
   }));
 
   await prisma.$transaction(async (prisma) => {
