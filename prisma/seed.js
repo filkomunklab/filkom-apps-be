@@ -98,6 +98,7 @@ async function main() {
         lastName: "Tangka",
       },
     ],
+    skipDuplicates: true,
   });
 }
 
