@@ -239,6 +239,9 @@ const findToUpdateBiodataStudent = async (studentId, payload, path) => {
     currentResidenceStatus,
     guardianEmail,
     guardianPhoneNo,
+    reg_num,
+    studentEmail,
+    address,
   } = payload;
   const { filename } = payload.studentImage;
   try {
@@ -247,6 +250,9 @@ const findToUpdateBiodataStudent = async (studentId, payload, path) => {
         id: studentId,
       },
       data: {
+        reg_num,
+        address,
+        studentEmail,
         password,
         dateOfBirth,
         phoneNo,
