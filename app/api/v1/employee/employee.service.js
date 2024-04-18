@@ -485,10 +485,10 @@ const insertByXlsx = async (file) => {
       },
     });
 
-    const rolePayload = employees.map((employee) => {
+    const rolePayload = normalize.map((employee) => {
       return {
-        userId: employee.id,
-        role: normalize.find((item) => item.nik === employee.nik).role,
+        userId: employees.find((item) => item.nik === employee.nik).id,
+        role: employee.role,
       };
     });
 
