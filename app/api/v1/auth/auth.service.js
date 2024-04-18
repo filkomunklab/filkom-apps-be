@@ -23,7 +23,7 @@ const signInAdmin = async (username, password) => {
         },
         secretKey,
         {
-          expiresIn: "3d",
+          expiresIn: "7d",
         }
       );
       checkUsername.token = token;
@@ -77,7 +77,7 @@ const signInEmployee = async (nik, password) => {
         },
         secretKey,
         {
-          expiresIn: "3d",
+          expiresIn: "7d",
         }
       );
       checkNIK.token = token;
@@ -133,7 +133,7 @@ const signInStudent = async (username, password) => {
         },
         secretKey,
         {
-          expiresIn: "3d",
+          expiresIn: "7d",
         }
       );
       checkNIM.token = token;
