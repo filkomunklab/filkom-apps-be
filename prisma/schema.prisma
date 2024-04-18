@@ -921,7 +921,7 @@ model GradingSystem {
 model StudentGrade {
   id              String        @id @default(uuid())
   rawGrade        Float
-  score           Decimal       @db.Decimal(3, 2)
+  score           Float
   calculateGrade  Float?
   Student         Student       @relation(fields: [studentNim], references: [nim])
   studentNim      String
