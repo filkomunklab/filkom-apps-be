@@ -37,6 +37,13 @@ const guidanceClassPolicy = ({ user }) => {
     can("read", "allUnassignedTeacher");
   }
 
+  if (hasRole("OPERATOR_FAKULTAS")) {
+    can("read", "allClass");
+    can("read", "guidanceClassDetail");
+    can("read", "allUnassignedStudent");
+    can("read", "allUnassignedTeacher");
+  }
+
   return build();
 };
 
