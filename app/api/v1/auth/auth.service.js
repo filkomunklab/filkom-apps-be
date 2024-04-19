@@ -21,10 +21,7 @@ const signInAdmin = async (username, password) => {
             role: checkUsername.role,
           },
         },
-        secretKey,
-        {
-          expiresIn: "7d",
-        }
+        secretKey
       );
       checkUsername.token = token;
       await adminRepository.updateAdmin(checkUsername.id, checkUsername);
@@ -75,10 +72,7 @@ const signInEmployee = async (nik, password) => {
             role: role,
           },
         },
-        secretKey,
-        {
-          expiresIn: "7d",
-        }
+        secretKey
       );
       checkNIK.token = token;
       await employeeRepository.updateEmployee(checkNIK.id, { token });
@@ -131,10 +125,7 @@ const signInStudent = async (username, password) => {
             majorGlobalId: checkNIM.majorGlobalId,
           },
         },
-        secretKey,
-        {
-          expiresIn: "7d",
-        }
+        secretKey
       );
       checkNIM.token = token;
       const {
