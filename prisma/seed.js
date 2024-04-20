@@ -2,6 +2,36 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function main() {
+  // CREATE ADMIN
+  await prisma.admin.create({
+    data: {
+      email: "admin@mail.com",
+      username: "admin",
+      password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      role: "ADMIN",
+    },
+  });
+
+  // CREATE SUPER_ADMIN
+  await prisma.admin.create({
+    data: {
+      email: "super_admin@mail.com",
+      username: "superadmin",
+      password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      role: "SUPER_ADMIN",
+    },
+  });
+
+  // CREATE ADMIN_LPMI
+  await prisma.admin.create({
+    data: {
+      email: "admin_lpmi@mail.com",
+      username: "adminlpmi",
+      password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+      role: "ADMIN_LPMI",
+    },
+  });
+
   // Create Lecturer
   await prisma.aKAD_Lecturer.createMany({
     data: [
