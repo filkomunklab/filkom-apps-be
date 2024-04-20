@@ -74,35 +74,38 @@ const createManyEmployee = async (data) => {
 
     // menggunakan primsa transaction untuk make sure semua proses berhasil baru commit
     // jika ada yang gagal maka akan rollback sehingga consistency data dijaga
-    const result = await prisma.$transaction(async (prisma) => {
-      try {
-        let dataEmployeeWithId = await employeeRepository.findEmployees();
+    const result = await prisma.$transaction(
+      async (prisma) => {
+        try {
+          let dataEmployeeWithId = await employeeRepository.findEmployees();
 
-        // pembuatan user role berdasarkan id user employee
-        // looping pertama untuk ambil data all employee tanpa role dengan user id
-        // looping kedua untuk all employee dengan role tanpa user id
-        // looping ketiga untuk push user role
-        dataEmployeeWithId.forEach((itemEmployeeWithoutRole) => {
-          data.forEach((itemEmployeeWithRole) => {
-            if (itemEmployeeWithRole.nik === itemEmployeeWithoutRole.nik) {
-              itemEmployeeWithRole.role.forEach((itemRole) => {
-                userRole.push({
-                  userId: itemEmployeeWithoutRole.id,
-                  role: itemRole,
+          // pembuatan user role berdasarkan id user employee
+          // looping pertama untuk ambil data all employee tanpa role dengan user id
+          // looping kedua untuk all employee dengan role tanpa user id
+          // looping ketiga untuk push user role
+          dataEmployeeWithId.forEach((itemEmployeeWithoutRole) => {
+            data.forEach((itemEmployeeWithRole) => {
+              if (itemEmployeeWithRole.nik === itemEmployeeWithoutRole.nik) {
+                itemEmployeeWithRole.role.forEach((itemRole) => {
+                  userRole.push({
+                    userId: itemEmployeeWithoutRole.id,
+                    role: itemRole,
+                  });
                 });
-              });
-            }
+              }
+            });
           });
-        });
-        console.log("ini user role: ", userRole);
-        await userRoleRepository.CreateManyRole(prisma, userRole);
+          console.log("ini user role: ", userRole);
+          await userRoleRepository.CreateManyRole(prisma, userRole);
 
-        return employee;
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    });
+          return employee;
+        } catch (error) {
+          console.log(error);
+          throw error;
+        }
+      },
+      { timeout: 30000, maxWait: 25000 }
+    );
 
     return result;
   } catch (error) {
@@ -112,12 +115,15 @@ const createManyEmployee = async (data) => {
 
 const deleteEmployeeById = async (id) => {
   try {
-    await prisma.$transaction(async (prisma) => {
-      const employee = await employeeRepository.findEmployeeById(prisma, id);
-      await employeeRepository.deleteEmployee(prisma, id);
-      await userRoleRepository.deleteUserRoles(prisma, employee.id);
-      return;
-    });
+    await prisma.$transaction(
+      async (prisma) => {
+        const employee = await employeeRepository.findEmployeeById(prisma, id);
+        await employeeRepository.deleteEmployee(prisma, id);
+        await userRoleRepository.deleteUserRoles(prisma, employee.id);
+        return;
+      },
+      { timeout: 30000, maxWait: 25000 }
+    );
   } catch (error) {
     throw error;
   }
@@ -463,40 +469,43 @@ const insertByXlsx = async (file) => {
     phoneNum: item.phoneNum?.toString(),
   }));
 
-  await prisma.$transaction(async (prisma) => {
-    const employeePayload = normalize.map((item) => {
-      const { role, ...rest } = item;
-      return rest;
-    });
-    await prisma.employee.createMany({
-      data: employeePayload,
-      skipDuplicates: true,
-    });
+  await prisma.$transaction(
+    async (prisma) => {
+      const employeePayload = normalize.map((item) => {
+        const { role, ...rest } = item;
+        return rest;
+      });
+      await prisma.employee.createMany({
+        data: employeePayload,
+        skipDuplicates: true,
+      });
 
-    const employees = await prisma.employee.findMany({
-      where: {
-        nik: {
-          in: normalize.map((item) => item.nik),
+      const employees = await prisma.employee.findMany({
+        where: {
+          nik: {
+            in: normalize.map((item) => item.nik),
+          },
         },
-      },
-      select: {
-        id: true,
-        nik: true,
-      },
-    });
+        select: {
+          id: true,
+          nik: true,
+        },
+      });
 
-    const rolePayload = normalize.map((employee) => {
-      return {
-        userId: employees.find((item) => item.nik === employee.nik).id,
-        role: employee.role,
-      };
-    });
+      const rolePayload = normalize.map((employee) => {
+        return {
+          userId: employees.find((item) => item.nik === employee.nik).id,
+          role: employee.role,
+        };
+      });
 
-    await prisma.userRole.createMany({
-      data: rolePayload,
-      skipDuplicates: true,
-    });
-  });
+      await prisma.userRole.createMany({
+        data: rolePayload,
+        skipDuplicates: true,
+      });
+    },
+    { timeout: 30000, maxWait: 25000 }
+  );
 };
 
 const changeStudentProfile = async (studnetId, payload) => {

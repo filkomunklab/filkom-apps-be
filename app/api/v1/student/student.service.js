@@ -55,20 +55,26 @@ const createManyStudent = async (data) => {
       }
     });
 
-    const result = await prisma.$transaction(async (prisma) => {
-      // data sudah benar langsung masukan ke tabel mahasiswa
-      const students = await studentRepository.insertManyStudent(data, prisma);
+    const result = await prisma.$transaction(
+      async (prisma) => {
+        // data sudah benar langsung masukan ke tabel mahasiswa
+        const students = await studentRepository.insertManyStudent(
+          data,
+          prisma
+        );
 
-      const userRole = students.map((item) => {
-        return {
-          userId: item.id,
-          role: "MAHASISWA",
-        };
-      });
+        const userRole = students.map((item) => {
+          return {
+            userId: item.id,
+            role: "MAHASISWA",
+          };
+        });
 
-      await userRoleRepository.CreateManyRole(prisma, userRole);
-      return students;
-    });
+        await userRoleRepository.CreateManyRole(prisma, userRole);
+        return students;
+      },
+      { timeout: 30000, maxWait: 25000 }
+    );
 
     return result;
   } catch (error) {
@@ -188,12 +194,15 @@ const updateOrPatchStudentById = async (id, payload) => {
 
 const deleteStudentById = async (id) => {
   try {
-    await prisma.$transaction(async (prisma) => {
-      const student = await studentRepository.findStudentById(prisma, id);
-      await studentRepository.deleteStudent(prisma, id);
-      await userRoleRepository.deleteUserRoles(prisma, student.id);
-      return;
-    });
+    await prisma.$transaction(
+      async (prisma) => {
+        const student = await studentRepository.findStudentById(prisma, id);
+        await studentRepository.deleteStudent(prisma, id);
+        await userRoleRepository.deleteUserRoles(prisma, student.id);
+        return;
+      },
+      { timeout: 30000, maxWait: 25000 }
+    );
   } catch (error) {
     throw error;
   }
@@ -336,7 +345,7 @@ const insertByXlsx = async (file) => {
         skipDuplicates: true,
       });
     },
-    { timeout: 30, maxWait: 20 }
+    { timeout: 30000, maxWait: 25000 }
   );
 };
 
