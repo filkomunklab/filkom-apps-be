@@ -396,6 +396,7 @@ const policyFor = ({ user }) => {
   if (hasRole("DOSEN")) {
     // ================================ Global ====================================
     // input here
+    can("read", "Employee");
     // ================================ Skripsi App ================================
     // (Dosen: All) view advisor team
     can("read", "advisor_team");
