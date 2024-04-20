@@ -73,7 +73,7 @@ const createManyStudent = async (data) => {
         await userRoleRepository.CreateManyRole(prisma, userRole);
         return students;
       },
-      { timeout: 30, maxWait: 25 }
+      { timeout: 30000, maxWait: 25000 }
     );
 
     return result;
@@ -201,7 +201,7 @@ const deleteStudentById = async (id) => {
         await userRoleRepository.deleteUserRoles(prisma, student.id);
         return;
       },
-      { timeout: 30, maxWait: 25 }
+      { timeout: 30000, maxWait: 25000 }
     );
   } catch (error) {
     throw error;
@@ -345,7 +345,7 @@ const insertByXlsx = async (file) => {
         skipDuplicates: true,
       });
     },
-    { timeout: 30, maxWait: 20 }
+    { timeout: 30000, maxWait: 25000 }
   );
 };
 

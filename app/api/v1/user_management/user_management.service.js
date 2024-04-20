@@ -15,7 +15,7 @@ const updateRoles = async (id, payload) => {
         console.log("ini employe coi: ", userRole);
         return userRole;
       },
-      { timeout: 30, maxWait: 25 }
+      { timeout: 30000, maxWait: 25000 }
     );
 
     return result;

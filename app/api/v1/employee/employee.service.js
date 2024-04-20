@@ -104,7 +104,7 @@ const createManyEmployee = async (data) => {
           throw error;
         }
       },
-      { timeout: 30, maxWait: 25 }
+      { timeout: 30000, maxWait: 25000 }
     );
 
     return result;
@@ -122,7 +122,7 @@ const deleteEmployeeById = async (id) => {
         await userRoleRepository.deleteUserRoles(prisma, employee.id);
         return;
       },
-      { timeout: 30, maxWait: 25 }
+      { timeout: 30000, maxWait: 25000 }
     );
   } catch (error) {
     throw error;
@@ -504,7 +504,7 @@ const insertByXlsx = async (file) => {
         skipDuplicates: true,
       });
     },
-    { timeout: 30, maxWait: 25 }
+    { timeout: 30000, maxWait: 25000 }
   );
 };
 

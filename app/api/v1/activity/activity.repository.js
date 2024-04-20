@@ -54,7 +54,7 @@ const takeAttendance = async (payload) => {
         },
       });
     },
-    { timeout: 30, maxWait: 25 }
+    { timeout: 30000, maxWait: 25000 }
   );
 };
 
