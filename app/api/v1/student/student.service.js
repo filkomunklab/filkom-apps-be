@@ -306,35 +306,38 @@ const insertByXlsx = async (file) => {
     arrivalYear: data.arrivalYear?.toString(),
   }));
 
-  await prisma.$transaction(async (prisma) => {
-    await prisma.student.createMany({
-      data: normalize,
-      skipDuplicates: true,
-    });
+  await prisma.$transaction(
+    async (prisma) => {
+      await prisma.student.createMany({
+        data: normalize,
+        skipDuplicates: true,
+      });
 
-    const students = await prisma.student.findMany({
-      where: {
-        nim: {
-          in: normalize.map((item) => item.nim),
+      const students = await prisma.student.findMany({
+        where: {
+          nim: {
+            in: normalize.map((item) => item.nim),
+          },
         },
-      },
-      select: {
-        id: true,
-      },
-    });
+        select: {
+          id: true,
+        },
+      });
 
-    const rolePaylod = students.map((item) => {
-      return {
-        userId: item.id,
-        role: "MAHASISWA",
-      };
-    });
+      const rolePaylod = students.map((item) => {
+        return {
+          userId: item.id,
+          role: "MAHASISWA",
+        };
+      });
 
-    await prisma.userRole.createMany({
-      data: rolePaylod,
-      skipDuplicates: true,
-    });
-  });
+      await prisma.userRole.createMany({
+        data: rolePaylod,
+        skipDuplicates: true,
+      });
+    },
+    { timeout: 30, maxWait: 20 }
+  );
 };
 
 module.exports = {
