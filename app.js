@@ -66,6 +66,7 @@ const corsOptions = {
     "http://localhost:3000",
     "https://development-filkom-apps-fe.vercel.app",
     "http://localhost:5173",
+    "https://bim-akad.vercel.app",
     "*",
   ],
 };
