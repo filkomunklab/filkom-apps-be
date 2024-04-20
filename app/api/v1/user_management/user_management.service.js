@@ -3,17 +3,20 @@ const userManagementRepository = require("./user_namagement.repository");
 
 const updateRoles = async (id, payload) => {
   try {
-    const result = await prisma.$transaction(async (prisma) => {
-      console.log("ini id: ", id);
-      await userManagementRepository.deleteUserRoles(prisma, id);
-      const userRole = await userManagementRepository.CreateManyRole(
-        prisma,
-        payload
-      );
+    const result = await prisma.$transaction(
+      async (prisma) => {
+        console.log("ini id: ", id);
+        await userManagementRepository.deleteUserRoles(prisma, id);
+        const userRole = await userManagementRepository.CreateManyRole(
+          prisma,
+          payload
+        );
 
-      console.log("ini employe coi: ", userRole);
-      return userRole;
-    });
+        console.log("ini employe coi: ", userRole);
+        return userRole;
+      },
+      { timeout: 30, maxWait: 25 }
+    );
 
     return result;
   } catch (error) {

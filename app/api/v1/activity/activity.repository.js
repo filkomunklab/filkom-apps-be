@@ -19,40 +19,43 @@ const createActivity = async (payload) => {
 
 const takeAttendance = async (payload) => {
   const { activityId, members } = payload;
-  return await prisma.$transaction(async (prisma) => {
-    await prisma.aKAD_ActivityMember.updateMany({
-      where: {
-        studentId: {
-          in: members,
+  return await prisma.$transaction(
+    async (prisma) => {
+      await prisma.aKAD_ActivityMember.updateMany({
+        where: {
+          studentId: {
+            in: members,
+          },
+          activityId: activityId,
         },
-        activityId: activityId,
-      },
-      data: {
-        presence: true,
-      },
-    });
-
-    await prisma.aKAD_ActivityMember.updateMany({
-      where: {
-        studentId: {
-          notIn: members,
+        data: {
+          presence: true,
         },
-        activityId: activityId,
-      },
-      data: {
-        presence: false,
-      },
-    });
+      });
 
-    await prisma.aKAD_Activity.update({
-      where: {
-        id: activityId,
-      },
-      data: {
-        isDone: true,
-      },
-    });
-  });
+      await prisma.aKAD_ActivityMember.updateMany({
+        where: {
+          studentId: {
+            notIn: members,
+          },
+          activityId: activityId,
+        },
+        data: {
+          presence: false,
+        },
+      });
+
+      await prisma.aKAD_Activity.update({
+        where: {
+          id: activityId,
+        },
+        data: {
+          isDone: true,
+        },
+      });
+    },
+    { timeout: 30, maxWait: 25 }
+  );
 };
 
 const findDetailActivity = async (payload) => {
