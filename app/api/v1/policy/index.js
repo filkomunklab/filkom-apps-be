@@ -255,7 +255,7 @@ const policyFor = ({ user }) => {
 
   if (hasRole("KAPRODI")) {
     // ================================ Global ====================================
-    // input here
+    can("read", "Employee");
     // ================================ Skripsi App ================================
     // Kaprodi view Consultation
     can("read", "Consultation");

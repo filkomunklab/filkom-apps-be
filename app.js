@@ -67,6 +67,7 @@ const corsOptions = {
     "https://development-filkom-apps-fe.vercel.app",
     "http://localhost:5173",
     "https://outcome-based.vercel.app",
+    "https://filkom.investsulut.id",
     "*",
   ],
 };

@@ -85,7 +85,7 @@ model Student {
   gender                    gender
   religion                  String?
   studentEmail              String?                @unique
-  curriculum                Curriculum?            @relation(fields: [curriculumId], references: [id])
+  curriculum                Curriculum?            @relation(fields: [curriculumId], references: [id], onDelete: SetNull)
   curriculumId              String?
   arrivalYear               String?
   address                   String?
@@ -188,7 +188,7 @@ model Subject {
 
 model Curriculum_Subject {
   id           String     @id @default(uuid())
-  curriculum   Curriculum @relation(fields: [curriculumId], references: [id])
+  curriculum   Curriculum @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
   curriculumId String
   subject      Subject    @relation(fields: [subjectId], references: [id])
   subjectId    String
@@ -861,7 +861,7 @@ model Cpl {
   id           String         @id @default(uuid())
   code         String
   description  String
-  curriculum   Curriculum     @relation(fields: [curriculumId], references: [id])
+  curriculum   Curriculum     @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
   curriculumId String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
@@ -875,7 +875,7 @@ model Subject_Cpl {
   id        String   @id @default(uuid())
   subject   Subject  @relation(fields: [subjectId], references: [id])
   subjectId String
-  cpl       Cpl      @relation(fields: [cplId], references: [id])
+  cpl       Cpl      @relation(fields: [cplId], references: [id], onDelete: Cascade)
   cplId     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -936,7 +936,7 @@ model StudentGrade {
 model SupportedCpl {
   cpmk   Cpmk   @relation(fields: [cpmkId], references: [id], onDelete: Cascade)
   cpmkId String
-  cpl    Cpl    @relation(fields: [cplId], references: [id])
+  cpl    Cpl    @relation(fields: [cplId], references: [id], onDelete: Cascade)
   cplId  String
 
   @@unique([cpmkId, cplId])
