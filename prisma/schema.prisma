@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  //directUrl = env("DIRECT_URL")
 }
 
 // ------- global ------------------------
@@ -818,6 +818,23 @@ model AKAD_Lecturer {
   id        String @id @default(uuid())
   firstName String
   lastName  String
+}
+
+model AKAD_guide {
+  id      String  @id @default(uuid())
+  number  String?
+  title   String?
+  type    String?
+  content String? @unique
+}
+
+model AKAD_Vmt {
+  id      String  @id @default(uuid())
+  major   Major?
+  number  String?
+  type    String?
+  level   String?
+  content String?
 }
 
 // ENUM 
