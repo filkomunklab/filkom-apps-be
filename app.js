@@ -85,6 +85,7 @@ const gradesRoutes = require("./app/api/v1/Grades/grades.routes");
 const guidanceClass = require("./app/api/v1/guidanceClass/guidanceClass.routes");
 const dashboardBA = require("./app/api/v1/dashboard_bimAkad/dashboard_ba.routes");
 const lecturerRoutes = require("./app/api/v1/Akad_Lecturer/lecturer.routes");
+const guideVmtRoutes = require("./app/api/v1/AKAD_guideVmt/guideVmt.routes");
 //--------------------------------------------------------
 
 app.use(cors(corsOptions));
@@ -133,6 +134,7 @@ app.use(`${URL}`, guidanceClass);
 app.use(`${URL}`, dashboardBA);
 app.use(`${URL}`, userManagement);
 app.use(`${URL}`, lecturerRoutes);
+app.use(`${URL}`, guideVmtRoutes);
 //---------------------------------------------------
 
 app.use("/", (req, res) => {
