@@ -69,7 +69,6 @@ const corsOptions = {
     "https://outcome-based.vercel.app",
     "https://filkom.investsulut.id",
     "https://hgdxm2td-3000.asse.devtunnels.ms",
-    "*",
   ],
 };
 
