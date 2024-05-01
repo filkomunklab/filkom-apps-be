@@ -8,6 +8,7 @@ const guideVmtPolicy = ({ user }) => {
 
   if (hasRole("DEKAN")) {
     can("update", "visi-misi-tujuan");
+    can("update", "academic-guide");
   }
 
   return build();

@@ -4,6 +4,14 @@ const postAcademicGuide = async (payload) => {
   return await guideVmtRepository.postAcademicGuide(payload);
 };
 
+const changeAcademicGuide = async (payload, id) => {
+  return await guideVmtRepository.changeAcademicGuide(payload, id);
+};
+
+const getAcademicGuide = async () => {
+  return await guideVmtRepository.getAcademicGuide();
+};
+
 //=============================VISI MISI TUJUAN ===============================
 const postVmt = async (payload) => {
   return await guideVmtRepository.postVmt(payload);
@@ -34,7 +42,11 @@ const patchvisiMisiTujuan = async (payload, id) => {
 };
 
 module.exports = {
+  //Academic Guide
   postAcademicGuide,
+  changeAcademicGuide,
+  getAcademicGuide,
+  //Visi Misi Tujuan
   postVmt,
   getVisiMisiTujuan,
   getVisiMisiTujuanFakultas,

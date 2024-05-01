@@ -7,6 +7,15 @@ const guideVmtController = require("./guideVmt.controller");
 // post Academic Guide
 router.post("/academicGuide", guideVmtController.postAcademicGuide);
 
+//update or change academic guide
+router.patch(
+  "/academic-guide/update/:id",
+  auth,
+  guideVmtController.changeAcademicGuide
+);
+
+router.get("/academic-guide/detail", guideVmtController.getAcademicGuide);
+
 //VISI, MISI, & TUJUAN
 // post Visi, misi, & tujuan
 router.post("/visionMissionAim", guideVmtController.postVmt);
