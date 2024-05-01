@@ -1,6 +1,5 @@
 const guideVmtService = require("./guideVmt.service");
 const { guideVmtPolicy } = require("./guideVmt.policy");
-const { error } = require("qrcode-terminal");
 
 const postAcademicGuide = async (req, res) => {
   const payload = req.body;
