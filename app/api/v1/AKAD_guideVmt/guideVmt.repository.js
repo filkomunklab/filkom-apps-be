@@ -10,12 +10,15 @@ const postAcademicGuide = async (payload) => {
   });
 };
 
-const changeAcademicGuide = async (content, id) => {
+const changeAcademicGuide = async (payload, id) => {
+  const { content, title, part } = payload;
   return await prisma.aKAD_guide.updateMany({
     where: {
       id,
     },
     data: {
+      part,
+      title,
       content,
     },
   });
@@ -23,13 +26,8 @@ const changeAcademicGuide = async (content, id) => {
 
 const getAcademicGuide = async () => {
   return await prisma.aKAD_guide.findMany({
-    orderBy: { number: "asc" },
-    select: {
-      type: true,
-      number: true,
-      title: true,
-      content: true,
-    },
+    orderBy: { part: "asc" },
+    // orderBy: { /*part: "asc"*/ number: "asc" },
   });
 };
 
@@ -105,11 +103,13 @@ const changeVmt = async (payload, id) => {
 };
 
 module.exports = {
+  //Academic Guide
   postAcademicGuide,
-  postVmt,
   changeAcademicGuide,
-  changeVmt,
   getAcademicGuide,
+  //Visi Misi Tujuan
+  postVmt,
+  changeVmt,
   getVisiMisiTujuan,
   getVisiMisiTujuanFakultas,
   getVisiMisiTujuanProdiIF,
