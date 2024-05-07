@@ -7,6 +7,8 @@ const userRoleRepository = require("../user_management/user_namagement.repositor
 const bcrypt = require("bcrypt");
 const prisma = require("../../../database");
 const { createHttpStatusError, extractXlsx } = require("../../../utils");
+const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
+const { storage } = require("../../../config/firebase");
 
 const getAllEmployees = async () => {
   try {
@@ -512,6 +514,31 @@ const changeStudentProfile = async (studnetId, payload) => {
   return await employeeRepository.changeStudentProfile(studnetId, payload);
 };
 
+const uploadProfilePicture = async (employeeId, payload) => {
+  const storageRef = ref(
+    storage,
+    `employee/${employeeId}/${payload.employeeImage.fileName}`
+  );
+  const metadata = { contentType: "image/jpeg" };
+  try {
+    const binaryString = atob(payload.employeeImage.buffer);
+    const byteArray = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      byteArray[i] = binaryString.charCodeAt(i);
+    }
+    await uploadBytes(storageRef, byteArray, metadata);
+    const path = await getDownloadURL(storageRef);
+
+    return await employeeRepository.uploadProfilePicture(
+      employeeId,
+      payload,
+      path
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -531,6 +558,7 @@ module.exports = {
   updateEmployeePassword,
   changeStudentStatus,
   insertByXlsx,
+  uploadProfilePicture,
   //-----------skripsi app-----------
   getAllDosenSkripsi,
   getAllDosen,

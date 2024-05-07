@@ -240,6 +240,9 @@ const policyFor = ({ user }) => {
     //Dekan : view statistic approved certificate
     can("read", "statistic_certificate");
 
+    //Upload Profile Picture
+    can("update", "profile-picture");
+
     // change password
     can("update", "EmployeePassword", { id: user.id });
 
@@ -372,6 +375,9 @@ const policyFor = ({ user }) => {
     //Biodata Student
     //Kaprodi: view profile student
     can("read", "student_biodata");
+
+    //upload profile picture
+    can("update", "profile-picture");
 
     //Certificate
     //Kaprodi : view all student Certificate
@@ -540,6 +546,9 @@ const policyFor = ({ user }) => {
     //Guidance Student
     //Dosen : set student status
     can("update", "student_status");
+
+    //upload profile picture
+    can("update", "profile-picture");
 
     //Biodata Student
     //Dosen: view profile student
