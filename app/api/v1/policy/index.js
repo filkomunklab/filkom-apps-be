@@ -106,6 +106,9 @@ const policyFor = ({ user }) => {
 
     //=================================BIMBINGAN AKADEMIK=====================
 
+    //upload profile picture
+    can("update", "profile-picture");
+
     //operator_fakultas: view profile student
     can("read", "student_biodata");
 
