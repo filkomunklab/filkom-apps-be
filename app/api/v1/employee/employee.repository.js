@@ -416,6 +416,34 @@ const changeStudentProfile = async (studentId, payload) => {
   });
 };
 
+const uploadProfilePicture = async (employeeId, payload, path) => {
+  const { firstName, lastName, Address, email, phoneNum } = payload;
+  const { fileName } = payload.employeeImage;
+  return await prisma.employee.update({
+    where: {
+      id: employeeId,
+    },
+    data: {
+      firstName,
+      lastName,
+      Address,
+      email,
+      phoneNum,
+      fileName,
+      path,
+    },
+    select: {
+      firstName: true,
+      lastName: true,
+      Address: true,
+      email: true,
+      phoneNum: true,
+      fileName: true,
+      path: true,
+    },
+  });
+};
+
 module.exports = {
   findEmployees,
   findEmployeeById,
@@ -438,4 +466,5 @@ module.exports = {
   updateEmployeeByNik,
   setStudentStatus,
   changeStudentProfile,
+  uploadProfilePicture,
 };

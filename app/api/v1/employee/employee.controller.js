@@ -476,6 +476,30 @@ const changeBiodataStudent = async (req, res) => {
   }
 };
 
+const uploadProfilePicture = async (req, res) => {
+  const policy = policyFor(req.user);
+  const { employeeId } = req.params;
+  const payload = req.body;
+
+  try {
+    if (!policy.can("update", "profile-picture")) {
+      return res.status(401).send({
+        status: "FAILED",
+        data: { error: "You don't have permission to perform this action" },
+      });
+    }
+    const employee = await employeeService.uploadProfilePicture(
+      employeeId,
+      payload
+    );
+    res.status(201).send({ status: "OK", data: employee });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
 module.exports = {
   getAllEmployees,
   getEmployeeById,
@@ -496,6 +520,7 @@ module.exports = {
   updateEmployeePassword,
   patchStudentStatus,
   insertByXlsx,
+  uploadProfilePicture,
   // ---------skripsi app------------
   getAllDosenSkripsi,
   getAllDosen,

@@ -116,4 +116,10 @@ router.patch(
   employeeController.changeBiodataStudent
 );
 
+router.patch(
+  "/employee/upload-profile-picture/:employeeId",
+  auth,
+  employeeController.uploadProfilePicture
+);
+
 module.exports = router;

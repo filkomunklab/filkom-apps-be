@@ -41,6 +41,8 @@ model Employee {
   updatedBy                 String?
   createdAt                 DateTime              @default(now())
   updatedAt                 DateTime?
+  fileName                  String?
+  path                      String?
   classroom                 Classroom[]           @relation("DosenMK")
   thesis_consultation       Thesis_Consultation[] @relation("ThesisConsultation")
   proposed_advisor          Submission[]          @relation("ProposedAdvisor")
