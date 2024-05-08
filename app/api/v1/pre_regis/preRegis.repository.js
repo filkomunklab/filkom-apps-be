@@ -337,7 +337,7 @@ const getAllSubject = async (payload) => {
   FROM "AKAD_ListOfRequest" lr 
   JOIN "AKAD_Subject" s ON lr."subjectId" = s."id" 
   JOIN "AKAD_PreRegistrationData" prd ON lr."preRegistrationDataId" = prd."id"
-  WHERE prd."preRegistrationId" = ${id} 
+  WHERE prd."preRegistrationId" = ${id} AND prd."status" = 'APPROVED'
   GROUP BY lr."subjectId", s.code, s.name, s.type`;
 };
 
