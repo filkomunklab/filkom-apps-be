@@ -85,7 +85,6 @@ const signInEmployee = async (nik, password) => {
           guidanceClassId: checkNIK.GuidanceClass?.id,
         },
         token: token,
-        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       };
       return data;
     } else {
