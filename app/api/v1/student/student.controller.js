@@ -178,7 +178,6 @@ const patchBiodataStudent = async (req, res) => {
     );
     res.status(201).send({ status: "OK", data: student });
   } catch (error) {
-    console.log(error);
     res
       .status(error?.status || 500)
       .send({ status: "FAILED", data: { error: error?.message || error } });

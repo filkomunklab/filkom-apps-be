@@ -69,6 +69,8 @@ const corsOptions = {
     "https://outcome-based.vercel.app",
     "https://filkom.investsulut.id",
     "https://hgdxm2td-3000.asse.devtunnels.ms",
+    "https://bim-akad.vercel.app",
+    "*",
   ],
 };
 
@@ -85,7 +87,8 @@ const gradesSubmissionRoutes = require("./app/api/v1/transaction_Grades/transact
 const gradesRoutes = require("./app/api/v1/Grades/grades.routes");
 const guidanceClass = require("./app/api/v1/guidanceClass/guidanceClass.routes");
 const dashboardBA = require("./app/api/v1/dashboard_bimAkad/dashboard_ba.routes");
-
+const lecturerRoutes = require("./app/api/v1/Akad_Lecturer/lecturer.routes");
+const guideVmtRoutes = require("./app/api/v1/AKAD_guideVmt/guideVmt.routes");
 //--------------------------------------------------------
 
 app.use(cors(corsOptions));
@@ -133,6 +136,8 @@ app.use(`${URL}`, gradesRoutes);
 app.use(`${URL}`, guidanceClass);
 app.use(`${URL}`, dashboardBA);
 app.use(`${URL}`, userManagement);
+app.use(`${URL}`, lecturerRoutes);
+app.use(`${URL}`, guideVmtRoutes);
 //---------------------------------------------------
 
 app.use("/", (req, res) => {
@@ -140,9 +145,3 @@ app.use("/", (req, res) => {
 });
 
 module.exports = app;
-
-// THESE LINE ADDED FOR TESTING PURPOSE
-// Trigger CI/CD
-// Trigger CI/CD
-// Trigger CI/CD
-// Trigger CI/CD

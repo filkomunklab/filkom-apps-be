@@ -370,6 +370,80 @@ const setStudentStatus = async (nim, payload) => {
   }
 };
 
+const changeStudentProfile = async (studentId, payload) => {
+  const {
+    dateOfBirth,
+    phoneNo,
+    areaOfConcentration,
+    currentResidenceStatus,
+    guardianEmail,
+    guardianPhoneNo,
+  } = payload;
+  return await prisma.student.update({
+    where: {
+      id: studentId,
+    },
+    data: {
+      dateOfBirth,
+      phoneNo,
+      areaOfConcentration,
+      currentResidenceStatus,
+      guardianEmail,
+      guardianPhoneNo,
+    },
+    include: {
+      GuidanceClassMember: {
+        select: {
+          gudianceClass: {
+            select: {
+              id: true,
+              teacher: {
+                select: {
+                  id: true,
+                  nik: true,
+                  firstName: true,
+                  lastName: true,
+                  email: true,
+                  phoneNum: true,
+                  Address: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
+const uploadProfilePicture = async (employeeId, payload, path) => {
+  const { firstName, lastName, Address, email, phoneNum } = payload;
+  const { fileName } = payload.employeeImage;
+  return await prisma.employee.update({
+    where: {
+      id: employeeId,
+    },
+    data: {
+      firstName,
+      lastName,
+      Address,
+      email,
+      phoneNum,
+      fileName,
+      path,
+    },
+    select: {
+      firstName: true,
+      lastName: true,
+      Address: true,
+      email: true,
+      phoneNum: true,
+      fileName: true,
+      path: true,
+    },
+  });
+};
+
 module.exports = {
   findEmployees,
   findEmployeeById,
@@ -391,4 +465,6 @@ module.exports = {
   insertManyEmployee,
   updateEmployeeByNik,
   setStudentStatus,
+  changeStudentProfile,
+  uploadProfilePicture,
 };

@@ -15,14 +15,7 @@ const CreateActivitySchema = Yup.object()
 const AttendanceSchema = Yup.object().shape({
   activityId: Yup.string().required("Activity Id is required"),
   members: Yup.array()
-    .of(
-      Yup.string()
-        .required("studentId is required")
-        .matches(/^[0-9]+$/, {
-          message: "NIM must be a number",
-          excludeEmptyString: true,
-        })
-    )
+    .of(Yup.string().required("studentId is required"))
     .min(1, "Members is required")
     .required("Members is required"),
 });

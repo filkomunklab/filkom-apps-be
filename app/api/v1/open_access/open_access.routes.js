@@ -24,4 +24,6 @@ router.get(
   auth,
   accessController.getlistGradeAccess
 );
+
+router.patch("/access/update/:accessId", auth, accessController.updateAccess);
 module.exports = router;

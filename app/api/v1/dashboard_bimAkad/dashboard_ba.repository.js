@@ -173,11 +173,11 @@ const findTotalAllCategoryCertificate = async () => {
   try {
     return await prisma.aKAD_Certificate.groupBy({
       where: {
-        approval_status: "APPROVED",
+        approvalStatus: "APPROVED",
       },
-      by: ["category"],
+      by: ["level"],
       _count: {
-        category: true,
+        level: true,
       },
     });
   } catch (error) {

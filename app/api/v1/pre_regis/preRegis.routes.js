@@ -49,20 +49,32 @@ router.get("/pre-regist/current/:id", preRegisController.getCurrentPreRegist);
 
 router.get(
   "/pre-regist/current/student/:studentId",
+  auth,
   preRegisController.getCurrentForStudent
 );
 
 router.get(
   "/pre-regist/list-submitted/:id",
+  auth,
   preRegisController.getAllSubmitedPreRegist
 );
 
-router.get("/pre-regist/list-subject/:id", preRegisController.getAllSubject);
+router.get(
+  "/pre-regist/list-subject/:id",
+  auth,
+  preRegisController.getAllSubject
+);
 
 router.patch(
   "/pre-regist/close-access/:id",
   auth,
   preRegisController.patchManualCloseAccess
+);
+
+router.patch(
+  "/pre-regist/update/:preRegId",
+  auth,
+  preRegisController.updatePreRegisAccess
 );
 
 module.exports = router;

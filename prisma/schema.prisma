@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 // ------- global ------------------------
@@ -31,7 +31,7 @@ model Employee {
   password                  String                @default("$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu")
   firstName                 String
   lastName                  String
-  email                     String                @unique
+  email                     String?               @unique
   phoneNum                  String?               @unique
   Address                   String?
   degree                    String?
@@ -41,6 +41,8 @@ model Employee {
   updatedBy                 String?
   createdAt                 DateTime              @default(now())
   updatedAt                 DateTime?
+  fileName                  String?
+  path                      String?
   classroom                 Classroom[]           @relation("DosenMK")
   thesis_consultation       Thesis_Consultation[] @relation("ThesisConsultation")
   proposed_advisor          Submission[]          @relation("ProposedAdvisor")
@@ -120,16 +122,16 @@ model Student {
   skripsi_conclusion_value  Skripsi_Conclusion[]   @relation("Student")
   FormSPT                   FormSPT[]
 
-  academic_Consultation AKAD_Academic_Consultation[]
-  Tracer_Study          Tracer_Study[]
+  Tracer_Study Tracer_Study[]
 
-  studentGrade        AKAD_Transaction_Grades[]
-  ActivityMember      AKAD_ActivityMember[]
-  GuidanceClassMember AKAD_GuidanceClassMember?
-  Certificate         AKAD_Certificate[]
-  PreRegistrationData AKAD_PreRegistrationData[]
-  StudentGrade        StudentGrade[]
-  ClassStudent        ClassStudent[]
+  studentGrade          AKAD_Transaction_Grades[]
+  ActivityMember        AKAD_ActivityMember[]
+  GuidanceClassMember   AKAD_GuidanceClassMember?
+  Certificate           AKAD_Certificate[]
+  PreRegistrationData   AKAD_PreRegistrationData[]
+  StudentGrade          StudentGrade[]
+  ClassStudent          ClassStudent[]
+  academic_Consultation AKAD_Academic_Consultation[]
 
   @@unique([firstName, lastName])
   @@index([studentEmail, personalEmail])
@@ -763,14 +765,11 @@ model AKAD_ListOfRequest {
 }
 
 model AKAD_Academic_Consultation {
-  id String @id @default(uuid())
-
-  student   Student @relation(fields: [studentId], references: [id])
-  studentId String
-
-  receiver   Employee @relation(fields: [receiverId], references: [id])
-  receiverId String
-
+  id                   String             @id @default(uuid())
+  student              Student            @relation(fields: [studentId], references: [id])
+  studentId            String
+  receiver             Employee           @relation(fields: [receiverId], references: [id])
+  receiverId           String
   receiver_name        String             @db.VarChar(255)
   topic                String             @db.VarChar(50)
   student_name         String             @db.VarChar(255)
@@ -786,14 +785,12 @@ model AKAD_Academic_Consultation {
 }
 
 model AKAD_Message {
-  id String @id @default(uuid())
-
+  id                       String                     @id @default(uuid())
   academic_consultation    AKAD_Academic_Consultation @relation(fields: [academic_consultation_id], references: [id])
   academic_consultation_id String
-
-  sender_name String   @db.VarChar(255)
-  content     String
-  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  sender_name              String                     @db.VarChar(255)
+  content                  String
+  createdAt                DateTime                   @default(now()) @db.Timestamptz(3)
 }
 
 model AKAD_Certificate {
@@ -853,6 +850,29 @@ model AKAD_GuidanceClassMember {
   guidanceClassId String
 
   @@unique([studentId, guidanceClassId])
+}
+
+model AKAD_Lecturer {
+  id        String @id @default(uuid())
+  firstName String
+  lastName  String
+}
+
+model AKAD_guide {
+  id      String  @id @default(uuid())
+  number  String?
+  part    String?
+  title   String?
+  content String?
+}
+
+model AKAD_Vmt {
+  id      String  @id @default(uuid())
+  major   Major?
+  number  String?
+  type    String?
+  level   String?
+  content String?
 }
 
 // =================== OBE START ===================

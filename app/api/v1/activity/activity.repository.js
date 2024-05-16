@@ -19,40 +19,43 @@ const createActivity = async (payload) => {
 
 const takeAttendance = async (payload) => {
   const { activityId, members } = payload;
-  return await prisma.$transaction(async (prisma) => {
-    await prisma.aKAD_ActivityMember.updateMany({
-      where: {
-        studentId: {
-          in: members,
+  return await prisma.$transaction(
+    async (prisma) => {
+      await prisma.aKAD_ActivityMember.updateMany({
+        where: {
+          studentId: {
+            in: members,
+          },
+          activityId: activityId,
         },
-        activityId: activityId,
-      },
-      data: {
-        presence: true,
-      },
-    });
-
-    await prisma.aKAD_ActivityMember.updateMany({
-      where: {
-        studentId: {
-          notIn: members,
+        data: {
+          presence: true,
         },
-        activityId: activityId,
-      },
-      data: {
-        presence: false,
-      },
-    });
+      });
 
-    await prisma.aKAD_Activity.update({
-      where: {
-        id: activityId,
-      },
-      data: {
-        isDone: true,
-      },
-    });
-  });
+      await prisma.aKAD_ActivityMember.updateMany({
+        where: {
+          studentId: {
+            notIn: members,
+          },
+          activityId: activityId,
+        },
+        data: {
+          presence: false,
+        },
+      });
+
+      await prisma.aKAD_Activity.update({
+        where: {
+          id: activityId,
+        },
+        data: {
+          isDone: true,
+        },
+      });
+    },
+    { timeout: 30000, maxWait: 25000 }
+  );
 };
 
 const findDetailActivity = async (payload) => {
@@ -66,6 +69,7 @@ const findDetailActivity = async (payload) => {
         include: {
           student: {
             select: {
+              nim: true,
               firstName: true,
               lastName: true,
               major: true,
@@ -109,21 +113,27 @@ const getHistoryForStudent = async (payload) => {
   const { studentId } = payload;
   return await prisma.aKAD_Activity.findMany({
     where: {
-      OR: [
+      AND: [
         {
-          dueDate: {
-            lte: new Date(),
+          OR: [
+            {
+              dueDate: {
+                lte: new Date(),
+              },
+            },
+            {
+              isDone: true,
+            },
+          ],
+        },
+        {
+          ActivityMember: {
+            some: {
+              studentId,
+            },
           },
         },
-        {
-          isDone: true,
-        },
       ],
-      ActivityMember: {
-        some: {
-          studentId,
-        },
-      },
     },
     select: {
       id: true,
@@ -142,17 +152,23 @@ const getHistoryForAdvisor = async (payload) => {
   const { employeeId } = payload;
   return await prisma.aKAD_Activity.findMany({
     where: {
-      OR: [
+      AND: [
         {
-          dueDate: {
-            lte: new Date(),
-          },
+          OR: [
+            {
+              dueDate: {
+                lte: new Date(),
+              },
+            },
+            {
+              isDone: true,
+            },
+          ],
         },
         {
-          isDone: true,
+          employeeId,
         },
       ],
-      employeeId,
     },
     select: {
       id: true,
@@ -200,6 +216,7 @@ const getCurrentActivity = async (payload) => {
         },
       ],
     },
+    orderBy: { updatedAt: "desc" },
     select: {
       id: true,
       title: true,
@@ -212,13 +229,13 @@ const getCurrentActivity = async (payload) => {
 const automateCloseActivity = () => {
   prisma.aKAD_Activity.updateMany({
     where: {
-      isDone: true,
+      isDone: false,
       dueDate: {
         lte: moment(),
       },
     },
     data: {
-      isDone: false,
+      isDone: true,
     },
   });
   console.log("hello world");
@@ -238,6 +255,7 @@ const getCurrentConsultation = async (payload) => {
       ],
       status: "OnProcess",
     },
+    orderBy: { updatedAt: "desc" },
     select: {
       id: true,
       description: true,

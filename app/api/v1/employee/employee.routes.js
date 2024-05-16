@@ -59,7 +59,7 @@ router.post("/employee", employeeController.createEmployee);
 router.post("/employees", auth, employeeController.createManyEmployee);
 router.post(
   "/employee-many",
-  upload.single("file"),
+  upload.single("xlsxFile"),
   employeeController.insertByXlsx
 );
 router.delete("/employee/:id", auth, employeeController.deleteEmployeeById);
@@ -108,6 +108,18 @@ router.patch(
   "/change-password-employee/:id",
   auth,
   employeeController.changePasswordByEmployee
+);
+
+router.patch(
+  "/employee/change-student-profile/:studentId",
+  auth,
+  employeeController.changeBiodataStudent
+);
+
+router.patch(
+  "/employee/upload-profile-picture/:employeeId",
+  auth,
+  employeeController.uploadProfilePicture
 );
 
 module.exports = router;
