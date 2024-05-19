@@ -1,14 +1,11 @@
 -- CreateEnum
-CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE');
-
--- CreateEnum
 CREATE TYPE "Major" AS ENUM ('SI', 'IF', 'DKV', 'TI', 'NONE');
 
 -- CreateEnum
 CREATE TYPE "StudentStatus" AS ENUM ('GRADUATE', 'ACTIVE', 'INACTIVE');
 
 -- CreateEnum
-CREATE TYPE "gender" AS ENUM ('MALE', 'FEMALE');
+CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE');
 
 -- CreateEnum
 CREATE TYPE "Thesis_Approve" AS ENUM ('Waiting', 'Approve', 'Rejected');
@@ -87,7 +84,7 @@ CREATE TABLE "Employee" (
     "password" TEXT NOT NULL DEFAULT '$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu',
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
+    "email" TEXT,
     "phoneNum" TEXT,
     "Address" TEXT,
     "degree" TEXT,
@@ -97,6 +94,8 @@ CREATE TABLE "Employee" (
     "updatedBy" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3),
+    "fileName" TEXT,
+    "path" TEXT,
 
     CONSTRAINT "Employee_pkey" PRIMARY KEY ("id")
 );
@@ -110,7 +109,7 @@ CREATE TABLE "Student" (
     "firstName" TEXT NOT NULL,
     "lastName" TEXT,
     "dateOfBirth" DATE,
-    "gender" "gender" NOT NULL,
+    "gender" "Gender" NOT NULL,
     "religion" TEXT,
     "studentEmail" TEXT,
     "curriculumId" TEXT,
@@ -838,6 +837,38 @@ CREATE TABLE "AKAD_GuidanceClassMember" (
 );
 
 -- CreateTable
+CREATE TABLE "AKAD_Lecturer" (
+    "id" TEXT NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+
+    CONSTRAINT "AKAD_Lecturer_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "AKAD_guide" (
+    "id" TEXT NOT NULL,
+    "number" TEXT,
+    "part" TEXT,
+    "title" TEXT,
+    "content" TEXT,
+
+    CONSTRAINT "AKAD_guide_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "AKAD_Vmt" (
+    "id" TEXT NOT NULL,
+    "major" "Major",
+    "number" TEXT,
+    "type" TEXT,
+    "level" TEXT,
+    "content" TEXT,
+
+    CONSTRAINT "AKAD_Vmt_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Cpl" (
     "id" TEXT NOT NULL,
     "code" TEXT NOT NULL,
@@ -898,7 +929,7 @@ CREATE TABLE "GradingSystem" (
 CREATE TABLE "StudentGrade" (
     "id" TEXT NOT NULL,
     "rawGrade" DOUBLE PRECISION NOT NULL,
-    "score" DECIMAL(3,2) NOT NULL,
+    "score" DOUBLE PRECISION NOT NULL,
     "calculateGrade" DOUBLE PRECISION,
     "studentNim" TEXT NOT NULL,
     "gradingSystemId" TEXT NOT NULL,
@@ -1139,7 +1170,7 @@ ALTER TABLE "Student" ADD CONSTRAINT "Student_majorGlobalId_fkey" FOREIGN KEY ("
 ALTER TABLE "Curriculum" ADD CONSTRAINT "Curriculum_headOfProgramStudyId_fkey" FOREIGN KEY ("headOfProgramStudyId") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Curriculum_Subject" ADD CONSTRAINT "Curriculum_Subject_curriculumId_fkey" FOREIGN KEY ("curriculumId") REFERENCES "Curriculum"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Curriculum_Subject" ADD CONSTRAINT "Curriculum_Subject_curriculumId_fkey" FOREIGN KEY ("curriculumId") REFERENCES "Curriculum"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Curriculum_Subject" ADD CONSTRAINT "Curriculum_Subject_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -1346,13 +1377,13 @@ ALTER TABLE "AKAD_GuidanceClassMember" ADD CONSTRAINT "AKAD_GuidanceClassMember_
 ALTER TABLE "AKAD_GuidanceClassMember" ADD CONSTRAINT "AKAD_GuidanceClassMember_guidanceClassId_fkey" FOREIGN KEY ("guidanceClassId") REFERENCES "AKAD_GuidanceClass"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Cpl" ADD CONSTRAINT "Cpl_curriculumId_fkey" FOREIGN KEY ("curriculumId") REFERENCES "Curriculum"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Cpl" ADD CONSTRAINT "Cpl_curriculumId_fkey" FOREIGN KEY ("curriculumId") REFERENCES "Curriculum"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Subject_Cpl" ADD CONSTRAINT "Subject_Cpl_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Subject_Cpl" ADD CONSTRAINT "Subject_Cpl_cplId_fkey" FOREIGN KEY ("cplId") REFERENCES "Cpl"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Subject_Cpl" ADD CONSTRAINT "Subject_Cpl_cplId_fkey" FOREIGN KEY ("cplId") REFERENCES "Cpl"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Cpmk" ADD CONSTRAINT "Cpmk_rpsId_fkey" FOREIGN KEY ("rpsId") REFERENCES "Rps"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -1373,7 +1404,7 @@ ALTER TABLE "StudentGrade" ADD CONSTRAINT "StudentGrade_gradingSystemId_fkey" FO
 ALTER TABLE "SupportedCpl" ADD CONSTRAINT "SupportedCpl_cpmkId_fkey" FOREIGN KEY ("cpmkId") REFERENCES "Cpmk"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SupportedCpl" ADD CONSTRAINT "SupportedCpl_cplId_fkey" FOREIGN KEY ("cplId") REFERENCES "Cpl"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SupportedCpl" ADD CONSTRAINT "SupportedCpl_cplId_fkey" FOREIGN KEY ("cplId") REFERENCES "Cpl"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Rps" ADD CONSTRAINT "Rps_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

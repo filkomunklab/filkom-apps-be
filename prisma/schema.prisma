@@ -84,7 +84,7 @@ model Student {
   firstName                 String
   lastName                  String?
   dateOfBirth               DateTime?              @db.Date
-  gender                    gender
+  gender                    Gender
   religion                  String?
   studentEmail              String?                @unique
   curriculum                Curriculum?            @relation(fields: [curriculumId], references: [id], onDelete: SetNull)
@@ -213,11 +213,6 @@ model AssessmentIndicator {
 }
 
 //-------------------Klabat Bridge ----------------------//
-
-enum Gender {
-  MALE
-  FEMALE
-}
 
 model FormSPT {
   id                String    @id @default(uuid())
@@ -1086,7 +1081,7 @@ enum StudentStatus {
   INACTIVE
 }
 
-enum gender {
+enum Gender {
   MALE
   FEMALE
 }
