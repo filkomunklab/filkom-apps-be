@@ -1,14 +1,11 @@
 -- CreateEnum
-CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE');
-
--- CreateEnum
-CREATE TYPE "Major" AS ENUM ('SI', 'IF', 'DKV', 'NONE');
+CREATE TYPE "Major" AS ENUM ('SI', 'IF', 'DKV', 'TI', 'NONE');
 
 -- CreateEnum
 CREATE TYPE "StudentStatus" AS ENUM ('GRADUATE', 'ACTIVE', 'INACTIVE');
 
 -- CreateEnum
-CREATE TYPE "gender" AS ENUM ('MALE', 'FEMALE');
+CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE');
 
 -- CreateEnum
 CREATE TYPE "Thesis_Approve" AS ENUM ('Waiting', 'Approve', 'Rejected');
@@ -61,6 +58,9 @@ CREATE TYPE "Certificate_Level" AS ENUM ('INTERNATIONAL', 'NATIONAL', 'REGION', 
 -- CreateEnum
 CREATE TYPE "Certificate_Category" AS ENUM ('PENALARAN_KEILMUAN', 'ORGANISASI_KEPEMIMPINAN', 'BAKAT_MINAT', 'PENGABDIAN_MASYARAKAT', 'OTHER');
 
+-- CreateEnum
+CREATE TYPE "SubjectType" AS ENUM ('Prerequisite', 'Major', 'General', 'Basic', 'Elective');
+
 -- CreateTable
 CREATE TABLE "Admin" (
     "id" TEXT NOT NULL,
@@ -81,10 +81,10 @@ CREATE TABLE "Admin" (
 CREATE TABLE "Employee" (
     "id" TEXT NOT NULL,
     "nik" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
+    "password" TEXT NOT NULL DEFAULT '$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu',
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
+    "email" TEXT,
     "phoneNum" TEXT,
     "Address" TEXT,
     "degree" TEXT,
@@ -94,6 +94,8 @@ CREATE TABLE "Employee" (
     "updatedBy" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3),
+    "fileName" TEXT,
+    "path" TEXT,
 
     CONSTRAINT "Employee_pkey" PRIMARY KEY ("id")
 );
@@ -107,7 +109,7 @@ CREATE TABLE "Student" (
     "firstName" TEXT NOT NULL,
     "lastName" TEXT,
     "dateOfBirth" DATE,
-    "gender" "gender" NOT NULL,
+    "gender" "Gender" NOT NULL,
     "religion" TEXT,
     "studentEmail" TEXT,
     "curriculumId" TEXT,
@@ -158,6 +160,58 @@ CREATE TABLE "UserRole" (
     "updatedAt" TIMESTAMP(3),
 
     CONSTRAINT "UserRole_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Curriculum" (
+    "id" TEXT NOT NULL,
+    "major" VARCHAR(100) NOT NULL,
+    "year" CHAR(4) NOT NULL,
+    "headOfProgramStudyId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Curriculum_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Subject" (
+    "id" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "englishName" TEXT NOT NULL,
+    "indonesiaName" TEXT NOT NULL,
+    "credits" INTEGER NOT NULL,
+    "type" "SubjectType" NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Subject_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Curriculum_Subject" (
+    "id" TEXT NOT NULL,
+    "curriculumId" TEXT NOT NULL,
+    "subjectId" TEXT NOT NULL,
+    "semester" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "prerequisite" TEXT[],
+
+    CONSTRAINT "Curriculum_Subject_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "AssessmentIndicator" (
+    "id" TEXT NOT NULL,
+    "letter" CHAR(1) NOT NULL,
+    "minScore" INTEGER NOT NULL,
+    "maxScore" INTEGER NOT NULL,
+    "description" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "AssessmentIndicator_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -617,29 +671,6 @@ CREATE TABLE "Thesis_Link" (
 );
 
 -- CreateTable
-CREATE TABLE "AKAD_Curriculum" (
-    "id" TEXT NOT NULL,
-    "major" VARCHAR(100) NOT NULL,
-    "year" VARCHAR(50) NOT NULL,
-
-    CONSTRAINT "AKAD_Curriculum_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "AKAD_Subject" (
-    "id" TEXT NOT NULL,
-    "code" VARCHAR(100) NOT NULL,
-    "name" TEXT NOT NULL,
-    "credits" INTEGER NOT NULL,
-    "type" VARCHAR(100) NOT NULL,
-    "prerequisite" TEXT,
-    "semester" INTEGER NOT NULL,
-    "curriculumId" TEXT,
-
-    CONSTRAINT "AKAD_Subject_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "AKAD_Transaction_Grades" (
     "id" TEXT NOT NULL,
     "submitedDate" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -810,9 +841,212 @@ CREATE TABLE "AKAD_Lecturer" (
     "id" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
-    "degree" TEXT NOT NULL,
 
     CONSTRAINT "AKAD_Lecturer_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "AKAD_guide" (
+    "id" TEXT NOT NULL,
+    "number" TEXT,
+    "part" TEXT,
+    "title" TEXT,
+    "content" TEXT,
+
+    CONSTRAINT "AKAD_guide_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "AKAD_Vmt" (
+    "id" TEXT NOT NULL,
+    "major" "Major",
+    "number" TEXT,
+    "type" TEXT,
+    "level" TEXT,
+    "content" TEXT,
+
+    CONSTRAINT "AKAD_Vmt_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Cpl" (
+    "id" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "curriculumId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Cpl_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Subject_Cpl" (
+    "id" TEXT NOT NULL,
+    "subjectId" TEXT NOT NULL,
+    "cplId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Subject_Cpl_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Cpmk" (
+    "id" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "rpsId" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Cpmk_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CpmkGrading" (
+    "id" TEXT NOT NULL,
+    "rpsId" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "totalGradingWeight" INTEGER NOT NULL,
+
+    CONSTRAINT "CpmkGrading_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "GradingSystem" (
+    "id" TEXT NOT NULL,
+    "cpmkGradingId" TEXT NOT NULL,
+    "gradingName" TEXT NOT NULL,
+    "gradingWeight" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "GradingSystem_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "StudentGrade" (
+    "id" TEXT NOT NULL,
+    "rawGrade" DOUBLE PRECISION NOT NULL,
+    "score" DOUBLE PRECISION NOT NULL,
+    "calculateGrade" DOUBLE PRECISION,
+    "studentNim" TEXT NOT NULL,
+    "gradingSystemId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "StudentGrade_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SupportedCpl" (
+    "cpmkId" TEXT NOT NULL,
+    "cplId" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Rps" (
+    "id" TEXT NOT NULL,
+    "subjectFamily" TEXT NOT NULL,
+    "subjectDescription" TEXT NOT NULL,
+    "parallel" CHAR(1) NOT NULL,
+    "schedule" TEXT NOT NULL,
+    "rpsDeveloper" TEXT NOT NULL,
+    "headOfExpertise" TEXT NOT NULL,
+    "headOfProgramStudy" TEXT NOT NULL,
+    "mainReferences" TEXT[],
+    "supportingReferences" TEXT[],
+    "software" TEXT NOT NULL,
+    "hardware" TEXT NOT NULL,
+    "teamTeaching" TEXT[],
+    "minPassStudents" TEXT NOT NULL,
+    "minPassGrade" TEXT NOT NULL,
+    "subjectId" TEXT NOT NULL,
+    "teacherId" TEXT NOT NULL,
+    "status" "status" NOT NULL DEFAULT 'WAITING',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "approvedAt" TIMESTAMP(3),
+
+    CONSTRAINT "Rps_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ClassStudent" (
+    "id" TEXT NOT NULL,
+    "studentNim" TEXT NOT NULL,
+    "rpsId" TEXT NOT NULL,
+
+    CONSTRAINT "ClassStudent_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "MeetingPlan" (
+    "id" TEXT NOT NULL,
+    "week" TEXT NOT NULL,
+    "cpmkList" TEXT[],
+    "subCpmkDescription" TEXT NOT NULL,
+    "achievementIndicators" TEXT NOT NULL,
+    "assessmentModel" TEXT NOT NULL,
+    "material" TEXT NOT NULL,
+    "method" TEXT NOT NULL,
+    "offlineActivity" TEXT NOT NULL,
+    "onlineActivity" TEXT NOT NULL,
+    "rpsId" TEXT NOT NULL,
+
+    CONSTRAINT "MeetingPlan_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "StudentAssignmentPlan" (
+    "id" TEXT NOT NULL,
+    "assignmentModel" TEXT NOT NULL,
+    "references" TEXT NOT NULL,
+    "subLearningOutcomes" TEXT NOT NULL,
+    "assignmentDescription" TEXT NOT NULL,
+    "icbValuation" TEXT NOT NULL,
+    "dueSchedule" TEXT NOT NULL,
+    "others" TEXT NOT NULL,
+    "referenceList" TEXT NOT NULL,
+    "rpsId" TEXT NOT NULL,
+
+    CONSTRAINT "StudentAssignmentPlan_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ReportSummary" (
+    "rpsId" TEXT NOT NULL,
+    "subjectName" TEXT NOT NULL,
+    "curriculum" TEXT NOT NULL,
+    "major" TEXT NOT NULL,
+    "credits" INTEGER NOT NULL,
+    "parallel" CHAR(1) NOT NULL,
+    "status" TEXT NOT NULL,
+    "semester" TEXT NOT NULL,
+    "teacher" TEXT NOT NULL,
+    "schedule" TEXT NOT NULL,
+    "highestCpmk" JSONB NOT NULL,
+    "lowestCpmk" JSONB NOT NULL,
+    "cpmkGradeSummary" JSONB NOT NULL,
+    "studentCpmkGrade" JSONB NOT NULL,
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" TIMESTAMP(3) NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "ReportDetail" (
+    "rpsId" TEXT NOT NULL,
+    "subjectName" TEXT NOT NULL,
+    "major" TEXT NOT NULL,
+    "credits" INTEGER NOT NULL,
+    "parallel" CHAR(1) NOT NULL,
+    "teacher" TEXT NOT NULL,
+    "schedule" TEXT NOT NULL,
+    "gradingSystem" JSONB NOT NULL,
+    "studentGrade" JSONB NOT NULL,
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" TIMESTAMP(3) NOT NULL
 );
 
 -- CreateIndex
@@ -864,6 +1098,15 @@ CREATE UNIQUE INDEX "Student_firstName_lastName_key" ON "Student"("firstName", "
 CREATE UNIQUE INDEX "UserRole_userId_role_key" ON "UserRole"("userId", "role");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Curriculum_major_year_key" ON "Curriculum"("major", "year");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Subject_code_key" ON "Subject"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Curriculum_Subject_curriculumId_subjectId_key" ON "Curriculum_Subject"("curriculumId", "subjectId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Group_submission_id_key" ON "Group"("submission_id");
 
 -- CreateIndex
@@ -871,9 +1114,6 @@ CREATE UNIQUE INDEX "Group_proposal_id_key" ON "Group"("proposal_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Group_skripsi_id_key" ON "Group"("skripsi_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "AKAD_Curriculum_major_year_key" ON "AKAD_Curriculum"("major", "year");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "AKAD_PreRegistrationData_preRegistrationId_studentId_key" ON "AKAD_PreRegistrationData"("preRegistrationId", "studentId");
@@ -893,11 +1133,47 @@ CREATE UNIQUE INDEX "AKAD_GuidanceClassMember_studentId_key" ON "AKAD_GuidanceCl
 -- CreateIndex
 CREATE UNIQUE INDEX "AKAD_GuidanceClassMember_studentId_guidanceClassId_key" ON "AKAD_GuidanceClassMember"("studentId", "guidanceClassId");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Cpl_code_curriculumId_key" ON "Cpl"("code", "curriculumId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Subject_Cpl_subjectId_cplId_key" ON "Subject_Cpl"("subjectId", "cplId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Cpmk_rpsId_code_key" ON "Cpmk"("rpsId", "code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "CpmkGrading_rpsId_code_key" ON "CpmkGrading"("rpsId", "code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "StudentGrade_studentNim_gradingSystemId_key" ON "StudentGrade"("studentNim", "gradingSystemId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SupportedCpl_cpmkId_cplId_key" ON "SupportedCpl"("cpmkId", "cplId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ClassStudent_studentNim_rpsId_key" ON "ClassStudent"("studentNim", "rpsId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ReportSummary_rpsId_key" ON "ReportSummary"("rpsId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ReportDetail_rpsId_key" ON "ReportDetail"("rpsId");
+
 -- AddForeignKey
-ALTER TABLE "Student" ADD CONSTRAINT "Student_curriculumId_fkey" FOREIGN KEY ("curriculumId") REFERENCES "AKAD_Curriculum"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Student" ADD CONSTRAINT "Student_curriculumId_fkey" FOREIGN KEY ("curriculumId") REFERENCES "Curriculum"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Student" ADD CONSTRAINT "Student_majorGlobalId_fkey" FOREIGN KEY ("majorGlobalId") REFERENCES "MajorGlobal"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Curriculum" ADD CONSTRAINT "Curriculum_headOfProgramStudyId_fkey" FOREIGN KEY ("headOfProgramStudyId") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Curriculum_Subject" ADD CONSTRAINT "Curriculum_Subject_curriculumId_fkey" FOREIGN KEY ("curriculumId") REFERENCES "Curriculum"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Curriculum_Subject" ADD CONSTRAINT "Curriculum_Subject_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "FormSPT" ADD CONSTRAINT "FormSPT_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("nim") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -1041,13 +1317,10 @@ ALTER TABLE "Thesis_History" ADD CONSTRAINT "Thesis_History_group_id_fkey" FOREI
 ALTER TABLE "Thesis_Link" ADD CONSTRAINT "Thesis_Link_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "AKAD_Subject" ADD CONSTRAINT "AKAD_Subject_curriculumId_fkey" FOREIGN KEY ("curriculumId") REFERENCES "AKAD_Curriculum"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "AKAD_Transaction_Grades" ADD CONSTRAINT "AKAD_Transaction_Grades_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "AKAD_Grades" ADD CONSTRAINT "AKAD_Grades_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "AKAD_Subject"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "AKAD_Grades" ADD CONSTRAINT "AKAD_Grades_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "AKAD_Grades" ADD CONSTRAINT "AKAD_Grades_transactionId_fkey" FOREIGN KEY ("transactionId") REFERENCES "AKAD_Transaction_Grades"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -1071,7 +1344,7 @@ ALTER TABLE "AKAD_PreRegistrationData" ADD CONSTRAINT "AKAD_PreRegistrationData_
 ALTER TABLE "AKAD_ListOfRequest" ADD CONSTRAINT "AKAD_ListOfRequest_preRegistrationDataId_fkey" FOREIGN KEY ("preRegistrationDataId") REFERENCES "AKAD_PreRegistrationData"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "AKAD_ListOfRequest" ADD CONSTRAINT "AKAD_ListOfRequest_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "AKAD_Subject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "AKAD_ListOfRequest" ADD CONSTRAINT "AKAD_ListOfRequest_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "AKAD_Academic_Consultation" ADD CONSTRAINT "AKAD_Academic_Consultation_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -1102,3 +1375,57 @@ ALTER TABLE "AKAD_GuidanceClassMember" ADD CONSTRAINT "AKAD_GuidanceClassMember_
 
 -- AddForeignKey
 ALTER TABLE "AKAD_GuidanceClassMember" ADD CONSTRAINT "AKAD_GuidanceClassMember_guidanceClassId_fkey" FOREIGN KEY ("guidanceClassId") REFERENCES "AKAD_GuidanceClass"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Cpl" ADD CONSTRAINT "Cpl_curriculumId_fkey" FOREIGN KEY ("curriculumId") REFERENCES "Curriculum"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Subject_Cpl" ADD CONSTRAINT "Subject_Cpl_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Subject_Cpl" ADD CONSTRAINT "Subject_Cpl_cplId_fkey" FOREIGN KEY ("cplId") REFERENCES "Cpl"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Cpmk" ADD CONSTRAINT "Cpmk_rpsId_fkey" FOREIGN KEY ("rpsId") REFERENCES "Rps"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CpmkGrading" ADD CONSTRAINT "CpmkGrading_rpsId_fkey" FOREIGN KEY ("rpsId") REFERENCES "Rps"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "GradingSystem" ADD CONSTRAINT "GradingSystem_cpmkGradingId_fkey" FOREIGN KEY ("cpmkGradingId") REFERENCES "CpmkGrading"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StudentGrade" ADD CONSTRAINT "StudentGrade_studentNim_fkey" FOREIGN KEY ("studentNim") REFERENCES "Student"("nim") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StudentGrade" ADD CONSTRAINT "StudentGrade_gradingSystemId_fkey" FOREIGN KEY ("gradingSystemId") REFERENCES "GradingSystem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SupportedCpl" ADD CONSTRAINT "SupportedCpl_cpmkId_fkey" FOREIGN KEY ("cpmkId") REFERENCES "Cpmk"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SupportedCpl" ADD CONSTRAINT "SupportedCpl_cplId_fkey" FOREIGN KEY ("cplId") REFERENCES "Cpl"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Rps" ADD CONSTRAINT "Rps_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Rps" ADD CONSTRAINT "Rps_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ClassStudent" ADD CONSTRAINT "ClassStudent_studentNim_fkey" FOREIGN KEY ("studentNim") REFERENCES "Student"("nim") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ClassStudent" ADD CONSTRAINT "ClassStudent_rpsId_fkey" FOREIGN KEY ("rpsId") REFERENCES "Rps"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MeetingPlan" ADD CONSTRAINT "MeetingPlan_rpsId_fkey" FOREIGN KEY ("rpsId") REFERENCES "Rps"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StudentAssignmentPlan" ADD CONSTRAINT "StudentAssignmentPlan_rpsId_fkey" FOREIGN KEY ("rpsId") REFERENCES "Rps"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ReportSummary" ADD CONSTRAINT "ReportSummary_rpsId_fkey" FOREIGN KEY ("rpsId") REFERENCES "Rps"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ReportDetail" ADD CONSTRAINT "ReportDetail_rpsId_fkey" FOREIGN KEY ("rpsId") REFERENCES "Rps"("id") ON DELETE CASCADE ON UPDATE CASCADE;

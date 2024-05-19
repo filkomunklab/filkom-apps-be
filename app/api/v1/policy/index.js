@@ -261,7 +261,7 @@ const policyFor = ({ user }) => {
 
   if (hasRole("KAPRODI")) {
     // ================================ Global ====================================
-    // input here
+    can("read", "Employee");
     // ================================ Skripsi App ================================
     // Kaprodi view Consultation
     can("read", "Consultation");
@@ -407,6 +407,7 @@ const policyFor = ({ user }) => {
   if (hasRole("DOSEN")) {
     // ================================ Global ====================================
     // input here
+    can("read", "Employee");
     // ================================ Skripsi App ================================
     // (Dosen: All) view advisor team
     can("read", "advisor_team");

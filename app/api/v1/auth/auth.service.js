@@ -33,6 +33,7 @@ const signInAdmin = async (username, password) => {
           role: checkUsername.role,
         },
         token: token,
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       };
       return data;
     } else {
@@ -146,6 +147,7 @@ const signInStudent = async (username, password) => {
           guidanceClassId: GuidanceClassMember?.guidanceClassId,
         },
         token: token,
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       };
       return data;
     } else {

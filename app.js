@@ -66,6 +66,9 @@ const corsOptions = {
     "http://localhost:3000",
     "https://development-filkom-apps-fe.vercel.app",
     "http://localhost:5173",
+    "https://outcome-based.vercel.app",
+    "https://filkom.investsulut.id",
+    "https://hgdxm2td-3000.asse.devtunnels.ms",
     "https://bim-akad.vercel.app",
     "*",
   ],
@@ -142,9 +145,3 @@ app.use("/", (req, res) => {
 });
 
 module.exports = app;
-
-// THESE LINE ADDED FOR TESTING PURPOSE
-// Trigger CI/CD
-// Trigger CI/CD
-// Trigger CI/CD
-// Trigger CI/CD
