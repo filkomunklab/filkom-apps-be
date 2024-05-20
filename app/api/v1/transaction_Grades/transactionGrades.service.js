@@ -76,10 +76,10 @@ const ApprovalGrades = async (transactionId, payload) => {
 //===========================Student Access=========================//
 
 //GRADES SUBMMISSION
-const createStudentGradesSubmmission = async (payload, nim) => {
+const createStudentGradesSubmmission = async (payload, studentId) => {
   const transaction = await transactionGradeRepository.insertDataforGrades(
     payload,
-    nim
+    studentId
   );
 
   const transactionId = transaction.id;
@@ -107,15 +107,16 @@ const createStudentGradesSubmmission = async (payload, nim) => {
 };
 
 //Check if isInput
-const viewCheckIsInput = async (id) => {
-  const transaction = transactionGradeRepository.findCheckIsInput(id);
+const viewCheckIsInput = async (transactionId) => {
+  const transaction =
+    transactionGradeRepository.findCheckIsInput(transactionId);
   return transaction;
 };
 
 //CURRENT GRADES SUBMISSION
-const viewCurrentGradeSubmission = async (nim) => {
+const viewCurrentGradeSubmission = async (studentId) => {
   let transaction = await transactionGradeRepository.findCurrentGradeSubmission(
-    nim
+    studentId
   );
 
   transaction = transaction.map((item) => {
@@ -130,9 +131,11 @@ const viewCurrentGradeSubmission = async (nim) => {
 };
 
 //HISTORY LIST STUDENT
-const viewStudentHistorytGradeSubmission = async (nim) => {
+const viewStudentHistorytGradeSubmission = async (studentId) => {
   let transaction =
-    await transactionGradeRepository.findListStudentHistoryGradeSubmission(nim);
+    await transactionGradeRepository.findListStudentHistoryGradeSubmission(
+      studentId
+    );
 
   transaction = transaction.map((item) => {
     return {
@@ -146,8 +149,9 @@ const viewStudentHistorytGradeSubmission = async (nim) => {
 };
 
 //APPROVED SEMESTER LIST
-const viewListSemesterGrades = async (nim) => {
-  const transaction = transactionGradeRepository.findListSemesterGrades(nim);
+const viewListSemesterGrades = async (studentId) => {
+  const transaction =
+    transactionGradeRepository.findListSemesterGrades(studentId);
   return transaction;
 };
 

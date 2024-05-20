@@ -7,7 +7,7 @@ const CreateActivitySchema = Yup.object()
     dueDate: Yup.date().required("Date is required"),
     isAttendance: Yup.boolean().required("Attendance type is required"),
     activityType: Yup.string().oneOf(["GUIDANCE_CLASS", "MAJOR", "FACULTY"]),
-    employeeNik: Yup.string().required("Employee NIK is required"),
+    employeeId: Yup.string().required("Employee Id is required"),
     members: Yup.array().required("Members is required"),
   })
   .noUnknown();
@@ -15,14 +15,7 @@ const CreateActivitySchema = Yup.object()
 const AttendanceSchema = Yup.object().shape({
   activityId: Yup.string().required("Activity Id is required"),
   members: Yup.array()
-    .of(
-      Yup.string()
-        .required("NIM is required")
-        .matches(/^[0-9]+$/, {
-          message: "NIM must be a number",
-          excludeEmptyString: true,
-        })
-    )
+    .of(Yup.string().required("studentId is required"))
     .min(1, "Members is required")
     .required("Members is required"),
 });

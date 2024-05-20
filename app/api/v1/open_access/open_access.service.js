@@ -34,7 +34,9 @@ const viewlistGradeAccess = async () => {
 //list grades for kaprodi
 const viewlistGradeAccessByMajor = async (major) => {
   try {
-    const openAccess = await accessRepository.findlistGradesAccessByMajor(major);
+    const openAccess = await accessRepository.findlistGradesAccessByMajor(
+      major
+    );
     return openAccess;
   } catch (error) {
     throw error;
@@ -50,10 +52,15 @@ const viewToCheckOpenGradeAccess = async (major) => {
   }
 };
 
+const updateAccess = async (accessId, payload) => {
+  return await accessRepository.updateAccess(accessId, payload);
+};
+
 module.exports = {
   createOpenGradAccess,
   setGradesAccessClose,
   viewlistGradeAccess,
   viewToCheckOpenGradeAccess,
-  viewlistGradeAccessByMajor
+  viewlistGradeAccessByMajor,
+  updateAccess,
 };

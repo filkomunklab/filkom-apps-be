@@ -106,6 +106,9 @@ const policyFor = ({ user }) => {
 
     //=================================BIMBINGAN AKADEMIK=====================
 
+    //upload profile picture
+    can("update", "profile-picture");
+
     //operator_fakultas: view profile student
     can("read", "student_biodata");
 
@@ -240,6 +243,9 @@ const policyFor = ({ user }) => {
     //Dekan : view statistic approved certificate
     can("read", "statistic_certificate");
 
+    //Upload Profile Picture
+    can("update", "profile-picture");
+
     // change password
     can("update", "EmployeePassword", { id: user.id });
 
@@ -255,7 +261,7 @@ const policyFor = ({ user }) => {
 
   if (hasRole("KAPRODI")) {
     // ================================ Global ====================================
-    // input here
+    can("read", "Employee");
     // ================================ Skripsi App ================================
     // Kaprodi view Consultation
     can("read", "Consultation");
@@ -344,6 +350,8 @@ const policyFor = ({ user }) => {
     can("read", "approved_semester_grades");
     //KAPRODI : view detail student grades only with GPA
     can("read", "grades_detail_only");
+    // edit access
+    can("update", "kaprodi_edit_access");
 
     //GRADES ACCESS
     //KAPRODI : create access for student to input grades
@@ -364,12 +372,15 @@ const policyFor = ({ user }) => {
     can("read", "total_inactive_major");
     //Kaprodi : view statistic student
     can("read", "statistic_student");
-    //Dekan : view statistic approved certificate
+    //Kaprodi : view statistic approved certificate
     can("read", "statistic_certificate");
 
     //Biodata Student
     //Kaprodi: view profile student
     can("read", "student_biodata");
+
+    //upload profile picture
+    can("update", "profile-picture");
 
     //Certificate
     //Kaprodi : view all student Certificate
@@ -396,6 +407,7 @@ const policyFor = ({ user }) => {
   if (hasRole("DOSEN")) {
     // ================================ Global ====================================
     // input here
+    can("read", "Employee");
     // ================================ Skripsi App ================================
     // (Dosen: All) view advisor team
     can("read", "advisor_team");
@@ -539,17 +551,12 @@ const policyFor = ({ user }) => {
     //Dosen : set student status
     can("update", "student_status");
 
+    //upload profile picture
+    can("update", "profile-picture");
+
     //Biodata Student
     //Dosen: view profile student
     can("read", "student_biodata");
-
-    // //Dashboard Dosen
-    // //Dosen : view total of Active & InActive Student guidance
-    // can("read", "total_student");
-    // //Dosen : view total Active student guidance
-    // can("read", "total_active_guidance");
-    // //Dosen : view total InActive student guidance
-    // can("read", "total_Inactive_guidance");
 
     // change password
     can("update", "EmployeePassword", { id: user.id });
@@ -562,6 +569,9 @@ const policyFor = ({ user }) => {
 
     // update Complete Status Academic Consultation
     can("update", "AcademicConsultationStatusComplete");
+
+    // change student Profile
+    can("update", "employee_Change_Student_Profile");
   }
 
   if (hasRole("DOSEN_MK")) {
@@ -797,7 +807,7 @@ const policyFor = ({ user }) => {
     can("create", "AcademicConsultation");
 
     // Get Academic Consultation
-    can("get", "AcademicConsultationByStudent", { nim: user.nim });
+    can("get", "AcademicConsultationByStudent", { studentId: user.id });
 
     // get Academic Consultation Detail
     can("get", "AcademicConsultationDetail");

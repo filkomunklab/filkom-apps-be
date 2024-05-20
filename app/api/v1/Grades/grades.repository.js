@@ -15,9 +15,7 @@ const findDetailSemesterGrades = async (transactionId) => {
   try {
     const grades = await prisma.aKAD_Grades.findMany({
       where: {
-        transaction_Grades: {
-          id: transactionId,
-        },
+        transactionId,
       },
       select: {
         subjectName: true,

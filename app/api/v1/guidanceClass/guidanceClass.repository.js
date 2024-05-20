@@ -8,7 +8,6 @@ const getAllClass = async () => {
           firstName: true,
           lastName: true,
           major: true,
-          nidn: true,
           nik: true,
           id: true,
         },
@@ -37,7 +36,6 @@ const getGuidanceClassDetail = async (payload) => {
           Address: true,
           email: true,
           major: true,
-          nidn: true,
         },
       },
       GuidanceClassMember: {
@@ -80,6 +78,7 @@ const getAllUnassignedStudent = async (payload) => {
       major: major ? major : undefined,
     },
     select: {
+      id: true,
       nim: true,
       major: true,
       status: true,
@@ -105,7 +104,6 @@ const getAllUnassignetTeacher = async () => {
     select: {
       id: true,
       nik: true,
-      nidn: true,
       email: true,
       major: true,
       Address: true,
@@ -147,7 +145,7 @@ const deleteStudentFromGuidanceClass = async (payload) => {
   const { studentList } = payload;
   return await prisma.aKAD_GuidanceClassMember.deleteMany({
     where: {
-      studentNim: {
+      studentId: {
         in: studentList,
       },
     },

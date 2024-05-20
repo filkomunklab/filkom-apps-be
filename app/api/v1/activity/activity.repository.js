@@ -1,4 +1,5 @@
 const prisma = require("../../../database");
+const moment = require("moment-timezone");
 
 //==========================Dospem Access============================//
 //CREATE ACTIVITY FOR STUDENT
@@ -18,52 +19,45 @@ const createActivity = async (payload) => {
 
 const takeAttendance = async (payload) => {
   const { activityId, members } = payload;
-  return await prisma.$transaction(async (prisma) => {
-    await prisma.aKAD_ActivityMember.updateMany({
-      where: {
-        studentNim: {
-          in: members,
+  return await prisma.$transaction(
+    async (prisma) => {
+      await prisma.aKAD_ActivityMember.updateMany({
+        where: {
+          studentId: {
+            in: members,
+          },
+          activityId: activityId,
         },
-        activityId: activityId,
-      },
-      data: {
-        presence: true,
-      },
-    });
-
-    await prisma.aKAD_ActivityMember.updateMany({
-      where: {
-        studentNim: {
-          notIn: members,
+        data: {
+          presence: true,
         },
-        activityId: activityId,
-      },
-      data: {
-        presence: false,
-      },
-    });
+      });
 
-    await prisma.aKAD_Activity.update({
-      where: {
-        id: activityId,
-      },
-      data: {
-        isDone: true,
-      },
-    });
-  });
+      await prisma.aKAD_ActivityMember.updateMany({
+        where: {
+          studentId: {
+            notIn: members,
+          },
+          activityId: activityId,
+        },
+        data: {
+          presence: false,
+        },
+      });
+
+      await prisma.aKAD_Activity.update({
+        where: {
+          id: activityId,
+        },
+        data: {
+          isDone: true,
+        },
+      });
+    },
+    { timeout: 30000, maxWait: 25000 }
+  );
 };
 
-// const addActivityForChoossenStudent = async (payload, nik) => {
-//   //
-// };
-
-//=============================Student Access=========================//
-// const findActivityFromDospem = async (nik) => {
-//   const activity = await prisma.activity.findMany({});
-// };
-
-//==============================General Access========================//
 const findDetailActivity = async (payload) => {
   const { activityId } = payload;
   return await prisma.aKAD_Activity.findUnique({
@@ -75,6 +69,7 @@ const findDetailActivity = async (payload) => {
         include: {
           student: {
             select: {
+              nim: true,
               firstName: true,
               lastName: true,
               major: true,
@@ -115,24 +110,30 @@ const getStudentList = async (payload) => {
 };
 
 const getHistoryForStudent = async (payload) => {
-  const { studentNim } = payload;
+  const { studentId } = payload;
   return await prisma.aKAD_Activity.findMany({
     where: {
-      OR: [
+      AND: [
         {
-          dueDate: {
-            lte: new Date(),
+          OR: [
+            {
+              dueDate: {
+                lte: new Date(),
+              },
+            },
+            {
+              isDone: true,
+            },
+          ],
+        },
+        {
+          ActivityMember: {
+            some: {
+              studentId,
+            },
           },
         },
-        {
-          isDone: true,
-        },
       ],
-      ActivityMember: {
-        some: {
-          studentNim,
-        },
-      },
     },
     select: {
       id: true,
@@ -148,20 +149,26 @@ const getHistoryForStudent = async (payload) => {
 };
 
 const getHistoryForAdvisor = async (payload) => {
-  const { employeeNik } = payload;
+  const { employeeId } = payload;
   return await prisma.aKAD_Activity.findMany({
     where: {
-      OR: [
+      AND: [
         {
-          dueDate: {
-            lte: new Date(),
-          },
+          OR: [
+            {
+              dueDate: {
+                lte: new Date(),
+              },
+            },
+            {
+              isDone: true,
+            },
+          ],
         },
         {
-          isDone: true,
+          employeeId,
         },
       ],
-      employeeNik,
     },
     select: {
       id: true,
@@ -196,12 +203,12 @@ const getCurrentActivity = async (payload) => {
         {
           OR: [
             {
-              employeeNik: id,
+              employeeId: id,
             },
             {
               ActivityMember: {
                 some: {
-                  studentNim: id,
+                  studentId: id,
                 },
               },
             },
@@ -209,6 +216,7 @@ const getCurrentActivity = async (payload) => {
         },
       ],
     },
+    orderBy: { updatedAt: "desc" },
     select: {
       id: true,
       title: true,
@@ -218,20 +226,36 @@ const getCurrentActivity = async (payload) => {
   });
 };
 
+const automateCloseActivity = () => {
+  prisma.aKAD_Activity.updateMany({
+    where: {
+      isDone: false,
+      dueDate: {
+        lte: moment(),
+      },
+    },
+    data: {
+      isDone: true,
+    },
+  });
+  console.log("hello world");
+};
+
 const getCurrentConsultation = async (payload) => {
   const { id } = payload;
   return await prisma.aKAD_Academic_Consultation.findMany({
     where: {
       OR: [
         {
-          receiver_nik: id,
+          receiverId: id,
         },
         {
-          student_nim: id,
+          studentId: id,
         },
       ],
       status: "OnProcess",
     },
+    orderBy: { updatedAt: "desc" },
     select: {
       id: true,
       description: true,
@@ -255,4 +279,5 @@ module.exports = {
   getStudentList,
   createActivity,
   takeAttendance,
+  automateCloseActivity,
 };

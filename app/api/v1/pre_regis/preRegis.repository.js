@@ -167,7 +167,6 @@ const automateClosePreRegist = () => {
       isOpen: false,
     },
   });
-  console.log("testing schaduler from repo");
 };
 
 const manualClosePreRegist = async (id) => {
@@ -216,6 +215,12 @@ const getHistoryForAdvisor = async (payload) => {
           guidanceClassId,
         },
       },
+      status: {
+        not: "WAITING",
+      },
+    },
+    orderBy: {
+      approveDate: "desc",
     },
     select: {
       id: true,
@@ -283,26 +288,44 @@ const getCurrentForStudent = async (payload) => {
   });
 };
 
-const getAllSubmitedPreRegist = async (payload) => {
+const getAllSubmitedPreRegist = async (payload, major) => {
   const { id } = payload;
-  return await prisma.aKAD_PreRegistration.findUnique({
+  return await prisma.student.findMany({
     where: {
-      id,
-    },
-    include: {
       PreRegistrationData: {
-        select: {
-          status: true,
-          Student: {
-            select: {
-              firstName: true,
-              lastName: true,
-              nim: true,
-              arrivalYear: true,
-            },
-          },
+        every: {
+          preRegistrationId: id,
         },
       },
+      major,
+    },
+    select: {
+      id: true,
+      nim: true,
+      firstName: true,
+      lastName: true,
+      arrivalYear: true,
+      major: true,
+      PreRegistrationData: {
+        select: {
+          id: true,
+          status: true,
+          preRegistrationId: true,
+        },
+      },
+    },
+  });
+};
+
+const updatePreRegisAccess = async (preRegId, payload) => {
+  const { semester, semesterPeriod, dueDate } = payload;
+  return await prisma.aKAD_PreRegistration.update({
+    where: { id: preRegId },
+    data: {
+      semester,
+      semesterPeriod,
+      dueDate,
+      isOpen: true,
     },
   });
 };
@@ -311,10 +334,10 @@ const getAllSubject = async (payload) => {
   const { id } = payload;
   return await prisma.$queryRaw`
   SELECT lr."subjectId", s.code, s.name, s.type, count(*) "totalRequest"
-  FROM "ListOfRequest" lr 
-  JOIN "Subject" s ON lr."subjectId" = s."id" 
-  JOIN "PreRegistrationData" prd ON lr."preRegistrationDataId" = prd."id"
-  WHERE prd."preRegistrationId" = ${id} 
+  FROM "AKAD_ListOfRequest" lr 
+  JOIN "AKAD_Subject" s ON lr."subjectId" = s."id" 
+  JOIN "AKAD_PreRegistrationData" prd ON lr."preRegistrationDataId" = prd."id"
+  WHERE prd."preRegistrationId" = ${id} AND prd."status" = 'APPROVED'
   GROUP BY lr."subjectId", s.code, s.name, s.type`;
 };
 
@@ -335,4 +358,5 @@ module.exports = {
   submitApproval,
   getAllPreRegis,
   getAllSubject,
+  updatePreRegisAccess,
 };

@@ -4,15 +4,15 @@ const prisma = require("../../../database");
 
 // create access for input graes
 const addOpenGradesAccess = async (payload) => {
-  const { semester, semester_period, major, due_date, employeeNik } = payload;
+  const { semester, semesterPeriod, major, dueDate, employeeId } = payload;
   try {
     const openAccess = await prisma.aKAD_Grades_access.create({
       data: {
         semester,
-        semester_period,
+        semesterPeriod,
         major,
-        due_date,
-        employeeNik,
+        dueDate,
+        employeeId,
       },
     });
     return openAccess;
@@ -81,13 +81,26 @@ const findToCheckOpenGradesAccess = async (major) => {
         major,
       },
       orderBy: {
-        createdAt: "desc",
+        updatedAt: "desc",
       },
     });
     return openAccess;
   } catch (error) {
     throw error;
   }
+};
+
+const updateAccess = async (accessId, payload) => {
+  const { semester, semesterPeriod, dueDate } = payload;
+  return await prisma.aKAD_Grades_access.update({
+    where: { id: accessId },
+    data: {
+      semester,
+      semesterPeriod,
+      dueDate,
+      isOpen: true,
+    },
+  });
 };
 
 //automate close access
@@ -112,4 +125,5 @@ module.exports = {
   findToCheckOpenGradesAccess,
   findlistGradesAccessByMajor,
   automateCloesGradesAccess,
+  updateAccess,
 };

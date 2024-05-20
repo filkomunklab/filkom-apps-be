@@ -240,7 +240,11 @@ const patchManualCloseAccess = async (req, res) => {
 
 const getCurrentForStudent = async (req, res) => {
   const payload = req.params;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("read", "preRegistCurrentForStudent")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.getCurrentForStudent(payload);
     res.status(200).send({ status: "OK", data });
   } catch (error) {
@@ -252,8 +256,13 @@ const getCurrentForStudent = async (req, res) => {
 
 const getAllSubmitedPreRegist = async (req, res) => {
   const payload = req.params;
+  const { major } = req.query;
+  const policy = preRegistPolicy(req.user);
   try {
-    const data = await preRegisService.getAllSubmitedPreRegist(payload);
+    if (!policy.can("read", "submitedList")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
+    const data = await preRegisService.getAllSubmitedPreRegist(payload, major);
     res.status(200).send({ status: "OK", data });
   } catch (error) {
     res
@@ -264,9 +273,34 @@ const getAllSubmitedPreRegist = async (req, res) => {
 
 const getAllSubject = async (req, res) => {
   const payload = req.params;
+  const policy = preRegistPolicy(req.user);
   try {
+    if (!policy.can("read", "subjectList")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
     const data = await preRegisService.getAllSubject(payload);
     res.status(200).send({ status: "OK", data });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+const updatePreRegisAccess = async (req, res) => {
+  const payload = req.body;
+  const { preRegId } = req.params;
+  const policy = preRegistPolicy(req.user);
+  try {
+    if (!policy.can("update", "preRegistAccess")) {
+      throw { status: 403, message: "Forbidden Access" };
+    }
+    const access = await preRegisService.updatePreRegisAccess(
+      preRegId,
+      payload
+    );
+    res.status(200).send({ status: "OK", data: access });
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -290,4 +324,5 @@ module.exports = {
   getAllSubject,
   preRegisMenu,
   patchManualCloseAccess,
+  updatePreRegisAccess,
 };

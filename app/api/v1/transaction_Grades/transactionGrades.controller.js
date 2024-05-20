@@ -107,9 +107,11 @@ const getListSemesterGrades = async (req, res) => {
     });
   }
 
-  const { nim } = req.params;
+  const { studentId } = req.params;
   try {
-    const transaction = await transactionService.viewListSemesterGrades(nim);
+    const transaction = await transactionService.viewListSemesterGrades(
+      studentId
+    );
     res.status(200).send({ status: "OK", data: transaction });
   } catch (error) {
     res
@@ -130,10 +132,10 @@ const postTransactionWithGrades = async (req, res) => {
 
   try {
     const payload = req.body;
-    const { nim } = req.params;
+    const { studentId } = req.params;
     const transaction = await transactionService.createStudentGradesSubmmission(
       payload,
-      nim
+      studentId
     );
     res.status(201).send({ status: "OK", data: transaction });
   } catch (error) {
@@ -155,9 +157,10 @@ const getCheckIsInput = async (req, res) => {
   }
 
   try {
-    const { id } = req.params;
-    const transaction = await transactionService.viewCheckIsInput(id);
-    // console.log("transaction controller: ", transaction);
+    const { transactionId } = req.params;
+    const transaction = await transactionService.viewCheckIsInput(
+      transactionId
+    );
     res.status(200).send({ status: "ok", data: transaction });
   } catch (error) {
     res
@@ -176,10 +179,10 @@ const getCurrentGradeSubmission = async (req, res) => {
     });
   }
 
-  const { nim } = req.params;
+  const { studentId } = req.params;
   try {
     const transaction = await transactionService.viewCurrentGradeSubmission(
-      nim
+      studentId
     );
     res.status(200).send({ status: "OK", data: transaction });
   } catch (error) {
@@ -199,10 +202,10 @@ const getStudentHistoryGradeSubmission = async (req, res) => {
     });
   }
 
-  const { nim } = req.params;
+  const { studentId } = req.params;
   try {
     const transaction =
-      await transactionService.viewStudentHistorytGradeSubmission(nim);
+      await transactionService.viewStudentHistorytGradeSubmission(studentId);
     res.status(200).send({ status: "OK", data: transaction });
   } catch (error) {
     res

@@ -36,35 +36,35 @@ router.put(
 
 //STUDENT POST SEMESTER GRADES
 router.post(
-  "/transaction/grades/:nim",
+  "/transaction/grades/:studentId",
   auth,
   transactionController.postTransactionWithGrades
 );
 
 //check isInput grades
 router.get(
-  "/transaction/grades/check/:id",
+  "/transaction/grades/check/:transactionId",
   auth,
   transactionController.getCheckIsInput
 );
 
 //STUDENT APPROVED SEMESTER LIST
 router.get(
-  "/transaction/semesterList/:nim",
+  "/transaction/semesterList/:studentId",
   auth,
   transactionController.getListSemesterGrades
 );
 
 //CURRENT GRADES SUBMISSION
 router.get(
-  "/transaction/student/currentGrades/:nim",
+  "/transaction/student/currentGrades/:studentId",
   auth,
   transactionController.getCurrentGradeSubmission
 );
 
 //Student History
 router.get(
-  "/transaction/student/history/:nim",
+  "/transaction/student/history/:studentId",
   auth,
   transactionController.getStudentHistoryGradeSubmission
 );

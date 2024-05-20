@@ -18,10 +18,10 @@ const findCertificate = async (payload) => {
           {
             OR: [
               {
-                approval_status: "APPROVED",
+                approvalStatus: "APPROVED",
               },
               {
-                approval_status: "REJECTED",
+                approvalStatus: "REJECTED",
               },
             ],
           },
@@ -34,7 +34,7 @@ const findCertificate = async (payload) => {
         id: true,
         title: true,
         approvalDate: true,
-        approval_status: true,
+        approvalStatus: true,
         student: {
           select: {
             firstName: true,
@@ -116,7 +116,7 @@ const findAdvisorCertificateWaitingList = async (payload) => {
             guidanceClassId,
           },
         },
-        approval_status: "WAITING",
+        approvalStatus: "WAITING",
       },
       orderBy: {
         submitDate: "desc",
@@ -125,10 +125,11 @@ const findAdvisorCertificateWaitingList = async (payload) => {
         id: true,
         title: true,
         category: true,
-        approval_status: true,
+        approvalStatus: true,
         submitDate: true,
         student: {
           select: {
+            id: true,
             firstName: true,
             lastName: true,
             GuidanceClassMember: {
@@ -137,6 +138,7 @@ const findAdvisorCertificateWaitingList = async (payload) => {
                   select: {
                     teacher: {
                       select: {
+                        id: true,
                         firstName: true,
                         lastName: true,
                       },
@@ -277,14 +279,14 @@ const filterWaitingListByArrYear = async (arrivalYear, payload) => {
 
 //approval Certificate by dospem
 const approvalCertificateStudent = async (certificateId, payload) => {
-  const { approval_status, comments } = payload;
+  const { approvalStatus, comments } = payload;
   try {
     const certificate = await prisma.aKAD_Certificate.update({
       where: {
         id: certificateId,
       },
       data: {
-        approval_status,
+        approvalStatus,
         approvalDate: new Date(),
         comments,
       },
@@ -297,13 +299,11 @@ const approvalCertificateStudent = async (certificateId, payload) => {
 };
 
 // View all certificate student
-const viewAllStudentCertificate = async (nim) => {
+const viewAllStudentCertificate = async (studentId) => {
   try {
     const certificate = await prisma.aKAD_Certificate.findMany({
       where: {
-        student: {
-          nim,
-        },
+        studentId,
       },
       include: {
         student: {
@@ -362,13 +362,12 @@ const findOneCertificate = async (certificateId) => {
 
 //===============================Student Access=========================//
 //history submited certificate (student)
-const findStudentCertificateHistory = async (nim) => {
-  console.log("ini Nim student: ", nim);
+const findStudentCertificateHistory = async (studentId) => {
   try {
     const certificate = await prisma.aKAD_Certificate.findMany({
       where: {
-        studentNim: nim,
-        approval_status: {
+        studentId,
+        approvalStatus: {
           not: "WAITING",
         },
       },
@@ -378,6 +377,8 @@ const findStudentCertificateHistory = async (nim) => {
       select: {
         id: true,
         title: true,
+        category: true,
+        level: true,
         approvalDate: true,
         student: {
           select: {
@@ -395,12 +396,12 @@ const findStudentCertificateHistory = async (nim) => {
 };
 
 //current Certificate Student (student)
-const findCurrentCertificateStudent = async (nim) => {
+const findCurrentCertificateStudent = async (id) => {
   try {
     const certificate = await prisma.aKAD_Certificate.findMany({
       where: {
-        studentNim: nim,
-        approval_status: "WAITING",
+        studentId: id,
+        approvalStatus: "WAITING",
       },
       orderBy: {
         submitDate: "desc",
@@ -408,6 +409,8 @@ const findCurrentCertificateStudent = async (nim) => {
       select: {
         id: true,
         title: true,
+        category: true,
+        level: true,
         submitDate: true,
         student: {
           select: {
@@ -424,17 +427,18 @@ const findCurrentCertificateStudent = async (nim) => {
 };
 
 //add certification (student)
-const insertCertificate = async (payload, nim, path) => {
-  const { title, category, description } = payload;
+const insertCertificate = async (payload, studentId, path) => {
+  const { title, category, level, description } = payload;
   const { filename } = payload.certificateFile;
   try {
     const certificate = await prisma.aKAD_Certificate.create({
       data: {
         title,
         category,
+        level,
         description,
         filename,
-        studentNim: nim,
+        studentId,
         path,
       },
     });

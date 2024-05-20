@@ -55,20 +55,26 @@ const createManyStudent = async (data) => {
       }
     });
 
-    const result = await prisma.$transaction(async (prisma) => {
-      // data sudah benar langsung masukan ke tabel mahasiswa
-      const students = await studentRepository.insertManyStudent(data, prisma);
+    const result = await prisma.$transaction(
+      async (prisma) => {
+        // data sudah benar langsung masukan ke tabel mahasiswa
+        const students = await studentRepository.insertManyStudent(
+          data,
+          prisma
+        );
 
-      const userRole = students.map((item) => {
-        return {
-          userId: item.id,
-          role: "MAHASISWA",
-        };
-      });
+        const userRole = students.map((item) => {
+          return {
+            userId: item.id,
+            role: "MAHASISWA",
+          };
+        });
 
-      await userRoleRepository.CreateManyRole(prisma, userRole);
-      return students;
-    });
+        await userRoleRepository.CreateManyRole(prisma, userRole);
+        return students;
+      },
+      { timeout: 30000, maxWait: 25000 }
+    );
 
     return result;
   } catch (error) {
@@ -188,22 +194,25 @@ const updateOrPatchStudentById = async (id, payload) => {
 
 const deleteStudentById = async (id) => {
   try {
-    await prisma.$transaction(async (prisma) => {
-      const student = await studentRepository.findStudentById(prisma, id);
-      await studentRepository.deleteStudent(prisma, id);
-      await userRoleRepository.deleteUserRoles(prisma, student.id);
-      return;
-    });
+    await prisma.$transaction(
+      async (prisma) => {
+        const student = await studentRepository.findStudentById(prisma, id);
+        await studentRepository.deleteStudent(prisma, id);
+        await userRoleRepository.deleteUserRoles(prisma, student.id);
+        return;
+      },
+      { timeout: 30000, maxWait: 25000 }
+    );
   } catch (error) {
     throw error;
   }
 };
 
 //===============================Bimbingan Akademik==================
-const updateBiodataStudent = async (nim, payload) => {
+const updateBiodataStudent = async (studentId, payload) => {
   const storageRef = ref(
     storage,
-    `student/${nim}/${payload.studentImage.filename}`
+    `student/${studentId}/${payload.studentImage.filename}`
   );
   const metadata = { contentType: "image/jpeg" };
   try {
@@ -222,7 +231,7 @@ const updateBiodataStudent = async (nim, payload) => {
     }
 
     return await studentRepository.findToUpdateBiodataStudent(
-      nim,
+      studentId,
       payload,
       path
     );
@@ -231,18 +240,18 @@ const updateBiodataStudent = async (nim, payload) => {
   }
 };
 
-const viewToCheckBiodata = async (nim) => {
+const viewToCheckBiodata = async (studentId) => {
   try {
-    const student = await studentRepository.findToCheckBiodata(nim);
+    const student = await studentRepository.findToCheckBiodata(studentId);
     return student;
   } catch (error) {
     throw error;
   }
 };
 
-const viewBiodataStudent = async (nim) => {
+const viewBiodataStudent = async (studentId) => {
   try {
-    return await studentRepository.findBiodataStudent(nim);
+    return await studentRepository.findBiodataStudent(studentId);
   } catch (error) {
     throw error;
   }
@@ -297,37 +306,48 @@ const insertByXlsx = async (file) => {
     major: data.major,
     religion: data.religion,
     currentResidenceStatus: data.currentResidenceStatus,
+    studentEmail: data.studentEmail,
+    address: data.address,
+    curriculumId: data.curriculumId,
+    guardianName: data.guardianName,
+    familyRelation: data.familyRelation,
+    reg_num: data.reg_num,
+    arrivalYear: data.arrivalYear?.toString(),
+    faculty: data.faculty,
   }));
 
-  await prisma.$transaction(async (prisma) => {
-    await prisma.student.createMany({
-      data: normalize,
-      skipDuplicates: true,
-    });
+  await prisma.$transaction(
+    async (prisma) => {
+      await prisma.student.createMany({
+        data: normalize,
+        skipDuplicates: true,
+      });
 
-    const students = await prisma.student.findMany({
-      where: {
-        nim: {
-          in: normalize.map((item) => item.nim),
+      const students = await prisma.student.findMany({
+        where: {
+          nim: {
+            in: normalize.map((item) => item.nim),
+          },
         },
-      },
-      select: {
-        id: true,
-      },
-    });
+        select: {
+          id: true,
+        },
+      });
 
-    const rolePaylod = students.map((item) => {
-      return {
-        userId: item.id,
-        role: "MAHASISWA",
-      };
-    });
+      const rolePaylod = students.map((item) => {
+        return {
+          userId: item.id,
+          role: "MAHASISWA",
+        };
+      });
 
-    await prisma.userRole.createMany({
-      data: rolePaylod,
-      skipDuplicates: true,
-    });
-  });
+      await prisma.userRole.createMany({
+        data: rolePaylod,
+        skipDuplicates: true,
+      });
+    },
+    { timeout: 30000, maxWait: 25000 }
+  );
 };
 
 module.exports = {

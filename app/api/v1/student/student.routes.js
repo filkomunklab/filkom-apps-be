@@ -60,20 +60,25 @@ router.put("/student/update/id/:id", studentController.patchStudentById);
 
 router.delete("/student/:id", studentController.deleteStudentById);
 
+//============================BimAkad Profile Management=========================
+
+//Student Input data for first time login
 router.patch(
-  "/student/biodata/:nim",
+  "/student/biodata/:studentId",
   auth,
   studentController.patchBiodataStudent
 );
 
+//check if student already input data in first time login
 router.get(
-  "/student/biodata/check/:nim",
+  "/student/biodata/check/:studentId",
   auth,
   studentController.getToCheckBiodata
 );
 
+//view of student profile/biodata
 router.get(
-  "/student/view/biodata/:nim",
+  "/student/view/biodata/:studentId",
   auth,
   studentController.getBiodataStudent
 );

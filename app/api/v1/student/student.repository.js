@@ -230,38 +230,34 @@ const deleteStudent = async (prisma, id) => {
 
 //=======================================Bimbingan Akademik==========
 
-const findToUpdateBiodataStudent = async (nim, payload, path) => {
+const findToUpdateBiodataStudent = async (studentId, payload, path) => {
   const {
     password,
-    bloodType,
     dateOfBirth,
     phoneNo,
-    AreaOfConcentration,
-    highSchoolGrad,
-    currentAddress,
+    areaOfConcentration,
     currentResidenceStatus,
-    guardianEducation,
-    guardianStatus,
     guardianEmail,
     guardianPhoneNo,
+    reg_num,
+    studentEmail,
+    address,
   } = payload;
   const { filename } = payload.studentImage;
   try {
     const student = await prisma.student.update({
       where: {
-        nim,
+        id: studentId,
       },
       data: {
+        reg_num,
+        address,
+        studentEmail,
         password,
-        bloodType,
         dateOfBirth,
         phoneNo,
-        AreaOfConcentration,
-        highSchoolGrad,
-        currentAddress,
+        areaOfConcentration,
         currentResidenceStatus,
-        guardianEducation,
-        guardianStatus,
         guardianEmail,
         guardianPhoneNo,
         filename,
@@ -298,11 +294,11 @@ const findToUpdateBiodataStudent = async (nim, payload, path) => {
   }
 };
 
-const findToCheckBiodata = async (nim) => {
+const findToCheckBiodata = async (studentId) => {
   try {
     const student = await prisma.student.findUnique({
       where: {
-        nim,
+        id: studentId,
       },
       select: {
         biodataCheck: true,
@@ -318,11 +314,11 @@ const findToCheckBiodata = async (nim) => {
   }
 };
 
-const findBiodataStudent = async (nim) => {
+const findBiodataStudent = async (studentId) => {
   try {
     const student = await prisma.student.findUnique({
       where: {
-        nim,
+        id: studentId,
       },
       include: {
         curriculum: {
@@ -339,7 +335,6 @@ const findBiodataStudent = async (nim) => {
                 teacher: {
                   select: {
                     id: true,
-                    nidn: true,
                     nik: true,
                     firstName: true,
                     lastName: true,

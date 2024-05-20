@@ -160,22 +160,22 @@ const approvalStudentGrades = async (transactionId, payload) => {
 
 //===========================Student Access==========================//
 //INPUT GRADES
-const insertDataforGrades = async (payload, nim) => {
+const insertDataforGrades = async (payload, studentId) => {
   const { semester } = payload;
   const transaction = await prisma.aKAD_Transaction_Grades.create({
     data: {
       semester,
-      student_Nim: nim,
+      studentId,
     },
   });
   return transaction;
 };
 
 //Check if student had input grades
-const findCheckIsInput = async (id) => {
+const findCheckIsInput = async (transactionId) => {
   const transaction = await prisma.aKAD_Transaction_Grades.findUnique({
     where: {
-      id,
+      id: transactionId,
     },
     include: {
       Student: {
@@ -191,12 +191,12 @@ const findCheckIsInput = async (id) => {
 };
 
 //Current Grades Submission
-const findCurrentGradeSubmission = async (nim) => {
+const findCurrentGradeSubmission = async (studentId) => {
   const transaction = await prisma.aKAD_Transaction_Grades.findMany({
     where: {
       AND: [
         {
-          student_Nim: nim,
+          studentId,
         },
         {
           status: "WAITING",
@@ -219,12 +219,12 @@ const findCurrentGradeSubmission = async (nim) => {
 };
 
 //HISTORY GRADE SUBMISSION
-const findListStudentHistoryGradeSubmission = async (nim) => {
+const findListStudentHistoryGradeSubmission = async (studentId) => {
   const transaction = await prisma.aKAD_Transaction_Grades.findMany({
     where: {
       AND: [
         {
-          student_Nim: nim,
+          studentId,
         },
         {
           OR: [
@@ -242,6 +242,7 @@ const findListStudentHistoryGradeSubmission = async (nim) => {
       id: true,
       semester: true,
       approveDate: true,
+      status: true,
       Student: {
         select: {
           firstName: true,
@@ -254,12 +255,12 @@ const findListStudentHistoryGradeSubmission = async (nim) => {
 };
 
 //LIST Approved Grades/semester (student acccess)
-const findListSemesterGrades = async (nim) => {
+const findListSemesterGrades = async (studentId) => {
   const transaction = await prisma.aKAD_Transaction_Grades.findMany({
     where: {
       AND: [
         {
-          student_Nim: nim,
+          studentId,
         },
         {
           status: "APPROVED",
@@ -270,7 +271,7 @@ const findListSemesterGrades = async (nim) => {
       id: true,
       semester: true,
       status: true,
-      student_Nim: true,
+      studentId: true,
     },
   });
   return transaction;
