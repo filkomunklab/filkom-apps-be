@@ -1050,18 +1050,17 @@ model ReportSummary {
 }
 
 model ReportDetail {
-  Rps           Rps      @relation(fields: [rpsId], references: [id], onDelete: Cascade)
-  rpsId         String   @unique
-  subjectName   String
-  major         String
-  credits       Int
-  parallel      String   @db.Char(1)
-  teacher       String
-  schedule      String
-  gradingSystem Json
-  studentGrade  Json
-  createAt      DateTime @default(now())
-  updateAt      DateTime @updatedAt
+  Rps          Rps      @relation(fields: [rpsId], references: [id], onDelete: Cascade)
+  rpsId        String   @unique
+  subjectName  String
+  major        String
+  credits      Int
+  parallel     String   @db.Char(1)
+  teacher      String
+  schedule     String
+  studentGrade Json
+  createAt     DateTime @default(now())
+  updateAt     DateTime @updatedAt
 }
 
 // =================== OBE END ===================
