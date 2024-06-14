@@ -70,6 +70,7 @@ const corsOptions = {
     "https://filkom.investsulut.id",
     "https://hgdxm2td-3000.asse.devtunnels.ms",
     "https://bim-akad.vercel.app",
+    "https://app.filkom.unklab.ac.id",
     "*",
   ],
 };
