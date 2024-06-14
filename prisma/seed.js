@@ -3,33 +3,67 @@ const prisma = new PrismaClient();
 
 async function main() {
   // CREATE ADMIN
-  await prisma.admin.create({
-    data: {
-      email: "admin@mail.com",
-      username: "admin",
-      password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      role: "ADMIN",
-    },
+  await prisma.assessmentIndicator.createMany({
+    data: [
+      {
+        description: "Sangat Baik",
+        letter: "A",
+        minScore: 85,
+        maxScore: 100,
+      },
+      {
+        description: "Baik",
+        letter: "B",
+        minScore: 70,
+        maxScore: 84,
+      },
+      {
+        description: "Cukup",
+        letter: "C",
+        minScore: 60,
+        maxScore: 69,
+      },
+      {
+        description: "Kurang",
+        letter: "D",
+        minScore: 50,
+        maxScore: 59,
+      },
+      {
+        description: "Sangat Kurang",
+        letter: "E",
+        minScore: 0,
+        maxScore: 49,
+      },
+    ],
+    skipDuplicates: true,
   });
 
-  // CREATE SUPER_ADMIN
-  await prisma.admin.create({
-    data: {
-      email: "super_admin@mail.com",
-      username: "superadmin",
-      password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      role: "SUPER_ADMIN",
-    },
-  });
-
-  // CREATE ADMIN_LPMI
-  await prisma.admin.create({
-    data: {
-      email: "admin_lpmi@mail.com",
-      username: "adminlpmi",
-      password: "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
-      role: "ADMIN_LPMI",
-    },
+  await prisma.admin.createMany({
+    data: [
+      {
+        email: "admin@mail.com",
+        username: "admin",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        role: "ADMIN",
+      },
+      {
+        email: "super_admin@mail.com",
+        username: "superadmin",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        role: "SUPER_ADMIN",
+      },
+      {
+        email: "admin_lpmi@mail.com",
+        username: "adminlpmi",
+        password:
+          "$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu",
+        role: "ADMIN_LPMI",
+      },
+    ],
+    skipDuplicates: true,
   });
 
   // Create Lecturer
