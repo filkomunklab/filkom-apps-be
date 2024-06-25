@@ -71,7 +71,7 @@ const corsOptions = {
     "https://hgdxm2td-3000.asse.devtunnels.ms",
     "https://bim-akad.vercel.app",
     "https://app.filkom.unklab.ac.id",
-    "*",
+    "http://app.filkom.unklab.ac.id",
   ],
 };
 
