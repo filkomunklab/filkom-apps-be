@@ -1,0 +1,190 @@
+model Cpl {
+    id           String         @id @default(uuid())
+    code         String
+    description  String
+    curriculum   Curriculum     @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+    curriculumId String
+    createdAt    DateTime       @default(now())
+    updatedAt    DateTime       @updatedAt
+    Subject_Cpl  Subject_Cpl[]
+    SupportedCpl SupportedCpl[]
+
+    @@unique([code, curriculumId])
+}
+
+model Subject_Cpl {
+    id        String   @id @default(uuid())
+    subject   Subject  @relation(fields: [subjectId], references: [id])
+    subjectId String
+    cpl       Cpl      @relation(fields: [cplId], references: [id], onDelete: Cascade)
+    cplId     String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([subjectId, cplId])
+}
+
+model Cpmk {
+    id           String         @id @default(cuid())
+    code         String
+    rps          Rps            @relation(fields: [rpsId], references: [id], onDelete: Cascade)
+    rpsId        String
+    description  String
+    createdAt    DateTime       @default(now())
+    updatedAt    DateTime       @updatedAt
+    SupportedCpl SupportedCpl[]
+
+    @@unique([rpsId, code])
+}
+
+model CpmkGrading {
+    id                 String          @id @default(uuid())
+    Rps                Rps             @relation(fields: [rpsId], references: [id], onDelete: Cascade)
+    rpsId              String
+    code               String
+    totalGradingWeight Int
+    GradingSystem      GradingSystem[]
+
+    @@unique([rpsId, code])
+}
+
+model GradingSystem {
+    id            String         @id @default(uuid())
+    CpmkGrading   CpmkGrading    @relation(fields: [cpmkGradingId], references: [id], onDelete: Cascade)
+    cpmkGradingId String
+    gradingName   String
+    gradingWeight Int
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+    StudentGrade  StudentGrade[]
+}
+
+model StudentGrade {
+    id              String        @id @default(uuid())
+    rawGrade        Float
+    score           Float
+    calculateGrade  Float?
+    Student         Student       @relation(fields: [studentNim], references: [nim])
+    studentNim      String
+    GradingSystem   GradingSystem @relation(fields: [gradingSystemId], references: [id], onDelete: Cascade)
+    gradingSystemId String
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
+
+    @@unique(name: "studentGradeId", [studentNim, gradingSystemId])
+}
+
+model SupportedCpl {
+    cpmk   Cpmk   @relation(fields: [cpmkId], references: [id], onDelete: Cascade)
+    cpmkId String
+    cpl    Cpl    @relation(fields: [cplId], references: [id], onDelete: Cascade)
+    cplId  String
+
+    @@unique([cpmkId, cplId])
+}
+
+model Rps {
+    id                    String                  @id @default(uuid())
+    subjectFamily         String
+    subjectDescription    String
+    parallel              String                  @db.Char(1)
+    schedule              String
+    rpsDeveloper          String
+    headOfExpertise       String
+    headOfProgramStudy    String
+    mainReferences        String[]
+    supportingReferences  String[]
+    software              String
+    hardware              String
+    teamTeaching          String[]
+    minPassStudents       String
+    minPassGrade          String
+    Subject               Subject                 @relation(fields: [subjectId], references: [id])
+    subjectId             String
+    teacher               Employee                @relation(fields: [teacherId], references: [id])
+    teacherId             String
+    status                status                  @default(WAITING)
+    createdAt             DateTime                @default(now())
+    updatedAt             DateTime                @updatedAt
+    approvedAt            DateTime?
+    Cpmk                  Cpmk[]
+    MeetingPlan           MeetingPlan[]
+    StudentAssignmentPlan StudentAssignmentPlan[]
+    ReportSummary         ReportSummary?
+    ReportDetail          ReportDetail?
+    CpmkGrading           CpmkGrading[]
+    ClassStudent          ClassStudent[]
+}
+
+model ClassStudent {
+    id         String  @id @default(uuid())
+    Student    Student @relation(fields: [studentNim], references: [nim])
+    studentNim String
+    Rps        Rps     @relation(fields: [rpsId], references: [id], onDelete: Cascade)
+    rpsId      String
+
+    @@unique([studentNim, rpsId])
+}
+
+model MeetingPlan {
+    id                    String   @id @default(uuid())
+    week                  String
+    cpmkList              String[]
+    subCpmkDescription    String
+    achievementIndicators String
+    assessmentModel       String
+    material              String
+    method                String
+    offlineActivity       String
+    onlineActivity        String
+    rps                   Rps      @relation(fields: [rpsId], references: [id], onDelete: Cascade)
+    rpsId                 String
+}
+
+model StudentAssignmentPlan {
+    id                    String @id @default(uuid())
+    assignmentModel       String
+    references            String
+    subLearningOutcomes   String
+    assignmentDescription String
+    icbValuation          String
+    dueSchedule           String
+    others                String
+    referenceList         String
+    rps                   Rps    @relation(fields: [rpsId], references: [id], onDelete: Cascade)
+    rpsId                 String
+}
+
+model ReportSummary {
+    Rps              Rps      @relation(fields: [rpsId], references: [id], onDelete: Cascade)
+    rpsId            String   @unique
+    subjectName      String
+    curriculum       String
+    major            String
+    credits          Int
+    parallel         String   @db.Char(1)
+    status           String
+    semester         String
+    teacher          String
+    schedule         String
+    highestCpmk      Json
+    lowestCpmk       Json
+    cpmkGradeSummary Json
+    studentCpmkGrade Json
+    createAt         DateTime @default(now())
+    updateAt         DateTime @updatedAt
+}
+
+model ReportDetail {
+    Rps          Rps      @relation(fields: [rpsId], references: [id], onDelete: Cascade)
+    rpsId        String   @unique
+    subjectName  String
+    major        String
+    credits      Int
+    parallel     String   @db.Char(1)
+    teacher      String
+    schedule     String
+    studentGrade Json
+    createAt     DateTime @default(now())
+    updateAt     DateTime @updatedAt
+}

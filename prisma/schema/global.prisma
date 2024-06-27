@@ -1,0 +1,344 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// ------- global ------------------------
+model Admin {
+    id        String    @id @default(uuid())
+    username  String    @unique
+    email     String
+    password  String
+    role      Role      @default(ADMIN)
+    token     String?   @unique
+    createdBy String?
+    updatedBy String?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime?
+}
+
+model Employee {
+    id                        String                @id @default(uuid())
+    nik                       String                @unique
+    password                  String                @default("$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu")
+    firstName                 String
+    lastName                  String
+    email                     String?               @unique
+    phoneNum                  String?               @unique
+    Address                   String?
+    degree                    String?
+    major                     Major?
+    token                     String?               @unique
+    createdBy                 String?
+    updatedBy                 String?
+    createdAt                 DateTime              @default(now())
+    updatedAt                 DateTime?
+    fileName                  String?
+    path                      String?
+    classroom                 Classroom[]           @relation("DosenMK")
+    thesis_consultation       Thesis_Consultation[] @relation("ThesisConsultation")
+    proposed_advisor          Submission[]          @relation("ProposedAdvisor")
+    proposed_co_advisor1      Submission[]          @relation("ProposedCoAdvisor1")
+    proposed_co_advisor2      Submission[]          @relation("ProposedCoAdvisor2")
+    proposal_advisor          Proposal[]            @relation("ProposalAdvisor")
+    proposal_co_advisor1      Proposal[]            @relation("ProposalCoAdvisor1")
+    proposal_co_advisor2      Proposal[]            @relation("ProposalCoAdvisor2")
+    proposal_panelis_chairman Proposal[]            @relation("ProposalPanelistChairman")
+    proposal_panelis_member   Proposal[]            @relation("ProposalPanelistMember")
+    skripsi_advisor           Skripsi[]             @relation("SkripsiAdvisor")
+    skripsi_co_advisor1       Skripsi[]             @relation("SkripsiCoAdvisor1")
+    skripsi_co_advisor2       Skripsi[]             @relation("SkripsiCoAdvisor2")
+    skripsi_panelis_chairman  Skripsi[]             @relation("SkripsiPanelistChairman")
+    skripsi_panelis_member    Skripsi[]             @relation("SkripsiPanelistMember")
+    proposal_assessment       Proposal_Assessment[] @relation("Dosen")
+    skripsi_assessment        Skripsi_Assessment[]  @relation("Dosen")
+    proposal_changes          Proposal_Changes[]    @relation("Dosen")
+    skripsi_changes           Skripsi_Changes[]     @relation("Dosen")
+
+    academic_consultations AKAD_Academic_Consultation[]
+    preRegis               AKAD_PreRegistration[]
+    gradesAccess           AKAD_Grades_access[]
+    GuidanceClass          AKAD_GuidanceClass?
+    PreRegistrationData    AKAD_PreRegistrationData[]
+    Activity               AKAD_Activity[]
+    Curriculum             Curriculum[]
+    Rps                    Rps[]
+
+    @@unique([firstName, lastName])
+    @@index([email])
+}
+
+model Student {
+    id                        String                 @id @default(uuid())
+    reg_num                   String?                @unique
+    nim                       String                 @unique
+    password                  String                 @default("$2b$10$8i4.tmBGcK619R.lL6goi.GBRA3E7y25fARKYRqIPR46PjwlPV9eu")
+    firstName                 String
+    lastName                  String?
+    dateOfBirth               DateTime?              @db.Date
+    gender                    Gender
+    religion                  String?
+    studentEmail              String?                @unique
+    curriculum                Curriculum?            @relation(fields: [curriculumId], references: [id], onDelete: SetNull)
+    curriculumId              String?
+    arrivalYear               String?
+    address                   String?
+    currentResidenceStatus    String?
+    status                    StudentStatus          @default(ACTIVE)
+    personalEmail             String?                @unique
+    faculty                   String?
+    major                     Major?
+    MajorGlobal               MajorGlobal?           @relation(fields: [majorGlobalId], references: [id])
+    majorGlobalId             String?
+    graduate_year             String?
+    phoneNo                   String?
+    areaOfConcentration       Area_Of_Concentration?
+    token                     String?                @unique
+    guardianName              String?
+    familyRelation            String?
+    guardianEmail             String?
+    guardianPhoneNo           String?
+    createdBy                 String?
+    updatedBy                 String?
+    createdAt                 DateTime               @default(now())
+    updatedAt                 DateTime?
+    filename                  String?
+    path                      String?
+    biodataCheck              Boolean                @default(false)
+    proposal_student          Proposal_Student[]     @relation("ProposalStudent")
+    skripsi_student           Skripsi_Student[]      @relation("SkripsiStudent")
+    group_student             Group_Student[]        @relation("StudentMember")
+    proposal_assessment       Proposal_Assessment[]  @relation("Student")
+    proposal_conclusion_value Proposal_Conclusion[]  @relation("Student")
+    skripsi_assessment        Skripsi_Assessment[]   @relation("Student")
+    skripsi_conclusion_value  Skripsi_Conclusion[]   @relation("Student")
+    FormSPT                   FormSPT[]
+
+    Tracer_Study Tracer_Study[]
+
+    studentGrade          AKAD_Transaction_Grades[]
+    ActivityMember        AKAD_ActivityMember[]
+    GuidanceClassMember   AKAD_GuidanceClassMember?
+    Certificate           AKAD_Certificate[]
+    PreRegistrationData   AKAD_PreRegistrationData[]
+    StudentGrade          StudentGrade[]
+    ClassStudent          ClassStudent[]
+    academic_Consultation AKAD_Academic_Consultation[]
+
+    @@unique([firstName, lastName])
+    @@index([studentEmail, personalEmail])
+}
+
+model MajorGlobal {
+    id        String    @id
+    shortName String
+    name      String
+    Student   Student[]
+}
+
+model UserRole {
+    id        String    @id @default(uuid())
+    userId    String
+    role      Role      @default(MAHASISWA)
+    createdBy String?
+    updatedBy String?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime?
+
+    @@unique([userId, role])
+}
+
+model Curriculum {
+    id                   String               @id @default(uuid())
+    major                String               @db.VarChar(100)
+    year                 String               @db.Char(4)
+    headOfProgramStudy   Employee             @relation(fields: [headOfProgramStudyId], references: [id])
+    headOfProgramStudyId String
+    createdAt            DateTime             @default(now())
+    updatedAt            DateTime             @updatedAt
+    student              Student[]
+    Cpl                  Cpl[]
+    Curriculum_Subject   Curriculum_Subject[]
+
+    @@unique([major, year])
+}
+
+model Subject {
+    id            String      @id @default(uuid())
+    code          String      @unique
+    englishName   String
+    indonesiaName String
+    credits       Int
+    type          SubjectType
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+
+    Curriculum_Subject Curriculum_Subject[]
+    Subject_Cpl        Subject_Cpl[]
+    Rps                Rps[]
+    AKAD_Grades        AKAD_Grades[]
+    AKAD_ListOfRequest AKAD_ListOfRequest[]
+}
+
+model Curriculum_Subject {
+    id           String     @id @default(uuid())
+    curriculum   Curriculum @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+    curriculumId String
+    subject      Subject    @relation(fields: [subjectId], references: [id])
+    subjectId    String
+    semester     Int
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+    prerequisite String[]
+
+    @@unique([curriculumId, subjectId])
+}
+
+model AssessmentIndicator {
+    id          String   @id @default(uuid())
+    letter      String   @db.Char(1)
+    minScore    Int
+    maxScore    Int
+    description String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+// ENUM 
+enum Major {
+    SI
+    IF
+    DKV
+    TI
+    NONE
+}
+
+enum StudentStatus {
+    GRADUATE
+    ACTIVE
+    INACTIVE
+}
+
+enum Gender {
+    MALE
+    FEMALE
+}
+
+enum Thesis_Approve {
+    Waiting
+    Approve
+    Rejected
+}
+
+enum Submission_Approve {
+    Waiting
+    Approve
+    Rejected
+}
+
+enum Classroom_Name {
+    Proposal
+    Skripsi
+}
+
+enum Semester {
+    Ganjil
+    Genap
+    Padat
+}
+
+enum Progress {
+    Submission
+    Proposal
+    Skripsi
+    Finished
+}
+
+enum Consultation_Status {
+    Proposal
+    Skripsi
+}
+
+enum status {
+    WAITING
+    APPROVED
+    REJECTED
+}
+
+enum Role {
+    ADMIN
+    SUPER_ADMIN
+    MAHASISWA
+    ADMIN_LPMI
+    OPERATOR_LPMI
+    ALUMNI
+    DEKAN
+    KAPRODI
+    DOSEN
+    DOSEN_MK
+    OPERATOR_FAKULTAS
+    SEKRETARIS
+    REGISTER
+}
+
+enum Exam_Conclution {
+    Rejected
+    Approve
+}
+
+enum Changes_Conclusion {
+    Major
+    Minor
+}
+
+enum Pass {
+    Pass
+    Fail
+    Repeat
+}
+
+enum Revision_Approve {
+    Waiting
+    Approve
+    Rejected
+}
+
+enum ConsultationStatus {
+    Waiting
+    OnProcess
+    Complete
+}
+
+enum ActivityType {
+    GUIDANCE_CLASS
+    MAJOR
+    FACULTY
+}
+
+enum Area_Of_Concentration {
+    OBJECT_PROGRAMMER
+    COMPETITIVE_INTELEGENT_ANALYSIS
+    NETWORK_ADMINISTRATOR
+}
+
+enum Certificate_Level {
+    INTERNATIONAL
+    NATIONAL
+    REGION
+    UNIVERSITY
+    MAJOR
+}
+
+enum Certificate_Category {
+    PENALARAN_KEILMUAN
+    ORGANISASI_KEPEMIMPINAN
+    BAKAT_MINAT
+    PENGABDIAN_MASYARAKAT
+    OTHER
+}
+
+enum SubjectType {
+    Prerequisite
+    Major
+    General
+    Basic
+    Elective
+}

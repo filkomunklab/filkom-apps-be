@@ -1,9 +1,9 @@
-import { Hono } from 'hono'
+import app from "./app";
+import { Config } from "./config";
 
-const app = new Hono()
+const server = Bun.serve({
+  fetch: app.fetch,
+  port: Config.PORT,
+});
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
-
-export default app
+console.log(`Server listening on port ${server.port}`);

@@ -1,0 +1,122 @@
+//-------------------Klabat Bridge ----------------------//
+
+model FormSPT {
+    id                String    @id @default(uuid())
+    full_name         String
+    reg_num           String
+    date_of_birth     String
+    gender            Gender
+    nik               String
+    nim               String
+    faculty           String
+    major             String
+    minor             String?
+    birth_mother      String
+    phone_num         String
+    personal_email    String
+    graduate_plan     String
+    remaining_credits String
+    remaining_classes String
+    certificateURL    String?
+    approval_fac      status    @default(WAITING) // approved dan reject, default waiting
+    approval_reg      status    @default(WAITING)
+    created_at        DateTime  @default(now())
+    updated_at        DateTime?
+    student           Student   @relation(fields: [studentId], references: [nim], onDelete: Cascade)
+    studentId         String
+}
+
+model Tracer_Study {
+    id          String   @id @default(uuid())
+    kdptimsmh   String //Kode PT --> default value dari BE
+    kdpstmsmh   String //Kode Prodi --> default value dari FE
+    nimhsmsmh   String //NIM
+    nmmhsmsmh   String //Nama Lengkap (lastname dg firstname di Student)
+    telpomsmh   String //Nomor Telepon/HP
+    emailmsmh   String //alamat email
+    tahun_lulus String //Tahun Lulus --> graduate_plan: Semester II 2023/2024 --> 2024gitu
+    nik         String //NIK
+    npwp        String //NPWP
+    f8          String //Pertanyaan no.1
+    f504        String? //Pertanyaan no.2
+    f502        String? //Pertanyaan no. 2a
+    f505        String? //Pertanyaan no.2b
+    f506        String? //tidak ada di pertanyaan
+    f5a1        String? //3 --> provinsi
+    f5a2        String? //3 --> kabupaten/kota
+    f1101       String? //4 --> pilihan
+    f1102       String? //4 --> lainnya, isian
+    f5b         String? //5 --> nama perusahaan
+    f5c         String? //6 --> jabatan 
+    f5d         String? //7 --> tingkat tempat kerja
+    f18a        String? //8 --> sumber biaya
+    f18b        String? //8 --> Perguruan tinggi
+    f18c        String? //8 --> program study
+    f18d        String? //8 --> Tanggal masuk 
+    f1201       String? //9 --> pilihan
+    f1202       String? //9 --> lainnya, tuliskan
+    f14         String? //10
+    f15         String? //11
+    f1761       String? //12 a1
+    f1762       String? //12 b1
+    f1763       String? //12 a2
+    f1764       String? //12 b2
+    f1765       String? //12 a3
+    f1766       String? //12 b3
+    f1767       String? //12 a4
+    f1768       String? //12 b4
+    f1769       String? //12 a5
+    f1770       String? //12 b5
+    f1771       String? //12 a6
+    f1772       String? //12 b6
+    f1773       String? //12 a7
+    f1774       String? //12 b7
+    f21         String? //13 a
+    f22         String? //13 b
+    f23         String? //13 c
+    f24         String? //13 d
+    f25         String? //13 e
+    f26         String? //13 f
+    f27         String? //13 g
+    f301        String? //14
+    f302        String? //14 a
+    f303        String? //14 b
+    f401        String? //15a
+    f402        String? //15b
+    f403        String? //15c
+    f404        String? //15d
+    f405        String? //15e
+    f406        String? //15f
+    f407        String? //15g
+    f408        String? //15h
+    f409        String? //15i
+    f410        String? //15j
+    f411        String? //15k
+    f412        String? //15l
+    f413        String? //15m
+    f414        String? //15n
+    f415        String? //15o
+    f416        String? //15 isian
+    f6          String? //16
+    f7          String? //17
+    f7a         String? //18
+    f1001       String? //19
+    f1002       String? //19 isian
+    f1601       String? //20
+    f1602       String? //20
+    f1603       String? //20
+    f1604       String? //20
+    f1605       String? //20
+    f1606       String? //20
+    f1607       String? //20
+    f1608       String? //20
+    f1609       String? //20
+    f1610       String? //20
+    f1611       String? //20
+    f1612       String? //20
+    f1613       String? //20
+    f1614       String? //20 isian
+    created_at  DateTime @default(now())
+    studentId   String
+    student     Student  @relation(fields: [studentId], references: [nim], onDelete: Cascade)
+}

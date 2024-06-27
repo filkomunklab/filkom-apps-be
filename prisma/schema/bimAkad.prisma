@@ -1,0 +1,190 @@
+model AKAD_Transaction_Grades {
+    id           String        @id @default(uuid())
+    submitedDate DateTime      @default(now()) @db.Timestamptz(3)
+    approveDate  DateTime?     @db.Timestamptz(3)
+    semester     String
+    comments     String?
+    isInput      Boolean       @default(true)
+    status       status        @default(WAITING)
+    Student      Student?      @relation(fields: [studentId], references: [id])
+    studentId    String
+    Grades       AKAD_Grades[]
+}
+
+model AKAD_Grades {
+    id                 String                   @id @default(uuid())
+    grades             String?
+    lecturer           String
+    description        String?
+    submited_Date      DateTime                 @default(now())
+    Subject            Subject?                 @relation(fields: [subjectId], references: [id])
+    subjectId          String?
+    subjectName        String?
+    transaction_Grades AKAD_Transaction_Grades? @relation(fields: [transactionId], references: [id])
+    transactionId      String?
+}
+
+model AKAD_Grades_access {
+    id             String    @id @default(uuid())
+    semester       Semester
+    semesterPeriod String?
+    major          Major
+    dueDate        DateTime
+    createdAt      DateTime  @default(now())
+    updatedAt      DateTime  @updatedAt
+    isOpen         Boolean   @default(true)
+    Employee       Employee? @relation(fields: [employeeId], references: [id])
+    employeeId     String?
+}
+
+model AKAD_PreRegistration {
+    id                  String                     @id @default(uuid())
+    semester            Semester
+    semesterPeriod      String
+    major               Major
+    dueDate             DateTime
+    isOpen              Boolean                    @default(true)
+    Employee            Employee                   @relation(fields: [employeeId], references: [id])
+    employeeId          String
+    createdAt           DateTime                   @default(now())
+    updatedAt           DateTime                   @updatedAt
+    PreRegistrationData AKAD_PreRegistrationData[]
+}
+
+model AKAD_PreRegistrationData {
+    id                String               @id @default(uuid())
+    Student           Student              @relation(fields: [studentId], references: [id])
+    studentId         String
+    Employee          Employee             @relation(fields: [employeeId], references: [id])
+    employeeId        String
+    status            status?              @default(WAITING)
+    description       String?
+    comments          String?
+    submitDate        DateTime             @default(now())
+    approveDate       DateTime?
+    PreRegistration   AKAD_PreRegistration @relation(fields: [preRegistrationId], references: [id])
+    preRegistrationId String
+    ListOfRequest     AKAD_ListOfRequest[]
+
+    @@unique([preRegistrationId, studentId])
+}
+
+model AKAD_ListOfRequest {
+    PreRegistrationData   AKAD_PreRegistrationData @relation(fields: [preRegistrationDataId], references: [id])
+    preRegistrationDataId String
+    subject               Subject                  @relation(fields: [subjectId], references: [id])
+    subjectId             String
+
+    @@unique([preRegistrationDataId, subjectId])
+}
+
+model AKAD_Academic_Consultation {
+    id                   String             @id @default(uuid())
+    student              Student            @relation(fields: [studentId], references: [id])
+    studentId            String
+    receiver             Employee           @relation(fields: [receiverId], references: [id])
+    receiverId           String
+    receiver_name        String             @db.VarChar(255)
+    topic                String             @db.VarChar(50)
+    student_name         String             @db.VarChar(255)
+    supervisor_name      String             @db.VarChar(255)
+    student_major        String             @db.VarChar(50)
+    student_arrival_year String             @db.VarChar(50)
+    createdAt            DateTime           @default(now()) @db.Timestamptz(3)
+    updatedAt            DateTime           @default(now()) @db.Timestamptz(3)
+    status               ConsultationStatus @default(Waiting)
+    description          String
+
+    messages AKAD_Message[]
+}
+
+model AKAD_Message {
+    id                       String                     @id @default(uuid())
+    academic_consultation    AKAD_Academic_Consultation @relation(fields: [academic_consultation_id], references: [id])
+    academic_consultation_id String
+    sender_name              String                     @db.VarChar(255)
+    content                  String
+    createdAt                DateTime                   @default(now()) @db.Timestamptz(3)
+}
+
+model AKAD_Certificate {
+    id             String               @id @default(uuid())
+    filename       String
+    path           String
+    title          String
+    category       Certificate_Category
+    level          Certificate_Level
+    description    String
+    comments       String?
+    approvalDate   DateTime?            @db.Timestamptz(3)
+    submitDate     DateTime             @default(now()) @db.Timestamptz(3)
+    approvalStatus status               @default(WAITING)
+    student        Student              @relation(fields: [studentId], references: [id])
+    studentId      String
+}
+
+model AKAD_Activity {
+    id             String                @id @default(uuid())
+    title          String
+    description    String
+    dueDate        DateTime
+    isAttendance   Boolean
+    isDone         Boolean               @default(false)
+    activityType   ActivityType
+    Employee       Employee              @relation(fields: [employeeId], references: [id])
+    employeeId     String
+    createdAt      DateTime              @default(now())
+    updatedAt      DateTime              @updatedAt
+    ActivityMember AKAD_ActivityMember[]
+}
+
+model AKAD_ActivityMember {
+    presence   Boolean?
+    activity   AKAD_Activity @relation(fields: [activityId], references: [id])
+    activityId String
+    student    Student       @relation(fields: [studentId], references: [id])
+    studentId  String
+
+    @@unique([activityId, studentId])
+}
+
+model AKAD_GuidanceClass {
+    id                  String                     @id @default(uuid())
+    teacher             Employee                   @relation(fields: [teacherId], references: [id])
+    teacherId           String                     @unique
+    createdAt           DateTime                   @default(now())
+    updatedAt           DateTime                   @updatedAt
+    GuidanceClassMember AKAD_GuidanceClassMember[]
+}
+
+model AKAD_GuidanceClassMember {
+    student         Student            @relation(fields: [studentId], references: [id])
+    studentId       String             @unique
+    gudianceClass   AKAD_GuidanceClass @relation(fields: [guidanceClassId], references: [id], onDelete: Cascade)
+    guidanceClassId String
+
+    @@unique([studentId, guidanceClassId])
+}
+
+model AKAD_Lecturer {
+    id        String @id @default(uuid())
+    firstName String
+    lastName  String
+}
+
+model AKAD_guide {
+    id      String  @id @default(uuid())
+    number  String?
+    part    String?
+    title   String?
+    content String?
+}
+
+model AKAD_Vmt {
+    id      String  @id @default(uuid())
+    major   Major?
+    number  String?
+    type    String?
+    level   String?
+    content String?
+}
