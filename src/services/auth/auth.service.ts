@@ -57,4 +57,50 @@ const signInAdmin = async ({ username, password }: Login) => {
   }
 };
 
-export default { signInAdmin };
+const signInEmployee = async ({ username, password }: Login) => {
+  const employee = await prisma.employee.findUnique({
+    where: { nik: username },
+    include: { GuidanceClass: true },
+  });
+
+  if (employee) {
+    const role = await prisma.userRole.findMany({
+      where: { userId: employee.id },
+    });
+    const checkPassword = await Bun.password.verify(
+      password,
+      employee.password
+    );
+    if (checkPassword) {
+      const token = await sign(
+        {
+          user: {
+            id: employee.id,
+            nik: employee.nik,
+            name: `${employee.firstName} ${employee.lastName}`,
+            role: role,
+          },
+        },
+        Config.SECRET_KEY
+      );
+      employee.token = token;
+      const data = {
+        user: {
+          id: employee.id,
+          nik: employee.nik,
+          name: `${employee.firstName} ${employee.lastName}`,
+          role: role,
+          guidanceClassId: employee.GuidanceClass?.id,
+        },
+        token: token,
+      };
+      return data;
+    } else {
+      throw new HTTPException(401, { message: "email or password incorrect" });
+    }
+  } else {
+    throw new HTTPException(401, { message: "email or password incorrect" });
+  }
+};
+
+export default { signInAdmin, signInEmployee };
