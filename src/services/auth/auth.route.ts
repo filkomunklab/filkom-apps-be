@@ -46,4 +46,24 @@ authRoute.post(
   }
 );
 
+authRoute.post(
+  "/signin-student",
+  zValidator("json", authSchema.login, (res, c) => {
+    if (!res.success) {
+      throw new HTTPException(400, {
+        message: "Please provide valid data",
+        cause: res.error,
+      });
+    }
+  }),
+  async (c) => {
+    const { username, password } = c.req.valid("json");
+    const student = await authService.signInStudent({ username, password });
+    return c.json(
+      { status: "SUCCESS", message: "Login Success", data: student },
+      200
+    );
+  }
+);
+
 export default authRoute;

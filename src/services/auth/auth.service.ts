@@ -103,4 +103,53 @@ const signInEmployee = async ({ username, password }: Login) => {
   }
 };
 
-export default { signInAdmin, signInEmployee };
+const signInStudent = async ({ username, password }: Login) => {
+  const student = await prisma.student.findUnique({
+    where: { nim: username },
+    include: { GuidanceClassMember: true },
+  });
+
+  if (student) {
+    const role = await prisma.userRole.findMany({
+      where: { userId: student.id },
+    });
+    const checkPassword = await Bun.password.verify(password, student.password);
+    if (checkPassword) {
+      const token = await sign(
+        {
+          user: {
+            id: student.id,
+            nim: student.nim,
+            name: `${student.firstName} ${student.lastName}`,
+            role: role,
+            majorGlobalId: student.majorGlobalId,
+          },
+        },
+        Config.SECRET_KEY
+      );
+      student.token = token;
+      const { GuidanceClassMember, majorGlobalId, curriculumId } = student;
+      const data = {
+        user: {
+          id: student.id,
+          nim: student.nim,
+          name: `${student.firstName} ${student.lastName}`,
+          status: student.status,
+          role: role[0],
+          majorGlobalId: majorGlobalId,
+          curriculumId: curriculumId,
+          guidanceClassId: GuidanceClassMember?.guidanceClassId,
+        },
+        token: token,
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+      };
+      return data;
+    } else {
+      throw new HTTPException(401, { message: "email or password incorrect" });
+    }
+  } else {
+    throw new HTTPException(401, { message: "email or password incorrect" });
+  }
+};
+
+export default { signInAdmin, signInEmployee, signInStudent };
