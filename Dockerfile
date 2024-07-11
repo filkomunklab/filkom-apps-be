@@ -1,8 +1,10 @@
 # Use the official Node.js image as the base image
 FROM node:18
 
+ENV PORT=${PORT}
+
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
@@ -17,7 +19,7 @@ COPY . .
 RUN npx prisma generate
 
 # Expose the port that the app will listen on
-EXPOSE 3000
+EXPOSE ${PORT}
 
 # Start the app
 CMD ["npm", "start"]

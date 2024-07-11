@@ -1,38 +1,94 @@
-name: Docker Image CI
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - obe
+      - master
 
 jobs:
-  push_to_container_registry:
-     name: Push Docker image to multiple registries
-     runs-on: ubuntu-latest
-     permissions:
-      packages: write
-      contents: read
-     steps:
-      - name: Check out the repo
+  # build-and-push:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v3
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v3
+  #     - name: Login to Docker Hub
+  #       uses: docker/login-action@v3
+  #       with:
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #     - name: Build and push
+  #       uses: docker/build-push-action@v6
+  #       with:
+  #         push: true
+  #         tags: filkomunklab/filkom-apps-be:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    # needs: build-and-push
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy Docker Compose file to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "./docker-compose.yml"
+          target: be
+
+      - name: Deploy using Docker Compose
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PORT: ${{ secrets.PORT }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          envs: POSTGRES_USER,POSTGRES_PASSWORD,POSTGRES_DB,POSTGRES_PORT,PORT,SECRET_KEY,FIREBASE_API_KEY,DATABASE_URL
+          script: |
+            cd be
+            echo "POSTGRES_USER=${POSTGRES_USER}" >> .env
+            echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" >> .env
+            echo "POSTGRES_DB=${POSTGRES_DB}" >> .env
+            echo "POSTGRES_PORT=${POSTGRES_PORT}" >> .env
+            echo "DATABASE_URL=${DATABASE_URL}" >> .env
+            echo "PORT=${PORT}" >> .env
+            echo "SECRET_KEY=${SECRET_KEY}" >> .env
+            echo "FIREBASE_API_KEY=${FIREBASE_API_KEY}" >> .env
+            sudo docker compose down
+            sudo docker compose pull
+            sudo docker compose up -d
+            rm .env
+
+  deploy-prisma-migration:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Checkout code
         uses: actions/checkout@v4
-      
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v4
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-       
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: |
-            edwinhati/filkom-app-api
-      
-      - name: Build and push Docker images
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Deploy Prisma migration
+        env:
+          DATABASE_URL: postgres://${{secrets.POSTGRES_USER}}:${{secrets.POSTGRES_PASSWORD}}@${{ secrets.SSH_HOST }}:${{secrets.POSTGRES_PORT}}/${{secrets.POSTGRES_DB}}
+        run: |
+          echo "DATABASE_URL=${DATABASE_URL}" >> .env
+          npx prisma migrate deploy
+          rm .env
