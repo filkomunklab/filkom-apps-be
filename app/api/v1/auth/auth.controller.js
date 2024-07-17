@@ -5,7 +5,7 @@ const signInAdmin = async (req, res) => {
   try {
     const { username, password } = req.body;
     const admin = await authService.signInAdmin(username, password);
-    res.status(200).send({ status: "SUCCESS", data: admin });
+    res.status(200).send({ status: "OK", data: admin });
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -21,7 +21,7 @@ const me = (req, res) => {
     });
   }
 
-  res.status(200).send({ status: "SUCCESS", data: req.user });
+  res.status(200).send({ status: "OK", data: req.user });
 };
 
 const signOutAdmin = async (req, res) => {
@@ -42,7 +42,7 @@ const signInEmployee = async (req, res) => {
   try {
     const { username, password } = req.body;
     const employee = await authService.signInEmployee(username, password);
-    res.status(200).send({ status: "SUCCESS", data: employee });
+    res.status(200).send({ status: "OK", data: employee });
   } catch (error) {
     res
       .status(error?.status || 500)
@@ -68,7 +68,7 @@ const signInStudent = async (req, res) => {
   try {
     const { username, password } = req.body;
     const student = await authService.signInStudent(username, password);
-    res.status(200).send({ status: "SUCCESS", data: student });
+    res.status(200).send({ status: "OK", data: student });
   } catch (error) {
     console.log("ini error: ", error);
     res

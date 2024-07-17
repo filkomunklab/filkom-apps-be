@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { authRoute } from "./services";
 import { HTTPException } from "hono/http-exception";
+import { academicCalendar, auth } from "./services";
 
 const app = new Hono();
 
@@ -13,7 +13,8 @@ app.get("/", (c) => {
   });
 });
 
-app.route("/", authRoute);
+app.route("/", auth);
+app.route("/", academicCalendar);
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
@@ -22,6 +23,7 @@ app.onError((err, c) => {
       err.status
     );
   }
+  console.log(err);
   return c.json<TResponse<unknown>>(
     { status: "FAILED", error: err.cause, message: err.message },
     500

@@ -1,5 +1,5 @@
-declare type TResponse<T = undefined> = {
-  status: "SUCCESS" | "FAILED";
+declare type TResponse<T = unknown> = {
+  status: "OK" | "FAILED";
   message: string;
   data?: T;
   error?: T;

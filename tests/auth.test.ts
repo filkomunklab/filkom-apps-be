@@ -80,7 +80,7 @@ describe("Login Admin", () => {
     });
     const data: TResponse<{ token: string }> = await res.json();
     expect(res.status).toBe(200);
-    expect(data.status).toBe("SUCCESS");
+    expect(data.status).toBe("OK");
     expect(data.data?.token).toBeString();
   });
 });
@@ -134,7 +134,7 @@ describe("Login Employee", () => {
     });
     const data: TResponse<{ token: string }> = await res.json();
     expect(res.status).toBe(200);
-    expect(data.status).toBe("SUCCESS");
+    expect(data.status).toBe("OK");
     expect(data.data?.token).toBeString();
   });
 });
@@ -188,7 +188,7 @@ describe("Login Student", () => {
     });
     const data: TResponse<{ token: string }> = await res.json();
     expect(res.status).toBe(200);
-    expect(data.status).toBe("SUCCESS");
+    expect(data.status).toBe("OK");
     expect(data.data?.token).toBeString();
   });
 });

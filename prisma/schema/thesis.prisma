@@ -49,6 +49,8 @@ model Academic_Calendar {
     semester  Semester
     year      String
     classroom Classroom[] @relation("Academic")
+
+    @@unique([year, semester])
 }
 
 model Classroom {

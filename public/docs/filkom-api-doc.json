@@ -28,7 +28,7 @@
         "description": "",
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -65,7 +65,7 @@
                   }
                 },
                 "example": {
-                  "status": "SUCCESS",
+                  "status": "OK",
                   "data": {
                     "user": {
                       "id": "6efa89b3-c086-4038-9ce9-68b99dbcb8bb",
@@ -183,7 +183,7 @@
                   }
                 },
                 "example": {
-                  "status": "SUCCESS",
+                  "status": "OK",
                   "data": {
                     "user": {
                       "id": "6efa89b3-c086-4038-9ce9-68b99dbcb8bb",
@@ -284,7 +284,7 @@
                   }
                 },
                 "example": {
-                  "status": "SUCCESS",
+                  "status": "OK",
                   "data": {
                     "user": {
                       "id": "ab9eb72e-acf5-4497-a7cb-d898ec8cce55",
@@ -385,7 +385,7 @@
                   }
                 },
                 "example": {
-                  "status": "SUCCESS",
+                  "status": "OK",
                   "data": {
                     "user": {
                       "id": "91c5d94a-600b-42bd-a470-e35a01f45639",
@@ -2824,11 +2824,11 @@
                 },
                 "example": [
                   {
-                    "status": "success",
+                    "status": "OK",
                     "pesan": "Pesan Terkirim ke 628961238189@c.us !"
                   },
                   {
-                    "status": "success",
+                    "status": "OK",
                     "pesan": "Pesan Terkirim ke 628123457832@c.us !"
                   }
                 ]

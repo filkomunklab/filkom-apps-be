@@ -1,7 +1,7 @@
 {
   "name": "filkom-apps-be",
   "scripts": {
-    "pretest": "docker compose up -d test-db && sleep 2 && bun --env-file=.env.test db:deploy",
+    "pretest": "docker compose up -d test-db && sleep 5 && bun --env-file=.env.test db:deploy",
     "test": "bun --env-test=.env.test test",
     "posttest": "docker compose down test-db",
     "dev": "bun run --hot src/index.ts",

@@ -28,7 +28,11 @@ const seedDatabase = async () => {
     })),
   });
 
-  return { admin, employees, students };
+  const academicCalendar = await prisma.academic_Calendar.create({
+    data: { year: "2024", semester: "Genap" },
+  });
+
+  return { admin, employees, students, academicCalendar };
 };
 
 const cleanDatabase = async () => {
@@ -36,6 +40,7 @@ const cleanDatabase = async () => {
     prisma.admin.deleteMany(),
     prisma.employee.deleteMany(),
     prisma.student.deleteMany(),
+    prisma.academic_Calendar.deleteMany(),
   ]);
 };
 

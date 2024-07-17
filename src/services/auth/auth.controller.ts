@@ -4,9 +4,9 @@ import authSchema from "./auth.schema";
 import authService from "./auth.service";
 import { HTTPException } from "hono/http-exception";
 
-const authRoute = new Hono().basePath("/auth");
+const auth = new Hono().basePath("/auth");
 
-authRoute.post(
+auth.post(
   "/signin-admin",
   zValidator("json", authSchema.login, (res, c) => {
     if (!res.success) {
@@ -19,14 +19,11 @@ authRoute.post(
   async (c) => {
     const { username, password } = c.req.valid("json");
     const admin = await authService.signInAdmin({ username, password });
-    return c.json(
-      { status: "SUCCESS", message: "Login Success", data: admin },
-      200
-    );
+    return c.json({ status: "OK", message: "Login Success", data: admin }, 200);
   }
 );
 
-authRoute.post(
+auth.post(
   "/signin-employee",
   zValidator("json", authSchema.login, (res, c) => {
     if (!res.success) {
@@ -40,13 +37,13 @@ authRoute.post(
     const { username, password } = c.req.valid("json");
     const employee = await authService.signInEmployee({ username, password });
     return c.json(
-      { status: "SUCCESS", message: "Login Success", data: employee },
+      { status: "OK", message: "Login Success", data: employee },
       200
     );
   }
 );
 
-authRoute.post(
+auth.post(
   "/signin-student",
   zValidator("json", authSchema.login, (res, c) => {
     if (!res.success) {
@@ -60,10 +57,10 @@ authRoute.post(
     const { username, password } = c.req.valid("json");
     const student = await authService.signInStudent({ username, password });
     return c.json(
-      { status: "SUCCESS", message: "Login Success", data: student },
+      { status: "OK", message: "Login Success", data: student },
       200
     );
   }
 );
 
-export default authRoute;
+export default auth;
