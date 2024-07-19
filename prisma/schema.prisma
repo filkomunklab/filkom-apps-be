@@ -87,7 +87,7 @@ model Student {
   gender                    Gender
   religion                  String?
   studentEmail              String?                @unique
-  curriculum                Curriculum?            @relation(fields: [curriculumId], references: [id], onDelete: SetNull)
+  curriculum                AKAD_Curriculum?       @relation(fields: [curriculumId], references: [id], onDelete: SetNull)
   curriculumId              String?
   arrivalYear               String?
   address                   String?
@@ -164,7 +164,7 @@ model Curriculum {
   headOfProgramStudyId String
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
-  student              Student[]
+  // student              Student[]
   Cpl                  Cpl[]
   Curriculum_Subject   Curriculum_Subject[]
 
@@ -184,8 +184,8 @@ model Subject {
   Curriculum_Subject Curriculum_Subject[]
   Subject_Cpl        Subject_Cpl[]
   Rps                Rps[]
-  AKAD_Grades        AKAD_Grades[]
-  AKAD_ListOfRequest AKAD_ListOfRequest[]
+  // AKAD_Grades        AKAD_Grades[]
+  // AKAD_ListOfRequest AKAD_ListOfRequest[]
 }
 
 model Curriculum_Subject {
@@ -679,6 +679,30 @@ model Thesis_Link {
 
 //---------------------------------------Bimbingan Akademik---------------------------------------/
 
+model AKAD_Curriculum {
+  id       String         @id @default(uuid())
+  major    String         @db.VarChar(100)
+  year     String         @db.VarChar(50)
+  Subjects AKAD_Subject[]
+  student  Student[]
+
+  @@unique([major, year])
+}
+
+model AKAD_Subject {
+  id            String               @id @default(uuid())
+  code          String               @db.VarChar(100)
+  name          String
+  credits       Int
+  type          String               @db.VarChar(100)
+  prerequisite  String?
+  semester      Int
+  grade         AKAD_Grades[]
+  Curriculum    AKAD_Curriculum?     @relation(fields: [curriculumId], references: [id])
+  curriculumId  String?
+  ListOfRequest AKAD_ListOfRequest[]
+}
+
 model AKAD_Transaction_Grades {
   id           String        @id @default(uuid())
   submitedDate DateTime      @default(now()) @db.Timestamptz(3)
@@ -698,7 +722,7 @@ model AKAD_Grades {
   lecturer           String
   description        String?
   submited_Date      DateTime                 @default(now())
-  Subject            Subject?                 @relation(fields: [subjectId], references: [id])
+  Subject            AKAD_Subject?            @relation(fields: [subjectId], references: [id])
   subjectId          String?
   subjectName        String?
   transaction_Grades AKAD_Transaction_Grades? @relation(fields: [transactionId], references: [id])
@@ -753,7 +777,7 @@ model AKAD_PreRegistrationData {
 model AKAD_ListOfRequest {
   PreRegistrationData   AKAD_PreRegistrationData @relation(fields: [preRegistrationDataId], references: [id])
   preRegistrationDataId String
-  subject               Subject                  @relation(fields: [subjectId], references: [id])
+  subject               AKAD_Subject             @relation(fields: [subjectId], references: [id])
   subjectId             String
 
   @@unique([preRegistrationDataId, subjectId])
