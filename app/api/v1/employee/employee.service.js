@@ -311,31 +311,18 @@ const changeStudentStatus = async (nim, payload) => {
 // @route           GET /employee/dosen-skripsi
 // @access          OPERATOR_FILKOM
 const getAllDosenSkripsi = async () => {
-  const dosenSkripsiData = [];
-  const dosenSkripsis = await userManagement.findAllUserByRole("DOSEN_MK");
-  if (dosenSkripsis) {
-    for (const entry of dosenSkripsis) {
-      const employee = await employeeRepository.findEmployeeByNIK(entry.userId);
-      if (employee) {
-        let fullName = employee.firstName;
-        if (employee.lastName) {
-          fullName += ` ${employee.lastName}`;
-        }
-
-        if (employee.degree) {
-          fullName += `, ${employee.degree}`;
-        }
-        const data = {
-          employee_id: employee.id,
-          role_id: entry.id,
-          fullName,
-          nidn: employee.nidn,
-        };
-        dosenSkripsiData.push(data);
-      }
-    }
-  }
-  return dosenSkripsiData;
+  const dosenSkripsiRole = await prisma.userRole.findMany({
+    where: { role: "DOSEN_MK" },
+  });
+  const _dosenSkripsi = await prisma.employee.findMany({
+    where: { id: { in: dosenSkripsiRole.map((item) => item.userId) } },
+  });
+  return _dosenSkripsi.map((item) => ({
+    employee_id: item.id,
+    role_id: dosenSkripsiRole.find((role) => role.userId === item.id).id,
+    fullName: `${item.firstName} ${item.lastName}`,
+    nidn: item.nik,
+  }));
 };
 
 //===================================================================
@@ -343,41 +330,23 @@ const getAllDosenSkripsi = async () => {
 // @route           GET /employee/dosen
 // @access          OPERATOR_FILKOM
 const getAllDosen = async () => {
-  const dosen = [];
   const employees = await employeeRepository.findEmployees();
-  if (employees) {
-    for (const entry of employees) {
-      // cek jika sudah jadi dosen skripsi
-      const isDosenSkripsi = await userManagement.findUserByNIKAndRole(
-        entry.nik,
-        "DOSEN_MK"
-      );
-      if (!isDosenSkripsi) {
-        // cek jika dosen
-        const isDosen = await userManagement.findUserByNIKAndRole(
-          entry.nik,
-          "DOSEN"
-        );
-        if (isDosen) {
-          let name = entry.firstName;
-          // Tambahkan lastName jika ada
-          if (entry.lastName) {
-            name += ` ${entry.lastName}`;
-          }
-          // Tambahkan degree jika tidak null
-          if (entry.degree) {
-            name += `, ${entry.degree}`;
-          }
-          const data = {
-            id: entry.id,
-            name,
-          };
-          dosen.push(data);
-        }
-      }
-    }
-  }
-  return dosen;
+  const isDosen = await prisma.userRole.findMany({
+    where: {
+      AND: [
+        { userId: { in: employees.map((employee) => employee.id) } },
+        { role: "DOSEN" },
+      ],
+    },
+  });
+  const data = isDosen.map((item) => {
+    const employee = employees.find((employee) => employee.id === item.userId);
+    return {
+      id: item.userId,
+      name: `${employee.firstName} ${employee.lastName}`,
+    };
+  });
+  return data;
 };
 
 //===================================================================
@@ -385,31 +354,13 @@ const getAllDosen = async () => {
 // @route           POST /employee/dosen-skripsi
 // @access          OPERATOR_FILKOM
 const createDosenSkripsi = async (payload) => {
-  const employee = await employeeRepository.findEmployeeById(
-    payload.employee_id
-  );
-  if (employee) {
-    const existingDosenSkripsi = await userManagement.findUserByNIKAndRole(
-      employee.nik,
-      "DOSEN_MK"
-    );
-    if (existingDosenSkripsi) {
-      throw {
-        status: 400,
-        message: `Dosen already has a Dosen Skipsi`,
-      };
-    }
-    const dosenSkripsi = await userManagement.inputRoleByNIK(
-      employee.nik,
-      "DOSEN_MK"
-    );
-    return dosenSkripsi;
-  } else {
-    throw {
-      status: 400,
-      message: `Dosen not found`,
-    };
-  }
+  const _employee = await prisma.userRole.create({
+    data: {
+      userId: payload.employee_id,
+      role: "DOSEN_MK",
+    },
+  });
+  return _employee;
 };
 
 //===================================================================

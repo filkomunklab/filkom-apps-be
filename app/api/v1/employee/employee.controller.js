@@ -7,6 +7,7 @@ const { subject } = require("@casl/ability");
 const { message } = require("../../../database");
 const prisma = require("../../../database");
 const { xlsxFileSchema } = require("../../../schemas");
+const { Prisma } = require("@prisma/client");
 
 const getAllEmployees = async (req, res) => {
   const policy = policyFor(req.user);
@@ -379,6 +380,14 @@ const createDosenSkripsi = async (req, res) => {
     const employee = await employeeService.createDosenSkripsi(payload);
     res.send({ status: "OK", data: employee });
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return res
+          .status(400)
+          .send({ status: "FAILED", data: { error: "Dosen already exist" } });
+      }
+    }
+    console.log(error);
     res
       .status(error?.status || 500)
       .send({ status: "FAILED", data: { error: error?.message || error } });

@@ -64,6 +64,7 @@ const URL = "/api/v1";
 const corsOptions = {
   origin: [
     "http://localhost:3000",
+    "http://127.0.0.1:3000",
     "https://app.filkom.unklab.ac.id",
     "http://app.filkom.unklab.ac.id",
     "http://103.59.95.208:3000",
