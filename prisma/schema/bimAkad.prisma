@@ -91,7 +91,7 @@ model AKAD_Academic_Consultation {
     student_major        String             @db.VarChar(50)
     student_arrival_year String             @db.VarChar(50)
     createdAt            DateTime           @default(now()) @db.Timestamptz(3)
-    updatedAt            DateTime           @default(now()) @db.Timestamptz(3)
+    updatedAt            DateTime           @updatedAt @db.Timestamptz(3)
     status               ConsultationStatus @default(Waiting)
     description          String
 

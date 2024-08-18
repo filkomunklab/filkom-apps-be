@@ -6,6 +6,7 @@
     "posttest": "docker compose down test-db",
     "dev": "bun run --hot src/index.ts",
     "db:migrate": "bunx prisma migrate dev",
+    "db:createonly": "bunx prisma migrate dev --create-only",
     "db:deploy": "bunx prisma migrate deploy"
   },
   "dependencies": {

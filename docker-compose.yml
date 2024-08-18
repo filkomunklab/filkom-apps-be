@@ -4,6 +4,8 @@ services:
     ports:
       - "5433:5432"
     env_file: .env.development
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
 
   test-db:
     image: postgres:latest
@@ -12,4 +14,4 @@ services:
     env_file: ".env.test"
 
 volumes:
-  postgres_data:
+  postgres_dev_data:
