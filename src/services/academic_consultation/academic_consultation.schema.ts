@@ -13,4 +13,8 @@ const create = z.object({
   description: z.string(),
 });
 
-export default { create };
+const update = z.object({
+  status: z.nativeEnum(ConsultationStatus),
+});
+
+export default { create, update };

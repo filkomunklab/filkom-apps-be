@@ -2,7 +2,6 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import academic_calendarSchema from "./academic_calendar.schema";
 import academic_calendarService from "./academic_calendar.service";
-import { fi } from "@faker-js/faker";
 import { Prisma } from "@prisma/client";
 import { HTTPException } from "hono/http-exception";
 
