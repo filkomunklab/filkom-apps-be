@@ -37,6 +37,7 @@ const seedDatabase = async () => {
 
 const cleanDatabase = async () => {
   await prisma.$transaction([
+    prisma.aKAD_Academic_Consultation.deleteMany(),
     prisma.admin.deleteMany(),
     prisma.employee.deleteMany(),
     prisma.student.deleteMany(),

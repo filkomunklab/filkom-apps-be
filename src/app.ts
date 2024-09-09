@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { academicCalendar, auth } from "./services";
+import { academicCalendar, academicConsultation, auth } from "./services";
 
 const app = new Hono();
 
@@ -15,6 +15,7 @@ app.get("/", (c) => {
 
 app.route("/", auth);
 app.route("/", academicCalendar);
+app.route("/", academicConsultation);
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
